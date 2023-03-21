@@ -1,0 +1,9 @@
+OPEN    : 'E10'
+BEGIN   : position:(c:0 m:0) targetchar='E'  	| parser://org.unlaxer.parser.elementary.ExponentParser
+BEGIN   : position:(c:1 m:1) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Optional
+COMMIT  : position:(c:1 m:1) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Optional | committed: 
+BEGIN   : position:(c:1 m:1) targetchar='1'  	| parser://org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.OneOrMore | committed:10 
+COMMIT  : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.elementary.ExponentParser | committed:E10 
+CLOSE   : 'E10' consumed:allConsumed 
+

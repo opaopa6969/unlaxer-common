@@ -1,0 +1,21 @@
+OPEN    : '(abc)%'
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.ParenthesesParser
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:choosable
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:abc 
+COMMIT  : position:(c:4 m:4) targetchar=')'  	| parser:choosable | committed:abc 
+BEGIN   : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+BEGIN   : position:(c:5 m:5) targetchar='%'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:5 m:5) targetchar='%'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+COMMIT  : position:(c:5 m:5) targetchar='%'  	| parser:org.unlaxer.parser.elementary.ParenthesesParser | committed:(abc) 
+BEGIN   : position:(c:5 m:5) targetchar='%'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+ROLLBACK: position:(c:5 m:5) targetchar='%'  	| parser:org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
+ROLLBACK: position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked:(abc) 
+CLOSE   : '(abc)%' consumed:0(6 remain) 
+

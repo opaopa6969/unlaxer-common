@@ -1,0 +1,7 @@
+OPEN    : '\b'
+START   : position:(c:0 m:0) targetchar='\'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser
+BEGIN   : position:(c:0 m:0) targetchar='\'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser
+COMMIT  : position:(c:2 m:2) targetchar=''  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser | committed:\b 
+END     : position:(c:2 m:2) targetchar=''  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser| status:succeeded | parsed:\b  
+CLOSE   : '\b' consumed:allConsumed 
+

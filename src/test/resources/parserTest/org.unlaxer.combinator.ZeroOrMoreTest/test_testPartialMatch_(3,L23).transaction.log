@@ -1,0 +1,5 @@
+OPEN    : '123e'
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore
+COMMIT  : position:(c:3 m:3) targetchar='e'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore | committed:123 
+CLOSE   : '123e' consumed:3(1 remain) 
+

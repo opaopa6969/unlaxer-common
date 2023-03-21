@@ -1,0 +1,23 @@
+OPEN    : '1.23e-5'
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.elementary.NumberParser
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:optional-signParser
+COMMIT  : position:(c:0 m:0) targetchar='1'  	| parser:optional-signParser | committed: 
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:digits-point-degits
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:any-digit
+COMMIT  : position:(c:1 m:1) targetchar='.'  	| parser:any-digit | committed:1 
+BEGIN   : position:(c:2 m:2) targetchar='2'  	| parser:any-digit
+COMMIT  : position:(c:4 m:4) targetchar='e'  	| parser:any-digit | committed:23 
+COMMIT  : position:(c:4 m:4) targetchar='e'  	| parser:digits-point-degits | committed:1.23 
+COMMIT  : position:(c:4 m:4) targetchar='e'  	| parser:org.unlaxer.parser.combinator.Choice | committed:1.23 
+BEGIN   : position:(c:4 m:4) targetchar='e'  	| parser:org.unlaxer.parser.combinator.Optional
+BEGIN   : position:(c:4 m:4) targetchar='e'  	| parser:org.unlaxer.parser.elementary.ExponentParser
+BEGIN   : position:(c:5 m:5) targetchar='-'  	| parser:org.unlaxer.parser.combinator.Optional
+COMMIT  : position:(c:6 m:6) targetchar='5'  	| parser:org.unlaxer.parser.combinator.Optional | committed:- 
+BEGIN   : position:(c:6 m:6) targetchar='5'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:7 m:7) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:5 
+COMMIT  : position:(c:7 m:7) targetchar=''  	| parser:org.unlaxer.parser.elementary.ExponentParser | committed:e-5 
+COMMIT  : position:(c:7 m:7) targetchar=''  	| parser:org.unlaxer.parser.combinator.Optional | committed:e-5 
+COMMIT  : position:(c:7 m:7) targetchar=''  	| parser:org.unlaxer.parser.elementary.NumberParser | committed:1.23e-5 
+CLOSE   : '1.23e-5' consumed:allConsumed 
+

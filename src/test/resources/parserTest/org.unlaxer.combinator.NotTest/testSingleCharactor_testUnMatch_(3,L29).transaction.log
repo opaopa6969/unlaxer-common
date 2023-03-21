@@ -1,0 +1,5 @@
+OPEN    : ''
+BEGIN   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
+ROLLBACK: position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource | rollbacked: 
+CLOSE   : '' consumed:allConsumed 
+

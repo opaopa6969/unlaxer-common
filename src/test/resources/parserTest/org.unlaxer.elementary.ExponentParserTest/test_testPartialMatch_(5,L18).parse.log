@@ -1,0 +1,6 @@
+START   : position:(c:0 m:0) targetchar='e'  	| parser://org.unlaxer.parser.elementary.ExponentParser
+START   : position:(c:1 m:1) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Optional
+END     : position:(c:1 m:1) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Optional| status:succeeded | parsed:  
+START   : position:(c:1 m:1) targetchar='1'  	| parser://org.unlaxer.parser.combinator.OneOrMore
+END     : position:(c:2 m:2) targetchar='.'  	| parser://org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:1  
+END     : position:(c:2 m:2) targetchar='.'  	| parser://org.unlaxer.parser.elementary.ExponentParser| status:succeeded | parsed:e1  

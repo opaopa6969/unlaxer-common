@@ -1,0 +1,7 @@
+OPEN    : 'a=1;'
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EmptyParser
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.MatchOnly
+COMMIT  : position:(c:0 m:1) targetchar='a'  	| parser://org.unlaxer.parser.combinator.MatchOnly | committed:a 
+COMMIT  : position:(c:0 m:1) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EmptyParser | committed: 
+CLOSE   : 'a=1;' consumed:0(4 remain) 
+

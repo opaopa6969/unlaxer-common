@@ -1,0 +1,5 @@
+OPEN    : 'ab'
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Repeat
+COMMIT  : position:(c:2 m:2) targetchar=''  	| parser://org.unlaxer.parser.combinator.Repeat | committed:ab 
+CLOSE   : 'ab' consumed:allConsumed 
+

@@ -1,0 +1,7 @@
+OPEN    : '-b'
+BEGIN   : position:(c:0 m:0) targetchar='-'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
+BEGIN   : position:(c:0 m:0) targetchar='-'  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain
+COMMIT  : position:(c:2 m:2) targetchar=''  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain | committed:-b 
+COMMIT  : position:(c:2 m:2) targetchar=''  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource | committed:-b 
+CLOSE   : '-b' consumed:allConsumed 
+

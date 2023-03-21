@@ -1,0 +1,5 @@
+'abc' (0 - 3): org.unlaxer.parser.combinator.NonOrdered
+ 'a' (0 - 1): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+ 'b' (1 - 2): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+ 'c' (2 - 3): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+

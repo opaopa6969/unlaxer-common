@@ -1,0 +1,13 @@
+'a=1;' (0 - 4): org.unlaxer.parser.combinator.Chain
+ 'a' (0 - 1): org.unlaxer.parser.posix.AlphabetParser
+ '=' (1 - 2): org.unlaxer.parser.elementary.WordParser
+ '1' (2 - 3): org.unlaxer.parser.combinator.Choice
+  '1' (2 - 3): org.unlaxer.parser.elementary.NumberParser
+   <EMPTY> (2 - 2): optional-signParser
+   '1' (2 - 3): org.unlaxer.parser.combinator.Choice
+    '1' (2 - 3): digits
+     '1' (2 - 3): any-digit
+      '1' (2 - 3): org.unlaxer.parser.posix.DigitParser
+   <EMPTY> (3 - 3): org.unlaxer.parser.combinator.Optional
+ ';' (3 - 4): org.unlaxer.parser.elementary.WordParser
+

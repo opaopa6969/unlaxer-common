@@ -1,0 +1,15 @@
+OPEN    : 'e+1'
+START   : position:(c:0 m:0) targetchar='e'  	| parser://org.unlaxer.parser.elementary.ExponentParser
+BEGIN   : position:(c:0 m:0) targetchar='e'  	| parser://org.unlaxer.parser.elementary.ExponentParser
+START   : position:(c:1 m:1) targetchar='+'  	| parser://org.unlaxer.parser.combinator.Optional
+BEGIN   : position:(c:1 m:1) targetchar='+'  	| parser://org.unlaxer.parser.combinator.Optional
+COMMIT  : position:(c:2 m:2) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Optional | committed:+ 
+END     : position:(c:2 m:2) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Optional| status:succeeded | parsed:+  
+START   : position:(c:2 m:2) targetchar='1'  	| parser://org.unlaxer.parser.combinator.OneOrMore
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser://org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.OneOrMore | committed:1 
+END     : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:1  
+COMMIT  : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.elementary.ExponentParser | committed:e+1 
+END     : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.elementary.ExponentParser| status:succeeded | parsed:e+1  
+CLOSE   : 'e+1' consumed:allConsumed 
+

@@ -1,0 +1,8 @@
+'1+1' (0 - 3): org.unlaxer.parser.combinator.Chain
+ '1' (0 - 1): org.unlaxer.parser.combinator.OneOrMore
+  '1' (0 - 1): org.unlaxer.parser.posix.DigitParser
+ '+' (1 - 2): org.unlaxer.parser.combinator.Choice
+  '+' (1 - 2): org.unlaxer.parser.ascii.PlusParser
+ '1' (2 - 3): org.unlaxer.parser.combinator.OneOrMore
+  '1' (2 - 3): org.unlaxer.parser.posix.DigitParser
+

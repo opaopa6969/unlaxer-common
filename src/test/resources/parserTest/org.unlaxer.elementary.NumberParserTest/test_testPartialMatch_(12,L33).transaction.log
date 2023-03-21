@@ -1,0 +1,25 @@
+OPEN    : '123..4'
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.elementary.NumberParser
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:optional-signParser
+COMMIT  : position:(c:0 m:0) targetchar='1'  	| parser:optional-signParser | committed: 
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:digits-point-degits
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:any-digit
+COMMIT  : position:(c:3 m:3) targetchar='.'  	| parser:any-digit | committed:123 
+BEGIN   : position:(c:4 m:4) targetchar='.'  	| parser:any-digit
+ROLLBACK: position:(c:4 m:4) targetchar='.'  	| parser:any-digit | rollbacked: 
+ROLLBACK: position:(c:0 m:0) targetchar='1'  	| parser:digits-point-degits | rollbacked:123. 
+ROLLBACK: position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:digits-point
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:any-digit
+COMMIT  : position:(c:3 m:3) targetchar='.'  	| parser:any-digit | committed:123 
+COMMIT  : position:(c:4 m:4) targetchar='.'  	| parser:digits-point | committed:123. 
+COMMIT  : position:(c:4 m:4) targetchar='.'  	| parser:org.unlaxer.parser.combinator.Choice | committed:123. 
+BEGIN   : position:(c:4 m:4) targetchar='.'  	| parser:org.unlaxer.parser.combinator.Optional
+BEGIN   : position:(c:4 m:4) targetchar='.'  	| parser:org.unlaxer.parser.elementary.ExponentParser
+ROLLBACK: position:(c:4 m:4) targetchar='.'  	| parser:org.unlaxer.parser.elementary.ExponentParser | rollbacked: 
+COMMIT  : position:(c:4 m:4) targetchar='.'  	| parser:org.unlaxer.parser.combinator.Optional | committed: 
+COMMIT  : position:(c:4 m:4) targetchar='.'  	| parser:org.unlaxer.parser.elementary.NumberParser | committed:123. 
+CLOSE   : '123..4' consumed:4(2 remain) 
+

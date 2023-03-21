@@ -1,0 +1,19 @@
+OPEN    : '(a1)b2'
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.ParenthesesParser
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:nonOrdered
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:2 m:2) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:a 
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:3 m:3) targetchar=')'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:1 
+BEGIN   : position:(c:3 m:3) targetchar=')'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+ROLLBACK: position:(c:3 m:3) targetchar=')'  	| parser:org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
+ROLLBACK: position:(c:1 m:1) targetchar='a'  	| parser:nonOrdered | rollbacked:a1 
+ROLLBACK: position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.ParenthesesParser | rollbacked:( 
+ROLLBACK: position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked: 
+CLOSE   : '(a1)b2' consumed:0(6 remain) 
+

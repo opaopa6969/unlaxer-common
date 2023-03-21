@@ -1,0 +1,11 @@
+OPEN    : '1a'
+START   : position:(c:0 m:0) targetchar='1'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
+START   : position:(c:0 m:0) targetchar='1'  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain
+ROLLBACK: position:(c:0 m:0) targetchar='1'  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain | rollbacked: 
+END     : position:(c:0 m:0) targetchar='1'  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+ROLLBACK: position:(c:0 m:0) targetchar='1'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource | rollbacked: 
+END     : position:(c:0 m:0) targetchar='1'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource| status:failed | parsed:  
+CLOSE   : '1a' consumed:0(2 remain) 
+

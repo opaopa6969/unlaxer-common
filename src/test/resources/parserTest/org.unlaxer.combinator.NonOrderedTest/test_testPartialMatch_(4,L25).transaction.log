@@ -1,0 +1,5 @@
+OPEN    : 'abcc'
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.NonOrdered
+COMMIT  : position:(c:3 m:3) targetchar='c'  	| parser://org.unlaxer.parser.combinator.NonOrdered | committed:abc 
+CLOSE   : 'abcc' consumed:3(1 remain) 
+

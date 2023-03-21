@@ -1,0 +1,3 @@
+'a' (0 - 1): org.unlaxer.parser.combinator.NotPropagatableSource
+ 'a' (0 - 1): org.unlaxer.parser.posix.DigitParser(inverted)
+

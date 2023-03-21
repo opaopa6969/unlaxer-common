@@ -1,0 +1,7 @@
+OPEN    : 'cab'
+START   : position:(c:0 m:0) targetchar='c'  	| parser://org.unlaxer.parser.combinator.NonOrdered
+BEGIN   : position:(c:0 m:0) targetchar='c'  	| parser://org.unlaxer.parser.combinator.NonOrdered
+COMMIT  : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.NonOrdered | committed:cab 
+END     : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.NonOrdered| status:succeeded | parsed:cab  
+CLOSE   : 'cab' consumed:allConsumed 
+

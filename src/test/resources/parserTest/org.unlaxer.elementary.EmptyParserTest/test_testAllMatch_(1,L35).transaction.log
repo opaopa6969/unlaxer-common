@@ -1,0 +1,33 @@
+OPEN    : 'a=1;'
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser:/Chain/org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser:/Chain/Choice/org.unlaxer.parser.elementary.NumberParser
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser://optional-signParser
+COMMIT  : position:(c:2 m:2) targetchar='1'  	| parser://optional-signParser | committed: 
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser:/Choice/digits-point-degits
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser:/Choice/point-digits/any-digit
+COMMIT  : position:(c:3 m:3) targetchar=';'  	| parser:/Choice/point-digits/any-digit | committed:1 
+ROLLBACK: position:(c:2 m:2) targetchar='1'  	| parser:/Choice/digits-point-degits | rollbacked:1 
+ROLLBACK: position:(c:2 m:2) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser:/Choice/digits-point
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser:/Choice/point-digits/any-digit
+COMMIT  : position:(c:3 m:3) targetchar=';'  	| parser:/Choice/point-digits/any-digit | committed:1 
+ROLLBACK: position:(c:2 m:2) targetchar='1'  	| parser:/Choice/digits-point | rollbacked:1 
+ROLLBACK: position:(c:2 m:2) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser://org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser:/Choice/digits
+BEGIN   : position:(c:2 m:2) targetchar='1'  	| parser:/Choice/point-digits/any-digit
+COMMIT  : position:(c:3 m:3) targetchar=';'  	| parser:/Choice/point-digits/any-digit | committed:1 
+COMMIT  : position:(c:3 m:3) targetchar=';'  	| parser:/Choice/digits | committed:1 
+COMMIT  : position:(c:3 m:3) targetchar=';'  	| parser://org.unlaxer.parser.combinator.Choice | committed:1 
+BEGIN   : position:(c:3 m:3) targetchar=';'  	| parser://org.unlaxer.parser.combinator.Optional
+BEGIN   : position:(c:3 m:3) targetchar=';'  	| parser:/Optional/org.unlaxer.parser.elementary.ExponentParser
+ROLLBACK: position:(c:3 m:3) targetchar=';'  	| parser:/Optional/org.unlaxer.parser.elementary.ExponentParser | rollbacked: 
+COMMIT  : position:(c:3 m:3) targetchar=';'  	| parser://org.unlaxer.parser.combinator.Optional | committed: 
+COMMIT  : position:(c:3 m:3) targetchar=';'  	| parser:/Chain/Choice/org.unlaxer.parser.elementary.NumberParser | committed:1 
+COMMIT  : position:(c:3 m:3) targetchar=';'  	| parser:/Chain/org.unlaxer.parser.combinator.Choice | committed:1 
+COMMIT  : position:(c:4 m:4) targetchar=''  	| parser://org.unlaxer.parser.combinator.Chain | committed:a=1; 
+CLOSE   : 'a=1;' consumed:allConsumed 
+

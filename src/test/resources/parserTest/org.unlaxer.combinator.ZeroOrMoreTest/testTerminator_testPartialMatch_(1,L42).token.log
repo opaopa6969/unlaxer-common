@@ -1,0 +1,13 @@
+'abcdefghiZ' (0 - 10): org.unlaxer.parser.combinator.ZeroOrMore
+ 'a' (0 - 1): org.unlaxer.parser.posix.AlphabetNumericParser
+ 'b' (1 - 2): org.unlaxer.parser.posix.AlphabetNumericParser
+ 'c' (2 - 3): org.unlaxer.parser.posix.AlphabetNumericParser
+ 'd' (3 - 4): org.unlaxer.parser.posix.AlphabetNumericParser
+ 'e' (4 - 5): org.unlaxer.parser.posix.AlphabetNumericParser
+ 'f' (5 - 6): org.unlaxer.parser.posix.AlphabetNumericParser
+ 'g' (6 - 7): org.unlaxer.parser.posix.AlphabetNumericParser
+ 'h' (7 - 8): org.unlaxer.parser.posix.AlphabetNumericParser
+ 'i' (8 - 9): org.unlaxer.parser.posix.AlphabetNumericParser
+ 'Z' (9 - 10): org.unlaxer.parser.combinator.ParserWrapper
+  'Z' (9 - 10): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+

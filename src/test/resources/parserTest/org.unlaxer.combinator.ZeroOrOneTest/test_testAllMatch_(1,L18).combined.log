@@ -1,0 +1,7 @@
+OPEN    : ''
+START   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.ZeroOrOne
+BEGIN   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.ZeroOrOne
+COMMIT  : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.ZeroOrOne | committed: 
+END     : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.ZeroOrOne| status:succeeded | parsed:  
+CLOSE   : '' consumed:allConsumed 
+

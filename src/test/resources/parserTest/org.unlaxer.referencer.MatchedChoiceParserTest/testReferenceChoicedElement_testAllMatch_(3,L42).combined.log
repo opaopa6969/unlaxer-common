@@ -1,0 +1,47 @@
+OPEN    : '(123)9'
+START   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain
+START   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.ParenthesesParser
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.ParenthesesParser
+START   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+END     : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+END     : position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:1 m:1) targetchar='1'  	| parser:choosable
+BEGIN   : position:(c:1 m:1) targetchar='1'  	| parser:choosable
+START   : position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+BEGIN   : position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+ROLLBACK: position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
+END     : position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:failed | parsed:  
+ROLLBACK: position:(c:1 m:1) targetchar='1'  	| parser:choosable | rollbacked: 
+BEGIN   : position:(c:1 m:1) targetchar='1'  	| parser:choosable
+START   : position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+BEGIN   : position:(c:1 m:1) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:123 
+END     : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:123  
+COMMIT  : position:(c:4 m:4) targetchar=')'  	| parser:choosable | committed:123 
+END     : position:(c:4 m:4) targetchar=')'  	| parser:choosable| status:succeeded | parsed:123  
+START   : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+END     : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:5 m:5) targetchar='9'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:5 m:5) targetchar='9'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:5 m:5) targetchar='9'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+END     : position:(c:5 m:5) targetchar='9'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+COMMIT  : position:(c:5 m:5) targetchar='9'  	| parser:org.unlaxer.parser.elementary.ParenthesesParser | committed:(123) 
+END     : position:(c:5 m:5) targetchar='9'  	| parser:org.unlaxer.parser.elementary.ParenthesesParser| status:succeeded | parsed:(123)  
+START   : position:(c:5 m:5) targetchar='9'  	| parser:org.unlaxer.parser.referencer.MatchedChoiceParser
+START   : position:(c:5 m:5) targetchar='9'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+BEGIN   : position:(c:5 m:5) targetchar='9'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:6 m:6) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:9 
+END     : position:(c:6 m:6) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:9  
+END     : position:(c:6 m:6) targetchar=''  	| parser:org.unlaxer.parser.referencer.MatchedChoiceParser| status:succeeded | parsed:9  
+COMMIT  : position:(c:6 m:6) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain | committed:(123)9 
+END     : position:(c:6 m:6) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain| status:succeeded | parsed:(123)9  
+CLOSE   : '(123)9' consumed:allConsumed 
+

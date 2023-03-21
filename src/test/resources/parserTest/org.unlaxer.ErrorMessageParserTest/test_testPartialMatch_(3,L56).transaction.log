@@ -1,0 +1,9 @@
+OPEN    : '1+s'
+BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:2 m:2) targetchar='s'  	| parser:org.unlaxer.parser.combinator.Choice
+ROLLBACK: position:(c:2 m:2) targetchar='s'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:2 m:2) targetchar='s'  	| parser:org.unlaxer.parser.combinator.Choice
+COMMIT  : position:(c:2 m:2) targetchar='s'  	| parser:org.unlaxer.parser.combinator.Choice | committed: 
+COMMIT  : position:(c:2 m:2) targetchar='s'  	| parser:org.unlaxer.parser.combinator.Chain | committed:1+ 
+CLOSE   : '1+s' consumed:2(1 remain) 
+

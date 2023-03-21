@@ -1,0 +1,5 @@
+OPEN    : 'a'
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Repeat
+ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Repeat | rollbacked:a 
+CLOSE   : 'a' consumed:0(1 remain) 
+

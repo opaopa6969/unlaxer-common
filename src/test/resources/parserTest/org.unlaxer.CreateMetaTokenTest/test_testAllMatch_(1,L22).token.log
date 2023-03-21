@@ -1,0 +1,4 @@
+'7a' (0 - 2): org.unlaxer.parser.combinator.Chain
+ '7' (0 - 1): org.unlaxer.parser.posix.DigitParser
+ 'a' (1 - 2): org.unlaxer.parser.posix.AlphabetParser
+

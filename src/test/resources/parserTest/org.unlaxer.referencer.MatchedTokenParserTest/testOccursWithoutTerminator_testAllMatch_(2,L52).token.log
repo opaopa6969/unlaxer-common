@@ -1,0 +1,8 @@
+'abz:abz' (0 - 7): org.unlaxer.parser.combinator.Chain
+ 'abz' (0 - 3): org.unlaxer.parser.combinator.OneOrMore
+  'a' (0 - 1): org.unlaxer.parser.posix.AlphabetParser
+  'b' (1 - 2): org.unlaxer.parser.posix.AlphabetParser
+  'z' (2 - 3): org.unlaxer.parser.posix.AlphabetParser
+ ':' (3 - 4): org.unlaxer.parser.elementary.WordParser
+ 'abz' (4 - 7): org.unlaxer.parser.elementary.WordParser
+

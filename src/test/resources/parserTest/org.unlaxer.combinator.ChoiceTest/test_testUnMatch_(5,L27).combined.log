@@ -1,0 +1,9 @@
+OPEN    : '*1+1'
+START   : position:(c:0 m:0) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:0 m:0) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice
+ROLLBACK: position:(c:0 m:0) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice
+ROLLBACK: position:(c:0 m:0) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+END     : position:(c:0 m:0) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice| status:failed | parsed:  
+CLOSE   : '*1+1' consumed:0(4 remain) 
+

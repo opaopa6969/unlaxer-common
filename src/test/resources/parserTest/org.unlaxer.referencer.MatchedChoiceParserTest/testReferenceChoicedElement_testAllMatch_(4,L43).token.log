@@ -1,0 +1,11 @@
+'(%)&%' (0 - 5): org.unlaxer.parser.combinator.Chain
+ '(%)' (0 - 3): org.unlaxer.parser.elementary.ParenthesesParser
+  '(' (0 - 1): org.unlaxer.parser.ascii.LeftParenthesisParser
+  '%' (1 - 2): choosable
+   '%' (1 - 2): org.unlaxer.parser.combinator.OneOrMore
+    '%' (1 - 2): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+  ')' (2 - 3): org.unlaxer.parser.ascii.RightParenthesisParser
+ '&%' (3 - 5): org.unlaxer.parser.combinator.OneOrMore
+  '&' (3 - 4): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+  '%' (4 - 5): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+

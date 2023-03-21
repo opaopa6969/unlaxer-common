@@ -1,0 +1,13 @@
+OPEN    : 'ax'
+START   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice
+START   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain
+ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked: 
+END     : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice
+COMMIT  : position:(c:2 m:2) targetchar=''  	| parser:org.unlaxer.parser.combinator.Choice | committed:ax 
+END     : position:(c:2 m:2) targetchar=''  	| parser:org.unlaxer.parser.combinator.Choice| status:succeeded | parsed:ax  
+CLOSE   : 'ax' consumed:allConsumed 
+

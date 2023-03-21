@@ -1,0 +1,7 @@
+OPEN    : '$%(&'
+START   : position:(c:0 m:0) targetchar='$'  	| parser://org.unlaxer.parser.combinator.OneOrMore
+BEGIN   : position:(c:0 m:0) targetchar='$'  	| parser://org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:2 m:2) targetchar='('  	| parser://org.unlaxer.parser.combinator.OneOrMore | committed:$% 
+END     : position:(c:2 m:2) targetchar='('  	| parser://org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:$%  
+CLOSE   : '$%(&' consumed:2(2 remain) 
+

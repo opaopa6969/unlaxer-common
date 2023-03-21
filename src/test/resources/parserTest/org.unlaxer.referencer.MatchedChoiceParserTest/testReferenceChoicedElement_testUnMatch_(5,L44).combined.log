@@ -1,0 +1,41 @@
+OPEN    : '(abc)123'
+START   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain
+START   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.ParenthesesParser
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.ParenthesesParser
+START   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+END     : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+END     : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:1 m:1) targetchar='a'  	| parser:choosable
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:choosable
+START   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:abc 
+END     : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:abc  
+COMMIT  : position:(c:4 m:4) targetchar=')'  	| parser:choosable | committed:abc 
+END     : position:(c:4 m:4) targetchar=')'  	| parser:choosable| status:succeeded | parsed:abc  
+START   : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+END     : position:(c:4 m:4) targetchar=')'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor | committed: 
+END     : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+COMMIT  : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.elementary.ParenthesesParser | committed:(abc) 
+END     : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.elementary.ParenthesesParser| status:succeeded | parsed:(abc)  
+START   : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.referencer.MatchedChoiceParser
+START   : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+BEGIN   : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+ROLLBACK: position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
+END     : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:failed | parsed:  
+END     : position:(c:5 m:5) targetchar='1'  	| parser:org.unlaxer.parser.referencer.MatchedChoiceParser| status:failed | parsed:  
+ROLLBACK: position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked:(abc) 
+END     : position:(c:0 m:0) targetchar='('  	| parser:org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+CLOSE   : '(abc)123' consumed:0(8 remain) 
+

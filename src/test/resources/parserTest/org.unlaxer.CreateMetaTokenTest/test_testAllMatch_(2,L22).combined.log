@@ -1,0 +1,7 @@
+OPEN    : '7a'
+START   : position:(c:0 m:0) targetchar='7'  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='7'  	| parser:org.unlaxer.parser.combinator.Chain
+COMMIT  : position:(c:2 m:2) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain | committed:7a 
+END     : position:(c:2 m:2) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain| status:succeeded | parsed:7a  
+CLOSE   : '7a' consumed:allConsumed 
+

@@ -1,0 +1,9 @@
+OPEN    : 'ZcdefghiZjklikmn'
+BEGIN   : position:(c:0 m:0) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore
+BEGIN   : position:(c:0 m:0) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore
+BEGIN   : position:(c:0 m:0) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.MatchOnly
+COMMIT  : position:(c:0 m:1) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.MatchOnly | committed:Z 
+COMMIT  : position:(c:0 m:1) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.MatchOnly | committed:Z 
+COMMIT  : position:(c:0 m:1) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore | committed:Z 
+CLOSE   : 'ZcdefghiZjklikmn' consumed:0(16 remain) 
+

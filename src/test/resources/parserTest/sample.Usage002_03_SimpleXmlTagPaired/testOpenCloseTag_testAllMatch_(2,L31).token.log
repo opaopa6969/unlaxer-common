@@ -1,0 +1,21 @@
+'<test></test>' (0 - 13): sample.Usage002_03_SimpleXmlTagPaired$OpenCloseTagPaired
+ '<test>' (0 - 6): sample.Usage002_03_SimpleXmlTagPaired$OpenTagWithReference
+  '<' (0 - 1): org.unlaxer.parser.elementary.WordParser
+  <EMPTY> (1 - 1): org.unlaxer.parser.elementary.SpaceDelimitor
+  'test' (1 - 5): sample.Usage002_01_SimpleXmlTag$TagIdentifier
+   't' (1 - 2): org.unlaxer.parser.elementary.WildCardStringParser
+   'e' (2 - 3): org.unlaxer.parser.elementary.WildCardStringParser
+   's' (3 - 4): org.unlaxer.parser.elementary.WildCardStringParser
+   't' (4 - 5): org.unlaxer.parser.elementary.WildCardStringParser
+  <EMPTY> (5 - 5): org.unlaxer.parser.elementary.SpaceDelimitor
+  '>' (5 - 6): org.unlaxer.parser.elementary.WordParser
+ <EMPTY> (6 - 6): org.unlaxer.parser.combinator.Optional
+ '</test>' (6 - 13): sample.Usage002_03_SimpleXmlTagPaired$CloseTagWithReference
+  '<' (6 - 7): org.unlaxer.parser.elementary.WordParser
+  <EMPTY> (7 - 7): org.unlaxer.parser.elementary.SpaceDelimitor
+  '/' (7 - 8): org.unlaxer.parser.elementary.WordParser
+  <EMPTY> (8 - 8): org.unlaxer.parser.elementary.SpaceDelimitor
+  'test' (8 - 12): org.unlaxer.parser.elementary.WordParser
+  <EMPTY> (12 - 12): org.unlaxer.parser.elementary.SpaceDelimitor
+  '>' (12 - 13): org.unlaxer.parser.elementary.WordParser
+

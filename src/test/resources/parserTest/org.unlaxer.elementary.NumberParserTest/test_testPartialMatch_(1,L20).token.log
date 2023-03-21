@@ -1,0 +1,9 @@
+'.0' (0 - 2): org.unlaxer.parser.elementary.NumberParser
+ <EMPTY> (0 - 0): optional-signParser
+ '.0' (0 - 2): org.unlaxer.parser.combinator.Choice
+  '.0' (0 - 2): point-digits
+   '.' (0 - 1): org.unlaxer.parser.ascii.PointParser
+   '0' (1 - 2): any-digit
+    '0' (1 - 2): org.unlaxer.parser.posix.DigitParser
+ <EMPTY> (2 - 2): org.unlaxer.parser.combinator.Optional
+

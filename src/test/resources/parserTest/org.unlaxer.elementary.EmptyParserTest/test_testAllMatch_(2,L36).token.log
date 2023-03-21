@@ -1,0 +1,7 @@
+'a=;' (0 - 3): org.unlaxer.parser.combinator.Chain
+ 'a' (0 - 1): org.unlaxer.parser.posix.AlphabetParser
+ '=' (1 - 2): org.unlaxer.parser.elementary.WordParser
+ '' (2 - 2): org.unlaxer.parser.combinator.Choice
+  <EMPTY> (2 - 2): org.unlaxer.parser.elementary.EmptyParser
+ ';' (2 - 3): org.unlaxer.parser.elementary.WordParser
+

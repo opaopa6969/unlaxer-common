@@ -1,0 +1,5 @@
+OPEN    : 'e'
+BEGIN   : position:(c:0 m:0) targetchar='e'  	| parser://org.unlaxer.parser.combinator.OneOrMore
+ROLLBACK: position:(c:0 m:0) targetchar='e'  	| parser://org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
+CLOSE   : 'e' consumed:0(1 remain) 
+

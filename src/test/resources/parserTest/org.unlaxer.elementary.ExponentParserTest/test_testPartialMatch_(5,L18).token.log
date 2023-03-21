@@ -1,0 +1,6 @@
+'e1' (0 - 2): org.unlaxer.parser.elementary.ExponentParser
+ 'e' (0 - 1): org.unlaxer.parser.elementary.EParser
+ <EMPTY> (1 - 1): org.unlaxer.parser.combinator.Optional
+ '1' (1 - 2): org.unlaxer.parser.combinator.OneOrMore
+  '1' (1 - 2): org.unlaxer.parser.posix.DigitParser
+

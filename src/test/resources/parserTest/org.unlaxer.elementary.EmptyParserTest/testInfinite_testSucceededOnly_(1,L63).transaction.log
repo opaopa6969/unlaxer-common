@@ -1,0 +1,9 @@
+OPEN    : ''
+BEGIN   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.ZeroOrMore
+BEGIN   : position:(c:0 m:0) targetchar=''  	| parser:/ZeroOrMore/org.unlaxer.parser.elementary.EmptyParser
+BEGIN   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.MatchOnly
+ROLLBACK: position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+COMMIT  : position:(c:0 m:0) targetchar=''  	| parser:/ZeroOrMore/org.unlaxer.parser.elementary.EmptyParser | committed: 
+COMMIT  : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.ZeroOrMore | committed: 
+CLOSE   : '' consumed:allConsumed 
+

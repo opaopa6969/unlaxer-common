@@ -1,0 +1,2 @@
+START   : position:(c:0 m:0) targetchar='e'  	| parser:org.unlaxer.parser.combinator.Optional
+END     : position:(c:0 m:0) targetchar='e'  	| parser:org.unlaxer.parser.combinator.Optional| status:succeeded | parsed:  

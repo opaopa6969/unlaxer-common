@@ -1,0 +1,5 @@
+'$%&' (0 - 3): org.unlaxer.parser.combinator.OneOrMore
+ '$' (0 - 1): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+ '%' (1 - 2): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+ '&' (2 - 3): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+

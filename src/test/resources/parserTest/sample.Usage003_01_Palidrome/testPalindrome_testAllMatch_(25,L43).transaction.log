@@ -1,0 +1,9 @@
+OPEN    : 'aa'
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:0 m:2) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:aa 
+COMMIT  : position:(c:0 m:2) targetchar='a'  	| parser:org.unlaxer.parser.combinator.MatchOnly | committed:aa 
+COMMIT  : position:(c:2 m:2) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain | committed:aa 
+CLOSE   : 'aa' consumed:allConsumed 
+

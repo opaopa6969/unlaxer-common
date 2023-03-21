@@ -1,0 +1,7 @@
+OPEN    : 'bc'
+START   : position:(c:0 m:0) targetchar='b'  	| parser://org.unlaxer.parser.combinator.NonOrdered
+BEGIN   : position:(c:0 m:0) targetchar='b'  	| parser://org.unlaxer.parser.combinator.NonOrdered
+ROLLBACK: position:(c:0 m:0) targetchar='b'  	| parser://org.unlaxer.parser.combinator.NonOrdered | rollbacked:bc 
+END     : position:(c:0 m:0) targetchar='b'  	| parser://org.unlaxer.parser.combinator.NonOrdered| status:failed | parsed:  
+CLOSE   : 'bc' consumed:0(2 remain) 
+

@@ -1,0 +1,12 @@
+'az69+' (0 - 5): org.unlaxer.parser.combinator.Chain
+ 'a' (0 - 1): org.unlaxer.parser.posix.AlphabetParser
+ 'z69' (1 - 4): org.unlaxer.parser.combinator.ZeroOrMore
+  'z' (1 - 2): org.unlaxer.parser.combinator.Choice
+   'z' (1 - 2): org.unlaxer.parser.posix.AlphabetParser
+  '6' (2 - 3): org.unlaxer.parser.combinator.Choice
+   '6' (2 - 3): org.unlaxer.parser.posix.DigitParser
+  '9' (3 - 4): org.unlaxer.parser.combinator.Choice
+   '9' (3 - 4): org.unlaxer.parser.posix.DigitParser
+ '+' (4 - 5): org.unlaxer.parser.combinator.NotPropagatableSource
+  '+' (4 - 5): org.unlaxer.parser.ascii.MinusParser(inverted)
+

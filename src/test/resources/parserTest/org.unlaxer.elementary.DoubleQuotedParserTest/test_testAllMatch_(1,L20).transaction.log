@@ -1,0 +1,39 @@
+OPEN    : '"abc"'
+BEGIN   : position:(c:0 m:0) targetchar='"'  	| parser:org.unlaxer.parser.elementary.DoubleQuotedParser
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.QuotedParser(contents)
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser
+ROLLBACK: position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser | rollbacked: 
+ROLLBACK: position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource
+COMMIT  : position:(c:2 m:2) targetchar='b'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource | committed:a 
+COMMIT  : position:(c:2 m:2) targetchar='b'  	| parser:org.unlaxer.parser.combinator.Choice | committed:a 
+BEGIN   : position:(c:2 m:2) targetchar='b'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:2 m:2) targetchar='b'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser
+ROLLBACK: position:(c:2 m:2) targetchar='b'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser | rollbacked: 
+ROLLBACK: position:(c:2 m:2) targetchar='b'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:2 m:2) targetchar='b'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:2 m:2) targetchar='b'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource
+COMMIT  : position:(c:3 m:3) targetchar='c'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource | committed:b 
+COMMIT  : position:(c:3 m:3) targetchar='c'  	| parser:org.unlaxer.parser.combinator.Choice | committed:b 
+BEGIN   : position:(c:3 m:3) targetchar='c'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:3 m:3) targetchar='c'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser
+ROLLBACK: position:(c:3 m:3) targetchar='c'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser | rollbacked: 
+ROLLBACK: position:(c:3 m:3) targetchar='c'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:3 m:3) targetchar='c'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:3 m:3) targetchar='c'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource
+COMMIT  : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource | committed:c 
+COMMIT  : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.Choice | committed:c 
+BEGIN   : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser
+ROLLBACK: position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser | rollbacked: 
+ROLLBACK: position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+BEGIN   : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.Choice
+BEGIN   : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource
+ROLLBACK: position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource | rollbacked: 
+ROLLBACK: position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
+COMMIT  : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(contents) | committed:abc 
+COMMIT  : position:(c:5 m:5) targetchar=''  	| parser:org.unlaxer.parser.elementary.DoubleQuotedParser | committed:"abc" 
+CLOSE   : '"abc"' consumed:allConsumed 
+

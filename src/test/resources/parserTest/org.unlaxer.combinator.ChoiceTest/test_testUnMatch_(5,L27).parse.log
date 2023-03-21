@@ -1,0 +1,2 @@
+START   : position:(c:0 m:0) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice
+END     : position:(c:0 m:0) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice| status:failed | parsed:  

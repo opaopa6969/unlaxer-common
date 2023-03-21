@@ -1,0 +1,7 @@
+OPEN    : '\'
+START   : position:(c:0 m:0) targetchar='\'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser
+BEGIN   : position:(c:0 m:0) targetchar='\'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser
+ROLLBACK: position:(c:0 m:0) targetchar='\'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser | rollbacked:\ 
+END     : position:(c:0 m:0) targetchar='\'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser| status:failed | parsed:  
+CLOSE   : '\' consumed:0(1 remain) 
+

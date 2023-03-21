@@ -1,0 +1,5 @@
+'(   	a   )' (0 - 10): org.unlaxer.parser.elementary.ParenthesesParser
+ '(' (0 - 1): org.unlaxer.parser.ascii.LeftParenthesisParser
+ 'a' (5 - 6): org.unlaxer.parser.elementary.WordParser
+ ')' (9 - 10): org.unlaxer.parser.ascii.RightParenthesisParser
+

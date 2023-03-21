@@ -1,0 +1,33 @@
+OPEN    : ' 1
+2	 3 4 '
+START   : position:(c:0 m:0) targetchar=' '  	| parser://org.unlaxer.parser.combinator.WhiteSpaceDelimitedLazyChainTest$WhiteSpaceDelimitedLazyChainTestParser
+BEGIN   : position:(c:0 m:0) targetchar=' '  	| parser://org.unlaxer.parser.combinator.WhiteSpaceDelimitedLazyChainTest$WhiteSpaceDelimitedLazyChainTestParser
+START   : position:(c:0 m:0) targetchar=' '  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:0 m:0) targetchar=' '  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:1 m:1) targetchar='1'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor | committed:  
+END     : position:(c:1 m:1) targetchar='1'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:   
+START   : position:(c:2 m:2) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:2 m:2) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:4 m:4) targetchar='2'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor | committed:
+ 
+END     : position:(c:4 m:4) targetchar='2'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:
+  
+START   : position:(c:5 m:5) targetchar='	'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:5 m:5) targetchar='	'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:7 m:7) targetchar='3'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor | committed:	  
+END     : position:(c:7 m:7) targetchar='3'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:	   
+START   : position:(c:8 m:8) targetchar='\r'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:8 m:8) targetchar='\r'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:10 m:10) targetchar='4'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor | committed:  
+END     : position:(c:10 m:10) targetchar='4'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:   
+START   : position:(c:11 m:11) targetchar=' '  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+BEGIN   : position:(c:11 m:11) targetchar=' '  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+COMMIT  : position:(c:12 m:12) targetchar=''  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor | committed:  
+END     : position:(c:12 m:12) targetchar=''  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:   
+COMMIT  : position:(c:12 m:12) targetchar=''  	| parser://org.unlaxer.parser.combinator.WhiteSpaceDelimitedLazyChainTest$WhiteSpaceDelimitedLazyChainTestParser | committed: 1
+2	 3 4  
+END     : position:(c:12 m:12) targetchar=''  	| parser://org.unlaxer.parser.combinator.WhiteSpaceDelimitedLazyChainTest$WhiteSpaceDelimitedLazyChainTestParser| status:succeeded | parsed: 1
+2	 3 4   
+CLOSE   : ' 1
+2	 3 4 ' consumed:allConsumed 
+

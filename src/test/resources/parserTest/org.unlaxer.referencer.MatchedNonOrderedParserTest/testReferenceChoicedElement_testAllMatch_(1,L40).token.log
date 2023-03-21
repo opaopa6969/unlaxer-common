@@ -1,0 +1,19 @@
+'(a1%)b2&' (0 - 8): org.unlaxer.parser.combinator.Chain
+ '(a1%)' (0 - 5): org.unlaxer.parser.elementary.ParenthesesParser
+  '(' (0 - 1): org.unlaxer.parser.ascii.LeftParenthesisParser
+  'a1%' (1 - 4): nonOrdered
+   'a' (1 - 2): org.unlaxer.parser.combinator.OneOrMore
+    'a' (1 - 2): org.unlaxer.parser.posix.AlphabetParser
+   '1' (2 - 3): org.unlaxer.parser.combinator.OneOrMore
+    '1' (2 - 3): org.unlaxer.parser.posix.DigitParser
+   '%' (3 - 4): org.unlaxer.parser.combinator.OneOrMore
+    '%' (3 - 4): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+  ')' (4 - 5): org.unlaxer.parser.ascii.RightParenthesisParser
+ 'b2&' (5 - 8): org.unlaxer.parser.combinator.Ordered
+  'b' (5 - 6): org.unlaxer.parser.combinator.OneOrMore
+   'b' (5 - 6): org.unlaxer.parser.posix.AlphabetParser
+  '2' (6 - 7): org.unlaxer.parser.combinator.OneOrMore
+   '2' (6 - 7): org.unlaxer.parser.posix.DigitParser
+  '&' (7 - 8): org.unlaxer.parser.combinator.OneOrMore
+   '&' (7 - 8): org.unlaxer.parser.elementary.MappedSingleCharacterParser
+
