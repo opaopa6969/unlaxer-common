@@ -1,10 +1,10 @@
 OPEN    : '"abc"'
 START   : position:(c:0 m:0) targetchar='"'  	| parser:org.unlaxer.parser.elementary.DoubleQuotedParser
 BEGIN   : position:(c:0 m:0) targetchar='"'  	| parser:org.unlaxer.parser.elementary.DoubleQuotedParser
-START   : position:(c:0 m:0) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(leftQuote)
-END     : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.QuotedParser(leftQuote)| status:succeeded | parsed:"  
-START   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.QuotedParser(contents)
-BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.QuotedParser(contents)
+START   : position:(c:0 m:0) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(leftQuote))
+END     : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(leftQuote))| status:succeeded | parsed:"  
+START   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(contents))
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(contents))
 START   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice
 BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice
 START   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser
@@ -61,10 +61,10 @@ ROLLBACK: position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combin
 END     : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource| status:failed | parsed:  
 ROLLBACK: position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
 END     : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.combinator.Choice| status:failed | parsed:  
-COMMIT  : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(contents) | committed:abc 
-END     : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(contents)| status:succeeded | parsed:abc  
-START   : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(rightQuote)
-END     : position:(c:5 m:5) targetchar=''  	| parser:org.unlaxer.parser.elementary.QuotedParser(rightQuote)| status:succeeded | parsed:"  
+COMMIT  : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(contents)) | committed:abc 
+END     : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(contents))| status:succeeded | parsed:abc  
+START   : position:(c:4 m:4) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(rightQuote))
+END     : position:(c:5 m:5) targetchar=''  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(rightQuote))| status:succeeded | parsed:"  
 COMMIT  : position:(c:5 m:5) targetchar=''  	| parser:org.unlaxer.parser.elementary.DoubleQuotedParser | committed:"abc" 
 END     : position:(c:5 m:5) targetchar=''  	| parser:org.unlaxer.parser.elementary.DoubleQuotedParser| status:succeeded | parsed:"abc"  
 CLOSE   : '"abc"' consumed:allConsumed 

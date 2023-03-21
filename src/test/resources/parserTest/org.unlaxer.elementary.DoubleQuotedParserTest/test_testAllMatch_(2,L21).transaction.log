@@ -1,6 +1,6 @@
 OPEN    : '"ab\c"'
 BEGIN   : position:(c:0 m:0) targetchar='"'  	| parser:org.unlaxer.parser.elementary.DoubleQuotedParser
-BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.QuotedParser(contents)
+BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(contents))
 BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice
 BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser
 ROLLBACK: position:(c:1 m:1) targetchar='a'  	| parser:org.unlaxer.parser.elementary.EscapeInQuotedParser | rollbacked: 
@@ -29,7 +29,7 @@ BEGIN   : position:(c:5 m:5) targetchar='"'  	| parser:org.unlaxer.parser.combin
 BEGIN   : position:(c:5 m:5) targetchar='"'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource
 ROLLBACK: position:(c:5 m:5) targetchar='"'  	| parser:org.unlaxer.parser.combinator.NotPropagatableSource | rollbacked: 
 ROLLBACK: position:(c:5 m:5) targetchar='"'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
-COMMIT  : position:(c:5 m:5) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(contents) | committed:ab\c 
+COMMIT  : position:(c:5 m:5) targetchar='"'  	| parser:org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(contents)) | committed:ab\c 
 COMMIT  : position:(c:6 m:6) targetchar=''  	| parser:org.unlaxer.parser.elementary.DoubleQuotedParser | committed:"ab\c" 
 CLOSE   : '"ab\c"' consumed:allConsumed 
 

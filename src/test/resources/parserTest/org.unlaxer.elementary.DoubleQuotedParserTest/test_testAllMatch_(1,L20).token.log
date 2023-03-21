@@ -1,6 +1,6 @@
 '"abc"' (0 - 5): org.unlaxer.parser.elementary.DoubleQuotedParser
  '"' (0 - 1): org.unlaxer.parser.ascii.DoubleQuoteParser
- 'abc' (1 - 4): org.unlaxer.parser.elementary.QuotedParser(contents)
+ 'abc' (1 - 4): org.unlaxer.parser.elementary.QuotedParser(org.unlaxer.parser.elementary.QuotedParser$Parts(contents))
   'a' (1 - 2): org.unlaxer.parser.combinator.Choice
    'a' (1 - 2): org.unlaxer.parser.combinator.NotPropagatableSource
     'a' (1 - 2): org.unlaxer.parser.ascii.DoubleQuoteParser
