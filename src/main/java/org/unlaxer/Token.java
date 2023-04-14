@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.unlaxer.listener.OutputLevel;
@@ -31,7 +32,13 @@ public class Token implements Serializable{
 	public Optional<Token> parent;
 	private final List<Token> originalChildren;
 	//TODO make private
-	public  final List<Token> filteredChildren;
+	public  final List<Token> filteredChildren; // astNodeChildren 
+
+	public enum ChildrenKind{
+		original,
+		astNodes
+	}
+	
 	public final TokenKind tokenKind;
 	
 	
@@ -46,6 +53,11 @@ public class Token implements Serializable{
 			tokens);
 	}
 	
+	// TODO too specialized...?
+	Predicate<Token> AST_NODES = token -> false == token.parser.hasTag(NodeKind.notNode.getTag());
+	
+
+	
 	public Token(TokenKind tokenKind , RangedString token, Parser parser , List<Token> children) {
 		super();
 		this.tokenKind = tokenKind;
@@ -56,7 +68,7 @@ public class Token implements Serializable{
 		parent= Optional.empty();
 		children.stream().forEach(child->child.parent = Optional.of(this));
 		this.filteredChildren = children.stream()
-			.filter(childToken->false == childToken.parser.hasTag(NodeKind.notNode.getTag()))
+			.filter(AST_NODES)
 			.collect(Collectors.toList());
 	}
 	
