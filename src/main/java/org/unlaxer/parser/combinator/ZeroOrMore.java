@@ -1,6 +1,7 @@
 package org.unlaxer.parser.combinator;
 
 import org.unlaxer.Name;
+import org.unlaxer.ast.ASTMapper.ASTNodeKind;
 import org.unlaxer.parser.Parser;
 
 public class ZeroOrMore extends ChildOccursWithTerminator {
@@ -20,6 +21,23 @@ public class ZeroOrMore extends ChildOccursWithTerminator {
 		super(name , inner,terminator);
 	}
 	
+	public ZeroOrMore(ASTNodeKind astNodeKind ,  Parser inner) {
+		super(inner);
+		addTag(astNodeKind.tag());
+	}
+	
+	public ZeroOrMore(Name name ,ASTNodeKind astNodeKind  ,  Parser inner) {
+		super(name , inner);
+		addTag(astNodeKind.tag());
+	}
+
+	
+	private ZeroOrMore(Name name , ASTNodeKind astNodeKind , Parser inner,Parser terminator) {
+		super(name , inner,terminator);
+		addTag(astNodeKind.tag());
+	}
+
+
 	public ZeroOrMore newWithTerminator(Parser terminator){
 		return new ZeroOrMore(getName() , getChild(), terminator);
 	}

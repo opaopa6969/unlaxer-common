@@ -41,11 +41,16 @@ public class ParserTestBase {
 	
 	public static String testFolderName ="parserTest";
 	
+	static {
+		File root = new File("build/"+testFolderName);
+		root.mkdirs();
+	}
+	
 	public static void setLevel(OutputLevel outputLevel) {
 		ParserTestBase.outputLevel.set(outputLevel);
 	}
-	public enum Assert{
-		doAssert,nothing
+	public enum DoAssert{
+		yes,no
 	}
 	public final LogListenerContainer transactionLogger = new LogListenerContainer();
 	public final LogListenerContainer parseLogger = new LogListenerContainer();
@@ -73,23 +78,23 @@ public class ParserTestBase {
 	
 	public TestResult testPartialMatch(Parser parser, String sourceString, String matchedString,
 			boolean createMeta)  {
-		return testPartialMatch(parser, sourceString, matchedString, createMeta , Assert.doAssert);
+		return testPartialMatch(parser, sourceString, matchedString, createMeta , DoAssert.yes);
 	}
 	
 	public TestResult testPartialMatch(Parser parser, String sourceString, String matchedString,
-			boolean createMeta  , Assert doAssert)  {
+			boolean createMeta  , DoAssert doAssert)  {
 		return testMatch(parser, sourceString, matchedString, createMeta , doAssert);
 	}
 	
 	public TestResult testPartialMatch(Parser parser, String sourceString, String matchedString) {
-		return testPartialMatch(parser, sourceString, matchedString, true , Assert.doAssert);
+		return testPartialMatch(parser, sourceString, matchedString, true , DoAssert.yes);
 	}
 	
-	public TestResult testPartialMatch(Parser parser, String sourceString, String matchedString  , Assert doAssert) {
+	public TestResult testPartialMatch(Parser parser, String sourceString, String matchedString  , DoAssert doAssert) {
 		return testMatch(parser, sourceString, matchedString, true , doAssert);
 	}
 
-	TestResult testMatch(Parser parser, String sourceString, String matchedString, boolean createMeta , Assert doAssert){
+	TestResult testMatch(Parser parser, String sourceString, String matchedString, boolean createMeta , DoAssert doAssert){
 		
 		return test(parser, sourceString, createMeta,
 			(parseContext , parsed)->{
@@ -130,40 +135,40 @@ public class ParserTestBase {
 		);
 	}
 	
-	static boolean  checkAssertEquals(Object expected , Object actual , Assert doAssert) {
+	static boolean  checkAssertEquals(Object expected , Object actual , DoAssert doAssert) {
 		
 		try {
 			assertEquals(expected, actual);
 			
 			return true;
 		} catch (Throwable e) {
-			if(doAssert == Assert.doAssert) {
+			if(doAssert == DoAssert.yes) {
 				throw e;
 			}
 			return false;
 		}
 	}
 	
-	static boolean  checkAssertFalse(boolean checkValue , Assert doAssert) {
+	static boolean  checkAssertFalse(boolean checkValue , DoAssert doAssert) {
 		
 		try {
 			assertFalse(checkValue);
 			return true;
 		} catch (Throwable e) {
-			if(doAssert == Assert.doAssert) {
+			if(doAssert == DoAssert.yes) {
 				throw e;
 			}
 			return false;
 		}
 	}
 	
-	static boolean  checkAsserttrue(boolean checkValue , Assert doAssert) {
+	static boolean  checkAsserttrue(boolean checkValue , DoAssert doAssert) {
 		
 		try {
 			assertTrue(checkValue);
 			return true;
 		} catch (Throwable e) {
-			if(doAssert == Assert.doAssert) {
+			if(doAssert == DoAssert.yes) {
 				throw e;
 			}
 			return false;
@@ -208,35 +213,35 @@ public class ParserTestBase {
 	}
 	
 	public TestResult testAllMatch(Parser parser, String sourceString ) {
-		return testAllMatch(parser, sourceString, true , Assert.doAssert);
+		return testAllMatch(parser, sourceString, true , DoAssert.yes);
 	}
 
-	public TestResult testAllMatch(Parser parser, String sourceString  , Assert doAssert) {
+	public TestResult testAllMatch(Parser parser, String sourceString  , DoAssert doAssert) {
 
 		return testPartialMatch(parser, sourceString, sourceString , doAssert);
 	}
 	public TestResult testAllMatch(Parser parser, String sourceString, boolean createMeta) {
 
-		return testAllMatch(parser, sourceString, createMeta , Assert.doAssert);
+		return testAllMatch(parser, sourceString, createMeta , DoAssert.yes);
 	}
 	
-	public TestResult testAllMatch(Parser parser, String sourceString, boolean createMeta , Assert doAssert) {
+	public TestResult testAllMatch(Parser parser, String sourceString, boolean createMeta , DoAssert doAssert) {
 
 		return testMatch(parser, sourceString, sourceString, createMeta , doAssert);
 	}
 	
 	public TestResult testUnMatch(Parser parser, String sourceString ) {
-		return testUnMatch(parser, sourceString, true , Assert.doAssert);
+		return testUnMatch(parser, sourceString, true , DoAssert.yes);
 	}
 
-	public TestResult testUnMatch(Parser parser, String sourceString  , Assert doAssert) {
+	public TestResult testUnMatch(Parser parser, String sourceString  , DoAssert doAssert) {
 		return testUnMatch(parser, sourceString, true , doAssert);
 	}
 
 	public TestResult testUnMatch(Parser parser, String sourceString, boolean createMeta) {
-		return testUnMatch(parser , sourceString , createMeta , Assert.doAssert);
+		return testUnMatch(parser , sourceString , createMeta , DoAssert.yes);
 	}
-	public TestResult testUnMatch(Parser parser, String sourceString, boolean createMeta , Assert doAssert) {
+	public TestResult testUnMatch(Parser parser, String sourceString, boolean createMeta , DoAssert doAssert) {
 
 		return test(parser, sourceString, createMeta,
 			(parseContext , parsed)->{
@@ -253,13 +258,13 @@ public class ParserTestBase {
 	}
 	
 	public TestResult testSucceededOnly(Parser parser, String sourceString) {
-		return testSucceededOnly(parser, sourceString, Assert.doAssert);
+		return testSucceededOnly(parser, sourceString, DoAssert.yes);
 	}
-	public TestResult testSucceededOnly(Parser parser, String sourceString , Assert doAssert) {
+	public TestResult testSucceededOnly(Parser parser, String sourceString , DoAssert doAssert) {
 		return testSucceededOnly(parser, sourceString, false , doAssert);
 	}
 	
-	public TestResult testSucceededOnly(Parser parser, String sourceString, boolean createMeta , Assert doAssert) {
+	public TestResult testSucceededOnly(Parser parser, String sourceString, boolean createMeta , DoAssert doAssert) {
 
 		return test(parser, sourceString, createMeta, 
 			(parseContext , parsed)->{

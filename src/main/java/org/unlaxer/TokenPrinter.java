@@ -63,7 +63,7 @@ public class TokenPrinter{
 			return ;
 		}
 		level++;
-		for(Token original : token.filteredChildren){
+		for(Token original : token.getAstNodeChildren()){
 			output(original,out,level,detailLevel,true);
 		}
 	}

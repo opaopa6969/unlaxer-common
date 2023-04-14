@@ -23,7 +23,7 @@ public class ParserFactoryBySupplier{
 		T parser = (T) singletonsBySupplier.get(supplier);
 		if(false == initialized(supplier)) {
 			initilizedBySupplier.put(supplier, true);
-			parser.initialize();
+//			parser.initialize();
 		}
 		return parser;
 	}

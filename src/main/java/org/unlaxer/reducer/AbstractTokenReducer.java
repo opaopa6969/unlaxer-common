@@ -38,15 +38,15 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 					token.getTokenKind(), //
 					token.getRangedString(), //
 					root);
-			newRootToken.filteredChildren.add(token);
+			newRootToken.addChildren(token);
 			token = newRootToken;
 		}
 
-		for (Token childToken : token.filteredChildren) {
+		for (Token childToken : token.getAstNodeChildren()) {
 			children.addAll(reduce(childToken));
 		}
-		token.filteredChildren.clear();
-		token.filteredChildren.addAll(children);
+		token.getAstNodeChildren().clear();
+		token.getAstNodeChildren().addAll(children);
 
 		// TokenPrinter.output(token, System.out, 0, DetailLevel.detail,
 		// true);
@@ -60,19 +60,19 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 		// false);
 		// System.out.println();
 
-		if (token.filteredChildren.isEmpty()) {
+		if (token.getAstNodeChildren().isEmpty()) {
 			return reduceWithLeaf(token);
 		}
 		List<Token> tokens = new ArrayList<Token>();
 
-		token.filteredChildren.stream().map(this::reduce)
+		token.getAstNodeChildren().stream().map(this::reduce)
 			.forEach(tokens::addAll);
 
 		if (doReduce(token.parser)) {
 			return tokens;
 		}
-		token.filteredChildren.clear();
-		token.filteredChildren.addAll(tokens);
+		token.getAstNodeChildren().clear();
+		token.getAstNodeChildren().addAll(tokens);
 		List<Token> tokenContainer = new ArrayList<Token>();
 		tokenContainer.add(token);
 		return tokenContainer;

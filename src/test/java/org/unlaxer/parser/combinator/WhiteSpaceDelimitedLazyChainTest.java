@@ -34,23 +34,16 @@ public class WhiteSpaceDelimitedLazyChainTest extends ParserTestBase{
 	public static class WhiteSpaceDelimitedLazyChainTestParser extends WhiteSpaceDelimitedLazyChain{
 
 		private static final long serialVersionUID = -4138533725870179243L;
-		List<Parser> parsers;
-
+//		List<Parser> parsers;
 		@Override
-		public void initialize() {
-			
-			parsers =
+		public List<Parser> getLazyParsers() {
+			return 
 				new Parsers(
 					new WordParser("1"),
 					new WordParser("2"),
 					new WordParser("3"),
 					new WordParser("4")
 				);
-		}
-
-		@Override
-		public List<Parser> getLazyParsers() {
-			return parsers;
 		}
 	}
 

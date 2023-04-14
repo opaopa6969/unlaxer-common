@@ -7,6 +7,7 @@ import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.util.annotation.TokenExtractor;
 
 public interface ChoiceInterface extends Parser{
 	
@@ -30,8 +31,9 @@ public interface ChoiceInterface extends Parser{
 		parseContext.endParse(this, Parsed.FAILED , parseContext, tokenKind, invertMatch);
 		return Parsed.FAILED;
 	}
-	
+
+	@TokenExtractor
 	public static Token choiced(Token thisChoiceToken) {
-		return thisChoiceToken.filteredChildren.get(0);
+		return thisChoiceToken.getChildFromAstNodes(0);
 	}
 }

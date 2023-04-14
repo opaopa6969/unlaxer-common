@@ -5,6 +5,7 @@ import java.util.List;
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
 import org.unlaxer.TokenKind;
+import org.unlaxer.ast.ASTMapper.ASTNodeKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.HasChildrenParser;
 import org.unlaxer.parser.Parser;
@@ -30,6 +31,29 @@ public class Choice extends ConstructedCombinatorParser implements ChoiceInterfa
 	public Choice(Parser... parsers) {
 		super(parsers);
 	}
+	
+	public Choice(Name name, ASTNodeKind astNodeKind ,  List<Parser> parsers) {
+		super(name, parsers);
+		addTag(astNodeKind.tag());
+	}
+
+	public Choice(ASTNodeKind astNodeKind ,  List<Parser> parsers) {
+		super(parsers);
+		addTag(astNodeKind.tag());
+	}
+
+	@SafeVarargs
+	public Choice(Name name, ASTNodeKind astNodeKind ,  Parser... parsers) {
+		super(name, parsers);
+		addTag(astNodeKind.tag());
+	}
+
+	@SafeVarargs
+	public Choice(ASTNodeKind astNodeKind ,  Parser... parsers) {
+		super(parsers);
+		addTag(astNodeKind.tag());
+	}
+
 
 	@Override
 	public Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch) {

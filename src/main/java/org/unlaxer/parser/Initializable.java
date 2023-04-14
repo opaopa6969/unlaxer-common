@@ -4,5 +4,5 @@ public interface Initializable{
 	
 	public default void initialize() {
 	}
-	
+//	public T initialize();
 }

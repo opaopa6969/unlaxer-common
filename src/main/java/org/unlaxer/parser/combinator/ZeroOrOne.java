@@ -1,6 +1,7 @@
 package org.unlaxer.parser.combinator;
 
 import org.unlaxer.Name;
+import org.unlaxer.ast.ASTMapper.ASTNodeKind;
 import org.unlaxer.parser.Parser;
 
 public class ZeroOrOne extends Optional{
@@ -14,4 +15,15 @@ public class ZeroOrOne extends Optional{
 	public ZeroOrOne(Parser inner) {
 		super(inner);
 	}
+	
+	public ZeroOrOne(Name name, ASTNodeKind astNodeKind ,  Parser inner) {
+		super(name, inner);
+		addTag(astNodeKind.tag());
+	}
+
+	public ZeroOrOne(ASTNodeKind astNodeKind , Parser inner) {
+		super(inner);
+		addTag(astNodeKind.tag());
+	}
+
 }

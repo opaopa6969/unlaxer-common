@@ -29,6 +29,34 @@ public class ID extends Specifier<ID>{
 		super(stringName);
 	}
 	
+	public static ID of(int id) {
+		return of(String.valueOf(id));
+	}
+	
+	public static ID of(long id) {
+		return of(String.valueOf(id));
+	}
+	
+	public static ID of(short id) {
+		return of(String.valueOf(id));
+	}
+	
+	public static ID of(byte id) {
+		return of(String.valueOf(id));
+	}
+	
+	public static ID of(float id) {
+		return of(String.valueOf(id));
+	}
+
+	public static ID of(double id) {
+		return of(String.valueOf(id));
+	}
+	
+	public static ID of(char id) {
+		return of(String.valueOf(id));
+	}
+	
 	public static ID of(String id){
 		return specifierByString.get(id);
 	}

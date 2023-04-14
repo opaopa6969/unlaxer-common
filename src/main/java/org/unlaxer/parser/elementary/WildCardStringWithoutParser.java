@@ -16,6 +16,7 @@ public class WildCardStringWithoutParser extends SingleStringParser implements S
 	public WildCardStringWithoutParser(String... excludes) {
 		super();
 		this.excludes = excludes;
+		checkSingleString();
 	}
 
 
@@ -31,6 +32,15 @@ public class WildCardStringWithoutParser extends SingleStringParser implements S
 	public WildCardStringWithoutParser(Name name, String... excludes) {
 		super(name);
 		this.excludes = excludes;
+		checkSingleString();
+	}
+	
+	void checkSingleString() {
+		for (String string : excludes) {
+			if(string.length() != 1) {
+				throw new IllegalArgumentException("must be specify single length string");
+			}
+		}
 	}
 
 

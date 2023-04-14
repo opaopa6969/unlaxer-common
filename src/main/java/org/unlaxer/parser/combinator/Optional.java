@@ -1,6 +1,7 @@
 package org.unlaxer.parser.combinator;
 
 import org.unlaxer.Name;
+import org.unlaxer.ast.ASTMapper.ASTNodeKind;
 import org.unlaxer.parser.Parser;
 
 public class Optional extends ChildOccursWithTerminator {
@@ -14,6 +15,17 @@ public class Optional extends ChildOccursWithTerminator {
 	public Optional(Name name, Parser inner) {
 		super(name, inner);
 	}
+	
+	public Optional(ASTNodeKind astNodeKind ,  Parser inner) {
+		super(inner);
+		addTag(astNodeKind.tag());
+	}
+
+	public Optional(Name name, ASTNodeKind astNodeKind ,  Parser inner) {
+		super(name, inner);
+		addTag(astNodeKind.tag());
+	}
+
 
 	@Override
 	public int min() {

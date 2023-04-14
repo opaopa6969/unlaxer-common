@@ -7,6 +7,7 @@ import org.unlaxer.Parsed;
 import org.unlaxer.ParserPath;
 import org.unlaxer.TaggableAccessor;
 import org.unlaxer.TokenKind;
+import org.unlaxer.ast.ASTMapper.ASTNodeKind;
 import org.unlaxer.context.ParseContext;
 
 
@@ -17,7 +18,7 @@ public interface Parser extends //
 	ParserPath,//
 //	ParserHierarchy , //
 //	ParserFinder,//
-	Initializable,
+//	Initializable,
 	Serializable{
 
 	//FIXME make Parsed parse(ParseContext parseContext) only. use to get tokenKind and invertMatch 
@@ -54,8 +55,11 @@ public interface Parser extends //
 		return ParserFactoryByClass.get(clazz);
 	}
 	
+	public static <T extends Parser> T get(ASTNodeKind nodeKind , Class<T> clazz ) {
+		return ParserFactoryByClass.get(nodeKind , clazz);
+	}
+	
 	public static <T extends Parser> T get(Supplier<? extends Parser> supplier) {
 		return ParserFactoryBySupplier.get(supplier);
 	}
-
 }

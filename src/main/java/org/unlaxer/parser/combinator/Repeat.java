@@ -1,6 +1,7 @@
 package org.unlaxer.parser.combinator;
 
 import org.unlaxer.Name;
+import org.unlaxer.ast.ASTMapper.ASTNodeKind;
 import org.unlaxer.parser.Parser;
 
 public class Repeat extends ChildOccursWithTerminator {
@@ -26,6 +27,28 @@ public class Repeat extends ChildOccursWithTerminator {
 		super(name , inner,terminator);
 		this.minInclusive = minInclusive;
 		this.maxInclusive = maxInclusive;
+	}
+	
+	public Repeat(ASTNodeKind astNodeKind ,Parser inner , int minInclusive , int maxInclusive) {
+		super(inner);
+		this.minInclusive = minInclusive;
+		this.maxInclusive = maxInclusive;
+		addTag(astNodeKind.tag());
+	}
+	
+	public Repeat(Name name , ASTNodeKind astNodeKind ,Parser inner , int minInclusive , int maxInclusive) {
+		super(name , inner);
+		this.minInclusive = minInclusive;
+		this.maxInclusive = maxInclusive;
+		addTag(astNodeKind.tag());
+	}
+
+	
+	private Repeat(Name name , ASTNodeKind astNodeKind ,Parser inner , int minInclusive , int maxInclusive,Parser terminator) {
+		super(name , inner,terminator);
+		this.minInclusive = minInclusive;
+		this.maxInclusive = maxInclusive;
+		addTag(astNodeKind.tag());
 	}
 	
 	public Repeat newWithTerminator(Parser terminator){

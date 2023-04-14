@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Parser;
@@ -31,7 +32,7 @@ public class Token implements Serializable{
 	
 	public Optional<Token> parent;
 	private final List<Token> originalChildren;
-	//TODO make private
+	//TODO make privateand rename astNodeChildren
 	public  final List<Token> filteredChildren; // astNodeChildren 
 
 	public enum ChildrenKind{
@@ -139,6 +140,12 @@ public class Token implements Serializable{
 		return new Token(tokenKind,new RangedString(tokenRange, tokenString),replace);
 	}
 	
+	List<Token> children(ChildrenKind kind){
+		return kind == ChildrenKind.astNodes ? 
+				filteredChildren :
+				originalChildren;
+	}
+	
 	public Token newCreatesOf(List<Token> newChildrens) {
 		
 		Token newToken = new Token(tokenKind , newChildrens , parser , tokenRange.startIndexInclusive);
@@ -148,5 +155,122 @@ public class Token implements Serializable{
 	public Token newCreatesOf(Token... newChildrens) {
 		
 		return newCreatesOf(Arrays.asList(newChildrens));
+	}
+	
+	public Token getChild(Predicate<Token> predicates) {
+		return originalChildren.stream().filter(predicates).findFirst().orElseThrow();
+	}
+	
+	public int getChildIndex(Predicate<Token> predicates) {
+		return getChildIndex(ChildrenKind.astNodes, predicates);
+	}
+
+	public int getChildIndex(ChildrenKind childrenKind, Predicate<Token> predicates) {
+		
+		int index=0;
+		for (Token token : children(childrenKind)) {
+			if(predicates.test(token)) {
+				return index;
+			}
+			index++;
+		}
+		throw new IllegalArgumentException("predicates is not match");
+	}
+	
+	public Token getChildWithParser(Predicate<Parser> predicatesWithTokensParser) {
+		return originalChildren.stream().filter(token-> predicatesWithTokensParser.test(token.parser)).findFirst().orElseThrow();
+	}
+	
+	public int getChildIndexWithParser(Predicate<Parser> predicatesWithTokensParser) {
+		return getChildIndexWithParser(ChildrenKind.astNodes, predicatesWithTokensParser);
+	}
+	
+	public int getChildIndexWithParser(ChildrenKind childrenKind, Predicate<Parser> predicatesWithTokensParser) {
+		
+		int index=0;
+		for (Token token : children(childrenKind)) {
+			if(predicatesWithTokensParser.test(token.parser)) {
+				return index;
+			}
+			index++;
+		}
+		throw new IllegalArgumentException("predicates is not match");
+	}
+
+	
+	public Token getChildWithParser(Class<? extends Parser> parserClass) {
+		return getChildWithParser(parser -> parser.getClass() == parserClass);
+	}
+	
+	public int getChildIndexWithParser(Class<? extends Parser> parserClass) {
+		return getChildIndexWithParser(ChildrenKind.astNodes, parserClass);
+	}
+	
+	public int getChildIndexWithParser(ChildrenKind childrenKind, Class<? extends Parser> parserClass) {
+		
+		return getChildIndexWithParser(childrenKind , parser -> parser.getClass() == parserClass);
+	}
+	
+	public Optional<Token> getChildAsOptional(Predicate<Token> predicates) {
+		return originalChildren.stream().filter(predicates).findFirst();
+	}
+	
+	public Optional<Token> getChildWithParserAsOptional(Predicate<Parser> predicatesWithTokensParser) {
+		return originalChildren.stream().filter(token-> predicatesWithTokensParser.test(token.parser)).findFirst();
+	}
+	
+	public Optional<Token> getChildWithParserAsOptional(Class<? extends Parser> parserClass) {
+		return getChildWithParserAsOptional(parser -> parser.getClass() == parserClass);
+	}
+	
+	public Stream<Token> getChildren(Predicate<Token> predicates) {
+		return originalChildren.stream().filter(predicates);
+	}
+	
+	public Stream<Token> getChildrenWithParser(Predicate<Parser> predicatesWithTokensParser) {
+		return originalChildren.stream().filter(token-> predicatesWithTokensParser.test(token.parser));
+	}
+	
+	public Stream<Token> getChildrenWithParser(Class<? extends Parser> parserClass) {
+		return getChildrenWithParser(parser -> parser.getClass() == parserClass);
+	}
+	
+	public List<Token> getChildrenAsList(Predicate<Token> predicates) {
+		return getChildren(predicates).collect(Collectors.toList());
+	}
+	
+	public List<Token> getChildrenWithParserAsList(Predicate<Parser> predicatesWithTokensParser) {
+		return getChildrenWithParser(predicatesWithTokensParser).collect(Collectors.toList());
+	}
+	
+	public List<Token> getChildrenWithParserAsList(Class<? extends Parser> parserClass) {
+		return getChildrenWithParserAsList(parser -> parser.getClass() == parserClass);
+	}
+	
+	public Token getChildFromOriginal(int index) {
+		return originalChildren.get(index);
+	}
+	
+	public Token getChildFromAstNodes(int index) {
+		return filteredChildren.get(index);
+	}
+
+	public List<Token> getOriginalChildren() {
+		return originalChildren;
+	}
+
+	public List<Token> getAstNodeChildren() {
+		return filteredChildren;
+	}
+	
+	public Token addChildren(Token...tokens) {
+		
+		for (Token token : tokens) {
+			originalChildren.add(token);
+			if(AST_NODES.test(token)) {
+				filteredChildren.add(token);
+			}
+		}
+		return this;
 	}
 }

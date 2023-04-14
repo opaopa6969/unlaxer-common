@@ -9,6 +9,7 @@ import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.ascii.LeftParenthesisParser;
 import org.unlaxer.parser.ascii.RightParenthesisParser;
 import org.unlaxer.parser.combinator.WhiteSpaceDelimitedLazyChain;
+import org.unlaxer.util.annotation.TokenExtractor;
 
 public abstract class NamedParenthesesParser extends WhiteSpaceDelimitedLazyChain{
 	
@@ -22,35 +23,28 @@ public abstract class NamedParenthesesParser extends WhiteSpaceDelimitedLazyChai
 		super();
 	}
 
-	List<Parser> parsers;
-
-
-
 	public abstract Parser nameParser();
 	
 	public abstract Parser innerParser();
 	
 	
-	@Override
-	public void initialize() {
+	@TokenExtractor
+	public static Token getInnerParserParsed(Token thisParserParsed) {
 		
-		parsers = 
+		// get next token of LeftParenthesisParser
+		int childIndexWithParser = thisParserParsed.getChildIndexWithParser(LeftParenthesisParser.class);
+		return thisParserParsed.getAstNodeChildren().get(childIndexWithParser+1);
+	}
+	
+	@Override
+	public List<Parser> getLazyParsers() {
+		return
 			new Parsers(
 				nameParser(),
 				new LeftParenthesisParser(),
 				innerParser(),
 				new RightParenthesisParser()
 			);
-	}
-	
-	public static Token getInnerParserParsed(Token thisParserParsed) {
-		return thisParserParsed.filteredChildren.get(2);
-	}
-	
-	@Override
-	public List<Parser> getLazyParsers() {
-		return parsers;
-	}
 
-
+	}
 }

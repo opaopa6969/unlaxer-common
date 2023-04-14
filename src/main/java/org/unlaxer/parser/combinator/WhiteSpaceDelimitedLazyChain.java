@@ -44,10 +44,10 @@ public abstract class WhiteSpaceDelimitedLazyChain extends LazyChain implements 
 		
 		if(childrenContainer.isEmpty()){
 			List<Parser> lazyParsers = getLazyParsers();
-			if(lazyParsers == null) {
-				initialize();
-				lazyParsers = getLazyParsers();
-			}
+//			if(lazyParsers == null) {
+//				initialize();
+//				lazyParsers = getLazyParsers();
+//			}
 			childrenContainer.add(spaceDelimitor);
 			for (Parser parser : lazyParsers) {
 				childrenContainer.add(parser);

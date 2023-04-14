@@ -1,6 +1,7 @@
 package org.unlaxer.parser.combinator;
 
 import org.unlaxer.Name;
+import org.unlaxer.ast.ASTMapper.ASTNodeKind;
 import org.unlaxer.parser.Parser;
 
 public class OneOrMore extends ChildOccursWithTerminator {
@@ -14,15 +15,30 @@ public class OneOrMore extends ChildOccursWithTerminator {
 	private OneOrMore(Name name, Parser inner, Parser terminator) {
 		super(name, inner, terminator);
 	}
-	
-	public OneOrMore newWithTerminator(Parser terminator){
-		return new OneOrMore(getName() , getChild(),terminator);
-	}
 
 	public OneOrMore(Name name, Parser inner) {
 		super(name, inner);
 	}
+	
+	public OneOrMore(ASTNodeKind astNodeKind ,  Parser inner) {
+		super(inner);
+		addTag(astNodeKind.tag());
+	}
+	
+	private OneOrMore(Name name, ASTNodeKind astNodeKind ,  Parser inner, Parser terminator) {
+		super(name, inner, terminator);
+		addTag(astNodeKind.tag());
+	}
 
+	public OneOrMore(Name name, ASTNodeKind astNodeKind ,  Parser inner) {
+		super(name, inner);
+		addTag(astNodeKind.tag());
+	}
+
+
+	public OneOrMore newWithTerminator(Parser terminator){
+		return new OneOrMore(getName() , getChild(),terminator);
+	}
 	@Override
 	public int min() {
 		return 1;
