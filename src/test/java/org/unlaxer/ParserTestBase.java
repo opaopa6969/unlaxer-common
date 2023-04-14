@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import org.junit.AfterClass;
 import org.unlaxer.context.CombinedDebugSpecifier;
-import org.unlaxer.context.CreateMetaTokenSprcifier;
+import org.unlaxer.context.CreateMetaTokenSpecifier;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.listener.CombinedDebugListener;
 import org.unlaxer.listener.DebugParserListener;
@@ -173,7 +173,7 @@ public class ParserTestBase {
 	public Parsed parse(Parser parser , String source) {
 		
 		StringSource stringSource = new StringSource(source);
-		ParseContext parseContext = new ParseContext(stringSource,CreateMetaTokenSprcifier.createMetaOn);
+		ParseContext parseContext = new ParseContext(stringSource,CreateMetaTokenSpecifier.createMetaOn);
 		Parsed parsed = parser.parse(parseContext);
 		return parsed;
 	}
@@ -203,7 +203,7 @@ public class ParserTestBase {
 				)
 					
 			),
-			CreateMetaTokenSprcifier.of(createMeta)
+			CreateMetaTokenSpecifier.of(createMeta)
 		);
 	}
 	

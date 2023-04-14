@@ -2,7 +2,7 @@ package sample;
 
 import org.junit.Test;
 import org.unlaxer.StringSource;
-import org.unlaxer.context.CreateMetaTokenSprcifier;
+import org.unlaxer.context.CreateMetaTokenSpecifier;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.ascii.DivisionParser;
@@ -38,7 +38,7 @@ public class Usage001_createParserAndParse extends UsageBase{
 		ParseContext parseContext = 
 			new ParseContext(
 				new StringSource("1+2+3"),
-				CreateMetaTokenSprcifier.createMetaOn
+				CreateMetaTokenSpecifier.createMetaOn
 			);
 		
 		parse(parser, parseContext);

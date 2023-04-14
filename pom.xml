@@ -7,7 +7,6 @@
   <version>1.2.0</version>
   <name>unlaxer-common</name>
   <packaging>jar</packaging>
-  <!-- FIXME change it to the project's website -->
   <url>https://bitbucket.org/opaopa6969/unlaxer/src/master/</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
