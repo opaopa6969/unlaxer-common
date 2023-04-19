@@ -81,21 +81,14 @@ public class QuotedParser extends LazyChain {
 			this.quoteParser = quoteParser;
 		}
 		
-		Parser contents;
 		Parser quoteParser;
 
 		@Override
-		public void initialize() {
-			contents = new Choice(
+		public Supplier<Parser> getLazyParser() {
+			return ()-> new Choice(
 				new EscapeInQuotedParser(),
 				new NotPropagatableSource(quoteParser)
 			);
-		}
-
-
-		@Override
-		public Supplier<Parser> getLazyParser() {
-			return ()-> contents;
 		}
 
 		@Override
@@ -120,7 +113,11 @@ public class QuotedParser extends LazyChain {
 		String contents = collect
 				.flatMap(Token::getToken)
 				//FIXME! this is work around for BUG...
-				.orElseGet(()->thisParsersToken.tokenString.map(quoted->quoted.substring(1, quoted.length()-1)).orElse(""));
+				.orElseGet(
+					()->thisParsersToken.tokenString
+						.map(quoted->quoted.substring(1, quoted.length()-1))
+						.orElse("")
+				);
 		return contents;
 		
 	}
