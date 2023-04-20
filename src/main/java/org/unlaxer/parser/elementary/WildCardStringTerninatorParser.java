@@ -9,6 +9,7 @@ import org.unlaxer.Name;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.StaticParser;
 import org.unlaxer.parser.combinator.Choice;
+import org.unlaxer.parser.combinator.MatchOnly;
 import org.unlaxer.parser.combinator.ZeroOrMore;
 
 public class WildCardStringTerninatorParser extends ZeroOrMore implements StaticParser {
@@ -29,10 +30,10 @@ public class WildCardStringTerninatorParser extends ZeroOrMore implements Static
 	  
 	  List<Parser> parsers =  Stream.of(terminators)
       .map(WordParser::new)
-	    .map(Parser::setMatchONlyTokenKind)
+	    .map(MatchOnly::new)
 	    .collect(Collectors.toList());
 	  Choice choice = new Choice(parsers);
 	  
 	  return choice;
 	}
-}
+}   

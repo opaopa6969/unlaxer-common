@@ -41,9 +41,6 @@ public abstract class AbstractParser implements Parser {
 	
 	NodeReduceMarker nodeReduceMarker;
 	
-	TokenKind overrideTokenKind;
-	
-	
 	public AbstractParser() {
 		this(null, new ArrayList<>());
 	}
@@ -173,18 +170,5 @@ public abstract class AbstractParser implements Parser {
 	public NodeReduceMarker getNodeReduceMarker() {
 		return nodeReduceMarker;
 	}
-
-
-  @Override
-  public Parser setTokenKind(TokenKind tokenKind) {
-    
-    overrideTokenKind = tokenKind;
-    return this;
-  }
-
-  @Override
-  public Optional<TokenKind> overrideTokenKind() {
-    return Optional.ofNullable(overrideTokenKind);
-  }
 		
 }

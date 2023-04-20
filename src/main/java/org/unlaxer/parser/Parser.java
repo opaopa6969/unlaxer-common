@@ -1,7 +1,6 @@
 package org.unlaxer.parser;
 
 import java.io.Serializable;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.unlaxer.Parsed;
@@ -30,22 +29,8 @@ public interface Parser extends //
   }
 
   public default TokenKind getTokenKind() {
-    return overrideTokenKind().orElse(TokenKind.consumed);
+    return TokenKind.consumed;
   }
-
-  public Parser setTokenKind(TokenKind tokenKind);
-
-  public default Parser setCosumedTokenKind() {
-    
-    return setTokenKind(TokenKind.consumed);
-  }
-
-  public default Parser setMatchONlyTokenKind() {
-    
-    return setTokenKind(TokenKind.matchOnly);
-  }
-
-  public Optional<TokenKind> overrideTokenKind();
 
   public default boolean forTerminalSymbol() {
     return this instanceof TerminalSymbol;
