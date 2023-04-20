@@ -28,7 +28,8 @@ public class WildCardStringTerninatorParser extends ZeroOrMore implements Static
 	static Parser createTerminator(String[] terminators) {
 	  
 	  List<Parser> parsers =  Stream.of(terminators)
-	    .map(WordParser::new)
+      .map(WordParser::new)
+	    .map(Parser::setMatchONlyTokenKind)
 	    .collect(Collectors.toList());
 	  Choice choice = new Choice(parsers);
 	  
