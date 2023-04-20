@@ -8,7 +8,7 @@ public class WildCardStringWithoutParserTest extends ParserTestBase{
 	@Test
 	public void test() {
 		
-		var parser = new WildCardStringWithoutParser("B");
+		var parser = new WildCardStringTerninatorParser("B");
 		
 		testAllMatch(parser,"/* niku */");
 		testUnMatch(parser,"/* nikuB */");

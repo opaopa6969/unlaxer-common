@@ -6,7 +6,7 @@ import org.unlaxer.Name;
 import org.unlaxer.parser.ChainParsers;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.combinator.LazyChain;
-import org.unlaxer.parser.elementary.WildCardStringWithoutParser;
+import org.unlaxer.parser.elementary.WildCardStringTerninatorParser;
 import org.unlaxer.parser.elementary.WordParser;
 
 public class BlockComment extends LazyChain{
@@ -24,7 +24,7 @@ public class BlockComment extends LazyChain{
 	public List<Parser> getLazyParsers() {
 		return new ChainParsers(
 			new WordParser("/*"),
-			new WildCardStringWithoutParser("*/"),
+			new WildCardStringTerninatorParser("*/"),
 			new WordParser("*/")
 		);
 	}

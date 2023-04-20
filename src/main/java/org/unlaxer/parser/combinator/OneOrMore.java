@@ -12,7 +12,7 @@ public class OneOrMore extends ChildOccursWithTerminator {
 		super(inner);
 	}
 	
-	private OneOrMore(Name name, Parser inner, Parser terminator) {
+	public  OneOrMore(Name name, Parser inner, Parser terminator) {
 		super(name, inner, terminator);
 	}
 
@@ -25,7 +25,7 @@ public class OneOrMore extends ChildOccursWithTerminator {
 		addTag(astNodeKind.tag());
 	}
 	
-	private OneOrMore(Name name, ASTNodeKind astNodeKind ,  Parser inner, Parser terminator) {
+	public  OneOrMore(Name name, ASTNodeKind astNodeKind ,  Parser inner, Parser terminator) {
 		super(name, inner, terminator);
 		addTag(astNodeKind.tag());
 	}
