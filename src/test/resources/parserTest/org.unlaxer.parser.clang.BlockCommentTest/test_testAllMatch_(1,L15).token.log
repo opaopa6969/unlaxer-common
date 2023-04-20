@@ -1,0 +1,13 @@
+'/* niku */' (0 - 10): org.unlaxer.parser.clang.BlockComment
+ '/*' (0 - 2): org.unlaxer.parser.elementary.WordParser
+ ' niku ' (2 - 8): org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+  ' ' (2 - 3): org.unlaxer.parser.elementary.WildCardStringParser
+  'n' (3 - 4): org.unlaxer.parser.elementary.WildCardStringParser
+  'i' (4 - 5): org.unlaxer.parser.elementary.WildCardStringParser
+  'k' (5 - 6): org.unlaxer.parser.elementary.WildCardStringParser
+  'u' (6 - 7): org.unlaxer.parser.elementary.WildCardStringParser
+  ' ' (7 - 8): org.unlaxer.parser.elementary.WildCardStringParser
+  '' (8 - 8): org.unlaxer.parser.combinator.Choice
+   <EMPTY> (8 - 8): org.unlaxer.parser.combinator.Choice
+ '*/' (8 - 10): org.unlaxer.parser.elementary.WordParser
+

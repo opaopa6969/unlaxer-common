@@ -1,0 +1,7 @@
+'/**/' (0 - 4): org.unlaxer.parser.clang.BlockComment
+ '/*' (0 - 2): org.unlaxer.parser.elementary.WordParser
+ '' (2 - 2): org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+  '' (2 - 2): org.unlaxer.parser.combinator.Choice
+   <EMPTY> (2 - 2): org.unlaxer.parser.combinator.Choice
+ '*/' (2 - 4): org.unlaxer.parser.elementary.WordParser
+
