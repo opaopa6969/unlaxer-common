@@ -17,7 +17,6 @@ public class BlockComment extends LazyChain{
 		super();
 	}
 	public BlockComment(Name name) {
-
 		super(name);
 	}
 
@@ -26,7 +25,7 @@ public class BlockComment extends LazyChain{
 		return new ChainParsers(
 			new WordParser("/*"),
 			new WildCardStringWithoutParser("*/"),
-			new  WordParser("*/")
+			new WordParser("*/")
 		);
 	}
 }

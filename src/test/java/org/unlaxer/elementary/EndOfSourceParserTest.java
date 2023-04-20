@@ -3,7 +3,9 @@ package org.unlaxer.elementary;
 import org.junit.Test;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.listener.OutputLevel;
+import org.unlaxer.parser.combinator.Chain;
 import org.unlaxer.parser.elementary.EndOfSourceParser;
+import org.unlaxer.parser.elementary.WordParser;
 
 public class EndOfSourceParserTest extends ParserTestBase{
 
@@ -12,10 +14,18 @@ public class EndOfSourceParserTest extends ParserTestBase{
 		
 		setLevel(OutputLevel.detail);
 		
-		EndOfSourceParser emptyParser = new EndOfSourceParser();
+		EndOfSourceParser eosParser = new EndOfSourceParser();
 		
 		
-		testAllMatch(emptyParser, "");
-		testUnMatch(emptyParser, " ");
+		testAllMatch(eosParser, "");
+		testUnMatch(eosParser, " ");
+		
+		var chainParser = new Chain(new WordParser("abc"),eosParser);
+	    testAllMatch(chainParser, "abc");
+
+			
+	    var chainParser2 = new Chain(eosParser,new WordParser("abc"));
+	    testUnMatch(chainParser2, "abc");
+
 	}
 }

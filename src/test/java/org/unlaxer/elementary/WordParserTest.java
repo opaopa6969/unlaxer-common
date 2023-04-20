@@ -32,6 +32,21 @@ public class WordParserTest extends ParserTestBase{
 		testAllMatch(slice, "This");
 
 	}
+	
+	@Test
+	public void testBlockComment() {
 
-
+		{
+			String source = "/*";
+			WordParser wordParser = new WordParser(source);
+			testAllMatch(wordParser, source);
+		}
+		
+		{
+			String source = "*/";
+			WordParser wordParser = new WordParser(source);
+			testAllMatch(wordParser, source);
+		}
+		
+	}
 }
