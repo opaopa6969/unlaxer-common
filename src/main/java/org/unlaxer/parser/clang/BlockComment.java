@@ -10,6 +10,8 @@ import org.unlaxer.parser.elementary.WildCardStringTerninatorParser;
 import org.unlaxer.parser.elementary.WordParser;
 
 public class BlockComment extends LazyChain{
+  
+  // parser for /* */ comment
 
 	private static final long serialVersionUID = 2143565367402566927L;
 
