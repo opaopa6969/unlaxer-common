@@ -1,0 +1,39 @@
+package org.unlaxer.parser.elementary;
+
+import java.util.List;
+
+import org.unlaxer.Cursor;
+import org.unlaxer.Parsed;
+import org.unlaxer.ParserCursor;
+import org.unlaxer.TokenKind;
+import org.unlaxer.TransactionElement;
+import org.unlaxer.context.ParseContext;
+import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
+import org.unlaxer.parser.combinator.LazyChoice;
+
+public class LineTerminatorParser extends LazyChoice{
+
+	private static final long serialVersionUID = -325480488364751237L;
+
+	@Override
+	public List<Parser> getLazyParsers() {
+		return new Parsers(
+			new WordParser(new String(new byte[] {0x0d/*cr*/,0x0a/*lf*/})),
+			new WordParser(new String(new byte[] {0x0d/*cr*/})),
+			new WordParser(new String(new byte[] {0x0a/*lf*/})),
+			Parser.get(EndOfSourceParser.class)
+		);
+	}
+	
+	
+	@Override
+	public Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch) {
+		Parsed parse = super.parse(parseContext, tokenKind, invertMatch);
+		TransactionElement current = parseContext.getCurrent();
+		ParserCursor parserCursor = current.getParserCursor();
+		Cursor cursor = parserCursor.getCursor(TokenKind.consumed);
+		cursor.setLineNumber(cursor.getLineNumber()+1);
+		return parse;
+	}
+}

@@ -64,7 +64,7 @@ public class TransactionElement implements Serializable{
 		return tokenKind;
 	}
 
-	public ParserCursor getCursor() {
+	public ParserCursor getParserCursor() {
 		return cursor;
 	}
 

@@ -38,7 +38,7 @@ public class Chain extends ConstructedCombinatorParser implements ChainInterface
 	}
 	
 	@Override
-	public Chain newWithout(Predicate<Parser> cutFilter){
+	public Chain newFiltered(Predicate<Parser> cutFilter){
 		
 		Predicate<Parser> passFilter = cutFilter.negate();
 		List<Parser> newChildren = getChildren().stream()

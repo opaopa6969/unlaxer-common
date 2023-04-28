@@ -46,7 +46,7 @@ public class WhiteSpaceDelimitedChain extends Chain implements ChainInterface{
 	}
 	
 	@Override
-	public WhiteSpaceDelimitedChain newWithout(Predicate<Parser> cutFilter){
+	public WhiteSpaceDelimitedChain newFiltered(Predicate<Parser> cutFilter){
 		
 		Predicate<Parser> passFilter = cutFilter.negate();
 		List<Parser> newChildren = getChildren().stream()

@@ -39,7 +39,7 @@ public class ParserCursor{
 		matched.addPosition(adding);
 	}
 	
-	private Cursor getCursor(TokenKind tokenKind){
+	public Cursor getCursor(TokenKind tokenKind){
 		return tokenKind == TokenKind.consumed ? consumed : matched;
 	}
 	

@@ -1,11 +1,9 @@
-package org.unlaxer.elementary;
+package org.unlaxer.parser.elementary;
 
 import org.junit.Test;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.combinator.Chain;
-import org.unlaxer.parser.elementary.EndOfSourceParser;
-import org.unlaxer.parser.elementary.WordParser;
 
 public class EndOfSourceParserTest extends ParserTestBase{
 

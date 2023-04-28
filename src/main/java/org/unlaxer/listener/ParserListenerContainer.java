@@ -42,4 +42,8 @@ public interface ParserListenerContainer{
 			.onEnd(parser , parsed ,  parseContext, tokenKind, invertMatch);
 		}
 	}
+	
+	public default void postParse(Parser parser , Parsed parsed , ParseContext parseContext) {
+		
+	}
 }

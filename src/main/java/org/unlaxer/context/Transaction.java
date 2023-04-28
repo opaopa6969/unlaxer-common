@@ -1,6 +1,7 @@
 package org.unlaxer.context;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -26,6 +27,12 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 		return getTokenStack().peekFirst();
 	}
 	
+	public default Optional<TransactionElement> getPrevious() {
+		Iterator<TransactionElement> iterator = getTokenStack().iterator();
+		iterator.next();
+		return iterator.hasNext() ? Optional.of(iterator.next()) : Optional.empty();
+	}
+	
 	public default void consume(int length) {
 		getCurrent().consume(length);
 	}
@@ -35,7 +42,7 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 	}
 	
 	public default void begin(Parser parser) {
-		getTokenStack().push(new TransactionElement(getCurrent().getCursor()));
+		getTokenStack().push(new TransactionElement(getCurrent().getParserCursor()));
 		onBegin(get(), parser);
 	}
 
@@ -58,7 +65,7 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 
 		TransactionElement current = getTokenStack().pollFirst();
 		TransactionElement parent = getCurrent();
-		parent.setCursor(new ParserCursor(current.getCursor(),false));
+		parent.setCursor(new ParserCursor(current.getParserCursor(),false));
 		
 		boolean outputCollected = doCreateMetaToken() || 
 				false == parser instanceof MetaFunctionParser || 

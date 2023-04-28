@@ -9,7 +9,7 @@ public interface HasChildrenParser extends Parser{
 	
 	public List<Parser> getChildren();
 	
-	public default HasChildrenParser newWithout(Predicate<Parser> cutFilter){
+	public default HasChildrenParser newFiltered(Predicate<Parser> cutFilter){
 		
 		Predicate<Parser> passFilter = cutFilter.negate();
 		List<Parser> newChildren = getChildren().stream()
