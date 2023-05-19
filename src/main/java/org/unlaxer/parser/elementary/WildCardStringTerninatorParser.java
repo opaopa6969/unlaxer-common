@@ -18,24 +18,42 @@ public class WildCardStringTerninatorParser extends ZeroOrMore implements Static
 	
 	static final Parser wildCardStringParser = new WildCardStringParser();
 	
-	public WildCardStringTerninatorParser(String... excludes) {
-		super(wildCardStringParser , createTerminator(excludes));
+	public WildCardStringTerninatorParser(boolean isTerminatorIsMatchOnly  , String... excludes) {
+		super(wildCardStringParser , createTerminator(isTerminatorIsMatchOnly , excludes));
 	}
 	
+  public WildCardStringTerninatorParser(String... excludes) {
+    this(true , excludes);
+  }
+	
+  public WildCardStringTerninatorParser(boolean isTerminatorIsMatchOnly  ,Parser terminator) {
+    super(wildCardStringParser , isTerminatorIsMatchOnly ? new MatchOnly(terminator) : terminator);
+  }
+  
   public WildCardStringTerninatorParser(Parser terminator) {
-    super(wildCardStringParser , new MatchOnly(terminator));
+    this(true,terminator);
   }
 
-	public WildCardStringTerninatorParser(Name name, String... excludes) {
-		super(name , wildCardStringParser ,  createTerminator(excludes));
+	public WildCardStringTerninatorParser(Name name, boolean isTerminatorIsMatchOnly  ,String... excludes) {
+		super(name , wildCardStringParser ,  createTerminator(isTerminatorIsMatchOnly,excludes));
 	}
 	
-	static Parser createTerminator(String[] terminators) {
+  public WildCardStringTerninatorParser(Name name, String... excludes) {
+	  super(name , wildCardStringParser ,  createTerminator(true,excludes));
+	}
+	
+	static Parser createTerminator(boolean isTerminatorIsMatchOnly , String[] terminators) {
 	  
-	  List<Parser> parsers =  Stream.of(terminators)
-      .map(WordParser::new)
-	    .map(MatchOnly::new)
+	  Stream<Parser> parserStream = Stream.of(terminators)
+      .map(WordParser::new);
+	  
+	  if(isTerminatorIsMatchOnly) {
+	    parserStream = parserStream.map(MatchOnly::new);
+	  }
+	  
+    List<Parser> parsers =  parserStream
 	    .collect(Collectors.toList());
+    
 	  Choice choice = new Choice(parsers);
 	  
 	  return choice;
