@@ -21,6 +21,10 @@ public class WildCardStringTerninatorParser extends ZeroOrMore implements Static
 	public WildCardStringTerninatorParser(String... excludes) {
 		super(wildCardStringParser , createTerminator(excludes));
 	}
+	
+  public WildCardStringTerninatorParser(Parser terminator) {
+    super(wildCardStringParser , new MatchOnly(terminator));
+  }
 
 	public WildCardStringTerninatorParser(Name name, String... excludes) {
 		super(name , wildCardStringParser ,  createTerminator(excludes));
