@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
 import org.unlaxer.util.FactoryBoundCache;
+import org.unlaxer.util.NullSafetyConcurrentHashMap;
 
 public class Token implements Serializable{
 	
@@ -33,7 +35,9 @@ public class Token implements Serializable{
 	public Optional<Token> parent;
 	private final List<Token> originalChildren;
 	//TODO make privateand rename astNodeChildren
-	public  final List<Token> filteredChildren; // astNodeChildren 
+	public  final List<Token> filteredChildren; // astNodeChildren
+	
+	private Map<Name,Object> extraObjectByName = new NullSafetyConcurrentHashMap<>();
 
 	public enum ChildrenKind{
 		original,
@@ -55,7 +59,7 @@ public class Token implements Serializable{
 	}
 	
 	// TODO too specialized...?
-	Predicate<Token> AST_NODES = token -> false == token.parser.hasTag(NodeKind.notNode.getTag());
+	Predicate<Token> AST_NODES = token -> token.parser.hasTag(NodeKind.node.getTag());
 	
 
 	
@@ -272,5 +276,24 @@ public class Token implements Serializable{
 			}
 		}
 		return this;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public<T> Optional<T> getExtraObject(Name name , Class<T> objectClass) {
+		return Optional.ofNullable( (T)extraObjectByName.get(name));
+	}
+	
+	public void setExtraObject(Name name , Object object) {
+		extraObjectByName.put(name , object);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> Optional<T>  removeExtraObject(Name name , Class<T> objectClass) {
+		return Optional.ofNullable( (T)extraObjectByName.remove(name));
+	}
+	
+	public boolean removeExtraObject(Name name) {
+		var preset = extraObjectByName.remove(name);
+		return preset != null ; 
 	}
 }

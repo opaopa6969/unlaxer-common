@@ -56,6 +56,8 @@ public interface ASTMapper {
 		OneOrMoreOperatorSuccessor,
 		Space,
 		Comment,
+		Annotation,
+		AnnotationAttribute,
 		Other,
 		;
 		

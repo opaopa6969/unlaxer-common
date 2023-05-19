@@ -59,6 +59,8 @@ public class Tag extends Specifier<Tag>{
 	static FactoryBoundCache<Enum<?>,Tag> specifierByEnum = 
 			new FactoryBoundCache<>(Tag::new);
 
-
+	public <T extends Enum<T>> T toEnum(Class<T> enumClass ) {
+		return Enum.valueOf(enumClass, enumName.orElseThrow().name());
+	}
 
 }

@@ -7,7 +7,7 @@ import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
 
-public abstract class TagWrapper extends SingleChildCollectingParser implements Parser{
+public abstract class TagWrapper extends SingleChildCollectingParser {
 
 	private static final long serialVersionUID = -3962308778072382255L;
 

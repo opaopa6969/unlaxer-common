@@ -22,7 +22,7 @@ import org.unlaxer.parser.combinator.ChoiceInterface;
 import org.unlaxer.parser.combinator.NonOrdered;
 
 public class ParseContext implements 
-	ParseContextBase , Closeable, Source, Transaction,
+	Closeable, Transaction,
 	ParserListenerContainer,
 	GlobalScopeTree , ParserContextScopeTree{
 

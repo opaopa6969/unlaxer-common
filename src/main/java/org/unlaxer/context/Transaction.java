@@ -53,7 +53,7 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 	 * @param actions effect ParseContext at committing phase if needed
 	 * @return last added Tokens
 	 */
-	public default Committed commit(Parser parser, TokenKind tokenKind , AdditionalCommitAction... actions) {
+	public default Committed commit(Parser parser, TokenKind tokenKind ) {
 
 		ParseContext parseContext = get();
 		

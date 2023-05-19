@@ -4,7 +4,7 @@ import org.unlaxer.Tag;
 import org.unlaxer.Taggable;
 import org.unlaxer.parser.Parser;
 
-public class TagBasedReducer extends AbstractTokenReducer implements CommittedReducer{
+public class TagBasedReducer extends AbstractTokenReducer {
 	
 	
 	public enum NodeKind {
