@@ -136,7 +136,7 @@ public class ParseContext implements
 
   @Override
   public Collection<AdditionalCommitAction> getActions() {
-    return null;
+    return actions;
   }
 
   @Override

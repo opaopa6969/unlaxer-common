@@ -72,7 +72,6 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
     List<AdditionalCommitAction> allActions = new ArrayList<>();
     
     allActions.addAll(getActions());
-    allActions.addAll(getActions());
     
     if(actions.length >0) {
       
