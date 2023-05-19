@@ -59,8 +59,8 @@ public class Token implements Serializable{
 	}
 	
 	// TODO too specialized...?
-	Predicate<Token> AST_NODES = token -> token.parser.hasTag(NodeKind.node.getTag());
-	
+//	Predicate<Token> AST_NODES = token -> token.parser.hasTag(NodeKind.node.getTag()); <-こちらだと動かない。そもそもTagなしの状態もありってことかな？
+  Predicate<Token> AST_NODES = token -> false == token.parser.hasTag(NodeKind.notNode.getTag());
 
 	
 	public Token(TokenKind tokenKind , RangedString token, Parser parser , List<Token> children) {
