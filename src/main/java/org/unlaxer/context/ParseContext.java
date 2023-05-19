@@ -2,6 +2,8 @@ package org.unlaxer.context;
 
 import java.io.Closeable;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -50,9 +52,12 @@ public class ParseContext implements
 	Map<Parser, Map<Name, Object>> scopeTreeMapByParser = new HashMap<>();
 	
 	Map<Name, Object> globalScopeTreeMap = new HashMap<>();
+	
+	Collection<AdditionalCommitAction> actions;
 
 	public ParseContext(Source source, ParseContextEffector... parseContextEffectors) {
 		this.source = source;
+		actions = new ArrayList<>();
 		tokenStack.add(new TransactionElement(new ParserCursor()));
 
 		for (ParseContextEffector parseContextEffector : parseContextEffectors) {
@@ -128,4 +133,14 @@ public class ParseContext implements
 	public Source getSource() {
 		return source;
 	}
+
+  @Override
+  public Collection<AdditionalCommitAction> getActions() {
+    return null;
+  }
+
+  @Override
+  public void addActions(List<AdditionalCommitAction> additionalCommitActions) {
+    actions.addAll(additionalCommitActions);
+  }
 }

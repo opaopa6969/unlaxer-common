@@ -1,10 +1,14 @@
 package org.unlaxer.context;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.unlaxer.Committed;
 import org.unlaxer.ParserCursor;
@@ -45,60 +49,82 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 		getTokenStack().push(new TransactionElement(getCurrent().getParserCursor()));
 		onBegin(get(), parser);
 	}
-
 	
-	/**
-	 * @param parser that processed tokens
-	 * @param tokenKind commit token's kind
-	 * @param actions effect ParseContext at committing phase if needed
-	 * @return last added Tokens
-	 */
-	public default Committed commit(Parser parser, TokenKind tokenKind ) {
+	Collection<AdditionalCommitAction> getActions();
+	
+  default void addActions(AdditionalCommitAction... additionalCommitActions) {
+    
+    addActions(
+      Stream.of(additionalCommitActions).collect(Collectors.toList())
+    );
+  }
+  
+  void addActions(List<AdditionalCommitAction> additionalCommitActions);
+	
+  /**
+   * @param parser that processed tokens
+   * @param tokenKind commit token's kind
+   * @param actions effect ParseContext at committing phase if needed
+   * @return last added Tokens
+   */
+  public default Committed commit(Parser parser, TokenKind tokenKind , AdditionalCommitAction... actions) {
+    
+    List<AdditionalCommitAction> allActions = new ArrayList<>();
+    
+    allActions.addAll(getActions());
+    allActions.addAll(getActions());
+    
+    if(actions.length >0) {
+      
+      for (AdditionalCommitAction action :actions) {
+        allActions.add(action);
+      }
+    }
+      
+    ParseContext parseContext = get();
+    
+    for (AdditionalCommitAction action : allActions) {
+      if (action instanceof AdditionalPreCommitAction) {
+        ((AdditionalPreCommitAction) action).effect(parser, parseContext);
+      }
+    }
 
-		ParseContext parseContext = get();
-		
-		for (AdditionalCommitAction action : actions) {
-			if (action instanceof AdditionalPreCommitAction) {
-				((AdditionalPreCommitAction) action).effect(parser, parseContext);
-			}
-		}
+    TransactionElement current = getTokenStack().pollFirst();
+    TransactionElement parent = getCurrent();
+    parent.setCursor(new ParserCursor(current.getParserCursor(),false));
+    
+    boolean outputCollected = doCreateMetaToken() || 
+        false == parser instanceof MetaFunctionParser || 
+        parser instanceof LazyInstance;
 
-		TransactionElement current = getTokenStack().pollFirst();
-		TransactionElement parent = getCurrent();
-		parent.setCursor(new ParserCursor(current.getParserCursor(),false));
-		
-		boolean outputCollected = doCreateMetaToken() || 
-				false == parser instanceof MetaFunctionParser || 
-				parser instanceof LazyInstance;
+    Committed committed;
+    
+    int position = parent.getPosition(tokenKind);
 
-		Committed committed;
-		
-		int position = parent.getPosition(tokenKind);
+    if (parser instanceof CollectingParser && outputCollected) {
+      
+      Token collected = ((CollectingParser) parser).collect(
+          current.tokens, position , tokenKind , tokenKind.passFilter);
+      parent.tokens.add(collected);
+      onCommit(parseContext, parser, Arrays.asList(collected));
+      committed = new Committed(collected, current.tokens);
 
-		if (parser instanceof CollectingParser && outputCollected) {
-			
-			Token collected = ((CollectingParser) parser).collect(
-					current.tokens, position , tokenKind , tokenKind.passFilter);
-			parent.tokens.add(collected);
-			onCommit(parseContext, parser, Arrays.asList(collected));
-			committed = new Committed(collected, current.tokens);
+    } else {
 
-		} else {
+      parent.tokens.addAll(current.tokens);
+      onCommit(parseContext, parser, current.tokens);
+      committed = new Committed(current.tokens);
+    }
 
-			parent.tokens.addAll(current.tokens);
-			onCommit(parseContext, parser, current.tokens);
-			committed = new Committed(current.tokens);
-		}
-
-		for (AdditionalCommitAction action : actions) {
-			if (action instanceof AdditionalPostCommitAction) {
-				((AdditionalPostCommitAction) action)
-					.effect(parser, parseContext , committed);
-			}
-		}
-		return committed;
-	}
-
+    for (AdditionalCommitAction action : getActions()) {
+      if (action instanceof AdditionalPostCommitAction) {
+        ((AdditionalPostCommitAction) action)
+          .effect(parser, parseContext , committed);
+      }
+    }
+    return committed;
+  }
+    
 	public default void rollback(Parser parser) {
 		if (parser instanceof ChoiceInterface) {
 			getChosenParserByChoice().remove(parser);
