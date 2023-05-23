@@ -10,10 +10,13 @@ import org.unlaxer.Name;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.TestResult;
 import org.unlaxer.Token;
+import org.unlaxer.TokenKind;
 import org.unlaxer.TokenPrinter;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
+
+import net.arnx.jsonic.JSON;
 
 public class WildCardInterleaveParserTest extends ParserTestBase{
 
@@ -38,6 +41,12 @@ public class WildCardInterleaveParserTest extends ParserTestBase{
       Token rootToken = testAllMatch.parsed.getRootToken();
       System.err.println("test:" + content);
       TokenPrinter.output(rootToken , System.err);
+      System.err.println();
+      
+      List<Token> parsedWithConcattedCharcter = mixedContentParser.getParsedWithConcattedCharcter(rootToken);
+      
+      Token token = new Token(TokenKind.consumed, parsedWithConcattedCharcter, mixedContentParser, 0);
+      TokenPrinter.output(token , System.err);
       System.err.println();
 
     }

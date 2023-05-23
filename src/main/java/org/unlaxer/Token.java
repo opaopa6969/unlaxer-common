@@ -97,7 +97,7 @@ public class Token implements Serializable{
 		return parser;
 	}
 
-	static RangedString createRangedString(List<Token> tokens, int position){
+	public static RangedString createRangedString(List<Token> tokens, int position){
 		
 		if(tokens.isEmpty()){
 			return new RangedString(position);
