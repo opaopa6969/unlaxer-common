@@ -26,7 +26,6 @@ public class CStyleDelimitedLazyChainTest extends ParserTestBase{
     
     testUnMatch(parser, "//コメントABCDEFG");
     testUnMatch(parser, "/*コメント*/ AB//コメント\nCDEFG//コメント");
-    
     testUnMatch(parser, "/*コメント*/ AB//コメント/*コメント \n* niku*/\nCDEFG//コメント");
   }
   
