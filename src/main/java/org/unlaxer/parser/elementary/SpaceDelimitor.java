@@ -26,5 +26,4 @@ public class SpaceDelimitor extends LazyZeroOrMore implements StaticParser{
 	public Optional<Parser> getLazyTerminatorParser() {
 		return Optional.empty();
 	}
-
 }

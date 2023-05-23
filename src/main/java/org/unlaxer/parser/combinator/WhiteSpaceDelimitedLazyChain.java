@@ -12,7 +12,7 @@ import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.elementary.SpaceDelimitor;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
 
-public abstract class WhiteSpaceDelimitedLazyChain extends LazyChain implements ChainInterface {
+public abstract class WhiteSpaceDelimitedLazyChain extends LazyChain {
 
 	private static final long serialVersionUID = -324234946352474224L;
 
