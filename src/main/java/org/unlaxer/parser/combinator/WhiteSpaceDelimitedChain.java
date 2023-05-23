@@ -14,7 +14,7 @@ import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.elementary.SpaceDelimitor;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
 
-public class WhiteSpaceDelimitedChain extends Chain implements ChainInterface{
+public class WhiteSpaceDelimitedChain extends Chain {
 
 	private static final long serialVersionUID = 7516040092056055656L;
 	
