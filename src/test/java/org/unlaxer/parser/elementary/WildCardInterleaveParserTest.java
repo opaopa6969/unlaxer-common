@@ -1,7 +1,5 @@
 package org.unlaxer.parser.elementary;
 
-import static org.junit.Assert.fail;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -15,8 +13,6 @@ import org.unlaxer.TokenPrinter;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
-
-import net.arnx.jsonic.JSON;
 
 public class WildCardInterleaveParserTest extends ParserTestBase{
 
