@@ -7,7 +7,7 @@ import org.unlaxer.Parsed;
 import org.unlaxer.ParserPath;
 import org.unlaxer.TaggableAccessor;
 import org.unlaxer.TokenKind;
-import org.unlaxer.ast.ASTMapper.ASTNodeKind;
+import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.context.ParseContext;
 
 public interface Parser extends //

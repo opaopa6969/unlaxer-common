@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.unlaxer.ast.ASTMapper.ASTNodeKind;
+import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.util.FactoryBoundCache;
 
 public class ParserFactoryByClass{

@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.unlaxer.Tag;
-import org.unlaxer.ast.ASTMapper.ASTNodeKind;
 
 public class ASTMapperTest {
 

@@ -1,6 +1,5 @@
 package org.unlaxer.ast;
 
-import org.unlaxer.Tag;
 import org.unlaxer.Token;
 
 public interface ASTMapper {
@@ -37,34 +36,6 @@ public interface ASTMapper {
 		}
 	}
 	 */
-	
-	
-	public enum ASTNodeKind{
-		Operator,
-		Operand,
-		ChoicedOperatorRoot,
-		ChoicedOperator,
-		ChoicedOperandRoot,
-		ChoicedOperand,
-		ZeroOrMoreOperatorOperandSuccessor,
-		OneOrMoreOperatorOperandSuccessor,
-		ZeroOrMoreChoicedOperatorOperandSuccessor,
-		OneOrMoreChoicedOperatorOperandSuccessor,
-		ZeroOrMoreOperandSuccessor,
-		OneOrMoreOperandSuccessor,
-		ZeroOrMoreOperatorSuccessor,
-		OneOrMoreOperatorSuccessor,
-		Space,
-		Comment,
-		Annotation,
-		AnnotationAttribute,
-		Other,
-		;
-		
-		public Tag tag() {
-			return Tag.of(this);
-		}
-	}
 
 
 	//この定義の要らない。

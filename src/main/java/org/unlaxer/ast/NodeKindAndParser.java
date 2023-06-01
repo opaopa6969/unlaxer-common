@@ -1,6 +1,5 @@
 package org.unlaxer.ast;
 
-import org.unlaxer.ast.ASTMapper.ASTNodeKind;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.util.collection.ID;
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
 import org.unlaxer.TokenKind;
-import org.unlaxer.ast.ASTMapper.ASTNodeKind;
+import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.HasChildrenParser;
 import org.unlaxer.parser.Parser;
@@ -30,6 +30,7 @@ public class Choice extends ConstructedCombinatorParser implements ChoiceInterfa
 	@SafeVarargs
 	public Choice(Parser... parsers) {
 		super(parsers);
+		setASTNodeKind(null);
 	}
 	
 	public Choice(Name name, ASTNodeKind astNodeKind ,  List<Parser> parsers) {

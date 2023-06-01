@@ -2,6 +2,7 @@ package org.unlaxer;
 
 import java.util.Set;
 
+import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.parser.Parser;
 
 public interface Taggable extends ParserFinder{
@@ -27,6 +28,10 @@ public interface Taggable extends ParserFinder{
 	}
 	
 	public Set<Tag> getTags();
+	
+	public Parser setASTNodeKind(ASTNodeKind astNodeKind);
+	
+	public ASTNodeKind astNodeKind();
 	
 	
 }

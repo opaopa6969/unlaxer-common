@@ -1,7 +1,7 @@
 package org.unlaxer.parser.combinator;
 
 import org.unlaxer.Name;
-import org.unlaxer.ast.ASTMapper.ASTNodeKind;
+import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.parser.Parser;
 
 public class ZeroOrMore extends ChildOccursWithTerminator {

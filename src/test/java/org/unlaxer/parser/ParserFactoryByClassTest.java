@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
-import org.unlaxer.ast.ASTMapper.ASTNodeKind;
+import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.parser.ParserFactoryByClass.ClassAndKind;
 import org.unlaxer.parser.elementary.SpaceDelimitor;
 

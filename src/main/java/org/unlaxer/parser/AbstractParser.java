@@ -15,6 +15,7 @@ import org.unlaxer.Name;
 import org.unlaxer.Parsed;
 import org.unlaxer.Tag;
 import org.unlaxer.TokenKind;
+import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.context.ParseContext;
 
 public abstract class AbstractParser implements Parser {
@@ -40,6 +41,8 @@ public abstract class AbstractParser implements Parser {
 	boolean donePrepareChildren = false;
 	
 	NodeReduceMarker nodeReduceMarker;
+	
+	ASTNodeKind astNodeKind;
 	
 	public AbstractParser() {
 		this(null, new ArrayList<>());
@@ -170,5 +173,20 @@ public abstract class AbstractParser implements Parser {
 	public NodeReduceMarker getNodeReduceMarker() {
 		return nodeReduceMarker;
 	}
-		
+
+  @Override
+  public Parser setASTNodeKind(ASTNodeKind astNodeKind) {
+    this.astNodeKind = astNodeKind;
+    addTag(astNodeKind.tag()); // TODO too much?
+    return this;
+  }
+
+  @Override
+  public ASTNodeKind astNodeKind() {
+    
+    if(astNodeKind == null) {
+      return ASTNodeKind.NotSpecified;
+    }
+    return astNodeKind;
+  }
 }
