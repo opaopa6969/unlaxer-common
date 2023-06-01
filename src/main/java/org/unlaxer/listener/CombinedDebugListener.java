@@ -15,8 +15,8 @@ import org.unlaxer.parser.Parser;
 import org.unlaxer.util.MultipleIOException;
 
 public class CombinedDebugListener implements 
-	ParserListener , TransactionListener ,  LogOutputCountListener , Closeable , 
-	BreakPointHolder{
+	ParserListener , TransactionListener ,  LogOutputCountListener , Closeable  
+	{
 
 	public final DebugParserListener debugParserListener;
 	public final DebugTransactionListener debugTransactionListener;

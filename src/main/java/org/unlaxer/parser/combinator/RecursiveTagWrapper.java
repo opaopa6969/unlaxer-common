@@ -5,7 +5,7 @@ import org.unlaxer.RecursiveMode;
 import org.unlaxer.Tag;
 import org.unlaxer.parser.Parser;
 
-public abstract class RecursiveTagWrapper extends TagWrapper implements Parser{
+public abstract class RecursiveTagWrapper extends TagWrapper {
 
 	private static final long serialVersionUID = -2669786224048693859L;
 

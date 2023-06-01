@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.unlaxer.Name;
 import org.unlaxer.parser.MetaFunctionParser;
-import org.unlaxer.parser.NonTerminallSymbol;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 
 public abstract class ConstructedCombinatorParser extends ConstructedMultiChildCollectingParser 
-	implements MetaFunctionParser , NonTerminallSymbol {
+	implements MetaFunctionParser {
 
 	private static final long serialVersionUID = -517554162836750441L;
 	

@@ -9,7 +9,7 @@ import org.unlaxer.parser.MetaFunctionParser;
 import org.unlaxer.parser.NonTerminallSymbol;
 import org.unlaxer.parser.Parser;
 
-public interface Occurs extends MetaFunctionParser , NonTerminallSymbol , Parser{
+public interface Occurs extends MetaFunctionParser , NonTerminallSymbol {
 	
 	@Override
 	public default Parsed parse(ParseContext parseContext,TokenKind tokenKind,boolean invertMatch) {

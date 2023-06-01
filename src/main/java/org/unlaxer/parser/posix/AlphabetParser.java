@@ -1,10 +1,9 @@
 package org.unlaxer.parser.posix;
 
 import org.unlaxer.Name;
-import org.unlaxer.parser.StaticParser;
 import org.unlaxer.parser.elementary.MappedSingleCharacterParser;
 
-public class AlphabetParser extends MappedSingleCharacterParser implements StaticParser{
+public class AlphabetParser extends MappedSingleCharacterParser {
 
 	private static final long serialVersionUID = -4498138530298998607L;
 	

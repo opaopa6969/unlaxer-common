@@ -24,7 +24,7 @@ public class LineTerminatorParserTest extends ParserTestBase{
 			
 			ParserCursor parserCursor = testPartialMatch.parseContext.getCurrent().getParserCursor();
 			Cursor consumed = parserCursor.getCursor(TokenKind.consumed);
-			Cursor matchOnly = parserCursor.getCursor(TokenKind.matchOnly);
+			parserCursor.getCursor(TokenKind.matchOnly);
 			
 			assertEquals(1, consumed.getLineNumber());
 		}
@@ -35,7 +35,7 @@ public class LineTerminatorParserTest extends ParserTestBase{
 			
 			ParserCursor parserCursor = testAllMatch.parseContext.getCurrent().getParserCursor();
 			Cursor consumed = parserCursor.getCursor(TokenKind.consumed);
-			Cursor matchOnly = parserCursor.getCursor(TokenKind.matchOnly);
+			parserCursor.getCursor(TokenKind.matchOnly);
 			
 			assertEquals(2, consumed.getLineNumber());
 		}

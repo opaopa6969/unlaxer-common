@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.unlaxer.Range;
-import org.unlaxer.util.StringUtil;
 
 
 public class StringUtilTest {

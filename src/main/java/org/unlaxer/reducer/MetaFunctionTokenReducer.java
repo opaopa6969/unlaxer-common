@@ -5,7 +5,7 @@ import org.unlaxer.parser.MetaFunctionParser;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
 
-public class MetaFunctionTokenReducer extends AbstractTokenReducer implements CommittedReducer {
+public class MetaFunctionTokenReducer extends AbstractTokenReducer  {
 
 	@Override
 	public boolean doReduce(Parser parser) {

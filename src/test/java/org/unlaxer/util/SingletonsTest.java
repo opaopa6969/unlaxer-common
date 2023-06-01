@@ -7,7 +7,6 @@ import org.unlaxer.Parsed;
 import org.unlaxer.StringSource;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.posix.AlphabetParser;
-import org.unlaxer.util.Singletons;
 
 public class SingletonsTest {
 

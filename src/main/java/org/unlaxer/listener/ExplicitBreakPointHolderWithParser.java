@@ -11,7 +11,7 @@ import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
 
 
-public class ExplicitBreakPointHolderWithParser implements ParserListener , BreakPointHolder{
+public class ExplicitBreakPointHolderWithParser implements ParserListener {
 	
 	public List<Predicate<Parser>> predicates;
 	

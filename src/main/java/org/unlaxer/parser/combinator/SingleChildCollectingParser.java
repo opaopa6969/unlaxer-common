@@ -1,11 +1,10 @@
 package org.unlaxer.parser.combinator;
 
 import org.unlaxer.Name;
-import org.unlaxer.parser.CollectingParser;
 import org.unlaxer.parser.NonTerminallSymbol;
 import org.unlaxer.parser.Parser;
 
-public abstract class SingleChildCollectingParser extends ConstructedSingleChildParser implements CollectingParser , NonTerminallSymbol{
+public abstract class SingleChildCollectingParser extends ConstructedSingleChildParser implements NonTerminallSymbol{
 
 	private static final long serialVersionUID = -5599677266143767670L;
 

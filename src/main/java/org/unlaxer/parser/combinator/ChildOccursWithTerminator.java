@@ -4,14 +4,11 @@ import java.util.Optional;
 
 import org.unlaxer.Name;
 import org.unlaxer.parser.ChildOccurs;
-import org.unlaxer.parser.MetaFunctionParser;
-import org.unlaxer.parser.NonTerminallSymbol;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 
 
-public abstract class ChildOccursWithTerminator extends ConstructedOccurs 
-	implements MetaFunctionParser , NonTerminallSymbol{
+public abstract class ChildOccursWithTerminator extends ConstructedOccurs	{
 
 	private static final long serialVersionUID = -4411440278839259161L;
 

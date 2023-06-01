@@ -7,7 +7,7 @@ import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
 
 
-public class ParserWrapper extends ConstructedSingleChildParser implements Parser{
+public class ParserWrapper extends ConstructedSingleChildParser{
 	
 	private static final long serialVersionUID = 5439333138608297140L;
 	public final Parser parser;

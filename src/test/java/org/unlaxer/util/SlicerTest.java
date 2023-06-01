@@ -1,9 +1,8 @@
 package org.unlaxer.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.unlaxer.util.Slicer;
 
 public class SlicerTest {
 

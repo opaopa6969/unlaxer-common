@@ -5,10 +5,9 @@ import org.unlaxer.Parsed;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
-import org.unlaxer.parser.StaticParser;
 import org.unlaxer.parser.elementary.MappedSingleCharacterParser;
 
-public class DigitParser extends MappedSingleCharacterParser implements StaticParser{
+public class DigitParser extends MappedSingleCharacterParser {
 	
 	private static final long serialVersionUID = -463617540001438700L;
 	

@@ -1,6 +1,5 @@
 package org.unlaxer.util;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class MultipleOutputStream extends OutputStream implements Closeable{
+public class MultipleOutputStream extends OutputStream {
 
 	private Collection<OutputStream> outputs;
 

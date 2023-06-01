@@ -10,7 +10,7 @@ import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
 
-public class ExplicitBreakPointHolder implements ParserListener , BreakPointHolder{
+public class ExplicitBreakPointHolder implements ParserListener {
 	
 	public List<Predicate<ParseParameters>> predicates;
 	OutputLevel level;

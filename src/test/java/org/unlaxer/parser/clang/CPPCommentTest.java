@@ -1,7 +1,5 @@
 package org.unlaxer.parser.clang;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.parser.combinator.Chain;

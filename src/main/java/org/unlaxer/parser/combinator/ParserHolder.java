@@ -7,7 +7,7 @@ import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.MetaFunctionParser;
 import org.unlaxer.parser.Parser;
 
-public class ParserHolder extends ConstructedSingleChildParser implements Parser , MetaFunctionParser{
+public class ParserHolder extends ConstructedSingleChildParser implements MetaFunctionParser{
 
 	private static final long serialVersionUID = -7769486063809426552L;
 
