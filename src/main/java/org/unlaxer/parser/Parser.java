@@ -7,7 +7,6 @@ import org.unlaxer.Parsed;
 import org.unlaxer.ParserPath;
 import org.unlaxer.TaggableAccessor;
 import org.unlaxer.TokenKind;
-import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.context.ParseContext;
 
 public interface Parser extends //
@@ -55,11 +54,11 @@ public interface Parser extends //
     return ParserFactoryByClass.get(clazz);
   }
 
-  public static <T extends Parser> T get(ASTNodeKind nodeKind, Class<T> clazz) {
-    return ParserFactoryByClass.get(nodeKind, clazz);
-  }
+//  public static <T extends Parser> T get(ASTNodeKind nodeKind, Class<T> clazz) {
+//    return ParserFactoryByClass.get(nodeKind, clazz);
+//  }
 
-  public static <T extends Parser> T get(Supplier<? extends Parser> supplier) {
+  public static <T extends Parser> T get(Supplier<T> supplier) {
     return ParserFactoryBySupplier.get(supplier);
   }
 
