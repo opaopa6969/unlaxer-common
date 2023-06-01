@@ -30,7 +30,7 @@ public class Choice extends ConstructedCombinatorParser implements ChoiceInterfa
 	@SafeVarargs
 	public Choice(Parser... parsers) {
 		super(parsers);
-		setASTNodeKind(null);
+		setASTNodeKind(ASTNodeKind.ChoicedOperator);
 	}
 	
 	public Choice(Name name, ASTNodeKind astNodeKind ,  List<Parser> parsers) {
