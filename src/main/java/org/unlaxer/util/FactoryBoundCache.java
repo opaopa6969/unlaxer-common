@@ -15,6 +15,12 @@ public class FactoryBoundCache<K,V>{
 	}
 	
 	public synchronized V get(K key){
-		return valueByKey.computeIfAbsent(key, factory::apply);
+//		return valueByKey.computeIfAbsent(key, factory::apply);
+		V v = valueByKey.get(key);
+		if(v == null) {
+			v = factory.apply(key);
+			valueByKey.put(key, v);
+		}
+		return v;
 	}
 }
