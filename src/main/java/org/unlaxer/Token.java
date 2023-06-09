@@ -73,7 +73,7 @@ public class Token implements Serializable{
 		this.parser = parser;
 		this.originalChildren = children;
 		parent= Optional.empty();
-		children.stream().forEach(child->child.parent = Optional.of(this));
+		children.stream().forEach(child->child.setParent(this));
 		this.filteredChildren = children.stream()
 			.filter(AST_NODES)
 			.collect(Collectors.toList());
@@ -118,11 +118,11 @@ public class Token implements Serializable{
 	}
 	
 	public List<Token> flatten(){
-		return flatten(BreadthOrDepth.Depth);
+		return flatten(SearchFirst.Depth);
 	}
 	
-	public List<Token> flatten(BreadthOrDepth breadthOrDepth){
-		return breadthOrDepth == BreadthOrDepth.Depth ?
+	public List<Token> flatten(SearchFirst breadthOrDepth){
+		return breadthOrDepth == SearchFirst.Depth ?
 				flattenDepth() : flattenBreadth();
 	}
 	
@@ -150,7 +150,7 @@ public class Token implements Serializable{
 	}
 
 	
-	public enum BreadthOrDepth{
+	public enum SearchFirst{
 		Breadth,
 		Depth
 	}
@@ -326,5 +326,15 @@ public class Token implements Serializable{
 	public boolean removeExtraObject(Name name) {
 		var preset = extraObjectByName.remove(name);
 		return preset != null ; 
+	}
+	
+	public void setParent(Token token) {
+		parent = Optional.of(token);
+		parser.setParent(token.parser);
+	}
+	
+	public void removeParent() {
+		parent = Optional.empty();
+		parser.setParent(null);
 	}
 }
