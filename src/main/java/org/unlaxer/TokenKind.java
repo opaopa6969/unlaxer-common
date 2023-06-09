@@ -49,8 +49,4 @@ public enum TokenKind{
 			.filter(cutFilter)
 			.collect(Collectors.toList());
 	}
-	
-	public interface VirtualTokenCreator{
-		// marker for virtualToken creator
-	}
 }
