@@ -1,8 +1,10 @@
 package org.unlaxer;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -116,12 +118,41 @@ public class Token implements Serializable{
 	}
 	
 	public List<Token> flatten(){
+		return flatten(BreadthOrDepth.Depth);
+	}
+	
+	public List<Token> flatten(BreadthOrDepth breadthOrDepth){
+		return breadthOrDepth == BreadthOrDepth.Depth ?
+				flattenDepth() : flattenBreadth();
+	}
+	
+	public List<Token> flattenDepth(){
 		List<Token> list = new ArrayList<Token>();
 		list.add(this);
 		for(Token child :originalChildren){
-			list.addAll(child.flatten());
+			list.addAll(child.flattenDepth());
 		}
 		return list;
+	}
+	
+	public List<Token> flattenBreadth(){
+		List<Token> list = new ArrayList<Token>();
+		Deque<Token> deque = new ArrayDeque<Token>();
+		deque.add(this);
+		while (false == deque.isEmpty()) {
+			Token poll = deque.poll();
+			list.add(poll);
+			if(false ==poll.originalChildren.isEmpty()) {
+				deque.addAll(poll.originalChildren);
+			}
+		}
+		return list;
+	}
+
+	
+	public enum BreadthOrDepth{
+		Breadth,
+		Depth
 	}
 	
 	@Override
