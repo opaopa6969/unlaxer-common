@@ -113,5 +113,9 @@ public class Range implements Comparable<Range>{
 			"["+startIndexInclusive+","+endIndexExclusive+"]";
 				
 	}
+	public static Range invalidRange() {
+		return invalidRange;
+	}
 	
+	static final Range invalidRange = new Range(); 
 }

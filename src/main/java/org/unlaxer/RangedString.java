@@ -24,4 +24,10 @@ public class RangedString{
 		this.range = new Range(startIndex);
 		this.token = Optional.empty();
 	}
+	
+	public RangedString(int startIndex , String token) {
+		super();
+		this.range = new Range(startIndex , startIndex + token.length());
+		this.token = Optional.of(token);
+	}
 }
