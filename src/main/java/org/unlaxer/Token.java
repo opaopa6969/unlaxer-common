@@ -73,7 +73,10 @@ public class Token implements Serializable{
 		this.parser = parser;
 		this.originalChildren = children;
 		parent= Optional.empty();
-		children.stream().forEach(child->child.setParent(this));
+		children.stream().forEach(child->{
+			child.parent = Optional.of(this);
+//			child.parser.setParent(parser);
+		});
 		this.filteredChildren = children.stream()
 			.filter(AST_NODES)
 			.collect(Collectors.toList());
@@ -326,15 +329,5 @@ public class Token implements Serializable{
 	public boolean removeExtraObject(Name name) {
 		var preset = extraObjectByName.remove(name);
 		return preset != null ; 
-	}
-	
-	public void setParent(Token token) {
-		parent = Optional.of(token);
-		parser.setParent(token.parser);
-	}
-	
-	public void removeParent() {
-		parent = Optional.empty();
-		parser.setParent(null);
 	}
 }
