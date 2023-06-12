@@ -124,6 +124,10 @@ public class Token implements Serializable{
 		return flatten(SearchFirst.Depth ,ChildrenKind.astNodes);
 	}
 	
+	public List<Token> flatten(SearchFirst breadthOrDepth){
+		return flatten(breadthOrDepth , ChildrenKind.astNodes);
+	}
+	
 	public List<Token> flatten(SearchFirst breadthOrDepth , ChildrenKind childrenKind){
 		return breadthOrDepth == SearchFirst.Depth ?
 				flattenDepth(childrenKind) : flattenBreadth(childrenKind);
