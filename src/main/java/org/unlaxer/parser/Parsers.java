@@ -62,6 +62,10 @@ public class Parsers implements List<Parser>  , Serializable{
 	public boolean add(Parser e) {
 		return parsers.add(e);
 	}
+	
+	public boolean add(Class<? extends Parser> clazz) {
+		return parsers.add(Parser.get(clazz));
+	}
 
 	@Override
 	public boolean remove(Object o) {
@@ -122,7 +126,14 @@ public class Parsers implements List<Parser>  , Serializable{
 	public void add(int index, Parser element) {
 		parsers.add(index, element);
 	}
+	
+	public Parser set(int index, Class<? extends Parser> element) {
+		return parsers.set(index, Parser.get(element));
+	}
 
+	public void add(int index, Class<? extends Parser> element) {
+		parsers.add(index, Parser.get(element));
+	}
 
 	@Override
 	public Parser remove(int index) {
