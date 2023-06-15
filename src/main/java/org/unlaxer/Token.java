@@ -359,4 +359,8 @@ public class Token implements Serializable{
 		var preset = extraObjectByName.remove(name);
 		return preset != null ; 
 	}
+	
+	public final static Predicate<Token> parserImplements(Class<?> interfaceClass){
+		return token->interfaceClass.isAssignableFrom(token.parser.getClass());
+	}
 }
