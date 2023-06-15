@@ -360,7 +360,15 @@ public class Token implements Serializable{
 		return preset != null ; 
 	}
 	
-	public final static Predicate<Token> parserImplements(Class<?> interfaceClass){
-		return token->interfaceClass.isAssignableFrom(token.parser.getClass());
+	public final static Predicate<Token> parserImplements(Class<?>... interfaceClasses){
+		return token->{
+			for (Class<?> interfaceClass : interfaceClasses) {
+				
+				if(interfaceClass.isAssignableFrom(token.parser.getClass())) {
+					return true;
+				}
+			}
+			return false;
+		};
 	}
 }

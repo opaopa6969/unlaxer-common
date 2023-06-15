@@ -11,8 +11,14 @@ import java.lang.annotation.Target;
  **/
 public @interface TokenExtractor{
 	
+	public enum Timing{
+		CreateOperatorOperandTree,
+		UseOperatorOperandTree
+	}
+	
 	boolean specifiedTokenIsThisParser() default true;
 	
 	boolean isExtactedList() default false;
-
+	
+	Timing[] timings() default {Timing.CreateOperatorOperandTree};
 }
