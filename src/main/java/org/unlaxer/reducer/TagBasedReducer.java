@@ -1,7 +1,7 @@
 package org.unlaxer.reducer;
 
 import org.unlaxer.Tag;
-import org.unlaxer.Taggable;
+import org.unlaxer.ParserTaggable;
 import org.unlaxer.parser.Parser;
 
 public class TagBasedReducer extends AbstractTokenReducer {
@@ -28,11 +28,11 @@ public class TagBasedReducer extends AbstractTokenReducer {
 			return Tag.of(this);
 		}
 		
-		public void addTag(Taggable taggable){
+		public void addTag(ParserTaggable taggable){
 			taggable.addTag(getTag());
 		}
 		
-		public void removeTag(Taggable taggable){
+		public void removeTag(ParserTaggable taggable){
 			taggable.removeTag(getTag());
 		}
 	}

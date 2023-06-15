@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.unlaxer.parser.Parser;
 
-public interface RecursiveTaggable extends Taggable{
+public interface RecursiveTaggable extends ParserTaggable{
 	
 	public default Parser addTagRecurciveChildrenOnly(Tag... addeds){
 		return addTag(true , RecursiveMode.childrenOnly, addeds);

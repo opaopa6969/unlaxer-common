@@ -47,6 +47,14 @@ public class Range implements Comparable<Range>{
 		return position < startIndexInclusive;
 	}
 	
+	public boolean smallerThan(Range other){
+		return other.startIndexInclusive >=  endIndexExclusive;
+	}
+	
+	public boolean biggerThan(Range other){
+		return other.endIndexExclusive <= startIndexInclusive;
+	}
+	
 	public RangesRelation relation(Range other){
 		int otherStart = other.startIndexInclusive;
 		int otherEnd= other.endIndexExclusive;

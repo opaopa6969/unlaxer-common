@@ -8,11 +8,14 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.listener.OutputLevel;
+import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
 import org.unlaxer.util.FactoryBoundCache;
@@ -371,4 +374,10 @@ public class Token implements Serializable{
 			return false;
 		};
 	}
+	
+	public final static Predicate<Token> afterToken(Token targetToken){
+		return token-> targetToken.tokenRange.biggerThan(token.tokenRange);
+	}
+
+
 }

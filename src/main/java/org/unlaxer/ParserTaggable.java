@@ -5,7 +5,7 @@ import java.util.Set;
 import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.parser.Parser;
 
-public interface Taggable extends ParserFinder{
+public interface ParserTaggable extends ParserFinder{
 
 	public default Parser addTag(Tag... addings){
 		
