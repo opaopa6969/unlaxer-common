@@ -376,6 +376,10 @@ public class Token implements Serializable{
 	}
 	
 	public final static Predicate<Token> afterToken(Token targetToken){
+		return token-> targetToken.tokenRange.smallerThan(token.tokenRange);
+	}
+	
+	public final static Predicate<Token> deforeToken(Token targetToken){
 		return token-> targetToken.tokenRange.biggerThan(token.tokenRange);
 	}
 

@@ -18,6 +18,7 @@ public class RangeTest {
 		Range range3 = new Range(0);
 		Range range4 = new Range(2,5);
 		Range range5 = new Range(1,2);
+		Range range6 = new Range(3,6);
 		
 		assertEquals(RangesRelation.notCrossed , range1.relation(range3));
 		assertEquals(RangesRelation.inner , range1.relation(range2));
@@ -32,6 +33,9 @@ public class RangeTest {
 		assertTrue(range1.smallerThan(3));
 		assertFalse(range1.smallerThan(2));
 		assertTrue(range1.biggerThan(0));
+		
+		assertTrue(range1.smallerThan(range6));
+		assertTrue(range6.biggerThan(range1));
 		
 		SortedSet<Range> ranges = new TreeSet<Range>();
 		ranges.add(range1);
