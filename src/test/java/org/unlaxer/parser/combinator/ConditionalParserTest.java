@@ -1,0 +1,134 @@
+package org.unlaxer.parser.combinator;
+
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.Test;
+import org.unlaxer.Parsed;
+import org.unlaxer.StringSource;
+import org.unlaxer.Tag;
+import org.unlaxer.Token;
+import org.unlaxer.TokenPrinter;
+import org.unlaxer.context.ParseContext;
+import org.unlaxer.listener.OutputLevel;
+import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.elementary.WordParser;
+
+public class ConditionalParserTest {
+	
+	@Test
+	public void test() {
+		
+		WordParser aParser = new WordParser("a");
+		WordParser bParser = new WordParser("b");
+		WordParser cParser = new WordParser("c");
+		
+		Tag abChoice = Tag.of("ab-Coice");
+		
+		
+		Chain chain = new Chain(
+			new Choice(
+				aParser,
+				bParser
+			).addTag(abChoice),
+			new Chain(
+				cParser,
+				new Choice(
+						aParser,
+						bParser
+				).addTag(abChoice)
+			)
+		);
+		
+		ParseContext parseContext = new ParseContext(new StringSource("aca"));
+		
+		Parsed parse = chain.parse(parseContext);
+		Token rootToken = parse.getRootToken();
+		String string = TokenPrinter.get(rootToken , OutputLevel.detail);
+		System.out.println(parse.status);
+		System.out.println(string);
+		
+		Stream<Token> children = rootToken.flatten().stream().filter(Token.hasTag(abChoice));
+		List<Parser> collect = children
+			.map(ChoiceInterface::choiced)
+			.map(Token::getParser)
+			.collect(Collectors.toList());
+		
+		for (Parser parser : collect) {
+			System.err.println(parser);
+		}
+	}
+	
+	@Test
+	public void testPredicateAnyMatchForParsedParser() {
+
+		Tag aTag = new Tag("a");
+		Tag bTag = new Tag("b");
+		
+		Parser aParser = new WordParser("a").addTag(aTag);
+		Parser bParser = new WordParser("b").addTag(bTag);
+		Parser cParser = new WordParser("c");
+		
+		Tag abChoice = Tag.of("ab-Coice");
+		
+		
+		
+		Chain chain = new Chain(
+			new Choice(
+				aParser,
+				bParser
+			).addTag(abChoice),
+			new Chain(
+				cParser,
+				new Choice(
+						aParser,
+						bParser
+				).addTag(abChoice)
+			)
+		);
+		
+		var predicateAnyMatchForParsedParser = new PredicateAnyMatchForParsedParser(
+			chain , 
+			Token.hasTag(aTag)
+		);
+		
+		{
+			ParseContext parseContext = new ParseContext(new StringSource("bcb"));
+			
+			Parsed parse = predicateAnyMatchForParsedParser.parse(parseContext);
+			Token rootToken = parse.getRootToken();
+			String string = TokenPrinter.get(rootToken , OutputLevel.detail);
+			System.out.println(parse.status);
+			System.out.println(string);
+			assertTrue(parse.isFailed());
+		
+		}
+
+		{
+			ParseContext parseContext = new ParseContext(new StringSource("aca"));
+			
+			Parsed parse = predicateAnyMatchForParsedParser.parse(parseContext);
+			Token rootToken = parse.getRootToken();
+			String string = TokenPrinter.get(rootToken , OutputLevel.detail);
+			System.out.println(parse.status);
+			System.out.println(string);
+			assertTrue(parse.isSucceeded());
+		
+		}
+		
+		{
+			ParseContext parseContext = new ParseContext(new StringSource("bcb"));
+			
+			Parsed parse = chain.parse(parseContext);
+			Token rootToken = parse.getRootToken();
+			String string = TokenPrinter.get(rootToken , OutputLevel.detail);
+			System.out.println(parse.status);
+			System.out.println(string);
+			assertTrue(parse.isSucceeded());
+		
+		}
+	}
+}

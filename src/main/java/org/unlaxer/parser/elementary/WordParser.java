@@ -108,7 +108,11 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 	public interface BeginSpecifier extends Function<String, Integer>{};
 	public interface EndSpecifier extends Function<String, Integer>{};
 	public interface RangeSpecifier extends Function<String,Range>{}; 
-	public interface WordEffector extends UnaryOperator<String>{}; 
+	public interface WordEffector extends UnaryOperator<String>{}
+	
+	public String toString() {
+		return "wordParser("+word+")";
+	}; 
 	
 	
 }
