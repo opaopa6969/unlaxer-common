@@ -53,11 +53,19 @@ public class ParserFactoryByClass{
 		return initilizedByClass.getOrDefault(clazz, false);
 	}
 	
-static boolean initialized(ClassAndKind clazzAndKind) {
-	return initilizedByClassAndKind.getOrDefault(clazzAndKind, false);
-}
-
+	static boolean initialized(ClassAndKind clazzAndKind) {
+		return initilizedByClassAndKind.getOrDefault(clazzAndKind, false);
+	}
 	
+	public static <T extends Parser> T newInstance(Class<T> clazz) {
+		try {
+			T parser = clazz.getDeclaredConstructor().newInstance();
+			return parser;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	static FactoryBoundCache<ClassAndKind,Parser>//
 	singletonsByClassAndKind = new FactoryBoundCache<>((classAndKind) -> {
 		try {

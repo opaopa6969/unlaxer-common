@@ -61,5 +61,9 @@ public interface Parser extends //
   public static <T extends Parser> T get(Supplier<T> supplier) {
     return ParserFactoryBySupplier.get(supplier);
   }
+  
+  public static <T extends Parser> T newInstance(Class<T> clazz) {
+    return ParserFactoryByClass.newInstance(clazz);
+  }
 
 }
