@@ -1,13 +1,12 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
+import org.unlaxer.Parsed.Status;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
-import org.unlaxer.Parsed.Status;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
 
@@ -31,7 +30,16 @@ public class PredicateAnyMatchForParsedParser extends ConstructedSingleChildPars
 		parseContext.startParse(this, parseContext, tokenKind, invertMatch);
 		Parsed parsed = getChild().parse(parseContext,tokenKind , invertMatch);
 		if(parsed.status == Status.succeeded) {
-//			List<Token> list = parsed.getRootToken().flatten().stream().filter(predicate).toList();
+//			List<Token> list = parsed.getRootToken().flatten().stream()
+//					.peek(_token-> {
+//						_token.parent.ifPresent(_parent->
+//						System.err.println("##"+TokenPrinter.get(_parent, 0,OutputLevel.withTag,false)));
+//						System.out.println("##"+TokenPrinter.get(_token, 0,OutputLevel.withTag,false));
+//						System.err.println("##parent:"+Token.hasTagInParent(Tag.of("ab-Coice")).test(_token));
+//						System.err.println("##this:"+Token.hasTag(Tag.of("a")).test(_token));
+//							
+//					})
+//					.filter(predicate).toList();
 			boolean anyMatch = parsed.getRootToken().flatten().stream().anyMatch(predicate);
 			if(false == anyMatch) {
 				parsed = parsed.negate();

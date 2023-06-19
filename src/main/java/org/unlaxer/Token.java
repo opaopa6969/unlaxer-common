@@ -8,14 +8,11 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.listener.OutputLevel;
-import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
 import org.unlaxer.util.FactoryBoundCache;
@@ -379,12 +376,21 @@ public class Token implements Serializable{
 		return token-> targetToken.tokenRange.smallerThan(token.tokenRange);
 	}
 	
-	public final static Predicate<Token> deforeToken(Token targetToken){
+	public final static Predicate<Token> beforeToken(Token targetToken){
 		return token-> targetToken.tokenRange.biggerThan(token.tokenRange);
+	}
+	
+	public final static Predicate<Token> relation(Token targetToken , RangesRelation rangesRelation){
+		return token-> targetToken.tokenRange.relation(token.tokenRange) == rangesRelation;
 	}
 	
 	public final static Predicate<Token> hasTag(Tag tag){
 		return token-> token.parser.hasTag(tag);
+	}
+	
+	public final static Predicate<Token> hasTagInParent(Tag tag){
+		return token-> token.parser.getParent()
+				.map(_parent->_parent.hasTag(tag)).orElse(false);
 	}
 
 

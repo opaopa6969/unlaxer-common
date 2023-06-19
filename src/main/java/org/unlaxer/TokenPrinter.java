@@ -2,8 +2,10 @@ package org.unlaxer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.unlaxer.listener.OutputLevel;
@@ -51,6 +53,17 @@ public class TokenPrinter{
 				getInverted(token),//
 				outputChildren ? "\n":"");
 			
+		}else if(detailLevel == OutputLevel.withTag){
+			
+			out.format("%s (%d - %d): %s%s%s%S", 
+					tokenString.map(TokenPrinter::quote).orElse(EMPTY) ,//
+					tokenRange.startIndexInclusive,//
+					tokenRange.endIndexExclusive, //
+					parser.getName(),
+					getInverted(token),//
+					getTag(token),
+					outputChildren ? "\n":"");
+			
 		}else if(detailLevel == OutputLevel.simple){
 			
 			out.format("%s : %s%s%s" , //
@@ -68,6 +81,23 @@ public class TokenPrinter{
 		}
 	}
 		
+	private static String getTag(Token token) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{");
+		Set<Tag> tags = token.parser.getTags();
+		Iterator<Tag> iterator = tags.iterator();
+		while (iterator.hasNext()) {
+			Tag tag = (Tag) iterator.next();
+			builder.append(tag.toString());
+			if(iterator.hasNext()) {
+				builder.append(",");
+			}
+		}
+		builder.append("}");
+		return builder.toString();
+	}
+
+
 	static String quote(String word){
 		return "'" +word + "'";
 	}

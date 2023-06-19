@@ -4,6 +4,7 @@ public enum OutputLevel{
 	none,
 	simple,
 	detail,
+	withTag,
 	;
 	public boolean isNone(){
 		return this == none;
