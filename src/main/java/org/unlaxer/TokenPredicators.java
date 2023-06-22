@@ -2,6 +2,8 @@ package org.unlaxer;
 
 import java.util.function.Predicate;
 
+import org.unlaxer.parser.Parser;
+
 public class TokenPredicators{
 	
 	public final static Predicate<Token> parserImplements(Class<?>... interfaceClasses){
@@ -15,6 +17,20 @@ public class TokenPredicators{
 			return false;
 		};
 	}
+	
+	@SafeVarargs
+	public final static Predicate<Token> parsers(Class<? extends Parser>... parserClasses){
+		return token->{
+			for (Class<? extends Parser> parserClass : parserClasses) {
+				
+				if(token.parser.getClass() == parserClass) {
+					return true;
+				}
+			}
+			return false;
+		};
+	}
+
 	
 	public final static Predicate<Token> afterToken(Token targetToken){
 		return token-> targetToken.tokenRange.smallerThan(token.tokenRange);
