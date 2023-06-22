@@ -202,6 +202,10 @@ public class Token implements Serializable{
 		return newCreatesOf(Arrays.asList(newChildrens));
 	}
 	
+	public Token newCreatesOf(Predicate<Token> filterForChildren) {
+		return newCreatesOf(getChildrenAsList(filterForChildren));
+	}
+	
 	public Token getChild(Predicate<Token> predicates) {
 		return getChild(predicates , ChildrenKind.astNodes);
 	}
