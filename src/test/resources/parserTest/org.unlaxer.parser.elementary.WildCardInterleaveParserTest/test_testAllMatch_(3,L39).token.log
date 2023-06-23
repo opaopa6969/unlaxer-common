@@ -1,0 +1,17 @@
+'123牛丼寿司天ぷら' (0 - 10): org.unlaxer.parser.elementary.WildCardInterleaveParserTest$MixedContentParser
+ '1' (0 - 1): org.unlaxer.parser.combinator.Choice
+  '1' (0 - 1): org.unlaxer.parser.elementary.WildCardCharacterParser
+ '2' (1 - 2): org.unlaxer.parser.combinator.Choice
+  '2' (1 - 2): org.unlaxer.parser.elementary.WildCardCharacterParser
+ '3' (2 - 3): org.unlaxer.parser.combinator.Choice
+  '3' (2 - 3): org.unlaxer.parser.elementary.WildCardCharacterParser
+ '牛丼' (3 - 5): org.unlaxer.parser.combinator.Choice
+  '牛丼' (3 - 5): 牛丼Parser
+ '寿司' (5 - 7): org.unlaxer.parser.combinator.Choice
+  '寿司' (5 - 7): org.unlaxer.parser.elementary.WordParser
+ '天ぷら' (7 - 10): org.unlaxer.parser.combinator.Choice
+  '天ぷら' (7 - 10): org.unlaxer.parser.elementary.WordParser
+ '' (10 - 10): org.unlaxer.parser.elementary.LineTerminatorParser
+  '' (10 - 10): org.unlaxer.parser.elementary.LineTerminatorParser
+   <EMPTY> (10 - 10): org.unlaxer.parser.elementary.EndOfSourceParser
+

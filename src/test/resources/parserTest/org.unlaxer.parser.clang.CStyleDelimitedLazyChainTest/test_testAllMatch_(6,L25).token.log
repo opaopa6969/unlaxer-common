@@ -1,0 +1,7 @@
+' ABC/* aaaコメント */DE//コメント  
+FG/* asdasd 
+*///asd' (0 - 48): org.unlaxer.parser.clang.CStyleDelimitedLazyChainTest$FooCStyleDelimitedLazyChain
+ 'ABC' (1 - 4): org.unlaxer.parser.elementary.WordParser
+ 'DE' (17 - 19): org.unlaxer.parser.elementary.WordParser
+ 'FG' (28 - 30): org.unlaxer.parser.elementary.WordParser
+

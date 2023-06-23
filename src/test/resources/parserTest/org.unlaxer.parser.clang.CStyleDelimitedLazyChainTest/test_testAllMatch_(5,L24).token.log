@@ -1,0 +1,6 @@
+' ABCDE//コメント  
+FG' (0 - 17): org.unlaxer.parser.clang.CStyleDelimitedLazyChainTest$FooCStyleDelimitedLazyChain
+ 'ABC' (1 - 4): org.unlaxer.parser.elementary.WordParser
+ 'DE' (4 - 6): org.unlaxer.parser.elementary.WordParser
+ 'FG' (15 - 17): org.unlaxer.parser.elementary.WordParser
+

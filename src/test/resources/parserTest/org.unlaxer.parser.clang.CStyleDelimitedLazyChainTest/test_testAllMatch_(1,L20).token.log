@@ -1,0 +1,5 @@
+'ABCDEFG' (0 - 7): org.unlaxer.parser.clang.CStyleDelimitedLazyChainTest$FooCStyleDelimitedLazyChain
+ 'ABC' (0 - 3): org.unlaxer.parser.elementary.WordParser
+ 'DE' (3 - 5): org.unlaxer.parser.elementary.WordParser
+ 'FG' (5 - 7): org.unlaxer.parser.elementary.WordParser
+

@@ -1,0 +1,4 @@
+START   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+END     : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+END     : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  

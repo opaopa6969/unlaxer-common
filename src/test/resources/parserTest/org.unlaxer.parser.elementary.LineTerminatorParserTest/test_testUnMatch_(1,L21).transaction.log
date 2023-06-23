@@ -1,0 +1,13 @@
+OPEN    : 'abc'
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:a 
+ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+CLOSE   : 'abc' consumed:0(3 remain) 
+

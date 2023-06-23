@@ -1,0 +1,8 @@
+'abc
+' (0 - 4): org.unlaxer.parser.combinator.Chain
+ 'abc' (0 - 3): org.unlaxer.parser.elementary.WordParser
+ '
+' (3 - 4): org.unlaxer.parser.elementary.LineTerminatorParser
+  '
+' (3 - 4): org.unlaxer.parser.elementary.WordParser
+
