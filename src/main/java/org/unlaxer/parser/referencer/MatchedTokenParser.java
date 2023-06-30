@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
@@ -29,7 +30,8 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 	WordEffector wordEffector;
 	boolean reverse;
 	Consumer<Slicer> slicerEffector;
-	Predicate<Token> tokenPredicator;
+	// must be tokenPredicator evaluates when all parser constructed.
+	Supplier<Predicate<Token>> tokenPredicator;
 
 	public MatchedTokenParser(Parser targetParser) {
 		super(List.of(targetParser));
@@ -38,7 +40,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		reverse = false;
 		wordEffector = null;
 		slicerEffector = null;
-		tokenPredicator = TokenPredicators.parsers(targetParser.getClass());
+		tokenPredicator = ()->tokenPredicator(targetParser);
 	}
 	
 	public MatchedTokenParser(
@@ -51,7 +53,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		this.rangeSpecifier = rangeSpecifier;
 		this.wordEffector = null;
 		this.slicerEffector = null;
-		tokenPredicator = TokenPredicators.parsers(targetParser.getClass());
+		tokenPredicator = ()->tokenPredicator(targetParser);
 	}
 	
 	public MatchedTokenParser(
@@ -64,7 +66,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		this.rangeSpecifier = null;
 		this.wordEffector = wordEffector;
 		this.slicerEffector = null;
-		tokenPredicator = TokenPredicators.parsers(targetParser.getClass());
+		tokenPredicator = ()->tokenPredicator(targetParser);
 	}
 
 	public MatchedTokenParser(
@@ -77,7 +79,15 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		this.rangeSpecifier = null;
 		this.wordEffector = null;
 		this.slicerEffector = slicerEffector;
-		tokenPredicator = TokenPredicators.parsers(targetParser.getClass());
+		tokenPredicator = ()->tokenPredicator(targetParser);
+	}
+	
+	Predicate<Token> tokenPredicator(Parser parser){
+		Parser targetParser = (parser instanceof ReferenceParser)?
+			((ReferenceParser)parser).getMatchedParser()
+				.orElseThrow(()->new IllegalArgumentException("specified matched parser not found yet.")):
+			parser;
+		return TokenPredicators.parsers(targetParser.getClass());
 	}
 	
 	public enum ScopeVariable{
@@ -93,7 +103,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		reverse = false;
 		wordEffector = null;
 		slicerEffector = null;
-		this.tokenPredicator = tokenPredicator;
+		this.tokenPredicator = ()->tokenPredicator;
 	}
 	
 	public MatchedTokenParser(
@@ -104,7 +114,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		this.rangeSpecifier = rangeSpecifier;
 		this.wordEffector = null;
 		this.slicerEffector = null;
-		this.tokenPredicator = tokenPredicator;
+		this.tokenPredicator = ()->tokenPredicator;
 	}
 	
 	public MatchedTokenParser(
@@ -115,7 +125,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		this.rangeSpecifier = null;
 		this.wordEffector = wordEffector;
 		this.slicerEffector = null;
-		this.tokenPredicator = tokenPredicator;
+		this.tokenPredicator = ()->tokenPredicator;
 	}
 
 	public MatchedTokenParser(
@@ -126,8 +136,10 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		this.rangeSpecifier = null;
 		this.wordEffector = null;
 		this.slicerEffector = slicerEffector;
-		this.tokenPredicator = tokenPredicator;
+		this.tokenPredicator = ()->tokenPredicator;
 	}
+	
+	
 	
 
 
@@ -142,7 +154,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		List<Token> matchedTokens = parseContext.getList(this, ScopeVariable.matchedToken.get(),Token.class);
 		
 		if(matchedTokens.isEmpty()){
-			matchedTokens = parseContext.getMatchedTokens(tokenPredicator);
+			matchedTokens = parseContext.getMatchedTokens(tokenPredicator.get());
 			parseContext.put(this, ScopeVariable.matchedToken.get() , matchedTokens);
 		}
 		
@@ -172,6 +184,43 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		}
 		return Parsed.FAILED;
 	}
+
+	/* previous implementation. pasting for reference.
+	@Override
+	public Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch) {
+		
+		if(targetParser instanceof ReferenceParser){
+			targetParser = ((ReferenceParser)targetParser).getMatchedParser()
+				.orElseThrow(()->new IllegalArgumentException("specified matched parser not found yet."));
+		}
+		
+		Optional<Token> matchedToken = parseContext.get(this, ScopeVariable.matchedToken.get(),Token.class);
+		
+		if(false == matchedToken.isPresent()){
+			matchedToken = parseContext.getMatchedToken((parser)->parser.equals(targetParser));
+			matchedToken.ifPresent(token->parseContext.put(this, ScopeVariable.matchedToken.get() , token));
+		}
+		Optional<WordParser> wordParser = matchedToken
+			.flatMap(Token::getToken)
+			.map(WordParser::new);
+		
+		if(rangeSpecifier != null){
+			
+			wordParser = wordParser.map(original->original.slice(rangeSpecifier,reverse));
+		}else if(wordEffector != null){
+			
+			wordParser = wordParser.map(original->original.effect(wordEffector));
+		}else if(slicerEffector != null){
+			
+			wordParser = wordParser.map(original->original.slice(slicerEffector));
+		}
+		
+		return wordParser
+				.map(parser->parser.parse(parseContext,tokenKind,invertMatch))
+				.orElse(Parsed.FAILED);
+	}
+	*/
+
 
 	@Override
 	public ChildOccurs getChildOccurs() {
