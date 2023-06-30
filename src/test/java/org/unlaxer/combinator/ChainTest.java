@@ -19,6 +19,7 @@ import org.unlaxer.parser.posix.AlphabetNumericParser;
 import org.unlaxer.parser.posix.AlphabetParser;
 import org.unlaxer.parser.posix.DigitParser;
 import org.unlaxer.parser.referencer.MatchedTokenParser;
+import org.unlaxer.parser.referencer.OldMatchedTokenParser;
 import org.unlaxer.parser.referencer.ReferenceParser;
 
 
@@ -114,6 +115,42 @@ public class ChainTest extends ParserTestBase{
 				).newWithTerminator(
 					new MatchOnly(//
 						new MatchedTokenParser(
+							ReferenceParser.of(Name.of(Baz.stopWord))
+						)
+					)
+				)
+			)
+		);
+		testPartialMatch(terminatored, "end;abcdefgendxx","end;abcdefg",true);
+
+	}
+	
+	@Test
+	public void testTerminatorOld(){
+		
+		setLevel(OutputLevel.simple);
+		
+		Chain terminatored = new Chain(Name.of(Baz.all),//
+			new MatchOnly(Name.of(Baz.lookahead),
+				new Chain(Name.of(Baz.declareStopWord),
+					new OneOrMore(Name.of(Baz.stopWord),
+						new AlphabetParser()
+					),
+					new WordParser(";")
+				)
+			),
+			new Chain(Name.of(Baz.clause),
+				new Chain(Name.of(Baz.header),
+					new OldMatchedTokenParser(
+						ReferenceParser.of(Name.of(Baz.stopWord))
+					),
+					new WordParser(";")
+				),
+				new OneOrMore(Name.of(Baz.contents),
+					new AlphabetNumericParser()//
+				).newWithTerminator(
+					new MatchOnly(//
+						new OldMatchedTokenParser(
 							ReferenceParser.of(Name.of(Baz.stopWord))
 						)
 					)

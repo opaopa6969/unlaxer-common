@@ -1,0 +1,11 @@
+OPEN    : ''
+START   : position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain
+START   : position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore
+BEGIN   : position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore
+ROLLBACK: position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
+END     : position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:failed | parsed:  
+ROLLBACK: position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked: 
+END     : position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+CLOSE   : '' consumed:allConsumed 
+

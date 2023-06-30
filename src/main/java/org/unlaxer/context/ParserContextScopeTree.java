@@ -1,6 +1,8 @@
 package org.unlaxer.context;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,6 +42,14 @@ public interface ParserContextScopeTree{
 		}
 		return Optional.of(specifiedClass.cast(object));
 	}
+	
+	@SuppressWarnings("unchecked")
+	public default <T> List<T> getList(Parser parser , Name name , Class<T> specifiedClass){
+		Map<Name, Object> map = getParserContextScopeTreeMap(parser);
+		List<T> list = (List<T>) map.get(name);
+		return list == null? Collections.emptyList() : list;
+	}
+
 	
 	public default void put(Parser parser , Object object){
 		put(parser, nameLess, object);

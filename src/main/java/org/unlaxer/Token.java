@@ -30,6 +30,7 @@ public class Token implements Serializable{
 					token->TokenPrinter.get(token,0,OutputLevel.detail,false));
 
 	
+	
 	public final Optional<String> tokenString;
 	public final Parser parser;
 	public final Range tokenRange;
@@ -40,6 +41,7 @@ public class Token implements Serializable{
 	public  final List<Token> filteredChildren; // astNodeChildren
 	
 	private Map<Name,Object> extraObjectByName = new NullSafetyConcurrentHashMap<>();
+	private Map<Name,Token> relatedTokenByName = new NullSafetyConcurrentHashMap<>();
 
 	public enum ChildrenKind{
 		original,
@@ -346,7 +348,7 @@ public class Token implements Serializable{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public<T> Optional<T> getExtraObject(Name name , Class<T> objectClass) {
+	public<T> Optional<T> getExtraObject(Name name) {
 		return Optional.ofNullable( (T)extraObjectByName.get(name));
 	}
 	
@@ -354,13 +356,20 @@ public class Token implements Serializable{
 		extraObjectByName.put(name , object);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public <T> Optional<T>  removeExtraObject(Name name , Class<T> objectClass) {
-		return Optional.ofNullable( (T)extraObjectByName.remove(name));
-	}
-	
 	public boolean removeExtraObject(Name name) {
 		var preset = extraObjectByName.remove(name);
 		return preset != null ; 
+	}
+	
+	public Optional<Token> getRelatedToken(Name name) {
+		return Optional.ofNullable( relatedTokenByName.get(name));
+	}
+	
+	public void setRelatedToken(Name name , Token relatedToken) {
+		relatedTokenByName.put(name , relatedToken);
+	}
+	
+	public Optional<Token>  removeRelatedToken(Name name) {
+		return Optional.ofNullable(relatedTokenByName.remove(name));
 	}
 }

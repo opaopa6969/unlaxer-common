@@ -1,0 +1,4 @@
+START   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain
+START   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+END     : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:failed | parsed:  
+END     : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain| status:failed | parsed:  

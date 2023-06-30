@@ -1,22 +1,25 @@
 package org.unlaxer.parser.referencer;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
+import org.unlaxer.TokenPredicators;
 import org.unlaxer.context.ParseContext;
+import org.unlaxer.parser.AbstractParser;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
-import org.unlaxer.parser.combinator.ConstructedSingleChildParser;
 import org.unlaxer.parser.elementary.WordParser;
 import org.unlaxer.parser.elementary.WordParser.RangeSpecifier;
 import org.unlaxer.parser.elementary.WordParser.WordEffector;
 import org.unlaxer.util.Slicer;
 
-public class MatchedTokenParser extends ConstructedSingleChildParser{
+public class MatchedTokenParser extends AbstractParser{//extends ConstructedSingleChildParserA
 
 	private static final long serialVersionUID = 9212874360894516134L;
 	
@@ -26,52 +29,55 @@ public class MatchedTokenParser extends ConstructedSingleChildParser{
 	WordEffector wordEffector;
 	boolean reverse;
 	Consumer<Slicer> slicerEffector;
+	Predicate<Token> tokenPredicator;
 
 	public MatchedTokenParser(Parser targetParser) {
-		super(targetParser);
+		super(List.of(targetParser));
 		this.targetParser = targetParser;
 		rangeSpecifier = null;
 		reverse = false;
 		wordEffector = null;
 		slicerEffector = null;
+		tokenPredicator = TokenPredicators.parsers(targetParser.getClass());
 	}
 	
 	public MatchedTokenParser(
 			Parser targetParser,
 			RangeSpecifier rangeSpecifier,
 			boolean reverse) {
-		super(targetParser);
+		super(List.of(targetParser));
 		this.targetParser = targetParser;
 		this.reverse = reverse;
 		this.rangeSpecifier = rangeSpecifier;
 		this.wordEffector = null;
 		this.slicerEffector = null;
+		tokenPredicator = TokenPredicators.parsers(targetParser.getClass());
 	}
 	
 	public MatchedTokenParser(
 			Parser targetParser,
 			WordEffector wordEffector
 			) {
-		super(targetParser);
+		super(List.of(targetParser));
 		this.targetParser = targetParser;
 		this.reverse = false;
 		this.rangeSpecifier = null;
 		this.wordEffector = wordEffector;
 		this.slicerEffector = null;
-		
+		tokenPredicator = TokenPredicators.parsers(targetParser.getClass());
 	}
 
 	public MatchedTokenParser(
 			Parser targetParser,
 			Consumer<Slicer> slicerEffector
 			) {
-		super(targetParser);
+		super(List.of(targetParser));
 		this.targetParser = targetParser;
 		this.reverse = false;
 		this.rangeSpecifier = null;
 		this.wordEffector = null;
 		this.slicerEffector = slicerEffector;
-		
+		tokenPredicator = TokenPredicators.parsers(targetParser.getClass());
 	}
 	
 	public enum ScopeVariable{
@@ -81,7 +87,48 @@ public class MatchedTokenParser extends ConstructedSingleChildParser{
 			return Name.of(this);
 		}
 	}
+	
+	public MatchedTokenParser(Predicate<Token> tokenPredicator) {
+		rangeSpecifier = null;
+		reverse = false;
+		wordEffector = null;
+		slicerEffector = null;
+		this.tokenPredicator = tokenPredicator;
+	}
+	
+	public MatchedTokenParser(
+			Predicate<Token> tokenPredicator,
+			RangeSpecifier rangeSpecifier,
+			boolean reverse) {
+		this.reverse = reverse;
+		this.rangeSpecifier = rangeSpecifier;
+		this.wordEffector = null;
+		this.slicerEffector = null;
+		this.tokenPredicator = tokenPredicator;
+	}
+	
+	public MatchedTokenParser(
+			Predicate<Token> tokenPredicator,
+			WordEffector wordEffector
+			) {
+		this.reverse = false;
+		this.rangeSpecifier = null;
+		this.wordEffector = wordEffector;
+		this.slicerEffector = null;
+		this.tokenPredicator = tokenPredicator;
+	}
 
+	public MatchedTokenParser(
+			Predicate<Token> tokenPredicator,
+			Consumer<Slicer> slicerEffector
+			) {
+		this.reverse = false;
+		this.rangeSpecifier = null;
+		this.wordEffector = null;
+		this.slicerEffector = slicerEffector;
+		this.tokenPredicator = tokenPredicator;
+	}
+	
 
 
 	@Override
@@ -92,30 +139,38 @@ public class MatchedTokenParser extends ConstructedSingleChildParser{
 				.orElseThrow(()->new IllegalArgumentException("specified matched parser not found yet."));
 		}
 		
-		Optional<Token> matchedToken = parseContext.get(this, ScopeVariable.matchedToken.get(),Token.class);
+		List<Token> matchedTokens = parseContext.getList(this, ScopeVariable.matchedToken.get(),Token.class);
 		
-		if(false == matchedToken.isPresent()){
-			matchedToken = parseContext.getMatchedToken((parser)->parser.equals(targetParser));
-			matchedToken.ifPresent(token->parseContext.put(this, ScopeVariable.matchedToken.get() , token));
-		}
-		Optional<WordParser> wordParser = matchedToken
-			.flatMap(Token::getToken)
-			.map(WordParser::new);
-		
-		if(rangeSpecifier != null){
-			
-			wordParser = wordParser.map(original->original.slice(rangeSpecifier,reverse));
-		}else if(wordEffector != null){
-			
-			wordParser = wordParser.map(original->original.effect(wordEffector));
-		}else if(slicerEffector != null){
-			
-			wordParser = wordParser.map(original->original.slice(slicerEffector));
+		if(matchedTokens.isEmpty()){
+			matchedTokens = parseContext.getMatchedTokens(tokenPredicator);
+			parseContext.put(this, ScopeVariable.matchedToken.get() , matchedTokens);
 		}
 		
-		return wordParser
-				.map(parser->parser.parse(parseContext,tokenKind,invertMatch))
-				.orElse(Parsed.FAILED);
+		for (Token token : matchedTokens) {
+			
+			Optional<WordParser> wordParser = token.getToken().map(WordParser::new);
+			if(wordParser.isEmpty()) {
+				continue;
+			}
+			
+			if(rangeSpecifier != null){
+				
+				wordParser = wordParser.map(original->original.slice(rangeSpecifier,reverse));
+			}else if(wordEffector != null){
+				
+				wordParser = wordParser.map(original->original.effect(wordEffector));
+			}else if(slicerEffector != null){
+				
+				wordParser = wordParser.map(original->original.slice(slicerEffector));
+			}
+			
+			Optional<Parsed> map = wordParser
+				.map(parser->parser.parse(parseContext,tokenKind,invertMatch));
+			if(map.isPresent() && map.get().isSucceeded()) {
+				return map.get();
+			}
+		}
+		return Parsed.FAILED;
 	}
 
 	@Override
@@ -145,6 +200,10 @@ public class MatchedTokenParser extends ConstructedSingleChildParser{
 	
 	public MatchedTokenParser slice(Consumer<Slicer> slicerEffector){
 		return new MatchedTokenParser(targetParser,slicerEffector);
+	}
+
+	@Override
+	public void prepareChildren(List<Parser> childrenContainer) {
 	}
 
 }

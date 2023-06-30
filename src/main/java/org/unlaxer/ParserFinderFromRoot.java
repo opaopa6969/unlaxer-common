@@ -14,8 +14,11 @@ public interface ParserFinderFromRoot extends ParserHierarchy{
 	}
 	
 	public default Stream<Parser> findFromRoot(Predicate<Parser> predicate) {
-		List<Parser> flatten = getRoot().flatten();
-		return flatten.stream().filter(predicate);
+		//FIXME!
+		List<Parser> flattenOriginal = getRoot().flatten();
+		return flattenOriginal.stream()
+				.peek(parser->System.out.println(parser.toString()))
+				.filter(predicate);
 	}
 	
 }

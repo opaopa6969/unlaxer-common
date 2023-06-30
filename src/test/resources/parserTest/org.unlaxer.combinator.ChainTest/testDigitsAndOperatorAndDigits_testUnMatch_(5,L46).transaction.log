@@ -1,0 +1,7 @@
+OPEN    : ''
+BEGIN   : position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore
+ROLLBACK: position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
+ROLLBACK: position:(c:0 m:0) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked: 
+CLOSE   : '' consumed:allConsumed 
+

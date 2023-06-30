@@ -17,6 +17,7 @@ import org.unlaxer.Source;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.TransactionElement;
+import org.unlaxer.Token.SearchFirst;
 import org.unlaxer.parser.CollectingParser;
 import org.unlaxer.parser.LazyInstance;
 import org.unlaxer.parser.MetaFunctionParser;
@@ -196,5 +197,21 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 				.flatMap(token -> token.flatten().stream())//
 				.filter(token -> targetParserPredicate.test(token.parser))//
 				.findFirst();
+	}
+	
+	public default List<Token> getMatchedTokens(
+			Predicate<Token> targetTokenPredicate , 
+			SearchFirst breadthOrDepth) {
+
+		return getTokenStack().stream()//
+				.flatMap(transactionElement -> transactionElement.getTokens().stream())//
+				.flatMap(token -> token.flatten(breadthOrDepth).stream())//
+				.filter(targetTokenPredicate)//
+				.collect(Collectors.toList());
+	}
+	
+	public default List<Token> getMatchedTokens(
+			Predicate<Token> targetTokenPredicate) {
+		return getMatchedTokens(targetTokenPredicate, SearchFirst.Depth);
 	}
 }

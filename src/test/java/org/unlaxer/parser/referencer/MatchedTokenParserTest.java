@@ -1,17 +1,24 @@
-package org.unlaxer.referencer;
+package org.unlaxer.parser.referencer;
 
 import org.junit.Test;
 import org.unlaxer.Name;
 import org.unlaxer.ParserTestBase;
+import org.unlaxer.Tag;
+import org.unlaxer.TestResult;
+import org.unlaxer.Token;
+import org.unlaxer.TokenPrinter;
 import org.unlaxer.listener.OutputLevel;
+import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.combinator.Chain;
+import org.unlaxer.parser.combinator.Choice;
 import org.unlaxer.parser.combinator.MatchOnly;
 import org.unlaxer.parser.combinator.OneOrMore;
+import org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain;
+import org.unlaxer.parser.combinator.ZeroOrMore;
 import org.unlaxer.parser.elementary.ParenthesesParser;
 import org.unlaxer.parser.elementary.WildCardStringParser;
 import org.unlaxer.parser.elementary.WordParser;
 import org.unlaxer.parser.posix.AlphabetParser;
-import org.unlaxer.parser.referencer.MatchedTokenParser;
 
 public class MatchedTokenParserTest extends ParserTestBase{
 
@@ -70,6 +77,61 @@ public class MatchedTokenParserTest extends ParserTestBase{
 		testAllMatch(parser, "abz:abz",true);
 		testUnMatch(parser, "abz:abu",true);
 	}
-
-
+	
+	@Test
+	public void testMultiSource() {
+		
+		Tag typeTag = new Tag("type");
+		
+		String text = 
+			"var $name string;\n"+
+			"var $age number;\n"+
+					
+		    "print $name;\n"+
+		    "print $age;\n"
+		    ;
+		
+		
+		setLevel(OutputLevel.simple);
+		
+		
+		Parser varKeywordParser = new WordParser("var");
+		Parser varNameParser = new Chain(
+			new WordParser("$"),
+			new OneOrMore(new AlphabetParser())
+		);
+		
+		Parser typeParser = new Choice(
+			new WordParser("string").addTag(typeTag),
+			new WordParser("number").addTag(typeTag)
+		);
+		
+		var varParser = new WhiteSpaceDelimitedChain(
+				varKeywordParser,
+				varNameParser,
+				typeParser,
+				new WordParser(";")
+		);
+		
+		Parser varsParser = new ZeroOrMore(varParser);
+		
+		
+		WordParser printKeywordParser = new WordParser("print");
+		
+		WhiteSpaceDelimitedChain printParser = new WhiteSpaceDelimitedChain(
+			printKeywordParser,
+			new MatchedTokenParser(varNameParser),
+			new WordParser(";")
+		);
+		
+		Parser printsParser = new OneOrMore(printParser);
+		
+		var parser = new WhiteSpaceDelimitedChain(varsParser , printsParser);
+		
+		TestResult testAllMatch = testAllMatch(parser, text);
+		Token rootToken = testAllMatch.parsed.getRootToken();
+		String string = TokenPrinter.get(rootToken);
+		System.out.println(string);
+		
+	}
 }
