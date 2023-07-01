@@ -204,8 +204,12 @@ public class Token implements Serializable{
 		return newCreatesOf(Arrays.asList(newChildrens));
 	}
 	
-	public Token newCreatesOf(Predicate<Token> filterForChildren) {
-		return newCreatesOf(getChildrenAsList(filterForChildren));
+	@SuppressWarnings("unchecked")
+	public Token newCreatesOf( Predicate<Token>... filterForChildrens) {
+		List<Token> newChildren = Stream.of(filterForChildrens)
+			.flatMap(this::getChildren)
+			.collect(Collectors.toList());
+		return newCreatesOf(newChildren);
 	}
 	
 	public Token getChild(Predicate<Token> predicates) {
