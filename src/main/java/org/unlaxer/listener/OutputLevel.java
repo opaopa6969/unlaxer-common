@@ -4,7 +4,9 @@ public enum OutputLevel{
 	none,
 	simple,
 	detail,
+	mostDetail,
 	withTag,
+	
 	;
 	public boolean isNone(){
 		return this == none;
@@ -15,4 +17,11 @@ public enum OutputLevel{
 	public boolean isDetail(){
 		return this == detail;
 	}
+	public boolean isMostDetail() {
+		return this == mostDetail;
+	}
+	public boolean isWithTag() {
+		return this == withTag;
+	}
+
 }

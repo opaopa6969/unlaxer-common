@@ -15,6 +15,7 @@ import org.unlaxer.listener.DebugTransactionListener;
 import org.unlaxer.parser.ascii.MinusParser;
 import org.unlaxer.parser.combinator.Chain;
 import org.unlaxer.parser.combinator.MatchOnly;
+import org.unlaxer.parser.combinator.Not;
 import org.unlaxer.parser.posix.DigitParser;
 
 
@@ -84,6 +85,45 @@ public class MatchOnlyTest {
 			assertEquals(3, parseContext.getLength());
 			assertEquals(1, parseContext.getConsumedPosition());
 		}
+	}
+	
+	@Test
+	public void testWithNot() {
+		Chain chain = new Chain(
+				new DigitParser(),
+				new Not(
+					new MatchOnly(//
+						new Chain(//
+							new  MinusParser(),new  MinusParser()
+							)
+					)
+				)
+			);
+		{
+			StringSource stringSource = new StringSource("1");
+			ParseContext parseContext = new ParseContext(stringSource);
+			Parsed parsed = chain.parse(parseContext);
+			assertTrue(parsed.isSucceeded());
+		}
+		{
+			StringSource stringSource = new StringSource("1-");
+			ParseContext parseContext = new ParseContext(stringSource);
+			Parsed parsed = chain.parse(parseContext);
+			assertTrue(parsed.isSucceeded());
+		}
+		{
+			StringSource stringSource = new StringSource("1++");
+			ParseContext parseContext = new ParseContext(stringSource);
+			Parsed parsed = chain.parse(parseContext);
+			assertTrue(parsed.isSucceeded());
+		}
+		{
+			StringSource stringSource = new StringSource("1--");
+			ParseContext parseContext = new ParseContext(stringSource);
+			Parsed parsed = chain.parse(parseContext);
+			assertTrue(parsed.isFailed());
+		}
+		
 		
 	}
 
