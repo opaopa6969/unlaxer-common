@@ -19,9 +19,11 @@ public class ParserContextPrinter {
 			
 			return String.format("CON(L:%d,P:%d) MO(L:%d,P:%d) Last20='%s' ", 
 					consumed.getLineNumber(),
-					consumed.getPositionInLine(),
+//					consumed.getPositionInLine(), // きちんと実装されてない
+					consumed.getPosition(),
 					matchOnly.getLineNumber(),
-					matchOnly.getPositionInLine(),
+//					matchOnly.getPositionInLine(),
+					matchOnly.getPosition(),
 					peek.token.map(ParserContextPrinter::normalize).orElse(""));
 		}
 		
