@@ -205,12 +205,32 @@ public class Token implements Serializable{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Token newCreatesOf( Predicate<Token>... filterForChildrens) {
+	public Token newCreatesOf(Predicate<Token>... filterForChildrens) {
 		List<Token> newChildren = Stream.of(filterForChildrens)
 			.flatMap(this::getChildren)
 			.collect(Collectors.toList());
 		return newCreatesOf(newChildren);
 	}
+	
+	
+	public Token newCreatesOf(TokenEffecterWithMatcher... tokenEffecterWithMatchers) {
+		return newCreatesOf(ChildrenKind.astNodes, tokenEffecterWithMatchers);
+	}
+	
+	public Token newCreatesOf(ChildrenKind kind , TokenEffecterWithMatcher... tokenEffecterWithMatchers) {
+		List<Token> newChildren = children(kind).stream()
+			.map(token->{
+				for (TokenEffecterWithMatcher tokenEffecterWithMatcher : tokenEffecterWithMatchers) {
+					if(tokenEffecterWithMatcher.target.test(token)) {
+						return tokenEffecterWithMatcher.effector.apply(token);
+					}
+				}
+				return token;
+			})
+			.collect(Collectors.toList());
+		return newCreatesOf(newChildren);
+	}
+
 	
 	public Token getChild(Predicate<Token> predicates) {
 		return getChild(predicates , ChildrenKind.astNodes);
@@ -356,7 +376,7 @@ public class Token implements Serializable{
 		return Optional.ofNullable( (T)extraObjectByName.get(name));
 	}
 	
-	public void setExtraObject(Name name , Object object) {
+	public void putExtraObject(Name name , Object object) {
 		extraObjectByName.put(name , object);
 	}
 	
@@ -369,7 +389,7 @@ public class Token implements Serializable{
 		return Optional.ofNullable( relatedTokenByName.get(name));
 	}
 	
-	public void setRelatedToken(Name name , Token relatedToken) {
+	public void putRelatedToken(Name name , Token relatedToken) {
 		relatedTokenByName.put(name , relatedToken);
 	}
 	

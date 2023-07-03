@@ -30,7 +30,26 @@ public class TokenPredicators{
 			return false;
 		};
 	}
+	
+	public final static Predicate<Token> parsersMatchWithClass(Parser... parsers){
+		return token->{
+			for (Parser parser: parsers) {
+				
+				if(token.parser.getClass() == parser.getClass()) {
+					return true;
+				}
+			}
+			return false;
+		};
+	}
+	
+	public final static Predicate<Token> noMatch(){
+		return token-> false;
+	}
 
+	public final static Predicate<Token> allMatch(){
+		return token-> true;
+	}
 	
 	public final static Predicate<Token> afterToken(Token targetToken){
 		return token-> targetToken.tokenRange.smallerThan(token.tokenRange);
