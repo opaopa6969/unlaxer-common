@@ -181,10 +181,14 @@ public class Token implements Serializable{
 		return tokenKind;
 	}
 	
-	public Token newWithReplacedParser(Parser replace){
-		return newWithReplacedParser(replace , ChildrenKind.astNodes);
+	public Token newWithReplace(Parser replace) {
+	  return new Token(tokenKind, filteredChildren, replace ,tokenRange.startIndexInclusive );
 	}
-	public Token newWithReplacedParser(Parser replace , ChildrenKind childrenKind){
+	
+	public Token newWithReplacedParserConstructRangedString(Parser replace){
+		return newWithReplacedParserConstructRangedString(replace , ChildrenKind.astNodes);
+	}
+	public Token newWithReplacedParserConstructRangedString(Parser replace , ChildrenKind childrenKind){
 		if(false == children(childrenKind).isEmpty()){
 			throw new IllegalArgumentException("not support collected token");
 		}
