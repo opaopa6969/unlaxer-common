@@ -34,6 +34,8 @@ public class Parsed extends Committed{
 	
 	public static final Parsed SUCCEEDED = new Parsed(Status.succeeded);
 	
+	private String message; 
+	
 	public Parsed(Committed committed) {
 		this(committed,Status.succeeded);
 	}
@@ -78,5 +80,14 @@ public class Parsed extends Committed{
 	}
 	public boolean isFailed(){
 		return status.isFailed();
+	}
+	
+	public Parsed setMessage(String message) {
+		this.message = message;
+		return this;
+	}
+	
+	public String getMessage() {
+		return status.name()+":"+message == null ? "" : message;
 	}
 }
