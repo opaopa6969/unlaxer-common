@@ -74,7 +74,6 @@ public abstract class AbstractParser implements Parser {
 		
 		parseContext.begin(this);
 		Parsed parsed = getParser().parse(parseContext,tokenKind,invertMatch);
-		parsed = afterParse(parseContext,parsed,tokenKind,invertMatch);
 		
 		if(parsed.isSucceeded()){
 			Committed commited = parseContext.commit(this , tokenKind);
@@ -87,12 +86,6 @@ public abstract class AbstractParser implements Parser {
 		parseContext.rollback(this);
 		parseContext.endParse(this, Parsed.FAILED , parseContext, tokenKind, invertMatch);
 		return Parsed.FAILED;
-	}
-	
-	
-	@Override
-	public Parsed afterParse(ParseContext parseContext, Parsed parsed, TokenKind tokenKind, boolean invertMatch) {
-		return parsed;
 	}
 
 	public Parser getParser() {

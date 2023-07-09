@@ -23,8 +23,6 @@ public interface Parser extends //
   // and invertMatch
   public Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch);
   
-  public Parsed afterParse(ParseContext parseContext, Parsed parsed , TokenKind tokenKind, boolean invertMatch);
-
   public default Parsed parse(ParseContext parseContext) {
     return parse(parseContext, getTokenKind(), false);
   }
