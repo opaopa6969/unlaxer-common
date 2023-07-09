@@ -1,17 +1,17 @@
 OPEN    : '1/a'
-BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Chain
-BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-COMMIT  : position:(c:1 m:1) targetchar='/'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:1 
-BEGIN   : position:(c:1 m:1) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Choice
-ROLLBACK: position:(c:1 m:1) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
-BEGIN   : position:(c:1 m:1) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Choice
-ROLLBACK: position:(c:1 m:1) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
-BEGIN   : position:(c:1 m:1) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Choice
-ROLLBACK: position:(c:1 m:1) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Choice | rollbacked: 
-BEGIN   : position:(c:1 m:1) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Choice
-COMMIT  : position:(c:2 m:2) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice | committed:/ 
-BEGIN   : position:(c:2 m:2) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-ROLLBACK: position:(c:2 m:2) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
-ROLLBACK: position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked:1/ 
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='1'  	| parser:/Chain
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='1'  	| parser:/Chain/OneOrMore
+COMMIT  : CON(L:0,P:1) MO(L:0,P:1) Last20='1/'  	| parser:/Chain/OneOrMore | committed:1 
+BEGIN   : CON(L:0,P:1) MO(L:0,P:1) Last20='1/'  	| parser:/Chain/Choice
+ROLLBACK: CON(L:0,P:1) MO(L:0,P:1) Last20='1/'  	| parser:/Chain/Choice | rollbacked: 
+BEGIN   : CON(L:0,P:1) MO(L:0,P:1) Last20='1/'  	| parser:/Chain/Choice
+ROLLBACK: CON(L:0,P:1) MO(L:0,P:1) Last20='1/'  	| parser:/Chain/Choice | rollbacked: 
+BEGIN   : CON(L:0,P:1) MO(L:0,P:1) Last20='1/'  	| parser:/Chain/Choice
+ROLLBACK: CON(L:0,P:1) MO(L:0,P:1) Last20='1/'  	| parser:/Chain/Choice | rollbacked: 
+BEGIN   : CON(L:0,P:1) MO(L:0,P:1) Last20='1/'  	| parser:/Chain/Choice
+COMMIT  : CON(L:0,P:2) MO(L:0,P:2) Last20='1/a'  	| parser:/Chain/Choice | committed:/ 
+BEGIN   : CON(L:0,P:2) MO(L:0,P:2) Last20='1/a'  	| parser:/Chain/OneOrMore
+ROLLBACK: CON(L:0,P:2) MO(L:0,P:2) Last20='1/a'  	| parser:/Chain/OneOrMore | rollbacked: 
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20='1'  	| parser:/Chain | rollbacked:1/ 
 CLOSE   : '1/a' consumed:0(3 remain) 
 

@@ -1,0 +1,4 @@
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='a'  	| parser:/Chain
+START   : CON(L:0,P:1) MO(L:0,P:1) Last20=''  	| parser:/Chain/ZeroOrMore
+END     : CON(L:0,P:1) MO(L:0,P:1) Last20=''  	| parser:/Chain/ZeroOrMore| status:succeeded | parsed:  
+END     : CON(L:0,P:1) MO(L:0,P:1) Last20=''  	| parser:/Chain| status:succeeded | parsed:a  

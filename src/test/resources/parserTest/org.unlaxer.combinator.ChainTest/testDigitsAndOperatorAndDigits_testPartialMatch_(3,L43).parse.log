@@ -1,8 +1,8 @@
-START   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Chain
-START   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-END     : position:(c:2 m:2) targetchar='*'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:10  
-START   : position:(c:2 m:2) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice
-END     : position:(c:3 m:3) targetchar='3'  	| parser:org.unlaxer.parser.combinator.Choice| status:succeeded | parsed:*  
-START   : position:(c:3 m:3) targetchar='3'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-END     : position:(c:4 m:4) targetchar='/'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:3  
-END     : position:(c:4 m:4) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Chain| status:succeeded | parsed:10*3  
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='1'  	| parser:/Chain
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='1'  	| parser:/Chain/OneOrMore
+END     : CON(L:0,P:2) MO(L:0,P:2) Last20='10*'  	| parser:/Chain/OneOrMore| status:succeeded | parsed:10  
+START   : CON(L:0,P:2) MO(L:0,P:2) Last20='10*'  	| parser:/Chain/Choice
+END     : CON(L:0,P:3) MO(L:0,P:3) Last20='10*3'  	| parser:/Chain/Choice| status:succeeded | parsed:*  
+START   : CON(L:0,P:3) MO(L:0,P:3) Last20='10*3'  	| parser:/Chain/OneOrMore
+END     : CON(L:0,P:4) MO(L:0,P:4) Last20='10*3/'  	| parser:/Chain/OneOrMore| status:succeeded | parsed:3  
+END     : CON(L:0,P:4) MO(L:0,P:4) Last20='10*3/'  	| parser:/Chain| status:succeeded | parsed:10*3  

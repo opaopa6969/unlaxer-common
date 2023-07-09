@@ -1,4 +1,4 @@
-START   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain
-START   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-END     : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:failed | parsed:  
-END     : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain/OneOrMore
+END     : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain/OneOrMore| status:failed | parsed:  
+END     : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain| status:failed | parsed:  

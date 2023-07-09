@@ -1,0 +1,7 @@
+'abbb' (0 - 4): org.unlaxer.parser.combinator.Chain
+ 'a' (0 - 1): org.unlaxer.parser.elementary.WordParser
+ 'bbb' (1 - 4): org.unlaxer.parser.combinator.ZeroOrMore
+  'b' (1 - 2): org.unlaxer.parser.elementary.WordParser
+  'b' (2 - 3): org.unlaxer.parser.elementary.WordParser
+  'b' (3 - 4): org.unlaxer.parser.elementary.WordParser
+

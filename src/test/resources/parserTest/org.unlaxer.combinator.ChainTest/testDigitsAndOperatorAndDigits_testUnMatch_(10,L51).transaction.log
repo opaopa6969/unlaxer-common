@@ -1,7 +1,7 @@
 OPEN    : '+10+10'
-BEGIN   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain
-BEGIN   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-ROLLBACK: position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
-ROLLBACK: position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked: 
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain/OneOrMore
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain/OneOrMore | rollbacked: 
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain | rollbacked: 
 CLOSE   : '+10+10' consumed:0(6 remain) 
 

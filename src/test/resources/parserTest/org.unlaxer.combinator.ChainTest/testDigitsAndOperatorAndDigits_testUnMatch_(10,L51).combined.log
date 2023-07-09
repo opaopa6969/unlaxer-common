@@ -1,11 +1,11 @@
 OPEN    : '+10+10'
-START   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain
-BEGIN   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain
-START   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-BEGIN   : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-ROLLBACK: position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
-END     : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:failed | parsed:  
-ROLLBACK: position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked: 
-END     : position:(c:0 m:0) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain/OneOrMore
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain/OneOrMore
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain/OneOrMore | rollbacked: 
+END     : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain/OneOrMore| status:failed | parsed:  
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain | rollbacked: 
+END     : CON(L:0,P:0) MO(L:0,P:0) Last20='+'  	| parser:/Chain| status:failed | parsed:  
 CLOSE   : '+10+10' consumed:0(6 remain) 
 

@@ -1,8 +1,8 @@
-START   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Chain
-START   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-END     : position:(c:3 m:3) targetchar='*'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:104  
-START   : position:(c:3 m:3) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice
-END     : position:(c:4 m:4) targetchar='3'  	| parser:org.unlaxer.parser.combinator.Choice| status:succeeded | parsed:*  
-START   : position:(c:4 m:4) targetchar='3'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-END     : position:(c:6 m:6) targetchar='/'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:37  
-END     : position:(c:6 m:6) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Chain| status:succeeded | parsed:104*37  
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='1'  	| parser:/Chain
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='1'  	| parser:/Chain/OneOrMore
+END     : CON(L:0,P:3) MO(L:0,P:3) Last20='104*'  	| parser:/Chain/OneOrMore| status:succeeded | parsed:104  
+START   : CON(L:0,P:3) MO(L:0,P:3) Last20='104*'  	| parser:/Chain/Choice
+END     : CON(L:0,P:4) MO(L:0,P:4) Last20='104*3'  	| parser:/Chain/Choice| status:succeeded | parsed:*  
+START   : CON(L:0,P:4) MO(L:0,P:4) Last20='104*3'  	| parser:/Chain/OneOrMore
+END     : CON(L:0,P:6) MO(L:0,P:6) Last20='104*37/'  	| parser:/Chain/OneOrMore| status:succeeded | parsed:37  
+END     : CON(L:0,P:6) MO(L:0,P:6) Last20='104*37/'  	| parser:/Chain| status:succeeded | parsed:104*37  

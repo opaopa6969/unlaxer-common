@@ -22,6 +22,8 @@ public interface Parser extends //
   // FIXME make Parsed parse(ParseContext parseContext) only. use to get tokenKind
   // and invertMatch
   public Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch);
+  
+  public Parsed afterParse(ParseContext parseContext, Parsed parsed , TokenKind tokenKind, boolean invertMatch);
 
   public default Parsed parse(ParseContext parseContext) {
     return parse(parseContext, getTokenKind(), false);

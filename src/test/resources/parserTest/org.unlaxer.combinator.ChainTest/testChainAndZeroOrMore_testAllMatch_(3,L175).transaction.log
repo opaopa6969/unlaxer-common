@@ -1,0 +1,7 @@
+OPEN    : 'abbb'
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='a'  	| parser:/Chain
+BEGIN   : CON(L:0,P:1) MO(L:0,P:1) Last20='ab'  	| parser:/Chain/ZeroOrMore
+COMMIT  : CON(L:0,P:4) MO(L:0,P:4) Last20=''  	| parser:/Chain/ZeroOrMore | committed:bbb 
+COMMIT  : CON(L:0,P:4) MO(L:0,P:4) Last20=''  	| parser:/Chain | committed:abbb 
+CLOSE   : 'abbb' consumed:allConsumed 
+

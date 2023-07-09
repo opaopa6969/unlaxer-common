@@ -160,5 +160,22 @@ public class ChainTest extends ParserTestBase{
 		testPartialMatch(terminatored, "end;abcdefgendxx","end;abcdefg",true);
 
 	}
+	
+	@Test
+	public void testChainAndZeroOrMore() {
+		
+		setLevel(OutputLevel.mostDetail);
+
+		Chain chain = new Chain(
+				new WordParser("a"),
+				new ZeroOrMore(new WordParser("b"))
+		);
+		testAllMatch(chain, "ab");
+		testAllMatch(chain, "a");
+		testAllMatch(chain, "abbb");
+		testUnMatch(chain, "");
+		testUnMatch(chain, "b");
+		
+	}
 
 }
