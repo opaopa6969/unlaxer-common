@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import org.unlaxer.Parsed;
 import org.unlaxer.ParserPath;
 import org.unlaxer.TaggableAccessor;
+import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 
@@ -65,5 +66,19 @@ public interface Parser extends //
   public static <T extends Parser> T newInstance(Class<T> clazz) {
     return ParserFactoryByClass.newInstance(clazz);
   }
+  
+  public default boolean doesParseThisParser(Token token) {
+	  return token.getParser().getClass() == getClass();
+  }
+  
+  public static  boolean doesParseThisParser(Token token , Class<? extends Parser> parserClass) {
+	  return token.getParser().getClass() == parserClass;
+  }
 
+  
+  public static void checkParseThisParser(Token token, Class<? extends Parser> parserClass) {
+	  if(false == doesParseThisParser(token , parserClass)) {
+		  throw new IllegalArgumentException("expected parse:" + parserClass + " actual parser:" + token.getParser().getClass());
+	  }
+  }
 }
