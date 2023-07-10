@@ -67,17 +67,23 @@ public interface Parser extends //
     return ParserFactoryByClass.newInstance(clazz);
   }
   
-  public default boolean doesParseThisParser(Token token) {
+  public default boolean isTokenParsedByThisParser(Token token) {
 	  return token.getParser().getClass() == getClass();
   }
   
-  public static  boolean doesParseThisParser(Token token , Class<? extends Parser> parserClass) {
+  public default void checkTokenParsedByThisParser(Token token) {
+	  if(false == isTokenParsedByThisParser(token)) {
+		  throw new IllegalArgumentException("expected parse:" + getClass() + " actual parser:" + token.getParser().getClass());
+	  }
+  }
+  
+  public static  boolean isTokenParsedBySpecifiedParser(Token token , Class<? extends Parser> parserClass) {
 	  return token.getParser().getClass() == parserClass;
   }
 
   
-  public static void checkParseThisParser(Token token, Class<? extends Parser> parserClass) {
-	  if(false == doesParseThisParser(token , parserClass)) {
+  public static void checkTokenParsedBySpecifiedParser(Token token, Class<? extends Parser> parserClass) {
+	  if(false == isTokenParsedBySpecifiedParser(token , parserClass)) {
 		  throw new IllegalArgumentException("expected parse:" + parserClass + " actual parser:" + token.getParser().getClass());
 	  }
   }
