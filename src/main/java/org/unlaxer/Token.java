@@ -238,7 +238,51 @@ public class Token implements Serializable{
 			.collect(Collectors.toList());
 		return newCreatesOf(newChildren);
 	}
+	
+	public Token getDirectAncestor(Predicate<Token> predicates){
+		return getDirectAncestorAsOptional(predicates).orElseThrow();
+	}
 
+	public Optional<Token> getDirectAncestorAsOptional(Predicate<Token> predicates){
+		Token current = this;
+		while(true) {
+			if(current.parent.isEmpty()) {
+				return Optional.empty();
+			}
+			Token parentToken = current.parent.get();
+			if(predicates.test(parentToken)) {
+				return Optional.of(parentToken);
+			}
+			current = parentToken;
+		}
+	}
+	
+	public Token getAncestor(Predicate<Token> predicates){
+		return getAncestorAsOptional(predicates).orElseThrow();
+	}
+	
+	public Optional<Token> getAncestorAsOptional(Predicate<Token> predicates){
+		int level=0;
+		Token current = this;
+		while(true) {
+			if(current.parent.isEmpty()) {
+				return Optional.empty();
+			}
+			Token parentToken = current.parent.get();
+			if(predicates.test(parentToken)) {
+				return Optional.of(parentToken);
+			}
+			if(level>0) {
+				for(Token child : parentToken.originalChildren) {
+					if(predicates.test(child)) {
+						return Optional.of(child);
+					}
+				}
+			}
+			current = parentToken;
+			level++;
+		}
+	}
 	
 	public Token getChild(Predicate<Token> predicates) {
 		return getChild(predicates , ChildrenKind.astNodes);
