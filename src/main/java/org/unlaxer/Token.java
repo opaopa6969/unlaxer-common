@@ -182,7 +182,7 @@ public class Token implements Serializable{
 	}
 	
 	public Token newWithReplace(Parser replace) {
-	  return new Token(tokenKind, filteredChildren, replace ,tokenRange.startIndexInclusive );
+	  return new Token(tokenKind, originalChildren, replace ,tokenRange.startIndexInclusive );
 	}
 	
 	public Token newWithReplacedParserConstructRangedString(Parser replace){
