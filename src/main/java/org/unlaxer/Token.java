@@ -107,6 +107,10 @@ public class Token implements Serializable{
   public <T extends Parser> T  getParser(Class<T> parserClass) {
     return parserClass.cast(parser);
   }
+  
+    public <T extends Parser> TypedToken<T> typed(Class<T> parserClass){
+    	return new TypedToken<T>(this, Parser.get(parserClass));
+    }
 
 	public static RangedString createRangedString(List<Token> tokens, int position){
 		
