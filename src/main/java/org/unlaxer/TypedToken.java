@@ -33,4 +33,9 @@ public class TypedToken<P extends Parser> extends Token{
 	public P getParser() {
 		return (P) super.getParser();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Class<? extends P> getParserClass(){
+		return (Class<? extends P>) getParser().getClass();
+	}
 }

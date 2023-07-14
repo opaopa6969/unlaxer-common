@@ -111,6 +111,14 @@ public class Token implements Serializable{
     public <T extends Parser> TypedToken<T> typed(Class<T> parserClass){
     	return new TypedToken<T>(this, Parser.get(parserClass));
     }
+    
+    public <T extends Parser> TypedToken<T> typedWithInterface(Class<T> parserInterface){
+    	if(false == parserInterface.isInterface()) {
+    		throw new IllegalArgumentException();
+    	}
+    	return new TypedToken<T>(this, parserInterface.cast(parser));
+    }
+
 
 	public static RangedString createRangedString(List<Token> tokens, int position){
 		
