@@ -108,8 +108,15 @@ public class Token implements Serializable{
     return parserClass.cast(parser);
   }
   
-    public <T extends Parser> TypedToken<T> typed(Class<T> parserClass){
-    	return new TypedToken<T>(this, Parser.get(parserClass));
+    public <T extends Parser> TypedToken<T> typed(Class<T> parserClassOrInterface){
+    	if(parserClassOrInterface.isInterface()) {
+    		return typedWithInterface(parserClassOrInterface);
+    	}
+    	return new TypedToken<T>(this, Parser.get(parserClassOrInterface));
+    }
+    
+    public <T extends Parser> TypedToken<T> typed(T parser){
+    	return new TypedToken<T>(this, parser);
     }
     
     public <T extends Parser> TypedToken<T> typedWithInterface(Class<T> parserInterface){
