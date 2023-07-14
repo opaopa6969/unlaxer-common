@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -204,15 +205,34 @@ public class Token implements Serializable{
 	  return new Token(tokenKind, originalChildren, replace ,tokenRange.startIndexInclusive );
 	}
 	
+	public <P extends Parser>TypedToken<P> newWithReplaceTyped(P replace) {
+	  return new Token(tokenKind, originalChildren, replace ,tokenRange.startIndexInclusive ).typed(replace);
+	}
+
+	
+	public <P extends Parser>TypedToken<P> newWithReplacedParserConstructRangedStringTyped(P replace){
+		return newWithReplacedParserConstructRangedStringTyped(replace , ChildrenKind.astNodes);
+	}
+	
 	public Token newWithReplacedParserConstructRangedString(Parser replace){
 		return newWithReplacedParserConstructRangedString(replace , ChildrenKind.astNodes);
 	}
+
+	
 	public Token newWithReplacedParserConstructRangedString(Parser replace , ChildrenKind childrenKind){
 		if(false == children(childrenKind).isEmpty()){
 			throw new IllegalArgumentException("not support collected token");
 		}
 		return new Token(tokenKind,new RangedString(tokenRange, tokenString),replace);
 	}
+	
+	public <P extends Parser>TypedToken<P> newWithReplacedParserConstructRangedStringTyped(P replace , ChildrenKind childrenKind){
+		if(false == children(childrenKind).isEmpty()){
+			throw new IllegalArgumentException("not support collected token");
+		}
+		return new Token(tokenKind,new RangedString(tokenRange, tokenString),replace).typed(replace);
+	}
+
 	
 	List<Token> children(ChildrenKind kind){
 		return kind == ChildrenKind.astNodes ? 
@@ -303,6 +323,7 @@ public class Token implements Serializable{
 		}
 	}
 	
+	//FIXME! 現在flattenしてから探しているものをinterface化する
 	public interface AbstractDescendantFinder{
 		
 	}
@@ -360,6 +381,11 @@ public class Token implements Serializable{
 		return getChildWithParser(parser -> parser.getClass() == parserClass);
 	}
 	
+	public <P extends Parser>TypedToken<P> getChildWithParserTyped(Class<P> parserClass) {
+		return getChildWithParser(parser -> parser.getClass() == parserClass).typed(parserClass);
+	}
+
+	
 	public int getChildIndexWithParser(Class<? extends Parser> parserClass) {
 		return getChildIndexWithParser(ChildrenKind.astNodes, parserClass);
 	}
@@ -388,6 +414,11 @@ public class Token implements Serializable{
 		return getChildWithParserAsOptional(parser -> parser.getClass() == parserClass);
 	}
 	
+	public <P extends Parser> Optional<TypedToken<P>> getChildWithParserAsOptionalTyped(Class<P> parserClass) {
+		return getChildWithParserAsOptional(parser -> parser.getClass() == parserClass).map(token->token.typed(parserClass));
+	}
+
+	
 	public Stream<Token> getChildren(Predicate<Token> predicates) {
 		return getChildren(predicates , ChildrenKind.astNodes);
 	}
@@ -407,6 +438,11 @@ public class Token implements Serializable{
 		return getChildrenWithParser(parser -> parser.getClass() == parserClass);
 	}
 	
+	public <P extends Parser> Stream<TypedToken<P>> getChildrenWithParserTyped(Class<P> parserClass) {
+		return getChildrenWithParser(parser -> parser.getClass() == parserClass).map(token->token.typed(parserClass));
+	}
+
+	
 	public List<Token> getChildrenAsList(Predicate<Token> predicates) {
 		return getChildren(predicates).collect(Collectors.toList());
 	}
@@ -418,6 +454,11 @@ public class Token implements Serializable{
 	public List<Token> getChildrenWithParserAsList(Class<? extends Parser> parserClass) {
 		return getChildrenWithParserAsList(parser -> parser.getClass() == parserClass);
 	}
+	
+	public <P extends Parser> List<TypedToken<P>> getChildrenWithParserAsListTyped(Class<P> parserClass) {
+		return getChildrenWithParserTyped(parserClass).collect(Collectors.toList());
+	}
+
 	
 	public Token getChildFromOriginal(int index) {
 		return children(ChildrenKind.original).get(index);
