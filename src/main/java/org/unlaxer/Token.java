@@ -146,15 +146,15 @@ public class Token implements Serializable{
 	}
 	
 	public List<Token> flatten(){
-		return flatten(SearchFirst.Depth ,ChildrenKind.astNodes);
+		return flatten(ScanDirection.Depth ,ChildrenKind.astNodes);
 	}
 	
-	public List<Token> flatten(SearchFirst breadthOrDepth){
+	public List<Token> flatten(ScanDirection breadthOrDepth){
 		return flatten(breadthOrDepth , ChildrenKind.astNodes);
 	}
 	
-	public List<Token> flatten(SearchFirst breadthOrDepth , ChildrenKind childrenKind){
-		return breadthOrDepth == SearchFirst.Depth ?
+	public List<Token> flatten(ScanDirection breadthOrDepth , ChildrenKind childrenKind){
+		return breadthOrDepth == ScanDirection.Depth ?
 				flattenDepth(childrenKind) : flattenBreadth(childrenKind);
 	}
 	
@@ -182,7 +182,7 @@ public class Token implements Serializable{
 	}
 
 	
-	public enum SearchFirst{
+	public enum ScanDirection{
 		Breadth,
 		Depth
 	}

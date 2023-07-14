@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
-import org.unlaxer.Token.SearchFirst;
+import org.unlaxer.Token.ScanDirection;
 import org.unlaxer.parser.ascii.PlusParser;
 import org.unlaxer.parser.posix.DotParser;
 import org.unlaxer.parser.posix.HashParser;
@@ -24,7 +24,7 @@ public class TokenTest {
 		);
 		Token root = new Token(TokenKind.matchOnly, second, new PlusParser(),0);
 		{
-			List<Token> flatten = root.flatten(SearchFirst.Breadth);
+			List<Token> flatten = root.flatten(ScanDirection.Breadth);
 			String collect = flatten.stream()
 					.map(token->token.parser.getName().getSimpleName())
 					.collect(Collectors.joining(","));
@@ -34,7 +34,7 @@ public class TokenTest {
 			assertEquals("PlusParser,DotParser,DotParser,HashParser,HashParser",collect);
 		}
 		{
-			List<Token> flatten = root.flatten(SearchFirst.Depth);
+			List<Token> flatten = root.flatten(ScanDirection.Depth);
 			String collect = flatten.stream()
 					.map(token->token.parser.getName().getSimpleName())
 					.collect(Collectors.joining(","));
