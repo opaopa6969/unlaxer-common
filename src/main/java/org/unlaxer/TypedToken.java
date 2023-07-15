@@ -34,6 +34,15 @@ public class TypedToken<P extends Parser> extends Token{
 		);
 		this.parser = parser;
 	}
+	public TypedToken<P> setParent(Token parentToken) {
+		parent = Optional.ofNullable(parentToken);
+		return this;
+	}
+
+	public TypedToken<P> setParent(Optional<Token> parentToken) {
+		parent = parentToken;
+		return this;
+	}
 
 	@SuppressWarnings("unchecked")
 	public P getParser() {

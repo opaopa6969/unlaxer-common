@@ -85,6 +85,17 @@ public class Token implements Serializable{
 			.collect(Collectors.toList());
 	}
 	
+	public Token setParent(Token parentToken) {
+		parent = Optional.ofNullable(parentToken);
+		return this;
+	}
+
+	public Token setParent(Optional<Token> parentToken) {
+		parent = parentToken;
+		return this;
+	}
+
+	
 	public static Token empty(TokenKind tokenKind , int position , Parser parser){
 		return new Token(tokenKind , empties.get(position),parser);
 	}
@@ -113,18 +124,18 @@ public class Token implements Serializable{
     	if(parserClassOrInterface.isInterface()) {
     		return typedWithInterface(parserClassOrInterface);
     	}
-    	return new TypedToken<T>(this, Parser.get(parserClassOrInterface));
+    	return new TypedToken<T>(this, Parser.get(parserClassOrInterface)).setParent(parent);
     }
     
     public <T extends Parser> TypedToken<T> typed(T parser){
-    	return new TypedToken<T>(this, parser);
+    	return new TypedToken<T>(this, parser).setParent(parent);
     }
     
     public <T extends Parser> TypedToken<T> typedWithInterface(Class<T> parserInterface){
     	if(false == parserInterface.isInterface()) {
     		throw new IllegalArgumentException();
     	}
-    	return new TypedToken<T>(this, parserInterface.cast(parser));
+    	return new TypedToken<T>(this, parserInterface.cast(parser)).setParent(parent);
     }
 
 
@@ -202,16 +213,19 @@ public class Token implements Serializable{
 	}
 	
 	public Token newWithReplace(Parser replace) {
-	  return new Token(tokenKind, originalChildren, replace ,tokenRange.startIndexInclusive );
+	  return new Token(tokenKind, originalChildren, replace ,tokenRange.startIndexInclusive )
+			  .setParent(parent);
 	}
 	
 	public <P extends Parser>TypedToken<P> newWithReplaceTyped(P replace) {
-	  return new Token(tokenKind, originalChildren, replace ,tokenRange.startIndexInclusive ).typed(replace);
+	  return new Token(tokenKind, originalChildren, replace ,tokenRange.startIndexInclusive ).typed(replace)
+			  .setParent(parent);
 	}
 
 	
 	public <P extends Parser>TypedToken<P> newWithReplacedParserConstructRangedStringTyped(P replace){
-		return newWithReplacedParserConstructRangedStringTyped(replace , ChildrenKind.astNodes);
+		return newWithReplacedParserConstructRangedStringTyped(replace , ChildrenKind.astNodes)
+				.setParent(parent);
 	}
 	
 	public Token newWithReplacedParserConstructRangedString(Parser replace){
@@ -223,14 +237,15 @@ public class Token implements Serializable{
 		if(false == children(childrenKind).isEmpty()){
 			throw new IllegalArgumentException("not support collected token");
 		}
-		return new Token(tokenKind,new RangedString(tokenRange, tokenString),replace);
+		return new Token(tokenKind,new RangedString(tokenRange, tokenString),replace).setParent(parent);
 	}
 	
 	public <P extends Parser>TypedToken<P> newWithReplacedParserConstructRangedStringTyped(P replace , ChildrenKind childrenKind){
 		if(false == children(childrenKind).isEmpty()){
 			throw new IllegalArgumentException("not support collected token");
 		}
-		return new Token(tokenKind,new RangedString(tokenRange, tokenString),replace).typed(replace);
+		return new Token(tokenKind,new RangedString(tokenRange, tokenString),replace)
+				.typed(replace).setParent(parent);
 	}
 
 	
@@ -242,13 +257,15 @@ public class Token implements Serializable{
 	
 	public Token newCreatesOf(List<Token> newChildrens) {
 		
-		Token newToken = new Token(tokenKind , newChildrens , parser , tokenRange.startIndexInclusive);
+		Token newToken = new Token(tokenKind , newChildrens , parser , tokenRange.startIndexInclusive)
+				.setParent(parent);
 		return newToken;
 	}
 	
 	public Token newCreatesOf(Token... newChildrens) {
 		
-		return newCreatesOf(Arrays.asList(newChildrens));
+		return newCreatesOf(Arrays.asList(newChildrens))
+				.setParent(parent);
 	}
 	
 	@SuppressWarnings("unchecked")
