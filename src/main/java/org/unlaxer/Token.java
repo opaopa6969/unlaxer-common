@@ -13,6 +13,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.unlaxer.ParserHierarchy.NameKind;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
@@ -264,8 +265,7 @@ public class Token implements Serializable{
 	
 	public Token newCreatesOf(Token... newChildrens) {
 		
-		return newCreatesOf(Arrays.asList(newChildrens))
-				.setParent(parent);
+		return newCreatesOf(Arrays.asList(newChildrens));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -648,5 +648,16 @@ public class Token implements Serializable{
 	
 	public Optional<Token>  removeRelatedToken(Name name) {
 		return Optional.ofNullable(relatedTokenByName.remove(name));
+	}
+	
+	public String getPath() {
+		return getPath(parser.getName(NameKind.computedName).getSimpleName());
+	}
+	
+	String getPath(String path) {
+		if(parent.isEmpty()) {
+			return "/"+path;
+		}
+		return getPath(parent.get().parser.getName(NameKind.computedName).getSimpleName()+"/" + path);
 	}
 }
