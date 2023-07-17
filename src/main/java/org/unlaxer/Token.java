@@ -34,7 +34,7 @@ public class Token implements Serializable{
 	
 	
 	public final Optional<String> tokenString;
-	public final Parser parser;
+	public Parser parser;
 	public final Range tokenRange;
 	
 	public Optional<Token> parent;
@@ -211,6 +211,10 @@ public class Token implements Serializable{
 
 	public TokenKind getTokenKind() {
 		return tokenKind;
+	}
+	public Token replace(Parser replace) {
+		this.parser = replace;
+		return this;
 	}
 	
 	public Token newWithReplace(Parser replace) {
@@ -658,6 +662,6 @@ public class Token implements Serializable{
 		if(parent.isEmpty()) {
 			return "/"+path;
 		}
-		return getPath(parent.get().parser.getName(NameKind.computedName).getSimpleName()+"/" + path);
+		return parent.get().getPath(parent.get().parser.getName(NameKind.computedName).getSimpleName()+"/" + path);
 	}
 }
