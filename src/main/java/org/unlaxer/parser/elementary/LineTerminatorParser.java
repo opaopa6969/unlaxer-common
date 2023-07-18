@@ -15,13 +15,16 @@ import org.unlaxer.parser.combinator.LazyChoice;
 public class LineTerminatorParser extends LazyChoice{
 
 	private static final long serialVersionUID = -325480488364751237L;
+	static final String LF = new String(new byte[] {0x0a/*lf*/});
+	static final String CR = new String(new byte[] {0x0d/*cr*/});
+	static final String CRLF = new String(new byte[] {0x0d/*cr*/,0x0a/*lf*/});
 
 	@Override
 	public List<Parser> getLazyParsers() {
 		return new Parsers(
-			new WordParser(new String(new byte[] {0x0d/*cr*/,0x0a/*lf*/})),
-			new WordParser(new String(new byte[] {0x0d/*cr*/})),
-			new WordParser(new String(new byte[] {0x0a/*lf*/})),
+			new WordParser(CRLF),
+			new WordParser(CR),
+			new WordParser(LF),
 			Parser.get(EndOfSourceParser.class)
 		);
 	}
