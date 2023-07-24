@@ -1,0 +1,5 @@
+OPEN    : 'abc'
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain | rollbacked:abc 
+CLOSE   : 'abc' consumed:0(3 remain) 
+

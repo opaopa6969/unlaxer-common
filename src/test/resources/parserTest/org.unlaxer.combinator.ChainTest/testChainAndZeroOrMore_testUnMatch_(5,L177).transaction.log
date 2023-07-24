@@ -1,5 +1,5 @@
 OPEN    : 'b'
-BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='b'  	| parser:/Chain
-ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20='b'  	| parser:/Chain | rollbacked: 
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain | rollbacked: 
 CLOSE   : 'b' consumed:0(1 remain) 
 

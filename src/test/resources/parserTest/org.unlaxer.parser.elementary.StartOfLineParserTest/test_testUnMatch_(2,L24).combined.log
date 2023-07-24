@@ -1,0 +1,3 @@
+OPEN    : 'abc'
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20='a'  	| parser:/Chain
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='a'  	| parser:/Chain

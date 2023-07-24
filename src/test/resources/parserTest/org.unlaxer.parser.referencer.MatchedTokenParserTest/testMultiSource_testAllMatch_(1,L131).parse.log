@@ -1,0 +1,92 @@
+START   : position:(c:0 m:0) targetchar='v'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+START   : position:(c:0 m:0) targetchar='v'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:0 m:0) targetchar='v'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:0 m:0) targetchar='v'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore
+START   : position:(c:0 m:0) targetchar='v'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+START   : position:(c:0 m:0) targetchar='v'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:0 m:0) targetchar='v'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:3 m:3) targetchar=' '  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:4 m:4) targetchar='$'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:   
+START   : position:(c:4 m:4) targetchar='$'  	| parser:org.unlaxer.parser.combinator.Chain
+START   : position:(c:5 m:5) targetchar='n'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+END     : position:(c:9 m:9) targetchar=' '  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:name  
+END     : position:(c:9 m:9) targetchar=' '  	| parser:org.unlaxer.parser.combinator.Chain| status:succeeded | parsed:$name  
+START   : position:(c:9 m:9) targetchar=' '  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:10 m:10) targetchar='s'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:   
+START   : position:(c:10 m:10) targetchar='s'  	| parser:org.unlaxer.parser.combinator.Choice
+END     : position:(c:16 m:16) targetchar=';'  	| parser:org.unlaxer.parser.combinator.Choice| status:succeeded | parsed:string  
+START   : position:(c:16 m:16) targetchar=';'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:16 m:16) targetchar=';'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:17 m:17) targetchar='\n'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:18 m:18) targetchar='v'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:
+  
+END     : position:(c:18 m:18) targetchar='v'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain| status:succeeded | parsed:var $name string;
+  
+START   : position:(c:18 m:18) targetchar='v'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+START   : position:(c:18 m:18) targetchar='v'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:18 m:18) targetchar='v'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:21 m:21) targetchar=' '  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:22 m:22) targetchar='$'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:   
+START   : position:(c:22 m:22) targetchar='$'  	| parser:org.unlaxer.parser.combinator.Chain
+START   : position:(c:23 m:23) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+END     : position:(c:26 m:26) targetchar=' '  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:age  
+END     : position:(c:26 m:26) targetchar=' '  	| parser:org.unlaxer.parser.combinator.Chain| status:succeeded | parsed:$age  
+START   : position:(c:26 m:26) targetchar=' '  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:27 m:27) targetchar='n'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:   
+START   : position:(c:27 m:27) targetchar='n'  	| parser:org.unlaxer.parser.combinator.Choice
+END     : position:(c:33 m:33) targetchar=';'  	| parser:org.unlaxer.parser.combinator.Choice| status:succeeded | parsed:number  
+START   : position:(c:33 m:33) targetchar=';'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:33 m:33) targetchar=';'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:34 m:34) targetchar='\n'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:
+  
+END     : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain| status:succeeded | parsed:var $age number;
+  
+START   : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+START   : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+END     : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain| status:failed | parsed:  
+END     : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore| status:succeeded | parsed:var $name string;
+var $age number;
+  
+START   : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+START   : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+START   : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:35 m:35) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:40 m:40) targetchar=' '  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:41 m:41) targetchar='$'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:   
+START   : position:(c:46 m:46) targetchar=';'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:46 m:46) targetchar=';'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:47 m:47) targetchar='\n'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:48 m:48) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:
+  
+END     : position:(c:48 m:48) targetchar='p'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain| status:succeeded | parsed:print $name;
+  
+START   : position:(c:48 m:48) targetchar='p'  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+START   : position:(c:48 m:48) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:48 m:48) targetchar='p'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:53 m:53) targetchar=' '  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:54 m:54) targetchar='$'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:   
+START   : position:(c:58 m:58) targetchar=';'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:58 m:58) targetchar=';'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+START   : position:(c:59 m:59) targetchar='\n'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:
+  
+END     : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain| status:succeeded | parsed:print $age;
+  
+START   : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+START   : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+END     : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain| status:failed | parsed:  
+END     : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:print $name;
+print $age;
+  
+START   : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
+END     : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
+END     : position:(c:60 m:60) targetchar=''  	| parser:org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain| status:succeeded | parsed:var $name string;
+var $age number;
+print $name;
+print $age;
+  

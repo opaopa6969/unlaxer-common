@@ -1,11 +1,11 @@
 OPEN    : 'ab'
-START   : CON(L:0,P:0) MO(L:0,P:0) Last20='a'  	| parser:/Chain
-BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20='a'  	| parser:/Chain
-START   : CON(L:0,P:1) MO(L:0,P:1) Last20='ab'  	| parser:/Chain/ZeroOrMore
-BEGIN   : CON(L:0,P:1) MO(L:0,P:1) Last20='ab'  	| parser:/Chain/ZeroOrMore
-COMMIT  : CON(L:0,P:2) MO(L:0,P:2) Last20=''  	| parser:/Chain/ZeroOrMore | committed:b 
-END     : CON(L:0,P:2) MO(L:0,P:2) Last20=''  	| parser:/Chain/ZeroOrMore| status:succeeded | parsed:b  
-COMMIT  : CON(L:0,P:2) MO(L:0,P:2) Last20=''  	| parser:/Chain | committed:ab 
-END     : CON(L:0,P:2) MO(L:0,P:2) Last20=''  	| parser:/Chain| status:succeeded | parsed:ab  
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain
+START   : CON(L:0,P:1) MO(L:0,P:1) Last20='a'  	| parser:/Chain/ZeroOrMore
+BEGIN   : CON(L:0,P:1) MO(L:0,P:1) Last20='a'  	| parser:/Chain/ZeroOrMore
+COMMIT  : CON(L:0,P:2) MO(L:0,P:2) Last20='ab'  	| parser:/Chain/ZeroOrMore | committed:b 
+END     : CON(L:0,P:2) MO(L:0,P:2) Last20='ab'  	| parser:/Chain/ZeroOrMore| status:succeeded | parsed:b  
+COMMIT  : CON(L:0,P:2) MO(L:0,P:2) Last20='ab'  	| parser:/Chain | committed:ab 
+END     : CON(L:0,P:2) MO(L:0,P:2) Last20='ab'  	| parser:/Chain| status:succeeded | parsed:ab  
 CLOSE   : 'ab' consumed:allConsumed 
 

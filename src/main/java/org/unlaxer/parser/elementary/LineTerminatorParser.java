@@ -5,11 +5,13 @@ import java.util.List;
 import org.unlaxer.Cursor;
 import org.unlaxer.Parsed;
 import org.unlaxer.ParserCursor;
+import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.TransactionElement;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
+import org.unlaxer.parser.combinator.ChoiceInterface;
 import org.unlaxer.parser.combinator.LazyChoice;
 
 public class LineTerminatorParser extends LazyChoice{
@@ -38,5 +40,10 @@ public class LineTerminatorParser extends LazyChoice{
 		Cursor cursor = parserCursor.getCursor(TokenKind.consumed);
 		cursor.setLineNumber(cursor.getLineNumber()+1);
 		return parse;
+	}
+	
+	public boolean isEndOfSource(Token thisParserParsed) {
+		Token choiced = ChoiceInterface.choiced(thisParserParsed);
+		return choiced.parser.getClass() == EndOfSourceParser.class;
 	}
 }

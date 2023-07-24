@@ -1,0 +1,66 @@
+'
+  asda 
+#asda 
+
+asdsad 
+' (0 - 25): org.unlaxer.parser.combinator.OneOrMore
+ '
+' (0 - 1): org.unlaxer.parser.elementary.WildCardLineParser
+  <EMPTY> (0 - 0): org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+  '
+' (0 - 1): org.unlaxer.parser.elementary.LineTerminatorParser
+   '
+' (0 - 1): org.unlaxer.parser.elementary.WordParser
+ '  asda 
+' (1 - 9): org.unlaxer.parser.elementary.WildCardLineParser
+  '  asda ' (1 - 8): org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+   ' ' (1 - 2): org.unlaxer.parser.elementary.WildCardStringParser
+   ' ' (2 - 3): org.unlaxer.parser.elementary.WildCardStringParser
+   'a' (3 - 4): org.unlaxer.parser.elementary.WildCardStringParser
+   's' (4 - 5): org.unlaxer.parser.elementary.WildCardStringParser
+   'd' (5 - 6): org.unlaxer.parser.elementary.WildCardStringParser
+   'a' (6 - 7): org.unlaxer.parser.elementary.WildCardStringParser
+   ' ' (7 - 8): org.unlaxer.parser.elementary.WildCardStringParser
+  '
+' (8 - 9): org.unlaxer.parser.elementary.LineTerminatorParser
+   '
+' (8 - 9): org.unlaxer.parser.elementary.WordParser
+ '#asda 
+' (9 - 16): org.unlaxer.parser.elementary.WildCardLineParser
+  '#asda ' (9 - 15): org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+   '#' (9 - 10): org.unlaxer.parser.elementary.WildCardStringParser
+   'a' (10 - 11): org.unlaxer.parser.elementary.WildCardStringParser
+   's' (11 - 12): org.unlaxer.parser.elementary.WildCardStringParser
+   'd' (12 - 13): org.unlaxer.parser.elementary.WildCardStringParser
+   'a' (13 - 14): org.unlaxer.parser.elementary.WildCardStringParser
+   ' ' (14 - 15): org.unlaxer.parser.elementary.WildCardStringParser
+  '
+' (15 - 16): org.unlaxer.parser.elementary.LineTerminatorParser
+   '
+' (15 - 16): org.unlaxer.parser.elementary.WordParser
+ '
+' (16 - 17): org.unlaxer.parser.elementary.WildCardLineParser
+  <EMPTY> (16 - 16): org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+  '
+' (16 - 17): org.unlaxer.parser.elementary.LineTerminatorParser
+   '
+' (16 - 17): org.unlaxer.parser.elementary.WordParser
+ 'asdsad 
+' (17 - 25): org.unlaxer.parser.elementary.WildCardLineParser
+  'asdsad ' (17 - 24): org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+   'a' (17 - 18): org.unlaxer.parser.elementary.WildCardStringParser
+   's' (18 - 19): org.unlaxer.parser.elementary.WildCardStringParser
+   'd' (19 - 20): org.unlaxer.parser.elementary.WildCardStringParser
+   's' (20 - 21): org.unlaxer.parser.elementary.WildCardStringParser
+   'a' (21 - 22): org.unlaxer.parser.elementary.WildCardStringParser
+   'd' (22 - 23): org.unlaxer.parser.elementary.WildCardStringParser
+   ' ' (23 - 24): org.unlaxer.parser.elementary.WildCardStringParser
+  '
+' (24 - 25): org.unlaxer.parser.elementary.LineTerminatorParser
+   '
+' (24 - 25): org.unlaxer.parser.elementary.WordParser
+ '' (25 - 25): org.unlaxer.parser.elementary.WildCardLineParser
+  <EMPTY> (25 - 25): org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+  '' (25 - 25): org.unlaxer.parser.elementary.LineTerminatorParser
+   <EMPTY> (25 - 25): org.unlaxer.parser.elementary.EndOfSourceParser
+

@@ -1,0 +1,11 @@
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain/LineTerminatorParser
+END     : CON(L:0,P:1) MO(L:0,P:1) Last20='\n'  	| parser:/Chain/LineTerminatorParser| status:succeeded | parsed:
+  
+START   : CON(L:1,P:4) MO(L:0,P:4) Last20='
+abc'  	| parser:/Chain/EndOfSourceParser
+END     : CON(L:1,P:4) MO(L:1,P:4) Last20='
+abc'  	| parser:/Chain/EndOfSourceParser| status:succeeded | parsed:  
+END     : CON(L:1,P:4) MO(L:1,P:4) Last20='
+abc'  	| parser:/Chain| status:succeeded | parsed:
+abc  

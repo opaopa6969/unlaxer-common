@@ -1,0 +1,669 @@
+OPEN    : '
+  asda 
+#asda 
+
+asdsad 
+'
+START   : position:(c:0 m:0) targetchar='\n'  	| parser://org.unlaxer.parser.combinator.OneOrMore
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser://org.unlaxer.parser.combinator.OneOrMore
+START   : position:(c:0 m:0) targetchar='\n'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+START   : position:(c:0 m:0) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:0 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:0 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:0 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+END     : position:(c:0 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:succeeded | parsed:
+  
+COMMIT  : position:(c:0 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+COMMIT  : position:(c:0 m:1) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | committed: 
+END     : position:(c:0 m:1) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser| status:succeeded | parsed:
+  
+START   : position:(c:0 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:0 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:0 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:0 m:0) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:1 m:1) targetchar=' '  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser | committed:
+ 
+END     : position:(c:1 m:1) targetchar=' '  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser| status:succeeded | parsed:
+  
+START   : position:(c:1 m:1) targetchar=' '  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+BEGIN   : position:(c:1 m:1) targetchar=' '  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+START   : position:(c:1 m:1) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:1 m:1) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:1 m:1) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:1 m:1) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:1 m:1) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:1 m:1) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:  
+END     : position:(c:1 m:1) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:1 m:1) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:1 m:1) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:2 m:2) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:2 m:2) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:2 m:2) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:2 m:2) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:  
+END     : position:(c:2 m:2) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:2 m:2) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:2 m:2) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:3 m:3) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:3 m:3) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:3 m:3) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:3 m:3) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:a 
+END     : position:(c:3 m:3) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:3 m:3) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:3 m:3) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:4 m:4) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:4 m:4) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:4 m:4) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:4 m:4) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:s 
+END     : position:(c:4 m:4) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:4 m:4) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:4 m:4) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:5 m:5) targetchar='d'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:5 m:5) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:5 m:5) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:5 m:5) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:d 
+END     : position:(c:5 m:5) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:5 m:5) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:5 m:5) targetchar='d'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:6 m:6) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:6 m:6) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:6 m:6) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:6 m:6) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:a 
+END     : position:(c:6 m:6) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:6 m:6) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:6 m:6) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:7 m:7) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:7 m:7) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:7 m:7) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:7 m:7) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:  
+END     : position:(c:7 m:7) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:7 m:7) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:7 m:7) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:8 m:8) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:8 m:9) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:8 m:9) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:8 m:9) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+END     : position:(c:8 m:9) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:succeeded | parsed:
+  
+COMMIT  : position:(c:8 m:9) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+COMMIT  : position:(c:8 m:9) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | committed:  asda  
+END     : position:(c:8 m:9) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser| status:succeeded | parsed:  asda 
+  
+START   : position:(c:8 m:9) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:8 m:9) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:8 m:9) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:8 m:8) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:9 m:9) targetchar='#'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser | committed:  asda 
+ 
+END     : position:(c:9 m:9) targetchar='#'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser| status:succeeded | parsed:  asda 
+  
+START   : position:(c:9 m:9) targetchar='#'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+BEGIN   : position:(c:9 m:9) targetchar='#'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+START   : position:(c:9 m:9) targetchar='#'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:9 m:9) targetchar='#'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:9 m:9) targetchar='#'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:9 m:9) targetchar='#'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:9 m:9) targetchar='#'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:9 m:9) targetchar='#'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:# 
+END     : position:(c:9 m:9) targetchar='#'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:9 m:9) targetchar='#'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:9 m:9) targetchar='#'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:10 m:10) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:10 m:10) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:10 m:10) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:10 m:10) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:a 
+END     : position:(c:10 m:10) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:10 m:10) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:10 m:10) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:11 m:11) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:11 m:11) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:11 m:11) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:11 m:11) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:s 
+END     : position:(c:11 m:11) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:11 m:11) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:11 m:11) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:12 m:12) targetchar='d'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:12 m:12) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:12 m:12) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:12 m:12) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:d 
+END     : position:(c:12 m:12) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:12 m:12) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:12 m:12) targetchar='d'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:13 m:13) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:13 m:13) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:13 m:13) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:13 m:13) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:a 
+END     : position:(c:13 m:13) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:13 m:13) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:13 m:13) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:14 m:14) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:14 m:14) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:14 m:14) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:14 m:14) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:  
+END     : position:(c:14 m:14) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:14 m:14) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:14 m:14) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:15 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:15 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:15 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:15 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+END     : position:(c:15 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:succeeded | parsed:
+  
+COMMIT  : position:(c:15 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+COMMIT  : position:(c:15 m:16) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | committed:#asda  
+END     : position:(c:15 m:16) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser| status:succeeded | parsed:#asda 
+  
+START   : position:(c:15 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:15 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:15 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:15 m:15) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:16 m:16) targetchar='\n'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser | committed:#asda 
+ 
+END     : position:(c:16 m:16) targetchar='\n'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser| status:succeeded | parsed:#asda 
+  
+START   : position:(c:16 m:16) targetchar='\n'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+START   : position:(c:16 m:16) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:16 m:17) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:16 m:17) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:16 m:17) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+END     : position:(c:16 m:17) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:succeeded | parsed:
+  
+COMMIT  : position:(c:16 m:17) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+COMMIT  : position:(c:16 m:17) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | committed: 
+END     : position:(c:16 m:17) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser| status:succeeded | parsed:
+  
+START   : position:(c:16 m:17) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:16 m:17) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:16 m:17) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:16 m:16) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:17 m:17) targetchar='a'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser | committed:
+ 
+END     : position:(c:17 m:17) targetchar='a'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser| status:succeeded | parsed:
+  
+START   : position:(c:17 m:17) targetchar='a'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+BEGIN   : position:(c:17 m:17) targetchar='a'  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+START   : position:(c:17 m:17) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:17 m:17) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:17 m:17) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:17 m:17) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:17 m:17) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:17 m:17) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:a 
+END     : position:(c:17 m:17) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:17 m:17) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:17 m:17) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:18 m:18) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:18 m:18) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:18 m:18) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:18 m:18) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:s 
+END     : position:(c:18 m:18) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:18 m:18) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:18 m:18) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:19 m:19) targetchar='d'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:19 m:19) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:19 m:19) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:19 m:19) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:d 
+END     : position:(c:19 m:19) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:19 m:19) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:19 m:19) targetchar='d'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:20 m:20) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:20 m:20) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:20 m:20) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:20 m:20) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:s 
+END     : position:(c:20 m:20) targetchar='s'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:20 m:20) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:21 m:21) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:21 m:21) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:21 m:21) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:21 m:21) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:a 
+END     : position:(c:21 m:21) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:21 m:21) targetchar='a'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:21 m:21) targetchar='a'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:22 m:22) targetchar='d'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:22 m:22) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:22 m:22) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:22 m:22) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:d 
+END     : position:(c:22 m:22) targetchar='d'  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:22 m:22) targetchar='d'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:22 m:22) targetchar='d'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:23 m:23) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:23 m:23) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:23 m:23) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+ROLLBACK: position:(c:23 m:23) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:  
+END     : position:(c:23 m:23) targetchar=' '  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+END     : position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:failed | parsed:  
+ROLLBACK: position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | rollbacked: 
+END     : position:(c:23 m:23) targetchar=' '  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+ROLLBACK: position:(c:23 m:23) targetchar=' '  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:24 m:24) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:24 m:25) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:24 m:25) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:24 m:25) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+END     : position:(c:24 m:25) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:succeeded | parsed:
+  
+COMMIT  : position:(c:24 m:25) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed:
+ 
+COMMIT  : position:(c:24 m:25) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | committed:asdsad  
+END     : position:(c:24 m:25) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser| status:succeeded | parsed:asdsad 
+  
+START   : position:(c:24 m:25) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:24 m:25) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:24 m:25) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:24 m:24) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser | committed:asdsad 
+ 
+END     : position:(c:25 m:25) targetchar=''  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser| status:succeeded | parsed:asdsad 
+  
+START   : position:(c:25 m:25) targetchar=''  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser
+START   : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | committed: 
+END     : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:succeeded | parsed:  
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed: 
+END     : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:  
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed: 
+END     : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:succeeded | parsed:  
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly | committed: 
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | committed: 
+END     : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser| status:succeeded | parsed:  
+START   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser
+START   : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+BEGIN   : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | committed: 
+END     : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:succeeded | parsed:  
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser | committed: 
+END     : position:(c:25 m:25) targetchar=''  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:  
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser | committed: 
+END     : position:(c:25 m:25) targetchar=''  	| parser:/OneOrMore/org.unlaxer.parser.elementary.WildCardLineParser| status:succeeded | parsed:  
+COMMIT  : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.combinator.OneOrMore | committed:
+  asda 
+#asda 
+
+asdsad 
+ 
+END     : position:(c:25 m:25) targetchar=''  	| parser://org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:
+  asda 
+#asda 
+
+asdsad 
+  
+CLOSE   : '
+  asda 
+#asda 
+
+asdsad 
+' consumed:allConsumed 
+

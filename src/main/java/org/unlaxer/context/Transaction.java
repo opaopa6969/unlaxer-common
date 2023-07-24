@@ -47,7 +47,7 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 	}
 	
 	public default void begin(Parser parser) {
-		getTokenStack().push(new TransactionElement(getCurrent().getParserCursor()));
+		getTokenStack().push(getCurrent().createNew());
 		onBegin(get(), parser);
 	}
 	

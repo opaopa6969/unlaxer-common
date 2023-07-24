@@ -1,0 +1,7 @@
+OPEN    : 'abc:abc'
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
+COMMIT  : position:(c:3 m:3) targetchar=':'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:abc 
+COMMIT  : position:(c:7 m:7) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain | committed:abc:abc 
+CLOSE   : 'abc:abc' consumed:allConsumed 
+

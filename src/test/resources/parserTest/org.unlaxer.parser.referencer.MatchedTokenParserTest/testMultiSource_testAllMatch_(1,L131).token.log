@@ -1,0 +1,47 @@
+'var $name string;
+var $age number;
+print $name;
+print $age;
+' (0 - 60): org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+ 'var $name string;
+var $age number;
+' (0 - 35): org.unlaxer.parser.combinator.ZeroOrMore
+  'var $name string;
+' (0 - 18): org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+   'var' (0 - 3): org.unlaxer.parser.elementary.WordParser
+   '$name' (4 - 9): org.unlaxer.parser.combinator.Chain
+    '$' (4 - 5): org.unlaxer.parser.elementary.WordParser
+    'name' (5 - 9): org.unlaxer.parser.combinator.OneOrMore
+     'n' (5 - 6): org.unlaxer.parser.posix.AlphabetParser
+     'a' (6 - 7): org.unlaxer.parser.posix.AlphabetParser
+     'm' (7 - 8): org.unlaxer.parser.posix.AlphabetParser
+     'e' (8 - 9): org.unlaxer.parser.posix.AlphabetParser
+   'string' (10 - 16): org.unlaxer.parser.combinator.Choice
+    'string' (10 - 16): org.unlaxer.parser.elementary.WordParser
+   ';' (16 - 17): org.unlaxer.parser.elementary.WordParser
+  'var $age number;
+' (18 - 35): org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+   'var' (18 - 21): org.unlaxer.parser.elementary.WordParser
+   '$age' (22 - 26): org.unlaxer.parser.combinator.Chain
+    '$' (22 - 23): org.unlaxer.parser.elementary.WordParser
+    'age' (23 - 26): org.unlaxer.parser.combinator.OneOrMore
+     'a' (23 - 24): org.unlaxer.parser.posix.AlphabetParser
+     'g' (24 - 25): org.unlaxer.parser.posix.AlphabetParser
+     'e' (25 - 26): org.unlaxer.parser.posix.AlphabetParser
+   'number' (27 - 33): org.unlaxer.parser.combinator.Choice
+    'number' (27 - 33): org.unlaxer.parser.elementary.WordParser
+   ';' (33 - 34): org.unlaxer.parser.elementary.WordParser
+ 'print $name;
+print $age;
+' (35 - 60): org.unlaxer.parser.combinator.OneOrMore
+  'print $name;
+' (35 - 48): org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+   'print' (35 - 40): org.unlaxer.parser.elementary.WordParser
+   '$name' (41 - 46): org.unlaxer.parser.elementary.WordParser
+   ';' (46 - 47): org.unlaxer.parser.elementary.WordParser
+  'print $age;
+' (48 - 60): org.unlaxer.parser.combinator.WhiteSpaceDelimitedChain
+   'print' (48 - 53): org.unlaxer.parser.elementary.WordParser
+   '$age' (54 - 58): org.unlaxer.parser.elementary.WordParser
+   ';' (58 - 59): org.unlaxer.parser.elementary.WordParser
+

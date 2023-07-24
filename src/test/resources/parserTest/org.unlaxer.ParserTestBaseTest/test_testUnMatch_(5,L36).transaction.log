@@ -1,0 +1,7 @@
+OPEN    : ''
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain/OneOrMore
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain/OneOrMore | rollbacked: 
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain | rollbacked: 
+CLOSE   : '' consumed:allConsumed 
+

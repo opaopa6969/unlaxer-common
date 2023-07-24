@@ -15,12 +15,26 @@ public class TransactionElement implements Serializable{
 	Optional<TokenKind> tokenKind;
 	ParserCursor cursor ;
 	
+	boolean resetMatchedWithConsumed = true;
+	
 	public final List<Token> tokens = new ArrayList<Token>();
 	
 	public TransactionElement(ParserCursor parserCursor) {
 		super();
 		this.cursor = new ParserCursor(parserCursor,true);
 		tokenKind = Optional.empty();
+	}
+	
+	
+	public TransactionElement(ParserCursor cursor, boolean resetMatchedWithConsumed) {
+		super();
+		this.cursor = cursor;
+		this.resetMatchedWithConsumed = resetMatchedWithConsumed;
+	}
+
+
+	public TransactionElement createNew() {
+		return new TransactionElement(new ParserCursor(cursor,resetMatchedWithConsumed),resetMatchedWithConsumed);
 	}
 	
 	public void consume(int length){
@@ -70,5 +84,9 @@ public class TransactionElement implements Serializable{
 
 	public void setCursor(ParserCursor cursor) {
 		this.cursor = cursor;
+	}
+	
+	public void setResetMatchedWithConsumed(boolean resetMatchedWithConsumed) {
+		this.resetMatchedWithConsumed = resetMatchedWithConsumed;
 	}
 }

@@ -1,0 +1,11 @@
+OPEN    : 'abc'
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain
+START   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain/EndOfSourceParser
+BEGIN   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain/EndOfSourceParser
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain/EndOfSourceParser | rollbacked:a 
+END     : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain/EndOfSourceParser| status:failed | parsed:  
+ROLLBACK: CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain | rollbacked: 
+END     : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain| status:failed | parsed:  
+CLOSE   : 'abc' consumed:0(3 remain) 
+
