@@ -5,8 +5,8 @@ END     : CON(L:0,P:4) MO(L:0,P:4) Last20='abc
   
 START   : CON(L:1,P:7) MO(L:0,P:7) Last20='abc
 abc'  	| parser:/Chain/EndOfSourceParser
-END     : CON(L:1,P:7) MO(L:1,P:7) Last20='abc
+END     : CON(L:1,P:7) MO(L:0,P:7) Last20='abc
 abc'  	| parser:/Chain/EndOfSourceParser| status:succeeded | parsed:  
-END     : CON(L:1,P:7) MO(L:1,P:7) Last20='abc
+END     : CON(L:1,P:7) MO(L:0,P:7) Last20='abc
 abc'  	| parser:/Chain| status:succeeded | parsed:abc
 abc  

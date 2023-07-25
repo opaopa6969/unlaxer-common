@@ -11,7 +11,9 @@ public interface ChainInterface extends Parser{
 	
 	@Override
 	public default Parsed parse(ParseContext parseContext,TokenKind tokenKind,boolean invertMatch) {
-		
+
+		parseContext.getCurrent().setResetMatchedWithConsumed(false);
+
 		parseContext.startParse(this, parseContext, tokenKind, invertMatch);
 		parseContext.begin(this);
 		

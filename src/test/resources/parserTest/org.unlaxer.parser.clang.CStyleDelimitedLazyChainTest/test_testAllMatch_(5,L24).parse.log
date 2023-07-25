@@ -80,11 +80,11 @@ END     : position:(c:14 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.e
 END     : position:(c:14 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.clang.CPPComment| status:succeeded | parsed://コメント    
 END     : position:(c:14 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.clang.CStyleDelimitorElements| status:succeeded | parsed://コメント    
 START   : position:(c:14 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.clang.CStyleDelimitorElements
-START   : position:(c:14 m:14) targetchar='\n'  	| parser://org.unlaxer.parser.clang.BlockComment
-END     : position:(c:14 m:14) targetchar='\n'  	| parser://org.unlaxer.parser.clang.BlockComment| status:failed | parsed:  
-START   : position:(c:14 m:14) targetchar='\n'  	| parser://org.unlaxer.parser.clang.CPPComment
-END     : position:(c:14 m:14) targetchar='\n'  	| parser://org.unlaxer.parser.clang.CPPComment| status:failed | parsed:  
-START   : position:(c:14 m:14) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
+START   : position:(c:14 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.clang.BlockComment
+END     : position:(c:14 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.clang.BlockComment| status:failed | parsed:  
+START   : position:(c:14 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.clang.CPPComment
+END     : position:(c:14 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.clang.CPPComment| status:failed | parsed:  
+START   : position:(c:14 m:15) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor
 END     : position:(c:15 m:15) targetchar='F'  	| parser://org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:
   
 END     : position:(c:15 m:15) targetchar='F'  	| parser://org.unlaxer.parser.clang.CStyleDelimitorElements| status:succeeded | parsed:

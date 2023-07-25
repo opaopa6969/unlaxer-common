@@ -1,0 +1,46 @@
+OPEN    : 'u
+---END_OF_PART--/
+sushi'
+START   : position:(c:0 m:0) targetchar='u'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:0 m:0) targetchar='u'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+BEGIN   : position:(c:0 m:0) targetchar='u'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain
+ROLLBACK: position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain | rollbacked: 
+END     : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+ROLLBACK: position:(c:0 m:0) targetchar='u'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:1 m:1) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain
+ROLLBACK: position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain | rollbacked: 
+END     : position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+ROLLBACK: position:(c:1 m:1) targetchar='\n'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | rollbacked: 
+BEGIN   : position:(c:2 m:2) targetchar='-'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:2 m:2) targetchar='-'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain
+BEGIN   : position:(c:2 m:2) targetchar='-'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain
+START   : position:(c:19 m:19) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/Chain/org.unlaxer.parser.elementary.LineTerminatorParser
+BEGIN   : position:(c:19 m:19) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/Chain/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:19 m:19) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/Chain/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:19 m:19) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/Chain/org.unlaxer.parser.elementary.LineTerminatorParser
+ROLLBACK: position:(c:19 m:19) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/Chain/org.unlaxer.parser.elementary.LineTerminatorParser | rollbacked: 
+BEGIN   : position:(c:19 m:19) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/Chain/org.unlaxer.parser.elementary.LineTerminatorParser
+COMMIT  : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/Chain/org.unlaxer.parser.elementary.LineTerminatorParser | committed:
+ 
+END     : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/Chain/org.unlaxer.parser.elementary.LineTerminatorParser| status:succeeded | parsed:
+  
+COMMIT  : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain | committed:---END_OF_PART--/
+ 
+END     : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain| status:succeeded | parsed:---END_OF_PART--/
+  
+COMMIT  : position:(c:20 m:20) targetchar='s'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.Chain | committed:---END_OF_PART--/
+ 
+COMMIT  : position:(c:20 m:20) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser | committed:u
+---END_OF_PART--/
+ 
+END     : position:(c:20 m:20) targetchar='s'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser| status:succeeded | parsed:u
+---END_OF_PART--/
+  
+CLOSE   : 'u
+---END_OF_PART--/
+sushi' consumed:20(5 remain) 
+

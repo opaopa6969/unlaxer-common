@@ -1,0 +1,15 @@
+START   : position:(c:0 m:0) targetchar='u'  	| parser://org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+START   : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.combinator.Chain
+START   : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/MatchOnly/Chain/org.unlaxer.parser.combinator.MatchOnly
+END     : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/MatchOnly/Chain/org.unlaxer.parser.combinator.MatchOnly| status:succeeded | parsed:  
+START   : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/MatchOnly/Chain/org.unlaxer.parser.combinator.MatchOnly
+END     : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/MatchOnly/Chain/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+END     : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+END     : position:(c:0 m:0) targetchar='u'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+START   : position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly
+START   : position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.combinator.Chain
+START   : position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/Chain/org.unlaxer.parser.combinator.MatchOnly
+END     : position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/Chain/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  
+END     : position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/MatchOnly/org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
+END     : position:(c:1 m:1) targetchar='\n'  	| parser:/WildCardStringTerninatorParser/org.unlaxer.parser.combinator.MatchOnly| status:failed | parsed:  

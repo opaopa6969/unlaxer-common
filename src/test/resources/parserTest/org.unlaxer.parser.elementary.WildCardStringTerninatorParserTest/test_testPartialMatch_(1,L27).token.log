@@ -1,0 +1,6 @@
+'u
+' (0 - 2): org.unlaxer.parser.elementary.WildCardStringTerninatorParser
+ 'u' (0 - 1): org.unlaxer.parser.elementary.WildCardStringParser
+ '
+' (1 - 2): org.unlaxer.parser.elementary.WildCardStringParser
+
