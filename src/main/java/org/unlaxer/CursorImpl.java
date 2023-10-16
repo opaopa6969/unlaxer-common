@@ -62,4 +62,9 @@ public class CursorImpl implements Serializable, Cursor{
 	public void setPositionInLine(int positionInLine) {
 		this.positionInLine = positionInLine;
 	}
+	
+  @Override
+  public String toString() {
+    return "[L:" + lineNumber + ",X:" + getPositionInLine()+",P:"+getPosition()+"]";
+  }
 }

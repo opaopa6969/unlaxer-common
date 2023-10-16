@@ -2,6 +2,7 @@ package org.unlaxer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +20,8 @@ public class Committed implements Serializable {
 	List<Token> originalTokens;
 	Optional<Token> collectedToken;
 	boolean collected;
+	
+	Collection<TransactionElement> mostConsumeds = new ArrayList<>();
 
 	public Committed(Committed committed) {
 		this.originalTokens = new ArrayList<>(committed.getOriginalTokens());
@@ -105,5 +108,6 @@ public class Committed implements Serializable {
 	public Token getRootToken(CommittedReducer committedReducer){
 		return committedReducer.reduce(this);
 	}
+	
 	
 }

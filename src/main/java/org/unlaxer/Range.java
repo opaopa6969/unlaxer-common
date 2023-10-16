@@ -125,5 +125,5 @@ public class Range implements Comparable<Range>{
 		return invalidRange;
 	}
 	
-	static final Range invalidRange = new Range(); 
+	static final Range invalidRange = new Range();
 }
