@@ -34,7 +34,7 @@ public class Token implements Serializable{
 	
 	public final Optional<String> tokenString;
 	public Parser parser;
-	public final Range tokenRange;
+	public final CursorRange tokenRange;
 	
 	public Optional<Token> parent;
 	private final List<Token> originalChildren;

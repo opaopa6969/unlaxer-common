@@ -6,20 +6,24 @@ public interface Cursor {
 
 	NameSpecifier getNameSpace();
 
-	void setNameSpace(NameSpecifier nameSpace);
+	Cursor setNameSpace(NameSpecifier nameSpace);
 
-	int getLineNumber();
+	LineNumber getLineNumber();
 
-	void setLineNumber(int lineNumber);
+	Cursor setLineNumber(LineNumber lineNumber);
+	
+  Cursor incrementLineNumber();
 
-	int getPosition();
+	Index getPosition();
 
-	void setPosition(int position);
+	Cursor setPosition(Index position);
+	
+  Cursor incrementPosition(); 
 
-	void addPosition(int adding);
+	Cursor addPosition(Index adding);
 
-	int getPositionInLine();
+	Index getPositionInLine();
 
-	void setPositionInLine(int positionInLine);
+	Cursor setPositionInLine(Index positionInLine);
 
 }

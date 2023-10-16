@@ -9,15 +9,15 @@ public class CursorImpl implements Serializable, Cursor{
 	private static final long serialVersionUID = -4419856259856233251L;
 	
 	private NameSpecifier nameSpace;
-	private int lineNumber;
-	private int position;
-	private int positionInLine;
+	private LineNumber lineNumber;
+	private Index position;
+	private Index positionInLine;
 	
 	public CursorImpl() {
 		super();
-		lineNumber =0;
-		position = 0;
-		positionInLine = 0;
+		lineNumber = new LineNumber(0);
+		position = new Index(0);
+		positionInLine = new Index(0);
 		nameSpace =NameSpecifier.of("");
 	}
 	public CursorImpl(Cursor cursor) {
@@ -31,40 +31,59 @@ public class CursorImpl implements Serializable, Cursor{
 		return nameSpace;
 	}
 	@Override
-	public void setNameSpace(NameSpecifier nameSpace) {
+	public Cursor setNameSpace(NameSpecifier nameSpace) {
 		this.nameSpace = nameSpace;
+		return this;
 	}
 	@Override
-	public int getLineNumber() {
+	public LineNumber getLineNumber() {
 		return lineNumber;
 	}
+	
 	@Override
-	public void setLineNumber(int lineNumber) {
+	public Cursor setLineNumber(LineNumber lineNumber) {
 		this.lineNumber = lineNumber;
+		return this;
 	}
+	
 	@Override
-	public int getPosition() {
+	public Index getPosition() {
 		return position;
 	}
 	@Override
-	public void setPosition(int position) {
+	public Cursor setPosition(Index position) {
 		this.position = position;
+		return this;
 	}
 	@Override
-	public void addPosition(int adding) {
-		this.position += adding;
+	public Cursor addPosition(Index adding) {
+		this.position = new Index(this.position.value + adding.value);
+		return this;
 	}
 	@Override
-	public int getPositionInLine() {
+	public Index getPositionInLine() {
 		return positionInLine;
 	}
 	@Override
-	public void setPositionInLine(int positionInLine) {
+	public Cursor setPositionInLine(Index positionInLine) {
 		this.positionInLine = positionInLine;
+		return this;
 	}
 	
   @Override
   public String toString() {
     return "[L:" + lineNumber + ",X:" + getPositionInLine()+",P:"+getPosition()+"]";
+  }
+  @Override
+  public Cursor incrementLineNumber() {
+    lineNumber = new LineNumber(lineNumber.value+1);
+    positionInLine = new Index(0);
+    return this;
+  }
+  @Override
+  public Cursor incrementPosition() {
+    position = new Index(position.value+1);
+    positionInLine = new Index(positionInLine.value+1);
+    return this;
   }
 }
