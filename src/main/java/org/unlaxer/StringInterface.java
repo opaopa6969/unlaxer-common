@@ -8,6 +8,8 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.unlaxer.util.StringIn;
+
 public interface StringInterface {
   
   Function<String,StringInterface> stringToStringInterface();
@@ -27,6 +29,8 @@ public interface StringInterface {
   StringLength stringLength();
   
   CodePointLength codePointLength();
+  
+  String getSource();
 
   /**
    * Returns {@code true} if, and only if, {@link #length()} is {@code 0}.
@@ -521,8 +525,12 @@ public interface StringInterface {
    */
   boolean regionMatches(int toffset, String other, int ooffset, int len);
   
-  default boolean regionMatches(CodePointOffset toffset, StringInterface other, CodePointOffset ooffset, Length len) {
-    
+  default boolean regionMatches(CodePointIndex toffset, String other, CodePointIndex ooffset, Length len) {
+    return regionMatches(toStringIndex(toffset).value, other , toStringIndex(ooffset).value, len.value);
+  }
+  
+  default boolean regionMatches(CodePointIndex toffset, StringInterface other, CodePointIndex ooffset, Length len) {
+    return regionMatches(toStringIndex(toffset).value, other.getSource(), toStringIndex(ooffset).value, len.value);
   }
   
   /**
@@ -577,7 +585,13 @@ public interface StringInterface {
    */
   boolean regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len);
   
-  boolean regionMatches(boolean ignoreCase, CodePointOffset toffset, StringInterface other, CodePointOffset ooffset, Length len);
+  default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, String other, CodePointIndex ooffset, Length len) {
+    return regionMatches(ignoreCase, toStringIndex(toffset).value, other, toStringIndex(ooffset).value, len.value);
+  }
+  
+  default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, StringInterface other, CodePointIndex ooffset, Length len) {
+    return regionMatches(ignoreCase, toStringIndex(toffset).value, other.getSource(), toStringIndex(ooffset).value, len.value);
+  }
 
   /**
    * Tests if the substring of this string beginning at the
@@ -598,7 +612,13 @@ public interface StringInterface {
    */
   boolean startsWith(String prefix, int toffset);
   
-  boolean startsWith(StringInterface prefix, CodePointOffset toffset);
+  default boolean startsWith(String prefix, CodePointIndex toffset) {
+    return startsWith(prefix, toStringIndex(toffset).value);
+  }
+  
+  default boolean startsWith(StringInterface prefix, CodePointIndex toffset) {
+    return startsWith(prefix.getSource(), toStringIndex(toffset).value);
+  }
 
   /**
    * Tests if this string starts with the specified prefix.
@@ -615,7 +635,9 @@ public interface StringInterface {
    */
   boolean startsWith(String prefix);
   
-  boolean startsWith(StringInterface prefix);
+  default boolean startsWith(StringInterface prefix) {
+    return startsWith(prefix.getSource());
+  }
 
   /**
    * Tests if this string ends with the specified suffix.
@@ -630,7 +652,9 @@ public interface StringInterface {
    */
   boolean endsWith(String suffix);
   
-  boolean endsWith(StringInterface suffix);
+  default boolean endsWith(StringInterface suffix) {
+    return endsWith(suffix.getSource());
+  }
 
   /**
    * Returns a hash code for this string. The hash code for a
@@ -673,7 +697,10 @@ public interface StringInterface {
    */
   int indexOf(int ch);
   
-  CodePointIndex indexOf(CodePointIndex codePointIndex);
+  default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint) {
+    return new CodePointIndexWithNegativeValue(
+        toCodePointIndex(new StringIndex(indexOf(codePoint.value))));
+  }
 
   /**
    * Returns the index within this string of the first occurrence of the
@@ -716,7 +743,10 @@ public interface StringInterface {
    */
   int indexOf(int ch, int fromIndex);
   
-  CodePointIndex indexOf(CodePointIndex codePointIndex , CodePointIndex fromIndex);
+  default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint, CodePointIndex fromIndex) {
+    return new CodePointIndexWithNegativeValue(
+        toCodePointIndex(new StringIndex(indexOf(codePoint.value,toStringIndex(fromIndex).value))));
+  }
 
   /**
    * Returns the index within this string of the last occurrence of
@@ -743,7 +773,10 @@ public interface StringInterface {
    */
   int lastIndexOf(int ch);
   
-   CodePointIndex lastIndexOf(CodePointIndex codePointIndex);
+  default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint) {
+    return new CodePointIndexWithNegativeValue(
+        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value))));
+  }
 
   /**
    * Returns the index within this string of the last occurrence of
@@ -781,7 +814,10 @@ public interface StringInterface {
    */
   int lastIndexOf(int ch, int fromIndex);
   
-  CodePointIndex lastIndexOf(CodePointIndex codePointIndex, CodePointIndex fromIndex);
+  default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint, CodePointIndex fromIndex) {
+    return new CodePointIndexWithNegativeValue(
+        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value, toStringIndex(fromIndex).value))));
+  }
 
   /**
    * Returns the index within this string of the first occurrence of the
@@ -799,7 +835,10 @@ public interface StringInterface {
    */
   int indexOf(String str);
   
-  CodePointIndex indexOf(StringInterface str);
+  default CodePointIndexWithNegativeValue indexOf(StringInterface str) {
+    return new CodePointIndexWithNegativeValue(
+        toCodePointIndex(new StringIndex(indexOf(str.getSource()))));
+  }
 
   /**
    * Returns the index within this string of the first occurrence of the
@@ -820,7 +859,11 @@ public interface StringInterface {
    */
   int indexOf(String str, int fromIndex);
   
-  CodePointIndex indexOf(StringInterface str, CodePointIndex fromIndex);
+  default CodePointIndex indexOf(StringInterface str, CodePointIndex fromIndex) {
+    return new CodePointIndexWithNegativeValue(
+        toCodePointIndex(new StringIndex(indexOf(str.getSource(),
+            toStringIndex(fromIndex).value))));
+  }
 
 
   /**
@@ -840,7 +883,10 @@ public interface StringInterface {
    */
   int lastIndexOf(String str);
 
-  CodePointIndex lastIndexOf(StringInterface str);
+  default CodePointIndex lastIndexOf(StringInterface str) {
+    return new CodePointIndexWithNegativeValue(
+        toCodePointIndex(new StringIndex(lastIndexOf(str.getSource()))));
+  }
 
   /**
    * Returns the index within this string of the last occurrence of the
@@ -861,7 +907,11 @@ public interface StringInterface {
    */
   int lastIndexOf(String str, int fromIndex);
 
-  CodePointIndex lastIndexOf(StringInterface str, CodePointIndex fromIndex);
+  default CodePointIndex lastIndexOf(StringInterface str, CodePointIndex fromIndex) {
+    return new CodePointIndexWithNegativeValue(
+        toCodePointIndex(new StringIndex(lastIndexOf(str.getSource() , 
+            toStringIndex(fromIndex).value))));
+  }
   
   /**
    * Returns a string that is a substring of this string. The
@@ -882,7 +932,9 @@ public interface StringInterface {
    */
   String substring(int beginIndex);
   
-  StringInterface substring(CodePointIndex beginIndex);
+  default StringInterface substring(CodePointIndex beginIndex) {
+    return stringToStringInterface().apply(substring(toStringIndex(beginIndex).value));
+  }
 
   /**
    * Returns a string that is a substring of this string. The
@@ -908,7 +960,10 @@ public interface StringInterface {
    */
   String substring(int beginIndex, int endIndex);
   
-  StringInterface substring(CodePointIndex beginIndex, CodePointIndex endIndex);
+  default StringInterface substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
+      return stringToStringInterface().apply(substring(
+          toStringIndex(beginIndex).value,toStringIndex(endIndex).value));
+  }
 
   /**
    * Returns a character sequence that is a subsequence of this sequence.
@@ -963,7 +1018,9 @@ public interface StringInterface {
    */
   String concat(String str);
   
-  StringInterface concat(StringInterface str);
+  default StringInterface concat(StringInterface str) {
+    return stringToStringInterface().apply(concat(str.getSource()));
+  }
 
   /**
    * Returns a string resulting from replacing all occurrences of
@@ -995,7 +1052,12 @@ public interface StringInterface {
    *          occurrence of {@code oldChar} with {@code newChar}.
    */
   String replace(char oldChar, char newChar);
-
+  
+  default StringInterface replaceAsStringInterface(char oldChar, char newChar) {
+    
+    return stringToStringInterface().apply(replace(oldChar, newChar));
+  }
+  
   /**
    * Tells whether or not this string matches the given <a
    * href="../util/regex/Pattern.html#sum">regular expression</a>.
@@ -1143,6 +1205,10 @@ public interface StringInterface {
    * @since 1.5
    */
   String replace(CharSequence target, CharSequence replacement);
+  
+  default StringInterface replaceaAsStringInterface(CharSequence target, CharSequence replacement) {
+    return stringToStringInterface().apply(replace(target, replacement));
+  }
 
   /**
    * Splits this string around matches of the given
@@ -1245,6 +1311,21 @@ public interface StringInterface {
    * @spec JSR-51
    */
   String[] split(String regex, int limit);
+  
+  default StringInterface[] splitAsStringInterface(String regex, int limit) {
+    
+    String[] returning = split(regex, limit);
+    
+    StringInterface[] result = new StringInterface[returning.length];
+    
+    int i =0;
+    for (String string : returning) {
+      
+      result[i++] = stringToStringInterface().apply(string);
+    }
+    return result;
+  }
+
 
   /**
    * Splits this string around matches of the given <a
@@ -1290,6 +1371,21 @@ public interface StringInterface {
    * @spec JSR-51
    */
   String[] split(String regex);
+  
+  default StringInterface[] splitAsStringInterface(String regex) {
+    
+    String[] returning = split(regex);
+    
+    StringInterface[] result = new StringInterface[returning.length];
+    
+    int i =0;
+    for (String string : returning) {
+      
+      result[i++] = stringToStringInterface().apply(string);
+    }
+    return result;
+  }
+
 
   /**
    * Converts all of the characters in this {@code String} to lower
@@ -1346,6 +1442,10 @@ public interface StringInterface {
    * @since   1.1
    */
   String toLowerCase(Locale locale);
+  
+  default StringInterface toLowerCaseAsStringInterface(Locale locale){
+    return stringToStringInterface().apply(toLowerCase(locale));
+  }
 
   /**
    * Converts all of the characters in this {@code String} to lower
@@ -1367,6 +1467,10 @@ public interface StringInterface {
    * @see     java.lang.String#toLowerCase(Locale)
    */
   String toLowerCase();
+  
+  default StringInterface toLowerCaseAsStringInterface(){
+    return stringToStringInterface().apply(toLowerCase());
+  }
 
   /**
    * Converts all of the characters in this {@code String} to upper
@@ -1422,6 +1526,10 @@ public interface StringInterface {
    * @since   1.1
    */
   String toUpperCase(Locale locale);
+  
+  default StringInterface toUpperCaseAsStringInterface(Locale locale){
+    return stringToStringInterface().apply(toUpperCase(locale));
+  }
 
   /**
    * Converts all of the characters in this {@code String} to upper
@@ -1443,6 +1551,10 @@ public interface StringInterface {
    * @see     java.lang.String#toUpperCase(Locale)
    */
   String toUpperCase();
+  
+  default StringInterface toUpperCaseAsStringInterface(){
+    return stringToStringInterface().apply(toUpperCase());
+  }
 
   /**
    * Returns a string whose value is this string, with all leading
@@ -1477,6 +1589,10 @@ public interface StringInterface {
    *          has no leading or trailing space.
    */
   String trim();
+  
+  default StringInterface trimAsStringInterface() {
+    return stringToStringInterface().apply(trim());
+  }
 
   /**
    * Returns a string whose value is this string, with all leading
@@ -1505,6 +1621,11 @@ public interface StringInterface {
    * @since 11
    */
   String strip();
+  
+  default StringInterface stripAsStringInterface() {
+    
+    return stringToStringInterface().apply(strip());
+  }
 
   /**
    * Returns a string whose value is this string, with all leading
@@ -1531,6 +1652,10 @@ public interface StringInterface {
    * @since 11
    */
   String stripLeading();
+  
+  default StringInterface stripLeadingAsStringInterface() {
+    return stringToStringInterface().apply((stripLeading()));
+  }
 
   /**
    * Returns a string whose value is this string, with all trailing
@@ -1557,6 +1682,10 @@ public interface StringInterface {
    * @since 11
    */
   String stripTrailing();
+  
+  default StringInterface stripTrailingAsStringInterface() {
+    return stringToStringInterface().apply(stripTrailing());
+  }
 
   /**
    * Returns {@code true} if the string is empty or contains only
@@ -1604,6 +1733,11 @@ public interface StringInterface {
    * @since 11
    */
   Stream<String> lines();
+  
+  default Stream<StringInterface> linesAsStringInterface(){
+    Function<String, StringInterface> stringToStringInterface = stringToStringInterface();
+    return lines().map(stringToStringInterface);
+  }
 
   /**
    * This object (which is already a string!) is itself returned.
@@ -1690,5 +1824,9 @@ public interface StringInterface {
    * @since 11
    */
   String repeat(int count);
-
+  
+  default StringInterface repeatAsStringInterface(int count) {
+    
+    return stringToStringInterface().apply(repeat(count));
+  }
 }

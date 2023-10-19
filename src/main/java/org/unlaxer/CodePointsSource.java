@@ -17,6 +17,7 @@ public class CodePointsSource implements StringInterface{
   private int[] codePoints;
   NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
   Map<CodePointIndex,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
+  Map<StringIndex,CodePointIndex> codePointIndexByStringIndex = new HashMap<>();
   
   public CodePointsSource(String source) {
     super();
@@ -30,8 +31,11 @@ public class CodePointsSource implements StringInterface{
     
     StringIndex stringIndex = new StringIndex(0);
     CodePointIndex codePointIndex = new CodePointIndex(0);
+    
     for (int i = 0; i < codePointCount; i++) {
       stringIndexByCodePointIndex.put(codePointIndex, stringIndex);
+      codePointIndexByStringIndex.put(stringIndex,codePointIndex);
+    
       int codePointAt = codePoints[i];
       
       stringIndex = stringIndex.add(Character.isBmpCodePoint(codePointAt) ? 1:2);
@@ -45,6 +49,7 @@ public class CodePointsSource implements StringInterface{
           
           stringIndex = stringIndex.add(1);
           stringIndexByCodePointIndex.put(codePointIndex.add(1), stringIndex);
+          codePointIndexByStringIndex.put(stringIndex,codePointIndex.add(1));
         }else {
           lineNumberByIndex.put(new CodePointIndex(i+1), lineNumber.increments());
         }
@@ -53,7 +58,8 @@ public class CodePointsSource implements StringInterface{
   }
   
   static Function<String, StringInterface> stringToStringInterface = CodePointsSource::new;
-
+  static Function<StringInterface, String> stringInterfaceToStgring = StringInterface::toString;
+  
   @Override
   public Function<String, StringInterface> stringToStringInterface() {
     return stringToStringInterface;
@@ -61,7 +67,7 @@ public class CodePointsSource implements StringInterface{
 
   @Override
   public Function<StringInterface, String> stringInterfaceToStgring() {
-    return StringInterface::toString;
+    return stringInterfaceToStgring;
   }
 
   @Override
@@ -159,336 +165,226 @@ public class CodePointsSource implements StringInterface{
   }
 
   @Override
-  public boolean regionMatches(CodePointOffset toffset, StringInterface other, CodePointOffset ooffset, Length len) {
-    return source.re;
-  }
-
-  @Override
   public boolean regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean regionMatches(boolean ignoreCase, CodePointOffset toffset, StringInterface other,
-      CodePointOffset ooffset, Length len) {
-    // TODO Auto-generated method stub
-    return false;
+    return source.regionMatches(toffset, other, ooffset, len);
   }
 
   @Override
   public boolean startsWith(String prefix, int toffset) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean startsWith(StringInterface prefix, CodePointOffset toffset) {
-    // TODO Auto-generated method stub
-    return false;
+    return source.startsWith(prefix, toffset);
   }
 
   @Override
   public boolean startsWith(String prefix) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean startsWith(StringInterface prefix) {
-    // TODO Auto-generated method stub
-    return false;
+    return source.startsWith(prefix);
   }
 
   @Override
   public boolean endsWith(String suffix) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean endsWith(StringInterface suffix) {
-    // TODO Auto-generated method stub
-    return false;
+    return source.endsWith(suffix);
   }
 
   @Override
   public int indexOf(int ch) {
-    // TODO Auto-generated method stub
-    return 0;
+    return source.indexOf(ch);
   }
 
-  @Override
-  public CodePointIndex indexOf(CodePointIndex codePointIndex) {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
   @Override
   public int indexOf(int ch, int fromIndex) {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public CodePointIndex indexOf(CodePointIndex codePointIndex, CodePointIndex fromIndex) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.indexOf(ch, fromIndex);
   }
 
   @Override
   public int lastIndexOf(int ch) {
-    // TODO Auto-generated method stub
-    return 0;
+    return source.lastIndexOf(ch);
   }
 
-  @Override
-  public CodePointIndex lastIndexOf(CodePointIndex codePointIndex) {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
   @Override
   public int lastIndexOf(int ch, int fromIndex) {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public CodePointIndex lastIndexOf(CodePointIndex codePointIndex, CodePointIndex fromIndex) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.lastIndexOf(ch,fromIndex);
   }
 
   @Override
   public int indexOf(String str) {
-    // TODO Auto-generated method stub
-    return 0;
+    return source.indexOf(str);
   }
 
-  @Override
-  public CodePointIndex indexOf(StringInterface str) {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
   @Override
   public int indexOf(String str, int fromIndex) {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public CodePointIndex indexOf(StringInterface str, CodePointIndex fromIndex) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.indexOf(str,fromIndex);
   }
 
   @Override
   public int lastIndexOf(String str) {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public CodePointIndex lastIndexOf(StringInterface str) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.lastIndexOf(str);
   }
 
   @Override
   public int lastIndexOf(String str, int fromIndex) {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public CodePointIndex lastIndexOf(StringInterface str, CodePointIndex fromIndex) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.lastIndexOf(str, fromIndex);
   }
 
   @Override
   public String substring(int beginIndex) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.substring(beginIndex);
   }
 
-  @Override
-  public StringInterface substring(CodePointIndex beginIndex) {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
   @Override
   public String substring(int beginIndex, int endIndex) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public StringInterface substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.substring(beginIndex,endIndex);
   }
 
   @Override
   public CharSequence subSequence(int beginIndex, int endIndex) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.subSequence(beginIndex, endIndex);
   }
 
   @Override
   public String concat(String str) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public StringInterface concat(StringInterface str) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.concat(str);
   }
 
   @Override
   public String replace(char oldChar, char newChar) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.replace(oldChar, newChar);
   }
 
   @Override
   public boolean matches(String regex) {
-    // TODO Auto-generated method stub
-    return false;
+    return source.matches(regex);
   }
 
   @Override
   public boolean contains(CharSequence s) {
-    // TODO Auto-generated method stub
-    return false;
+    return source.contains(s);
   }
 
   @Override
   public String replaceFirst(String regex, String replacement) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.replaceFirst(regex, replacement);
   }
 
   @Override
   public String replaceAll(String regex, String replacement) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.replaceAll(regex, replacement);
   }
 
   @Override
   public String replace(CharSequence target, CharSequence replacement) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.replace(target, replacement);
   }
 
   @Override
   public String[] split(String regex, int limit) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.split(regex,limit);
   }
 
   @Override
   public String[] split(String regex) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.split(regex);
   }
 
   @Override
   public String toLowerCase(Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.toLowerCase(locale);
   }
 
   @Override
   public String toLowerCase() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.toLowerCase();
   }
 
   @Override
   public String toUpperCase(Locale locale) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.toUpperCase(locale);
   }
 
   @Override
   public String toUpperCase() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.toUpperCase();
   }
 
   @Override
   public String trim() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.trim();
   }
 
   @Override
   public String strip() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.strip();
   }
 
   @Override
   public String stripLeading() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.stripLeading();
   }
 
   @Override
   public String stripTrailing() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.stripTrailing();
   }
 
   @Override
   public boolean isBlank() {
-    // TODO Auto-generated method stub
-    return false;
+    return source.isBlank();
   }
 
   @Override
   public Stream<String> lines() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.lines();
   }
 
   @Override
   public IntStream chars() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.chars();
   }
 
   @Override
   public IntStream codePoints() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.codePoints();
   }
 
   @Override
   public char[] toCharArray() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.toCharArray();
   }
 
   @Override
   public String intern() {
-    // TODO Auto-generated method stub
-    return null;
+    return source.intern();
   }
 
   @Override
   public String repeat(int count) {
-    // TODO Auto-generated method stub
-    return null;
+    return source.repeat(count);
   }
 
-  
+  @Override
+  public StringIndex toStringIndex(CodePointIndex codePointIndex) {
+    return stringIndexByCodePointIndex.get(codePointIndex);
+  }
 
+  @Override
+  public CodePointIndex toCodePointIndex(StringIndex stringIndex) {
+    return codePointIndexByStringIndex.get(stringIndex);
+  }
 
+  @Override
+  public int hashCode() {
+    return source.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return source.equals(obj);
+  }
+
+  @Override
+  public String toString() {
+    return source.toString();
+  }
 }
