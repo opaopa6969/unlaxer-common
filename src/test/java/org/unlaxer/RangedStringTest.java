@@ -32,6 +32,9 @@ public class RangedStringTest {
         surrogatePare
         ;
     
+    System.out.println(lines);
+    System.out.println(SymbolMap.replaceSymbol(lines, SymbolMap.lf));
+    
     List<RangedString> tokeizeWithLineTerminator = RangedString.tokeizeWithLineTerminator(lines);
     
     assertEquals(word+cr, tokeizeWithLineTerminator.get(0).token.get());
@@ -44,5 +47,31 @@ public class RangedStringTest {
     assertEquals(surrogatePare+crlf, tokeizeWithLineTerminator.get(7).token.get());
     assertEquals(surrogatePare+lf, tokeizeWithLineTerminator.get(8).token.get());
     assertEquals(surrogatePare, tokeizeWithLineTerminator.get(9).token.get());
+  }
+  /*
+      a⇠[[L:0,X:0,P:0],[L:11,X:0,P:20]]
+      a⇠⇣[[L:0,X:3,P:3],[L:11,X:0,P:20]]
+      a⇠⇣[[L:1,X:2,P:5],[L:11,X:0,P:20]]
+      a⇣[[L:2,X:1,P:6],[L:11,X:0,P:20]]
+      a⇣a⇠⇣[[L:3,X:1,P:7],[L:11,X:0,P:20]]
+      a⇣a⇠⇣⇣[[L:4,X:3,P:10],[L:11,X:0,P:20]]
+      a⇣a⇠⇣⇣[[L:5,X:1,P:11],[L:11,X:0,P:20]]
+      ⇠[[L:6,X:1,P:12],[L:11,X:0,P:20]]
+      છ?⇠[[L:7,X:1,P:13],[L:11,X:0,P:20]]
+      છ?⇠⇣[[L:8,X:3,P:16],[L:11,X:0,P:20]]
+      છ?⇠⇣[[L:9,X:3,P:19],[L:11,X:0,P:20]]
+      */
+  
+  public static void main(String[] args) {
+    String surrogatePare = "𪛊";
+    
+    String text= surrogatePare+"a"+surrogatePare+"a";
+    
+    int[] array = text.codePoints().toArray();
+    for (int i : array) {
+      System.out.println(i);
+    }
+    
+    System.out.println(surrogatePare.codePointBefore(0));
   }
 }
