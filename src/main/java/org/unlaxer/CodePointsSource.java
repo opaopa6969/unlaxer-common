@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class CodePointsSource implements StringInterface{
+public class CodePointsSource implements CPString{
   
   private String source;
   private int[] codePoints;
@@ -57,16 +57,16 @@ public class CodePointsSource implements StringInterface{
     }
   }
   
-  static Function<String, StringInterface> stringToStringInterface = CodePointsSource::new;
-  static Function<StringInterface, String> stringInterfaceToStgring = StringInterface::toString;
+  static Function<String, CPString> stringToStringInterface = CodePointsSource::new;
+  static Function<CPString, String> stringInterfaceToStgring = CPString::toString;
   
   @Override
-  public Function<String, StringInterface> stringToStringInterface() {
+  public Function<String, CPString> stringToStringInterface() {
     return stringToStringInterface;
   }
 
   @Override
-  public Function<StringInterface, String> stringInterfaceToStgring() {
+  public Function<CPString, String> stringInterfaceToStgring() {
     return stringInterfaceToStgring;
   }
 
@@ -385,6 +385,11 @@ public class CodePointsSource implements StringInterface{
 
   @Override
   public String toString() {
-    return source.toString();
+    return source;
+  }
+
+  @Override
+  public String getSource() {
+    return source;
   }
 }

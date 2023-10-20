@@ -10,7 +10,7 @@ public class StringSource implements Source{
 	
 	private String source;
 	private int[] codePoints;
-	NavigableMap<Index, LineNumber> lineNumberByIndex = new TreeMap<>();
+	NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
 	
 
 	public StringSource(String source) {
@@ -20,7 +20,7 @@ public class StringSource implements Source{
     int codePointCount = codePoints.length;
     
     LineNumber lineNumber = new LineNumber(0);
-    Index index = new Index(0);
+    CodePointIndex index = new CodePointIndex(0);
     lineNumberByIndex.put(index, lineNumber);
     
     
@@ -35,11 +35,11 @@ public class StringSource implements Source{
           codePointCount-1!=i && codePoints[i+1] ==SymbolMap.lf.codes[0]) {
           i++;
       }
-      lineNumberByIndex.put(new Index(i+1), lineNumber.increments());
+      lineNumberByIndex.put(new CodePointIndex(i+1), lineNumber.increments());
     }
 	}
 	
-	public LineNumber getLineNUmber(Index Position) {
+	public LineNumber getLineNUmber(CodePointIndex Position) {
 	  return lineNumberByIndex.floorEntry(Position).getValue();
 	}
 
@@ -47,7 +47,7 @@ public class StringSource implements Source{
 	public RangedString peek(int startIndexInclusive, int length) {
 		
 		if(startIndexInclusive + length > codePoints.length){
-		  Index index = new Index(startIndexInclusive);
+		  CodePointIndex index = new CodePointIndex(startIndexInclusive);
 		  CursorRange cursorRange = new CursorRange(new CursorImpl()
 		      .setPosition(index)
 		      .setLineNumber(getLineNUmber(index))
@@ -55,8 +55,8 @@ public class StringSource implements Source{
 			return new RangedString(cursorRange);
 		}
 		
-    Index startIndex = new Index(startIndexInclusive);
-    Index endIndex = new Index(startIndexInclusive+length);
+		CodePointIndex startIndex = new CodePointIndex(startIndexInclusive);
+		CodePointIndex endIndex = new CodePointIndex(startIndexInclusive+length);
     CursorRange cursorRange = new CursorRange(
         new CursorImpl()
           .setPosition(startIndex)

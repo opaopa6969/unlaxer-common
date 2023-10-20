@@ -6,15 +6,15 @@ public interface Source extends Serializable{
 	
 	public RangedString peek(int startIndexInclusive, int length);
 	
-	public default RangedString peek(Index startIndexInclusive, Length length) {
+	public default RangedString peek(CodePointIndex startIndexInclusive, Length length) {
 	  return peek(startIndexInclusive.value, length.value);
 	}
 	
-  public default RangedString peek(Index startIndexInclusive, Index endIndexExclusive) {
+  public default RangedString peek(CodePointIndex startIndexInclusive, Index endIndexExclusive) {
     return peek(startIndexInclusive.value, endIndexExclusive.value - startIndexInclusive.value);
   }
   
-  public default RangedString peekLast(Index endIndexInclusive, Length length) {
+  public default RangedString peekLast(CodePointIndex endIndexInclusive, Length length) {
     return peekLast(endIndexInclusive.value, length.value);
   }
 	

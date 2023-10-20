@@ -8,12 +8,13 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.unlaxer.util.StringIn;
-
-public interface StringInterface {
+/**
+ * CP　means CodePoint
+ */
+public interface CPString {
   
-  Function<String,StringInterface> stringToStringInterface();
-  Function<StringInterface,String> stringInterfaceToStgring();
+  Function<String,CPString> stringToStringInterface();
+  Function<CPString,String> stringInterfaceToStgring();
   
   StringIndex toStringIndex(CodePointIndex codePointIndex);
   CodePointIndex toCodePointIndex(StringIndex stringIndex);
@@ -121,7 +122,6 @@ public interface StringInterface {
   default CodePoint codePointBefore(CodePointIndex index) {
     return new CodePoint(codePointBefore(index.value));
   }
-
 
   /**
    * Returns the number of Unicode code points in the specified text
@@ -409,7 +409,7 @@ public interface StringInterface {
    */
   boolean equalsIgnoreCase(String anotherString);
 
-  default boolean equalsIgnoreCase(StringInterface anotherString) {
+  default boolean equalsIgnoreCase(CPString anotherString) {
     return equalsIgnoreCase(anotherString.toString());
   }
 
@@ -459,7 +459,7 @@ public interface StringInterface {
    */
   int compareTo(String anotherString);
   
-  default int compareTo(StringInterface  anotherString) {
+  default int compareTo(CPString  anotherString) {
     return compareTo(anotherString.toString());
   }
 
@@ -484,7 +484,7 @@ public interface StringInterface {
    */
   int compareToIgnoreCase(String str);
   
-  default int compareToIgnoreCase(StringInterface str) {
+  default int compareToIgnoreCase(CPString str) {
     return compareToIgnoreCase(str.toString());
   }
 
@@ -529,7 +529,7 @@ public interface StringInterface {
     return regionMatches(toStringIndex(toffset).value, other , toStringIndex(ooffset).value, len.value);
   }
   
-  default boolean regionMatches(CodePointIndex toffset, StringInterface other, CodePointIndex ooffset, Length len) {
+  default boolean regionMatches(CodePointIndex toffset, CPString other, CodePointIndex ooffset, Length len) {
     return regionMatches(toStringIndex(toffset).value, other.getSource(), toStringIndex(ooffset).value, len.value);
   }
   
@@ -589,7 +589,7 @@ public interface StringInterface {
     return regionMatches(ignoreCase, toStringIndex(toffset).value, other, toStringIndex(ooffset).value, len.value);
   }
   
-  default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, StringInterface other, CodePointIndex ooffset, Length len) {
+  default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, CPString other, CodePointIndex ooffset, Length len) {
     return regionMatches(ignoreCase, toStringIndex(toffset).value, other.getSource(), toStringIndex(ooffset).value, len.value);
   }
 
@@ -616,7 +616,7 @@ public interface StringInterface {
     return startsWith(prefix, toStringIndex(toffset).value);
   }
   
-  default boolean startsWith(StringInterface prefix, CodePointIndex toffset) {
+  default boolean startsWith(CPString prefix, CodePointIndex toffset) {
     return startsWith(prefix.getSource(), toStringIndex(toffset).value);
   }
 
@@ -635,7 +635,7 @@ public interface StringInterface {
    */
   boolean startsWith(String prefix);
   
-  default boolean startsWith(StringInterface prefix) {
+  default boolean startsWith(CPString prefix) {
     return startsWith(prefix.getSource());
   }
 
@@ -652,7 +652,7 @@ public interface StringInterface {
    */
   boolean endsWith(String suffix);
   
-  default boolean endsWith(StringInterface suffix) {
+  default boolean endsWith(CPString suffix) {
     return endsWith(suffix.getSource());
   }
 
@@ -835,7 +835,7 @@ public interface StringInterface {
    */
   int indexOf(String str);
   
-  default CodePointIndexWithNegativeValue indexOf(StringInterface str) {
+  default CodePointIndexWithNegativeValue indexOf(CPString str) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(indexOf(str.getSource()))));
   }
@@ -859,7 +859,7 @@ public interface StringInterface {
    */
   int indexOf(String str, int fromIndex);
   
-  default CodePointIndex indexOf(StringInterface str, CodePointIndex fromIndex) {
+  default CodePointIndex indexOf(CPString str, CodePointIndex fromIndex) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(indexOf(str.getSource(),
             toStringIndex(fromIndex).value))));
@@ -883,7 +883,7 @@ public interface StringInterface {
    */
   int lastIndexOf(String str);
 
-  default CodePointIndex lastIndexOf(StringInterface str) {
+  default CodePointIndex lastIndexOf(CPString str) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(lastIndexOf(str.getSource()))));
   }
@@ -907,7 +907,7 @@ public interface StringInterface {
    */
   int lastIndexOf(String str, int fromIndex);
 
-  default CodePointIndex lastIndexOf(StringInterface str, CodePointIndex fromIndex) {
+  default CodePointIndex lastIndexOf(CPString str, CodePointIndex fromIndex) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(lastIndexOf(str.getSource() , 
             toStringIndex(fromIndex).value))));
@@ -932,7 +932,7 @@ public interface StringInterface {
    */
   String substring(int beginIndex);
   
-  default StringInterface substring(CodePointIndex beginIndex) {
+  default CPString substring(CodePointIndex beginIndex) {
     return stringToStringInterface().apply(substring(toStringIndex(beginIndex).value));
   }
 
@@ -960,7 +960,7 @@ public interface StringInterface {
    */
   String substring(int beginIndex, int endIndex);
   
-  default StringInterface substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
+  default CPString substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
       return stringToStringInterface().apply(substring(
           toStringIndex(beginIndex).value,toStringIndex(endIndex).value));
   }
@@ -1018,7 +1018,7 @@ public interface StringInterface {
    */
   String concat(String str);
   
-  default StringInterface concat(StringInterface str) {
+  default CPString concat(CPString str) {
     return stringToStringInterface().apply(concat(str.getSource()));
   }
 
@@ -1053,7 +1053,7 @@ public interface StringInterface {
    */
   String replace(char oldChar, char newChar);
   
-  default StringInterface replaceAsStringInterface(char oldChar, char newChar) {
+  default CPString replaceAsStringInterface(char oldChar, char newChar) {
     
     return stringToStringInterface().apply(replace(oldChar, newChar));
   }
@@ -1140,7 +1140,7 @@ public interface StringInterface {
    */
   String replaceFirst(String regex, String replacement);
   
-  default StringInterface replaceFirst(String regex, StringInterface replacement) {
+  default CPString replaceFirst(String regex, CPString replacement) {
     return stringToStringInterface().apply(replaceFirst(regex, replacement.toString()));
   }
 
@@ -1188,7 +1188,7 @@ public interface StringInterface {
    */
   String replaceAll(String regex, String replacement);
   
-  default StringInterface replaceAll(String regex, StringInterface replacement) {
+  default CPString replaceAll(String regex, CPString replacement) {
     return stringToStringInterface().apply(replaceAll(regex, replacement.toString()));
   }
 
@@ -1206,7 +1206,7 @@ public interface StringInterface {
    */
   String replace(CharSequence target, CharSequence replacement);
   
-  default StringInterface replaceaAsStringInterface(CharSequence target, CharSequence replacement) {
+  default CPString replaceaAsStringInterface(CharSequence target, CharSequence replacement) {
     return stringToStringInterface().apply(replace(target, replacement));
   }
 
@@ -1312,11 +1312,11 @@ public interface StringInterface {
    */
   String[] split(String regex, int limit);
   
-  default StringInterface[] splitAsStringInterface(String regex, int limit) {
+  default CPString[] splitAsStringInterface(String regex, int limit) {
     
     String[] returning = split(regex, limit);
     
-    StringInterface[] result = new StringInterface[returning.length];
+    CPString[] result = new CPString[returning.length];
     
     int i =0;
     for (String string : returning) {
@@ -1372,11 +1372,11 @@ public interface StringInterface {
    */
   String[] split(String regex);
   
-  default StringInterface[] splitAsStringInterface(String regex) {
+  default CPString[] splitAsStringInterface(String regex) {
     
     String[] returning = split(regex);
     
-    StringInterface[] result = new StringInterface[returning.length];
+    CPString[] result = new CPString[returning.length];
     
     int i =0;
     for (String string : returning) {
@@ -1443,7 +1443,7 @@ public interface StringInterface {
    */
   String toLowerCase(Locale locale);
   
-  default StringInterface toLowerCaseAsStringInterface(Locale locale){
+  default CPString toLowerCaseAsStringInterface(Locale locale){
     return stringToStringInterface().apply(toLowerCase(locale));
   }
 
@@ -1468,7 +1468,7 @@ public interface StringInterface {
    */
   String toLowerCase();
   
-  default StringInterface toLowerCaseAsStringInterface(){
+  default CPString toLowerCaseAsStringInterface(){
     return stringToStringInterface().apply(toLowerCase());
   }
 
@@ -1527,7 +1527,7 @@ public interface StringInterface {
    */
   String toUpperCase(Locale locale);
   
-  default StringInterface toUpperCaseAsStringInterface(Locale locale){
+  default CPString toUpperCaseAsStringInterface(Locale locale){
     return stringToStringInterface().apply(toUpperCase(locale));
   }
 
@@ -1552,7 +1552,7 @@ public interface StringInterface {
    */
   String toUpperCase();
   
-  default StringInterface toUpperCaseAsStringInterface(){
+  default CPString toUpperCaseAsStringInterface(){
     return stringToStringInterface().apply(toUpperCase());
   }
 
@@ -1590,7 +1590,7 @@ public interface StringInterface {
    */
   String trim();
   
-  default StringInterface trimAsStringInterface() {
+  default CPString trimAsStringInterface() {
     return stringToStringInterface().apply(trim());
   }
 
@@ -1622,7 +1622,7 @@ public interface StringInterface {
    */
   String strip();
   
-  default StringInterface stripAsStringInterface() {
+  default CPString stripAsStringInterface() {
     
     return stringToStringInterface().apply(strip());
   }
@@ -1653,7 +1653,7 @@ public interface StringInterface {
    */
   String stripLeading();
   
-  default StringInterface stripLeadingAsStringInterface() {
+  default CPString stripLeadingAsStringInterface() {
     return stringToStringInterface().apply((stripLeading()));
   }
 
@@ -1683,7 +1683,7 @@ public interface StringInterface {
    */
   String stripTrailing();
   
-  default StringInterface stripTrailingAsStringInterface() {
+  default CPString stripTrailingAsStringInterface() {
     return stringToStringInterface().apply(stripTrailing());
   }
 
@@ -1734,8 +1734,8 @@ public interface StringInterface {
    */
   Stream<String> lines();
   
-  default Stream<StringInterface> linesAsStringInterface(){
-    Function<String, StringInterface> stringToStringInterface = stringToStringInterface();
+  default Stream<CPString> linesAsStringInterface(){
+    Function<String, CPString> stringToStringInterface = stringToStringInterface();
     return lines().map(stringToStringInterface);
   }
 
@@ -1825,7 +1825,7 @@ public interface StringInterface {
    */
   String repeat(int count);
   
-  default StringInterface repeatAsStringInterface(int count) {
+  default CPString repeatAsStringInterface(int count) {
     
     return stringToStringInterface().apply(repeat(count));
   }

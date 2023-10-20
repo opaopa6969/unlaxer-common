@@ -1,5 +1,8 @@
 package org.unlaxer;
 
+import org.unlaxer.base.MinIntegerValue._MinIntegerValue;
+
+@_MinIntegerValue(0)
 public class StringIndex extends Index{
 
   public StringIndex(int value) {
