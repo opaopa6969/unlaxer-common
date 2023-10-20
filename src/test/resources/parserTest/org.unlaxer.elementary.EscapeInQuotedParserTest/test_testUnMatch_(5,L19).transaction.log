@@ -1,5 +1,0 @@
-OPEN    : 'b\'
-BEGIN   : position:(c:0 m:0) targetchar='b'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser
-ROLLBACK: position:(c:0 m:0) targetchar='b'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser | rollbacked: 
-CLOSE   : 'b\' consumed:0(2 remain) 
-

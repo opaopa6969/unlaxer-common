@@ -1,2 +1,0 @@
-START   : position:(c:0 m:0) targetchar='\'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser
-END     : position:(c:0 m:0) targetchar='\'  	| parser://org.unlaxer.parser.elementary.EscapeInQuotedParser| status:failed | parsed:  
