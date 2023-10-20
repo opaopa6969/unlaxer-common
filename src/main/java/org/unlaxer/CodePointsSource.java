@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class CodePointsSource implements CPString{
+public class CodePointsSource implements CodePointAccessor{
   
   private String source;
   private int[] codePoints;
@@ -57,16 +57,16 @@ public class CodePointsSource implements CPString{
     }
   }
   
-  static Function<String, CPString> stringToStringInterface = CodePointsSource::new;
-  static Function<CPString, String> stringInterfaceToStgring = CPString::toString;
+  static Function<String, CodePointAccessor> stringToStringInterface = CodePointsSource::new;
+  static Function<CodePointAccessor, String> stringInterfaceToStgring = CodePointsSource::toString;
   
   @Override
-  public Function<String, CPString> stringToStringInterface() {
+  public Function<String, CodePointAccessor> stringToStringInterface() {
     return stringToStringInterface;
   }
 
   @Override
-  public Function<CPString, String> stringInterfaceToStgring() {
+  public Function<CodePointAccessor, String> stringInterfaceToStgring() {
     return stringInterfaceToStgring;
   }
 
@@ -87,36 +87,6 @@ public class CodePointsSource implements CPString{
   @Override
   public char charAt(int index) {
     return source.charAt(index);
-  }
-
-  @Override
-  public int codePointAt(int index) {
-    return source.codePointAt(index);
-  }
-
-  @Override
-  public int codePointBefore(int index) {
-    return source.codePointBefore(index);
-  }
-
-  @Override
-  public int codePointCount(int beginIndex, int endIndex) {
-    return source.codePointCount(beginIndex, endIndex);
-  }
-
-  @Override
-  public int offsetByCodePoints(int index, int codePointOffset) {
-    return source.offsetByCodePoints(index, codePointOffset);
-  }
-
-  @Override
-  public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin) {
-    source.getChars(srcBegin, srcEnd, dst, dstBegin);
-  }
-
-  @Override
-  public void getBytes(int srcBegin, int srcEnd, byte[] dst, int dstBegin) {
-    source.getBytes(srcBegin, srcEnd, dst, dstBegin);
   }
 
   @Override
@@ -160,21 +130,6 @@ public class CodePointsSource implements CPString{
   }
 
   @Override
-  public boolean regionMatches(int toffset, String other, int ooffset, int len) {
-    return source.regionMatches(toffset, other, ooffset, len);
-  }
-
-  @Override
-  public boolean regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len) {
-    return source.regionMatches(toffset, other, ooffset, len);
-  }
-
-  @Override
-  public boolean startsWith(String prefix, int toffset) {
-    return source.startsWith(prefix, toffset);
-  }
-
-  @Override
   public boolean startsWith(String prefix) {
     return source.startsWith(prefix);
   }
@@ -189,21 +144,9 @@ public class CodePointsSource implements CPString{
     return source.indexOf(ch);
   }
 
-
-  @Override
-  public int indexOf(int ch, int fromIndex) {
-    return source.indexOf(ch, fromIndex);
-  }
-
   @Override
   public int lastIndexOf(int ch) {
     return source.lastIndexOf(ch);
-  }
-
-
-  @Override
-  public int lastIndexOf(int ch, int fromIndex) {
-    return source.lastIndexOf(ch,fromIndex);
   }
 
   @Override
@@ -211,31 +154,9 @@ public class CodePointsSource implements CPString{
     return source.indexOf(str);
   }
 
-
-  @Override
-  public int indexOf(String str, int fromIndex) {
-    return source.indexOf(str,fromIndex);
-  }
-
   @Override
   public int lastIndexOf(String str) {
     return source.lastIndexOf(str);
-  }
-
-  @Override
-  public int lastIndexOf(String str, int fromIndex) {
-    return source.lastIndexOf(str, fromIndex);
-  }
-
-  @Override
-  public String substring(int beginIndex) {
-    return source.substring(beginIndex);
-  }
-
-
-  @Override
-  public String substring(int beginIndex, int endIndex) {
-    return source.substring(beginIndex,endIndex);
   }
 
   @Override
@@ -391,5 +312,36 @@ public class CodePointsSource implements CPString{
   @Override
   public String getSource() {
     return source;
+  }
+
+  @Override
+  public int length() {
+    return 0;
+  }
+
+  @Override
+  public StringIndexWithNegativeValue toStringIndex(CodePointIndexWithNegativeValue codePointIndex) {
+    if(codePointIndex.isNegative()) {
+      return new StringIndexWithNegativeValue(codePointIndex.value);
+    }
+    return new StringIndexWithNegativeValue(toStringIndex(codePointIndex.toCodePointIndex()));
+  }
+
+  @Override
+  public CodePointIndexWithNegativeValue toCodePointIndexWithNegativeValue(StringIndexWithNegativeValue stringIndex) {
+    if(stringIndex.isNegative()) {
+      return new CodePointIndexWithNegativeValue(stringIndex.value);
+    }
+    return new CodePointIndexWithNegativeValue(toCodePointIndex(stringIndex.toStringIndex()));
+  }
+
+  @Override
+  public StringIndexAccessor stringIndexAccessor() {
+    return null;
+  }
+  
+  public static String toString(CodePointAccessor codePointAccessor) {
+    
+    return codePointAccessor.toString();
   }
 }

@@ -11,10 +11,10 @@ import java.util.stream.Stream;
 /**
  * CP　means CodePoint
  */
-public interface CPString {
+public interface CodePointString {
   
-  Function<String,CPString> stringToStringInterface();
-  Function<CPString,String> stringInterfaceToStgring();
+  Function<String,CodePointString> stringToStringInterface();
+  Function<CodePointString,String> stringInterfaceToStgring();
   
   StringIndex toStringIndex(CodePointIndex codePointIndex);
   CodePointIndex toCodePointIndex(StringIndex stringIndex);
@@ -409,7 +409,7 @@ public interface CPString {
    */
   boolean equalsIgnoreCase(String anotherString);
 
-  default boolean equalsIgnoreCase(CPString anotherString) {
+  default boolean equalsIgnoreCase(CodePointString anotherString) {
     return equalsIgnoreCase(anotherString.toString());
   }
 
@@ -459,7 +459,7 @@ public interface CPString {
    */
   int compareTo(String anotherString);
   
-  default int compareTo(CPString  anotherString) {
+  default int compareTo(CodePointString  anotherString) {
     return compareTo(anotherString.toString());
   }
 
@@ -484,7 +484,7 @@ public interface CPString {
    */
   int compareToIgnoreCase(String str);
   
-  default int compareToIgnoreCase(CPString str) {
+  default int compareToIgnoreCase(CodePointString str) {
     return compareToIgnoreCase(str.toString());
   }
 
@@ -529,7 +529,7 @@ public interface CPString {
     return regionMatches(toStringIndex(toffset).value, other , toStringIndex(ooffset).value, len.value);
   }
   
-  default boolean regionMatches(CodePointIndex toffset, CPString other, CodePointIndex ooffset, Length len) {
+  default boolean regionMatches(CodePointIndex toffset, CodePointString other, CodePointIndex ooffset, Length len) {
     return regionMatches(toStringIndex(toffset).value, other.getSource(), toStringIndex(ooffset).value, len.value);
   }
   
@@ -589,7 +589,7 @@ public interface CPString {
     return regionMatches(ignoreCase, toStringIndex(toffset).value, other, toStringIndex(ooffset).value, len.value);
   }
   
-  default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, CPString other, CodePointIndex ooffset, Length len) {
+  default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, CodePointString other, CodePointIndex ooffset, Length len) {
     return regionMatches(ignoreCase, toStringIndex(toffset).value, other.getSource(), toStringIndex(ooffset).value, len.value);
   }
 
@@ -616,7 +616,7 @@ public interface CPString {
     return startsWith(prefix, toStringIndex(toffset).value);
   }
   
-  default boolean startsWith(CPString prefix, CodePointIndex toffset) {
+  default boolean startsWith(CodePointString prefix, CodePointIndex toffset) {
     return startsWith(prefix.getSource(), toStringIndex(toffset).value);
   }
 
@@ -635,7 +635,7 @@ public interface CPString {
    */
   boolean startsWith(String prefix);
   
-  default boolean startsWith(CPString prefix) {
+  default boolean startsWith(CodePointString prefix) {
     return startsWith(prefix.getSource());
   }
 
@@ -652,7 +652,7 @@ public interface CPString {
    */
   boolean endsWith(String suffix);
   
-  default boolean endsWith(CPString suffix) {
+  default boolean endsWith(CodePointString suffix) {
     return endsWith(suffix.getSource());
   }
 
@@ -835,7 +835,7 @@ public interface CPString {
    */
   int indexOf(String str);
   
-  default CodePointIndexWithNegativeValue indexOf(CPString str) {
+  default CodePointIndexWithNegativeValue indexOf(CodePointString str) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(indexOf(str.getSource()))));
   }
@@ -859,7 +859,7 @@ public interface CPString {
    */
   int indexOf(String str, int fromIndex);
   
-  default CodePointIndex indexOf(CPString str, CodePointIndex fromIndex) {
+  default CodePointIndex indexOf(CodePointString str, CodePointIndex fromIndex) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(indexOf(str.getSource(),
             toStringIndex(fromIndex).value))));
@@ -883,7 +883,7 @@ public interface CPString {
    */
   int lastIndexOf(String str);
 
-  default CodePointIndex lastIndexOf(CPString str) {
+  default CodePointIndex lastIndexOf(CodePointString str) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(lastIndexOf(str.getSource()))));
   }
@@ -907,7 +907,7 @@ public interface CPString {
    */
   int lastIndexOf(String str, int fromIndex);
 
-  default CodePointIndex lastIndexOf(CPString str, CodePointIndex fromIndex) {
+  default CodePointIndex lastIndexOf(CodePointString str, CodePointIndex fromIndex) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(lastIndexOf(str.getSource() , 
             toStringIndex(fromIndex).value))));
@@ -932,7 +932,7 @@ public interface CPString {
    */
   String substring(int beginIndex);
   
-  default CPString substring(CodePointIndex beginIndex) {
+  default CodePointString substring(CodePointIndex beginIndex) {
     return stringToStringInterface().apply(substring(toStringIndex(beginIndex).value));
   }
 
@@ -960,7 +960,7 @@ public interface CPString {
    */
   String substring(int beginIndex, int endIndex);
   
-  default CPString substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
+  default CodePointString substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
       return stringToStringInterface().apply(substring(
           toStringIndex(beginIndex).value,toStringIndex(endIndex).value));
   }
@@ -1018,7 +1018,7 @@ public interface CPString {
    */
   String concat(String str);
   
-  default CPString concat(CPString str) {
+  default CodePointString concat(CodePointString str) {
     return stringToStringInterface().apply(concat(str.getSource()));
   }
 
@@ -1053,7 +1053,7 @@ public interface CPString {
    */
   String replace(char oldChar, char newChar);
   
-  default CPString replaceAsStringInterface(char oldChar, char newChar) {
+  default CodePointString replaceAsStringInterface(char oldChar, char newChar) {
     
     return stringToStringInterface().apply(replace(oldChar, newChar));
   }
@@ -1140,7 +1140,7 @@ public interface CPString {
    */
   String replaceFirst(String regex, String replacement);
   
-  default CPString replaceFirst(String regex, CPString replacement) {
+  default CodePointString replaceFirst(String regex, CodePointString replacement) {
     return stringToStringInterface().apply(replaceFirst(regex, replacement.toString()));
   }
 
@@ -1188,7 +1188,7 @@ public interface CPString {
    */
   String replaceAll(String regex, String replacement);
   
-  default CPString replaceAll(String regex, CPString replacement) {
+  default CodePointString replaceAll(String regex, CodePointString replacement) {
     return stringToStringInterface().apply(replaceAll(regex, replacement.toString()));
   }
 
@@ -1206,7 +1206,7 @@ public interface CPString {
    */
   String replace(CharSequence target, CharSequence replacement);
   
-  default CPString replaceaAsStringInterface(CharSequence target, CharSequence replacement) {
+  default CodePointString replaceaAsStringInterface(CharSequence target, CharSequence replacement) {
     return stringToStringInterface().apply(replace(target, replacement));
   }
 
@@ -1312,11 +1312,11 @@ public interface CPString {
    */
   String[] split(String regex, int limit);
   
-  default CPString[] splitAsStringInterface(String regex, int limit) {
+  default CodePointString[] splitAsStringInterface(String regex, int limit) {
     
     String[] returning = split(regex, limit);
     
-    CPString[] result = new CPString[returning.length];
+    CodePointString[] result = new CodePointString[returning.length];
     
     int i =0;
     for (String string : returning) {
@@ -1372,11 +1372,11 @@ public interface CPString {
    */
   String[] split(String regex);
   
-  default CPString[] splitAsStringInterface(String regex) {
+  default CodePointString[] splitAsStringInterface(String regex) {
     
     String[] returning = split(regex);
     
-    CPString[] result = new CPString[returning.length];
+    CodePointString[] result = new CodePointString[returning.length];
     
     int i =0;
     for (String string : returning) {
@@ -1443,7 +1443,7 @@ public interface CPString {
    */
   String toLowerCase(Locale locale);
   
-  default CPString toLowerCaseAsStringInterface(Locale locale){
+  default CodePointString toLowerCaseAsStringInterface(Locale locale){
     return stringToStringInterface().apply(toLowerCase(locale));
   }
 
@@ -1468,7 +1468,7 @@ public interface CPString {
    */
   String toLowerCase();
   
-  default CPString toLowerCaseAsStringInterface(){
+  default CodePointString toLowerCaseAsStringInterface(){
     return stringToStringInterface().apply(toLowerCase());
   }
 
@@ -1527,7 +1527,7 @@ public interface CPString {
    */
   String toUpperCase(Locale locale);
   
-  default CPString toUpperCaseAsStringInterface(Locale locale){
+  default CodePointString toUpperCaseAsStringInterface(Locale locale){
     return stringToStringInterface().apply(toUpperCase(locale));
   }
 
@@ -1552,7 +1552,7 @@ public interface CPString {
    */
   String toUpperCase();
   
-  default CPString toUpperCaseAsStringInterface(){
+  default CodePointString toUpperCaseAsStringInterface(){
     return stringToStringInterface().apply(toUpperCase());
   }
 
@@ -1590,7 +1590,7 @@ public interface CPString {
    */
   String trim();
   
-  default CPString trimAsStringInterface() {
+  default CodePointString trimAsStringInterface() {
     return stringToStringInterface().apply(trim());
   }
 
@@ -1622,7 +1622,7 @@ public interface CPString {
    */
   String strip();
   
-  default CPString stripAsStringInterface() {
+  default CodePointString stripAsStringInterface() {
     
     return stringToStringInterface().apply(strip());
   }
@@ -1653,7 +1653,7 @@ public interface CPString {
    */
   String stripLeading();
   
-  default CPString stripLeadingAsStringInterface() {
+  default CodePointString stripLeadingAsStringInterface() {
     return stringToStringInterface().apply((stripLeading()));
   }
 
@@ -1683,7 +1683,7 @@ public interface CPString {
    */
   String stripTrailing();
   
-  default CPString stripTrailingAsStringInterface() {
+  default CodePointString stripTrailingAsStringInterface() {
     return stringToStringInterface().apply(stripTrailing());
   }
 
@@ -1734,8 +1734,8 @@ public interface CPString {
    */
   Stream<String> lines();
   
-  default Stream<CPString> linesAsStringInterface(){
-    Function<String, CPString> stringToStringInterface = stringToStringInterface();
+  default Stream<CodePointString> linesAsStringInterface(){
+    Function<String, CodePointString> stringToStringInterface = stringToStringInterface();
     return lines().map(stringToStringInterface);
   }
 
@@ -1825,7 +1825,7 @@ public interface CPString {
    */
   String repeat(int count);
   
-  default CPString repeatAsStringInterface(int count) {
+  default CodePointString repeatAsStringInterface(int count) {
     
     return stringToStringInterface().apply(repeat(count));
   }

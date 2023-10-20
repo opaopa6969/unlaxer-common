@@ -6,6 +6,10 @@ public class StringIndexWithNegativeValue extends Index{
     super(value);
   }
   
+  public StringIndexWithNegativeValue(StringIndex stringIndex) {
+    super(stringIndex.value);
+  }
+  
   public StringIndexWithNegativeValue increments() {
     return new StringIndexWithNegativeValue(value+1);
   }
@@ -16,5 +20,10 @@ public class StringIndexWithNegativeValue extends Index{
   
   public StringIndex toStringIndex() {
     return new StringIndex(value);
+  }
+  
+  public boolean isNegative() {
+    
+    return value <0;
   }
 }

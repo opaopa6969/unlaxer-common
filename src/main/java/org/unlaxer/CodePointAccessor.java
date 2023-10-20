@@ -2,13 +2,9 @@ package org.unlaxer;
 
 import java.util.Locale;
 import java.util.function.Function;
-import java.util.regex.PatternSyntaxException;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import javax.swing.plaf.basic.BasicProgressBarUI;
-
-public interface CodePointAccessor extends java.io.Serializable, Comparable<CodePointAccessor>, CharSequence {
+public interface CodePointAccessor extends java.io.Serializable, Comparable<CodePointAccessor>, StringBase {
   
   Function<String,CodePointAccessor> stringToStringInterface();
   Function<CodePointAccessor,String> stringInterfaceToStgring();
@@ -33,7 +29,7 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
 
   StringIndexAccessor stringIndexAccessor();
   
-  StringBase stringBase();
+//  StringBase stringBase();
 
 
 
@@ -65,15 +61,15 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   }
   
   default boolean equalsIgnoreCase(CodePointAccessor anotherString) {
-    return stringBase().equalsIgnoreCase(anotherString.getSource());
+    return equalsIgnoreCase(anotherString.getSource());
   }
 
   default int compareTo(CodePointAccessor  anotherString) {
-    return stringBase().compareTo(anotherString.getSource());
+    return compareTo(anotherString.getSource());
   }
 
   default int compareToIgnoreCase(CodePointAccessor str) {
-    return stringBase().compareToIgnoreCase(str.toString());
+    return compareToIgnoreCase(str.toString());
   }
   
   default boolean regionMatches(CodePointIndex toffset, String other, CodePointIndex ooffset, Length len) {
@@ -101,18 +97,18 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   }
   
   default boolean startsWith(CodePointAccessor prefix) {
-    return stringBase().startsWith(prefix.getSource());
+    return startsWith(prefix.getSource());
   }
 
   
   default boolean endsWith(CodePointAccessor suffix) {
-    return stringBase().endsWith(suffix.getSource());
+    return endsWith(suffix.getSource());
   }
 
   default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(
-            stringBase().indexOf(codePoint.value))));
+            indexOf(codePoint.value))));
   }
   
   default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint, CodePointIndex fromIndex) {
@@ -123,7 +119,7 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   
   default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(stringBase().lastIndexOf(codePoint.value))));
+        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value))));
   }
   
   default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint, CodePointIndex fromIndex) {
@@ -134,7 +130,7 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   
   default CodePointIndexWithNegativeValue indexOf(CodePointAccessor str) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(stringBase().indexOf(str.getSource()))));
+        toCodePointIndex(new StringIndex(indexOf(str.getSource()))));
   }
     
   default CodePointIndex indexOf(CodePointAccessor str, CodePointIndex fromIndex) {
@@ -144,7 +140,7 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
 
   default CodePointIndex lastIndexOf(CodePointAccessor str) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(stringBase().lastIndexOf(str.getSource()))));
+        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(lastIndexOf(str.getSource()))));
   }
 
   default CodePointIndex lastIndexOf(CodePointAccessor str, CodePointIndex fromIndex) {
@@ -164,29 +160,29 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   }
   
   default CodePointAccessor concat(CodePointAccessor str) {
-    return stringToStringInterface().apply(stringBase().concat(str.getSource()));
+    return stringToStringInterface().apply(concat(str.getSource()));
   }
   
   default CodePointAccessor replaceAsStringInterface(char oldChar, char newChar) {
-    return stringToStringInterface().apply(stringBase().replace(oldChar, newChar));
+    return stringToStringInterface().apply(replace(oldChar, newChar));
   }
   
   
   default CodePointAccessor replaceFirst(String regex, CodePointAccessor replacement) {
-    return stringToStringInterface().apply(stringBase().replaceFirst(regex, replacement.toString()));
+    return stringToStringInterface().apply(replaceFirst(regex, replacement.toString()));
   }
   
   default CodePointAccessor replaceAll(String regex, CodePointAccessor replacement) {
-    return stringToStringInterface().apply(stringBase().replaceAll(regex, replacement.toString()));
+    return stringToStringInterface().apply(replaceAll(regex, replacement.toString()));
   }
   
   default CodePointAccessor replaceaAsStringInterface(CharSequence target, CharSequence replacement) {
-    return stringToStringInterface().apply(stringBase().replace(target, replacement));
+    return stringToStringInterface().apply(replace(target, replacement));
   }
 
   default CodePointAccessor[] splitAsStringInterface(String regex, int limit) {
     
-    String[] returning = stringBase().split(regex, limit);
+    String[] returning = split(regex, limit);
     
     CodePointAccessor[] result = new CodePointAccessor[returning.length];
     
@@ -200,7 +196,7 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   
   default CodePointAccessor[] splitAsStringInterface(String regex) {
     
-    String[] returning = stringBase().split(regex);
+    String[] returning = split(regex);
     
     CodePointAccessor[] result = new CodePointAccessor[returning.length];
     
@@ -213,45 +209,45 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   }
   
   default CodePointAccessor toLowerCaseAsStringInterface(Locale locale){
-    return stringToStringInterface().apply(stringBase().toLowerCase(locale));
+    return stringToStringInterface().apply(toLowerCase(locale));
   }
   
   default CodePointAccessor toLowerCaseAsStringInterface(){
-    return stringToStringInterface().apply(stringBase().toLowerCase());
+    return stringToStringInterface().apply(toLowerCase());
   }
 
   default CodePointAccessor toUpperCaseAsStringInterface(Locale locale){
-    return stringToStringInterface().apply(stringBase().toUpperCase(locale));
+    return stringToStringInterface().apply(toUpperCase(locale));
   }
   
   default CodePointAccessor toUpperCaseAsStringInterface(){
-    return stringToStringInterface().apply(stringBase().toUpperCase());
+    return stringToStringInterface().apply(toUpperCase());
   }
   
   default CodePointAccessor trimAsStringInterface() {
-    return stringToStringInterface().apply(stringBase().trim());
+    return stringToStringInterface().apply(trim());
   }
   
   default CodePointAccessor stripAsStringInterface() {
     
-    return stringToStringInterface().apply(stringBase().strip());
+    return stringToStringInterface().apply(strip());
   }
   
   default CodePointAccessor stripLeadingAsStringInterface() {
-    return stringToStringInterface().apply((stringBase().stripLeading()));
+    return stringToStringInterface().apply((stripLeading()));
   }
   
   default CodePointAccessor stripTrailingAsStringInterface() {
-    return stringToStringInterface().apply(stringBase().stripTrailing());
+    return stringToStringInterface().apply(stripTrailing());
   }
   
   default Stream<CodePointAccessor> linesAsStringInterface(){
     Function<String, CodePointAccessor> stringToStringInterface = stringToStringInterface();
-    return stringBase().lines().map(stringToStringInterface);
+    return lines().map(stringToStringInterface);
   }
 
   default CodePointAccessor repeatAsStringInterface(int count) {
     
-    return stringToStringInterface().apply(stringBase().repeat(count));
+    return stringToStringInterface().apply(repeat(count));
   }
 }

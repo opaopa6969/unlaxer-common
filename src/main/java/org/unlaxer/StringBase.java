@@ -7,7 +7,7 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public interface StringBase {
+public interface StringBase extends CharSequence{
 
   
   /**
