@@ -579,7 +579,7 @@ public interface StringIndexAccessor {
     }
 
     @Override
-    public void getBytes(int srcBegin, int srcEnd, byte[] dst, int dstBegin) {]
+    public void getBytes(int srcBegin, int srcEnd, byte[] dst, int dstBegin) {
         source.getBytes(srcBegin, srcEnd, dst, dstBegin);
     }
 
@@ -632,5 +632,5 @@ public interface StringIndexAccessor {
     public CharSequence subSequence(int beginIndex, int endIndex) {
       return source.subSequence(beginIndex, endIndex);
     }
- }
+  }
 }
