@@ -1,7 +1,0 @@
-OPEN    : 'ZcdefghiZjklikmn'
-BEGIN   : position:(c:0 m:0) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore
-BEGIN   : position:(c:0 m:0) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore
-COMMIT  : position:(c:1 m:1) targetchar='c'  	| parser:org.unlaxer.parser.elementary.MappedSingleCharacterParser | committed:Z 
-COMMIT  : position:(c:1 m:1) targetchar='c'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore | committed:Z 
-CLOSE   : 'ZcdefghiZjklikmn' consumed:1(15 remain) 
-

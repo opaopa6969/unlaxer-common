@@ -1,6 +1,0 @@
-' 1234 ' (0 - 6): org.unlaxer.parser.combinator.WhiteSpaceDelimitedLazyChainTest$WhiteSpaceDelimitedLazyChainTestParser
- '1' (1 - 2): org.unlaxer.parser.elementary.WordParser
- '2' (2 - 3): org.unlaxer.parser.elementary.WordParser
- '3' (3 - 4): org.unlaxer.parser.elementary.WordParser
- '4' (4 - 5): org.unlaxer.parser.elementary.WordParser
-

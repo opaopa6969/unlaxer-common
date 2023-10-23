@@ -1,3 +1,0 @@
-'Z' (0 - 1): org.unlaxer.parser.combinator.ZeroOrMore
- 'Z' (0 - 1): org.unlaxer.parser.elementary.MappedSingleCharacterParser
-

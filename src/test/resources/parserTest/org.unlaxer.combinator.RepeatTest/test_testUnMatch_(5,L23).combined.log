@@ -1,7 +1,0 @@
-OPEN    : ''
-START   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.Repeat
-BEGIN   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.Repeat
-ROLLBACK: position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.Repeat | rollbacked: 
-END     : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.Repeat| status:failed | parsed:  
-CLOSE   : '' consumed:allConsumed 
-

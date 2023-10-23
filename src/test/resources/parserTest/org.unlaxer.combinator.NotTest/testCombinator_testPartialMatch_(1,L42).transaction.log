@@ -1,7 +1,0 @@
-OPEN    : 'a1'
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain
-COMMIT  : position:(c:2 m:2) targetchar=''  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain | committed:a1 
-COMMIT  : position:(c:2 m:2) targetchar=''  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource | committed:a1 
-CLOSE   : 'a1' consumed:allConsumed 
-

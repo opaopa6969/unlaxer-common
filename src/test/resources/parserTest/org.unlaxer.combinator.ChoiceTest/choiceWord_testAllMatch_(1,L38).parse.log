@@ -1,4 +1,0 @@
-START   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Choice
-START   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain
-END     : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain| status:failed | parsed:  
-END     : position:(c:2 m:2) targetchar=''  	| parser:org.unlaxer.parser.combinator.Choice| status:succeeded | parsed:ax  

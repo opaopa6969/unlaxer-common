@@ -1,7 +1,0 @@
-OPEN    : ''
-START   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
-BEGIN   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
-ROLLBACK: position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource | rollbacked: 
-END     : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource| status:failed | parsed:  
-CLOSE   : '' consumed:allConsumed 
-

@@ -1,2 +1,0 @@
-START   : position:(c:0 m:0) targetchar='b'  	| parser://org.unlaxer.parser.combinator.NonOrdered
-END     : position:(c:0 m:0) targetchar='b'  	| parser://org.unlaxer.parser.combinator.NonOrdered| status:failed | parsed:  

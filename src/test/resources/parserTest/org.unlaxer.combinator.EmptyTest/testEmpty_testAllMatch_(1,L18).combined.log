@@ -1,7 +1,0 @@
-OPEN    : ''
-START   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.Zero
-BEGIN   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.Zero
-COMMIT  : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.Zero | committed: 
-END     : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.Zero| status:succeeded | parsed:  
-CLOSE   : '' consumed:allConsumed 
-

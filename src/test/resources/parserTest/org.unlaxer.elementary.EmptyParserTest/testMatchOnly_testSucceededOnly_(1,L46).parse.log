@@ -1,4 +1,0 @@
-START   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EmptyParser
-START   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.MatchOnly
-END     : position:(c:0 m:1) targetchar='a'  	| parser://org.unlaxer.parser.combinator.MatchOnly| status:succeeded | parsed:a  
-END     : position:(c:0 m:1) targetchar='a'  	| parser://org.unlaxer.parser.elementary.EmptyParser| status:succeeded | parsed:a  

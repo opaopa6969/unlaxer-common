@@ -1,9 +1,0 @@
-OPEN    : 'abcba'
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.MatchOnly
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-COMMIT  : position:(c:0 m:5) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:abcba 
-COMMIT  : position:(c:0 m:5) targetchar='a'  	| parser:org.unlaxer.parser.combinator.MatchOnly | committed:abcba 
-COMMIT  : position:(c:5 m:5) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain | committed:abcba 
-CLOSE   : 'abcba' consumed:allConsumed 
-

@@ -19,7 +19,7 @@ public class WildCardInterleaveParserTest extends ParserTestBase{
   @Test
   public void test() {
     
-    setLevel(OutputLevel.detail);
+    setLevel(OutputLevel.mostDetail);
     
     String[] contents  = new String[] {
         "123",//
@@ -46,9 +46,6 @@ public class WildCardInterleaveParserTest extends ParserTestBase{
       System.err.println();
 
     }
-    
-    
-    
   }
   
   

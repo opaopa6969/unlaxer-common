@@ -1,5 +1,0 @@
-'a1' (0 - 2): org.unlaxer.parser.combinator.NotPropagatableSource
- 'a1' (0 - 2): org.unlaxer.parser.combinator.Chain(inverted)
-  'a' (0 - 1): org.unlaxer.parser.posix.DigitParser(inverted)
-  '1' (1 - 2): org.unlaxer.parser.ascii.MinusParser(inverted)
-

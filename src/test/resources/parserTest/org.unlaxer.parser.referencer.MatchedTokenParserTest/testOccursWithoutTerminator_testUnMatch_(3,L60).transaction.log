@@ -1,7 +1,0 @@
-OPEN    : 'abz:abu'
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-COMMIT  : position:(c:3 m:3) targetchar=':'  	| parser:org.unlaxer.parser.combinator.OneOrMore | committed:abz 
-ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain | rollbacked:abz: 
-CLOSE   : 'abz:abu' consumed:0(7 remain) 
-

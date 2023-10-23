@@ -1,2 +1,0 @@
-START   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.ZeroOrOne
-END     : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.combinator.ZeroOrOne| status:succeeded | parsed:  

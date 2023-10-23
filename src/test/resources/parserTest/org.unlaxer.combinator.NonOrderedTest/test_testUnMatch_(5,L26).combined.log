@@ -1,7 +1,0 @@
-OPEN    : 'azc'
-START   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.NonOrdered
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.NonOrdered
-ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.NonOrdered | rollbacked:a 
-END     : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.NonOrdered| status:failed | parsed:  
-CLOSE   : 'azc' consumed:0(3 remain) 
-

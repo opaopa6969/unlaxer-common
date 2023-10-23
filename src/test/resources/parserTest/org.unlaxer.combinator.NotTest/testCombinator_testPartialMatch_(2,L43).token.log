@@ -1,5 +1,0 @@
-'-b' (0 - 2): org.unlaxer.parser.combinator.NotPropagatableSource
- '-b' (0 - 2): org.unlaxer.parser.combinator.Chain(inverted)
-  '-' (0 - 1): org.unlaxer.parser.posix.DigitParser(inverted)
-  'b' (1 - 2): org.unlaxer.parser.ascii.MinusParser(inverted)
-

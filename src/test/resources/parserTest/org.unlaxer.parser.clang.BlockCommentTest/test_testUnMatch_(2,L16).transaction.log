@@ -1,5 +1,0 @@
-OPEN    : ''
-BEGIN   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.clang.BlockComment
-ROLLBACK: position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.clang.BlockComment | rollbacked: 
-CLOSE   : '' consumed:allConsumed 
-

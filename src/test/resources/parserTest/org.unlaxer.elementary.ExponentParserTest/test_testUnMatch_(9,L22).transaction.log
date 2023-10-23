@@ -1,9 +1,0 @@
-OPEN    : 'ea'
-BEGIN   : position:(c:0 m:0) targetchar='e'  	| parser://org.unlaxer.parser.elementary.ExponentParser
-BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Optional
-COMMIT  : position:(c:1 m:1) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Optional | committed: 
-BEGIN   : position:(c:1 m:1) targetchar='a'  	| parser://org.unlaxer.parser.combinator.OneOrMore
-ROLLBACK: position:(c:1 m:1) targetchar='a'  	| parser://org.unlaxer.parser.combinator.OneOrMore | rollbacked: 
-ROLLBACK: position:(c:0 m:0) targetchar='e'  	| parser://org.unlaxer.parser.elementary.ExponentParser | rollbacked:e 
-CLOSE   : 'ea' consumed:0(2 remain) 
-

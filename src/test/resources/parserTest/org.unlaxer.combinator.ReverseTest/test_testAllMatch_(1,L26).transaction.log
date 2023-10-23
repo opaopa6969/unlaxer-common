@@ -1,5 +1,0 @@
-OPEN    : 'a5$'
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Chain
-COMMIT  : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.Chain | committed:a5$ 
-CLOSE   : 'a5$' consumed:allConsumed 
-

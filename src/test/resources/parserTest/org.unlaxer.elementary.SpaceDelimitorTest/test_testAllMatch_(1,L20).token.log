@@ -1,4 +1,0 @@
-'a' (0 - 1): org.unlaxer.parser.combinator.Chain
- 'a' (0 - 1): org.unlaxer.parser.posix.AlphabetParser
- <EMPTY> (1 - 1): org.unlaxer.parser.elementary.SpaceDelimitor
-

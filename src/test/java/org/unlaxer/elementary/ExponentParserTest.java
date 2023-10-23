@@ -2,6 +2,7 @@ package org.unlaxer.elementary;
 
 import org.junit.Test;
 import org.unlaxer.ParserTestBase;
+import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.elementary.ExponentParser;
 
@@ -9,7 +10,9 @@ public class ExponentParserTest extends ParserTestBase{
 
 	@Test
 	public void test() {
-		
+	  
+	  setLevel(OutputLevel.detail);
+
 		Parser exponentParser = new ExponentParser();
 		testPartialMatch(exponentParser, "e+1", "e+1");
 		testPartialMatch(exponentParser, "e+1", "e+1");

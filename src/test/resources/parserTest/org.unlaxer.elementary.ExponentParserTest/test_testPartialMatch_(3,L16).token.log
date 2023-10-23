@@ -1,8 +1,0 @@
-'E-10' (0 - 4): org.unlaxer.parser.elementary.ExponentParser
- 'E' (0 - 1): org.unlaxer.parser.elementary.EParser
- '-' (1 - 2): org.unlaxer.parser.combinator.Optional
-  '-' (1 - 2): org.unlaxer.parser.elementary.SignParser
- '10' (2 - 4): org.unlaxer.parser.combinator.OneOrMore
-  '1' (2 - 3): org.unlaxer.parser.posix.DigitParser
-  '0' (3 - 4): org.unlaxer.parser.posix.DigitParser
-
