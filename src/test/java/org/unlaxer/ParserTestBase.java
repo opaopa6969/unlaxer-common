@@ -310,6 +310,8 @@ public class ParserTestBase {
 			return testResult;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		}finally {
+		  outputLevel.set(OutputLevel.none);
 		}
 	}
 
