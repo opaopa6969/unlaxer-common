@@ -1,5 +1,0 @@
-OPEN    : 'abc'
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.ZeroOrOne
-COMMIT  : position:(c:1 m:1) targetchar='b'  	| parser://org.unlaxer.parser.combinator.ZeroOrOne | committed:a 
-CLOSE   : 'abc' consumed:1(2 remain) 
-

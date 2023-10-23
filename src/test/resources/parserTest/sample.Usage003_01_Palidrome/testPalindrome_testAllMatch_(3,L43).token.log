@@ -1,5 +1,0 @@
-'abcba' (0 - 5): org.unlaxer.parser.combinator.Chain
- 'ab' (0 - 2): org.unlaxer.parser.elementary.WordParser
- 'c' (2 - 3): org.unlaxer.parser.elementary.WordParser
- 'ba' (3 - 5): org.unlaxer.parser.elementary.WordParser
-

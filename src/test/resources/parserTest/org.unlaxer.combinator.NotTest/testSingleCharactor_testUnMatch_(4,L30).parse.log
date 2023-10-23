@@ -1,2 +1,0 @@
-START   : position:(c:0 m:0) targetchar='1'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
-END     : position:(c:0 m:0) targetchar='1'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource| status:failed | parsed:  

@@ -1,9 +1,0 @@
-'10*3' (0 - 4): org.unlaxer.parser.combinator.Chain
- '10' (0 - 2): org.unlaxer.parser.combinator.OneOrMore
-  '1' (0 - 1): org.unlaxer.parser.posix.DigitParser
-  '0' (1 - 2): org.unlaxer.parser.posix.DigitParser
- '*' (2 - 3): org.unlaxer.parser.combinator.Choice
-  '*' (2 - 3): org.unlaxer.parser.elementary.MultipleParser
- '3' (3 - 4): org.unlaxer.parser.combinator.OneOrMore
-  '3' (3 - 4): org.unlaxer.parser.posix.DigitParser
-

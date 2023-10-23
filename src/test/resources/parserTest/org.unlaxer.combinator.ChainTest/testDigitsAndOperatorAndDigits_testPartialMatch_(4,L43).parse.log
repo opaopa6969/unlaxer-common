@@ -1,8 +1,0 @@
-START   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Chain
-START   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-END     : position:(c:3 m:3) targetchar='*'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:104  
-START   : position:(c:3 m:3) targetchar='*'  	| parser:org.unlaxer.parser.combinator.Choice
-END     : position:(c:4 m:4) targetchar='3'  	| parser:org.unlaxer.parser.combinator.Choice| status:succeeded | parsed:*  
-START   : position:(c:4 m:4) targetchar='3'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-END     : position:(c:6 m:6) targetchar='/'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:37  
-END     : position:(c:6 m:6) targetchar='/'  	| parser:org.unlaxer.parser.combinator.Chain| status:succeeded | parsed:104*37  

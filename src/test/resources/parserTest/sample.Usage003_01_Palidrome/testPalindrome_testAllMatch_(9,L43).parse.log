@@ -1,6 +1,0 @@
-START   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.Chain
-START   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.MatchOnly
-START   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore
-END     : position:(c:0 m:6) targetchar='a'  	| parser:org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:abccba  
-END     : position:(c:0 m:6) targetchar='a'  	| parser:org.unlaxer.parser.combinator.MatchOnly| status:succeeded | parsed:abccba  
-END     : position:(c:6 m:6) targetchar=''  	| parser:org.unlaxer.parser.combinator.Chain| status:succeeded | parsed:abccbaabccba  

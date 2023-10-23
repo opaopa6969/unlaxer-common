@@ -1,7 +1,0 @@
-OPEN    : ''
-START   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
-BEGIN   : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser
-COMMIT  : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser | committed: 
-END     : position:(c:0 m:0) targetchar=''  	| parser://org.unlaxer.parser.elementary.EndOfSourceParser| status:succeeded | parsed:  
-CLOSE   : '' consumed:allConsumed 
-

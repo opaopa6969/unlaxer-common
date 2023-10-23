@@ -1,7 +1,0 @@
-OPEN    : 'abc'
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Chain
-BEGIN   : position:(c:3 m:3) targetchar=''  	| parser:/Chain/org.unlaxer.parser.elementary.EndOfSourceParser
-COMMIT  : position:(c:3 m:3) targetchar=''  	| parser:/Chain/org.unlaxer.parser.elementary.EndOfSourceParser | committed: 
-COMMIT  : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.Chain | committed:abc 
-CLOSE   : 'abc' consumed:allConsumed 
-

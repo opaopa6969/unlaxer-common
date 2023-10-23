@@ -1,5 +1,0 @@
-OPEN    : ' '
-BEGIN   : position:(c:0 m:0) targetchar=' '  	| parser://org.unlaxer.parser.combinator.Zero
-ROLLBACK: position:(c:0 m:0) targetchar=' '  	| parser://org.unlaxer.parser.combinator.Zero | rollbacked:  
-CLOSE   : ' ' consumed:0(1 remain) 
-

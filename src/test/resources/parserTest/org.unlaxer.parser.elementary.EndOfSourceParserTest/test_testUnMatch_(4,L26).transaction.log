@@ -1,7 +1,0 @@
-OPEN    : 'abc'
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Chain
-BEGIN   : position:(c:0 m:0) targetchar='a'  	| parser:/Chain/org.unlaxer.parser.elementary.EndOfSourceParser
-ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser:/Chain/org.unlaxer.parser.elementary.EndOfSourceParser | rollbacked:a 
-ROLLBACK: position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Chain | rollbacked: 
-CLOSE   : 'abc' consumed:0(3 remain) 
-

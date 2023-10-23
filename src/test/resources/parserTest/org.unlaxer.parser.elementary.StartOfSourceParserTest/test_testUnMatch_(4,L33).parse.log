@@ -1,4 +1,0 @@
-START   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain
-START   : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain/EndOfSourceParser
-END     : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain/EndOfSourceParser| status:failed | parsed:  
-END     : CON(L:0,P:0) MO(L:0,P:0) Last20=''  	| parser:/Chain| status:failed | parsed:  

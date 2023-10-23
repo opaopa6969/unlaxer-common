@@ -1,9 +1,0 @@
-'
-abc' (0 - 4): org.unlaxer.parser.combinator.Chain
- '
-' (0 - 1): org.unlaxer.parser.elementary.LineTerminatorParser
-  '
-' (0 - 1): org.unlaxer.parser.elementary.WordParser
- 'abc' (1 - 4): org.unlaxer.parser.elementary.WordParser
- <EMPTY> (4 - 4): org.unlaxer.parser.elementary.EndOfSourceParser
-

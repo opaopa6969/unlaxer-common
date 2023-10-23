@@ -1,5 +1,0 @@
-'aa' (0 - 2): org.unlaxer.parser.combinator.Chain
- 'a' (0 - 1): org.unlaxer.parser.elementary.WordParser
- '' (1 - 1): org.unlaxer.parser.elementary.WordParser
- 'a' (1 - 2): org.unlaxer.parser.elementary.WordParser
-

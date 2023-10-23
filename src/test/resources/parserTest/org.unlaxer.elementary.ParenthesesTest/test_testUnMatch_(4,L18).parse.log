@@ -1,4 +1,0 @@
-START   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.elementary.ParenthesesParser
-START   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor
-END     : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.elementary.SpaceDelimitor| status:succeeded | parsed:  
-END     : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.elementary.ParenthesesParser| status:failed | parsed:  

@@ -1,3 +1,0 @@
-'1' (0 - 1): org.unlaxer.parser.combinator.ZeroOrMore
- '1' (0 - 1): org.unlaxer.parser.posix.DigitParser
-

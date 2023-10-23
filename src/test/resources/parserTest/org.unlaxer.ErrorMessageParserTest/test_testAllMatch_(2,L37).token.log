@@ -1,4 +1,0 @@
-'1+' (0 - 2): org.unlaxer.parser.PseudoRootParser
- '1' (0 - 1): org.unlaxer.parser.posix.DigitParser
- '+' (1 - 2): org.unlaxer.parser.ascii.PlusParser
-

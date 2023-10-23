@@ -1,5 +1,0 @@
-OPEN    : '$%&'
-BEGIN   : position:(c:0 m:0) targetchar='$'  	| parser://org.unlaxer.parser.combinator.OneOrMore
-COMMIT  : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.OneOrMore | committed:$%& 
-CLOSE   : '$%&' consumed:allConsumed 
-

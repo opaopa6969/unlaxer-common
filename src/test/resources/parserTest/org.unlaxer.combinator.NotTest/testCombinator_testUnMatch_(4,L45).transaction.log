@@ -1,7 +1,0 @@
-OPEN    : '99'
-BEGIN   : position:(c:0 m:0) targetchar='9'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
-BEGIN   : position:(c:0 m:0) targetchar='9'  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain
-ROLLBACK: position:(c:0 m:0) targetchar='9'  	| parser:/NotPropagatableSource/org.unlaxer.parser.combinator.Chain | rollbacked: 
-ROLLBACK: position:(c:0 m:0) targetchar='9'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource | rollbacked: 
-CLOSE   : '99' consumed:0(2 remain) 
-

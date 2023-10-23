@@ -1,5 +1,0 @@
-OPEN    : '$5a'
-BEGIN   : position:(c:0 m:0) targetchar='$'  	| parser://org.unlaxer.parser.combinator.Reverse
-COMMIT  : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.Reverse | committed:$5a 
-CLOSE   : '$5a' consumed:allConsumed 
-

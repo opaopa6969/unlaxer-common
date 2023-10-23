@@ -1,5 +1,0 @@
-OPEN    : '1'
-BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource
-ROLLBACK: position:(c:0 m:0) targetchar='1'  	| parser://org.unlaxer.parser.combinator.NotPropagatableSource | rollbacked: 
-CLOSE   : '1' consumed:0(1 remain) 
-

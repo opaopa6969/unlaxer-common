@@ -1,9 +1,0 @@
-START   : position:(c:0 m:0) targetchar='e'  	| parser:org.unlaxer.combinator.Baz(all)
-START   : position:(c:0 m:0) targetchar='e'  	| parser:org.unlaxer.combinator.Baz(lookahead)
-START   : position:(c:0 m:0) targetchar='e'  	| parser:org.unlaxer.combinator.Baz(declareStopWord)
-START   : position:(c:0 m:0) targetchar='e'  	| parser:org.unlaxer.combinator.Baz(stopWord)
-END     : position:(c:0 m:3) targetchar='e'  	| parser:org.unlaxer.combinator.Baz(stopWord)| status:succeeded | parsed:end  
-END     : position:(c:0 m:4) targetchar='e'  	| parser:org.unlaxer.combinator.Baz(declareStopWord)| status:succeeded | parsed:end;  
-END     : position:(c:0 m:4) targetchar='e'  	| parser:org.unlaxer.combinator.Baz(lookahead)| status:succeeded | parsed:end;  
-START   : position:(c:0 m:4) targetchar='e'  	| parser:org.unlaxer.combinator.Baz(clause)
-START   : position:(c:0 m:0) targetchar='e'  	| parser:org.unlaxer.combinator.Baz(header)

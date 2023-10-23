@@ -1,2 +1,0 @@
-START   : position:(c:0 m:0) targetchar='a'  	| parser://org.unlaxer.parser.combinator.Repeat
-END     : position:(c:3 m:3) targetchar='d'  	| parser://org.unlaxer.parser.combinator.Repeat| status:succeeded | parsed:abc  

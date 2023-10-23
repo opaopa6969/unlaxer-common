@@ -1,2 +1,0 @@
-START   : position:(c:0 m:0) targetchar='$'  	| parser://org.unlaxer.parser.combinator.OneOrMore
-END     : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.OneOrMore| status:succeeded | parsed:$%&  

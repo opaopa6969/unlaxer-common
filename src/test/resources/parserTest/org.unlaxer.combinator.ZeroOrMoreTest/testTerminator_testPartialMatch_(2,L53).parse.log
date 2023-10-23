@@ -1,6 +1,0 @@
-START   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore
-START   : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.ParserWrapper
-END     : position:(c:0 m:0) targetchar='a'  	| parser:org.unlaxer.parser.combinator.ParserWrapper| status:failed | parsed:  
-START   : position:(c:1 m:1) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.ParserWrapper
-END     : position:(c:1 m:2) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.ParserWrapper| status:succeeded | parsed:Z  
-END     : position:(c:1 m:2) targetchar='Z'  	| parser:org.unlaxer.parser.combinator.ZeroOrMore| status:succeeded | parsed:aZ  

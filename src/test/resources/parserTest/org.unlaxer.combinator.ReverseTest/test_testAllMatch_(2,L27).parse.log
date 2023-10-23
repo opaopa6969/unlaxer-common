@@ -1,2 +1,0 @@
-START   : position:(c:0 m:0) targetchar='$'  	| parser://org.unlaxer.parser.combinator.Reverse
-END     : position:(c:3 m:3) targetchar=''  	| parser://org.unlaxer.parser.combinator.Reverse| status:succeeded | parsed:$5a  

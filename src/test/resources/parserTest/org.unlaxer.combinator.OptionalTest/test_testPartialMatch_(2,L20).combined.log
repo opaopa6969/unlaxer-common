@@ -1,7 +1,0 @@
-OPEN    : '123e'
-START   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Optional
-BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Optional
-COMMIT  : position:(c:1 m:1) targetchar='2'  	| parser:org.unlaxer.parser.combinator.Optional | committed:1 
-END     : position:(c:1 m:1) targetchar='2'  	| parser:org.unlaxer.parser.combinator.Optional| status:succeeded | parsed:1  
-CLOSE   : '123e' consumed:1(3 remain) 
-

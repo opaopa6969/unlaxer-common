@@ -1,5 +1,0 @@
-OPEN    : '1+1'
-BEGIN   : position:(c:0 m:0) targetchar='1'  	| parser:org.unlaxer.parser.combinator.Choice
-COMMIT  : position:(c:1 m:1) targetchar='+'  	| parser:org.unlaxer.parser.combinator.Choice | committed:1 
-CLOSE   : '1+1' consumed:1(2 remain) 
-

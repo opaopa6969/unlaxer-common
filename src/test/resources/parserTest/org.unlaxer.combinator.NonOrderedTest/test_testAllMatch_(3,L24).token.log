@@ -1,5 +1,0 @@
-'cab' (0 - 3): org.unlaxer.parser.combinator.NonOrdered
- 'c' (0 - 1): org.unlaxer.parser.elementary.MappedSingleCharacterParser
- 'a' (1 - 2): org.unlaxer.parser.elementary.MappedSingleCharacterParser
- 'b' (2 - 3): org.unlaxer.parser.elementary.MappedSingleCharacterParser
-
