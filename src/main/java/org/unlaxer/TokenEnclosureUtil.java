@@ -11,7 +11,7 @@ public class TokenEnclosureUtil{
 	public static Optional<Token> getEnclosureWithToken(
 			Token baseToken,
 			EnclosureDirection direction ,
-			int position,
+			Index position,
 			Optional<Token> currentToken,
 			ParsersSpecifier parserSpecifier){
 		return getEnclosureWithRange(baseToken , direction , position , currentToken.map(x->x.tokenRange), parserSpecifier);
@@ -21,8 +21,8 @@ public class TokenEnclosureUtil{
 	public static Optional<Token> getEnclosureWithRange(
 			Token baseToken,
 			EnclosureDirection direction ,
-			int position,
-			Optional<Range> currentRange,
+			Index position,
+			Optional<CursorRange> currentRange,
 			ParsersSpecifier parserSepcifier){
 		
 		List<Token> collect = baseToken.flatten().stream()

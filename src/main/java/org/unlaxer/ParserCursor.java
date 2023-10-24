@@ -47,13 +47,12 @@ public class ParserCursor{
 	 public void addMatchedPosition(Index adding){
 	   addMatchedPosition(adding);
   }
-
 	
 	public Cursor getCursor(TokenKind tokenKind){
 		return tokenKind == TokenKind.consumed ? consumed : matched;
 	}
 	
-	public Index getPosition(TokenKind tokenKind){
+	public CodePointIndex getPosition(TokenKind tokenKind){
 		return getCursor(tokenKind).getPosition(); 
 	}
 	
@@ -61,5 +60,5 @@ public class ParserCursor{
 		matched.setPosition(consumed.getPosition());
 		matched.setLineNumber(consumed.getLineNumber());
 	}
-
+	
 }

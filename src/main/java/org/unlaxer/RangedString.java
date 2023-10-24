@@ -2,11 +2,16 @@ package org.unlaxer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class RangedString{
 	
 	public final CursorRange range;
 	public Optional<String> token;
+	
+  public RangedString(Cursor cursor) {
+    this(new CursorRange(cursor));
+  }
 	
 	public RangedString(CursorRange range, Optional<String> token) {
 		super();
@@ -26,6 +31,32 @@ public class RangedString{
 		this.range = cursorRange;
 		this.token = Optional.empty();
 	}
+	
+	 public RangedString() {
+      super();
+      this.range = new CursorRange();
+      this.token = Optional.empty();
+    }
+	 
+	 public RangedString(List<Token> tokens) {
+	   
+	   super();
+	   
+	    if(tokens.isEmpty()){
+	      token = Optional.empty();
+	      range = new CursorRange();
+	    }else {
+	      token = Optional.of(
+	          tokens.stream()
+	          .map(Token::getToken)
+	          .filter(Optional::isPresent)
+	          .map(Optional::get)
+	          .collect(Collectors.joining()));
+	      
+	      CursorRange combinedCursorRange = TokenList.combinedCursorRange(tokens);
+	      range = combinedCursorRange;
+	    }
+	 }
 
 	// TODO
 //	public RangedString(Cursor cursor, String token) {

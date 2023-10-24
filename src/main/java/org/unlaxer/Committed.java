@@ -17,21 +17,21 @@ public class Committed implements Serializable {
 
 	private static final long serialVersionUID = -5413329267448242699L;
 
-	List<Token> originalTokens;
+	TokenList originalTokens;
 	Optional<Token> collectedToken;
 	boolean collected;
 	
 	Collection<TransactionElement> mostConsumeds = new ArrayList<>();
 
 	public Committed(Committed committed) {
-		this.originalTokens = new ArrayList<>(committed.getOriginalTokens());
+		this.originalTokens = TokenList.of(committed.getOriginalTokens());
 		this.collectedToken = committed.getTokenOptional();
 		this.collected = committed.isCollected();
 	}
 
 	public Committed(List<Token> originalTokens) {
 		super();
-		this.originalTokens = originalTokens;
+		this.originalTokens = TokenList.of(originalTokens);
 		collected = false;
 		collectedToken = Optional.empty();
 	}
@@ -39,7 +39,7 @@ public class Committed implements Serializable {
 	public Committed(Token token, List<Token> originalTokens) {
 		super();
 		this.collectedToken = Optional.of(token);
-		this.originalTokens = originalTokens;
+		this.originalTokens = TokenList.of(originalTokens);
 		collected = true;
 	}
 
@@ -47,7 +47,7 @@ public class Committed implements Serializable {
 		super();
 		this.collectedToken = Optional.empty();
 		collected = false;
-		originalTokens = new ArrayList<>();
+		originalTokens = new TokenList();
 	}
 
 	public Optional<Token> getTokenOptional() {
@@ -72,14 +72,18 @@ public class Committed implements Serializable {
 	}
 	
 	public Token getConsumed(){
-		return new Token(
+	  
+		TokenList collect =TokenList.of(
+		    originalTokens.stream()
+  		    .filter(TokenKind.consumed.passFilter)
+  		    .collect(Collectors.toList())
+		 );
+    return new Token(
 				TokenKind.consumed, 
-				originalTokens.stream()
-					.filter(TokenKind.consumed.passFilter)
-					.collect(Collectors.toList()),
+				collect,
 				collected ? 
 						collectedToken.get().parser:
-							Singletons.get(PseudoRootParser.class),0);
+							Singletons.get(PseudoRootParser.class));
 	}
 
 	
@@ -100,7 +104,7 @@ public class Committed implements Serializable {
 		}
 		Token token = collected ? 
 			collectedToken.get() : 
-			new Token(TokenKind.consumed, originalTokens, Singletons.get(PseudoRootParser.class),0);
+			new Token(TokenKind.consumed, originalTokens, Singletons.get(PseudoRootParser.class));
 		return token;
 	}
 

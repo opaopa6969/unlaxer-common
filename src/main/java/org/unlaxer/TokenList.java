@@ -1,11 +1,11 @@
 package org.unlaxer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
@@ -19,8 +19,26 @@ public class TokenList implements List<Token>{
 
   public TokenList(List<Token> tokens) {
     super();
-    this.tokens = tokens;
+    this.tokens = new ArrayList<>(tokens);
   }
+  
+  public TokenList(Token... tokens) {
+    super();
+    this.tokens = new ArrayList<>();
+    for (Token token : tokens) {
+      this.tokens.add(token);
+    }
+  }
+  
+  public TokenList() {
+    super();
+    this.tokens = new ArrayList<>();
+  }
+  
+  public static TokenList of(List<Token> tokens) {
+    return new TokenList(tokens);
+  }
+
 
   public void forEach(Consumer<? super Token> action) {
     tokens.forEach(action);
@@ -176,7 +194,12 @@ public class TokenList implements List<Token>{
      );
   }
   
-  public static CursorRange combinedCursorRange(TokenList tokens , Optional<Integer> startPosition) {
+  public static CursorRange combinedCursorRange(TokenList tokens) {
+    
+    return combinedCursorRange(tokens.tokens);
+  }
+
+  public static CursorRange combinedCursorRange(List<Token> tokens) {
     
     if(tokens.isEmpty()) {
       return new CursorRange(new CursorImpl(), new CursorImpl().incrementPosition());
@@ -188,20 +211,15 @@ public class TokenList implements List<Token>{
     
     return new CursorRange(
           new CursorImpl()
-            .addPosition(new Index(startPosition.orElse(0)))
             .setLineNumber(first.startIndexInclusive.getLineNumber())
             .setPositionInLine(first.startIndexInclusive.getPositionInLine())
             .setPosition(first.startIndexInclusive.getPosition()),
           new CursorImpl()
-            .addPosition(new Index(startPosition.orElse(0)))
             .setLineNumber(last.endIndexExclusive.getLineNumber())
             .setPositionInLine(last.endIndexExclusive.getPositionInLine())
             .setPosition(last.endIndexExclusive.getPosition())
      );
+    
   }
   
-  public static CursorRange combinedCursorRange(TokenList tokens) {
-    
-    return combinedCursorRange(tokens, Optional.empty());
-  }
 }

@@ -13,7 +13,7 @@ public class TransactionElement implements Serializable{
 	private static final long serialVersionUID = -4168699143819523755L;
 
 	Optional<TokenKind> tokenKind;
-	ParserCursor cursor ;
+	ParserCursor parserCursor ;
 	
 	boolean resetMatchedWithConsumed = true;
 	
@@ -21,28 +21,28 @@ public class TransactionElement implements Serializable{
 	
 	public TransactionElement(ParserCursor parserCursor) {
 		super();
-		this.cursor = new ParserCursor(parserCursor,true);
+		this.parserCursor = new ParserCursor(parserCursor,true);
 		tokenKind = Optional.empty();
 	}
 	
 	
 	public TransactionElement(ParserCursor cursor, boolean resetMatchedWithConsumed) {
 		super();
-		this.cursor = cursor;
+		this.parserCursor = cursor;
 		this.resetMatchedWithConsumed = resetMatchedWithConsumed;
 	}
 
 
 	public TransactionElement createNew() {
-		return new TransactionElement(new ParserCursor(cursor,resetMatchedWithConsumed),resetMatchedWithConsumed);
+		return new TransactionElement(new ParserCursor(parserCursor,resetMatchedWithConsumed),resetMatchedWithConsumed);
 	}
 	
 	public void consume(int length){
-		cursor.addPosition(length);
+		parserCursor.addPosition(length);
 	}
 	
 	public void matchOnly(int length){
-		cursor.addMatchedPosition(length);
+		parserCursor.addMatchedPosition(length);
 	}
 	
 	public void addToken(Token token){
@@ -66,9 +66,13 @@ public class TransactionElement implements Serializable{
 		return Optional.of(parsedString);
 	}
 	
-	public int getPosition(TokenKind tokenKind){
-		return cursor.getPosition(tokenKind);
+	public CodePointIndex getPosition(TokenKind tokenKind){
+		return parserCursor.getPosition(tokenKind);
 	}
+	
+	public Cursor getCursor(TokenKind tokenKind){
+	   return parserCursor.getCursor(tokenKind);
+  }
 	
 	public List<Token> getTokens(){
 		return tokens;
@@ -79,11 +83,11 @@ public class TransactionElement implements Serializable{
 	}
 
 	public ParserCursor getParserCursor() {
-		return cursor;
+		return parserCursor;
 	}
 
 	public void setCursor(ParserCursor cursor) {
-		this.cursor = cursor;
+		this.parserCursor = cursor;
 	}
 	
 	public void setResetMatchedWithConsumed(boolean resetMatchedWithConsumed) {

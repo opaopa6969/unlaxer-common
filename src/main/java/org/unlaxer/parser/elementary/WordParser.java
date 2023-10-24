@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import org.unlaxer.CursorRange;
 import org.unlaxer.Name;
 import org.unlaxer.Range;
 import org.unlaxer.RangedString;
@@ -46,7 +47,7 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 		if(length == 0) {
 			return new Token(tokenKind , 
 				new RangedString(
-					new Range(parseContext.getConsumedPosition()),""
+					new CursorRange(parseContext.getConsumedPosition()),""
 				)
 				, this
 			);

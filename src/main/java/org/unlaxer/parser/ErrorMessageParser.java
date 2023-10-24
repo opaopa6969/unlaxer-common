@@ -2,9 +2,9 @@ package org.unlaxer.parser;
 
 import java.util.List;
 
+import org.unlaxer.CursorRange;
 import org.unlaxer.ErrorMessage;
 import org.unlaxer.Name;
-import org.unlaxer.Range;
 import org.unlaxer.RangedContent;
 import org.unlaxer.parser.combinator.ContainerParser;
 
@@ -35,7 +35,7 @@ public class ErrorMessageParser extends ContainerParser<String>{
 	}
 	
 	@Override
-	public RangedContent<String> get(Range position) {
+	public RangedContent<String> get(CursorRange position) {
 		return new ErrorMessage(position, message);
 	}
 

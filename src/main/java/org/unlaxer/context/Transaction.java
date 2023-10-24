@@ -10,14 +10,18 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.unlaxer.CodePointIndex;
 import org.unlaxer.Committed;
+import org.unlaxer.Cursor;
+import org.unlaxer.Index;
+import org.unlaxer.Length;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.RangedString;
 import org.unlaxer.Source;
 import org.unlaxer.Token;
+import org.unlaxer.Token.ScanDirection;
 import org.unlaxer.TokenKind;
 import org.unlaxer.TransactionElement;
-import org.unlaxer.Token.ScanDirection;
 import org.unlaxer.parser.CollectingParser;
 import org.unlaxer.parser.LazyInstance;
 import org.unlaxer.parser.MetaFunctionParser;
@@ -98,13 +102,12 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
         parser instanceof LazyInstance;
 
     Committed committed;
-    
-    int position = parent.getPosition(tokenKind);
 
     if (parser instanceof CollectingParser && outputCollected) {
       
       Token collected = ((CollectingParser) parser).collect(
-          current.tokens, position , tokenKind , tokenKind.passFilter);
+          current.tokens, tokenKind , tokenKind.passFilter);
+      
       parent.tokens.add(collected);
       onCommit(parseContext, parser, Arrays.asList(collected));
       committed = new Committed(collected, current.tokens);
@@ -137,38 +140,44 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 	}
 	
 	public default String getRemain(TokenKind tokenKind) {
-		int position = getPosition(tokenKind);
+		int position = getPosition(tokenKind).value;
 		return getSource().peek(position, getLength() - position).token.orElse("");
 	}
 
 	public default String getConsumed(TokenKind tokenKind) {
-		int position = getPosition(tokenKind);
+		int position = getPosition(tokenKind).value;
 		return getSource().peek(0, position).token.orElse("");
 	}
 
 	public default boolean allMatched() {
-		return getPosition(TokenKind.matchOnly) == getSource().getLength();
+		return getPosition(TokenKind.matchOnly).value == getSource().getLength();
 	}
 
 	public default boolean allConsumed() {
-		return getPosition(TokenKind.consumed) == getSource().getLength();
+		return getPosition(TokenKind.consumed).value == getSource().getLength();
 	}
 
-	public default RangedString peek(TokenKind tokenKind, int length) {
+	public default RangedString peek(TokenKind tokenKind, Length length) {
 		return peek(getCurrent().getPosition(tokenKind), length);
 	}
 
-	public default int getConsumedPosition() {
+	public default CodePointIndex getConsumedPosition() {
 		return getPosition(TokenKind.consumed);
 	}
 
-	public default int getMatchedPosition() {
+	public default CodePointIndex getMatchedPosition() {
 		return getPosition(TokenKind.matchOnly);
 	}
 
-	public default int getPosition(TokenKind tokenKind) {
+	public default CodePointIndex getPosition(TokenKind tokenKind) {
 		return getCurrent().getPosition(tokenKind);
 	}
+	
+	
+   public default Cursor getCursor(TokenKind tokenKind) {
+	    return getCurrent().getCursor(tokenKind);
+	 }
+
 	
 	public default Optional<Parser> getChosen(ChoiceInterface choice) {
 		return Optional.ofNullable(getChosenParserByChoice().get(choice));

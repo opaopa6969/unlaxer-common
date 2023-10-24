@@ -14,7 +14,7 @@ public interface Cursor {
 	
   Cursor incrementLineNumber();
 
-	Index getPosition();
+	CodePointIndex getPosition();
 
 	Cursor setPosition(Index position);
 	
@@ -22,7 +22,7 @@ public interface Cursor {
 
 	Cursor addPosition(Index adding);
 
-	Index getPositionInLine();
+	CodePointOffset getPositionInLine();
 
 	Cursor setPositionInLine(Index positionInLine);
 

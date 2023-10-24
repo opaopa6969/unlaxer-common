@@ -4,27 +4,30 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.unlaxer.Index;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
+import org.unlaxer.TokenList;
 
 
 
 public interface CollectingParser extends Parser {
 	
-	public default Token collect(List<Token> tokens, Index position , TokenKind tokenKind ,
+	public default Token collect(List<Token> tokens, TokenKind tokenKind ,
 			Predicate<Token> tokenFilter){
 			
-		return new Token(tokenKind,
-				tokens.stream()
+		TokenList collect = TokenList.of( 
+		    tokens.stream()
 					.filter(tokenFilter)
-					.collect(Collectors.toList())
+					.collect(Collectors.toList()));
+		
+    return new Token(tokenKind,
+				collect
 				, this //
-				, position);
+				);
 
 	}
 	
-	public default Token collect(List<Token> tokens, Index position , TokenKind tokenKind){
-		return collect(tokens, position, tokenKind , token->true);
+	public default Token collect(List<Token> tokens, TokenKind tokenKind){
+		return collect(tokens, tokenKind , token->true);
 	}
 }
