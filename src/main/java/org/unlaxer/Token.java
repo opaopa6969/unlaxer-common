@@ -56,7 +56,7 @@ public class Token implements Serializable{
 		this(tokenKind , token , parser , new ArrayList<>());
 	}
 	
-	public Token(TokenKind tokenKind , List<Token> tokens , Parser parser , int position) {
+	public Token(TokenKind tokenKind , List<Token> tokens , Parser parser , Index position) {
 		this(tokenKind , 
 			createRangedString(tokens , position),
 			parser,
@@ -104,7 +104,7 @@ public class Token implements Serializable{
 		return tokenString;
 	}
 	
-	public Range getTokenRange() {
+	public CursorRange getTokenRange() {
 		return tokenRange;
 	}
 	
@@ -139,7 +139,7 @@ public class Token implements Serializable{
     }
 
 
-	public static RangedString createRangedString(List<Token> tokens, int position){
+	public static RangedString createRangedString(List<Token> tokens, Index position){
 		
 		if(tokens.isEmpty()){
 			return new RangedString(position);

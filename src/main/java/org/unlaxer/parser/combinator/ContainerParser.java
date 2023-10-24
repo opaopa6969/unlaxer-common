@@ -4,6 +4,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.unlaxer.CursorRange;
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
 import org.unlaxer.Range;
@@ -36,7 +37,7 @@ public abstract class ContainerParser<T> extends NoneChildParser {
 	
 	public abstract T get();
 	
-	public abstract RangedContent<T> get(Range position);
+	public abstract RangedContent<T> get(CursorRange position);
 	
 	@SuppressWarnings("unchecked")
 	public static <T> List<RangedContent<T>> getRangedContents(Token rootToken ){

@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.unlaxer.CursorRange;
 import org.unlaxer.Parsed;
+import org.unlaxer.Parsed.Status;
 import org.unlaxer.Range;
 import org.unlaxer.RangedContent;
 import org.unlaxer.TokenKind;
-import org.unlaxer.Parsed.Status;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.combinator.ContainerParser;
 
@@ -47,12 +48,12 @@ public class SuggestsCollectorParser extends ContainerParser<Suggests>{
 	}
 
 	@Override
-	public RangedContent<Suggests> get(Range position) {
+	public RangedContent<Suggests> get(CursorRange position) {
 		
 		return new RangedContent<Suggests>() {
 			
 			@Override
-			public Range getRange() {
+			public CursorRange getRange() {
 				return position;
 			}
 			
@@ -62,5 +63,4 @@ public class SuggestsCollectorParser extends ContainerParser<Suggests>{
 			}
 		};
 	}
-	
 }

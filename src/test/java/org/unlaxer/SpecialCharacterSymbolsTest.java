@@ -11,7 +11,7 @@ public class SpecialCharacterSymbolsTest {
     char TAB  = (char) 0x09; 
 
     String text ="this is tab->"+TAB+"Next"+CR+LF;
-    String replaceSymbol = SpecialCharacterSymbols.replaceSymbol(text);
+    String replaceSymbol = SymbolMap.replaceSymbol(text , SymbolMap.crlf);
     System.out.println(text);
     System.out.println(replaceSymbol);
       

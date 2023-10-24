@@ -1,6 +1,6 @@
 package org.unlaxer;
 
 public interface RangedContent<T>{
-	public Range getRange();
+	public CursorRange getRange();
 	public T getContent();
 }

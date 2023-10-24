@@ -2,18 +2,18 @@ package org.unlaxer;
 
 public class ErrorMessage implements RangedContent<String>{
 	
-	Range position;
+  CursorRange position;
 	
 	String message;
 
-	public ErrorMessage(Range position, String message) {
+	public ErrorMessage(CursorRange position, String message) {
 		super();
 		this.position = position;
 		this.message = message;
 	}
 
 	@Override
-	public Range getRange() {
+	public CursorRange getRange() {
 		return position;
 	}
 

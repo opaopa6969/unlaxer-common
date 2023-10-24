@@ -30,20 +30,30 @@ public class ParserCursor{
 	}
 
 	public void addPosition(int adding){
-		consumed.addPosition(adding);
-//		matched.addPosition(adding);
-		matched.setPosition(consumed.getPosition());
+	  addPosition(new Index(adding));
 	}
 	
+	 public void addPosition(Index adding){
+	    consumed.addPosition(adding);
+//	    matched.addPosition(adding);
+	    matched.setPosition(consumed.getPosition());
+	  }
+
+	
 	public void addMatchedPosition(int adding){
-		matched.addPosition(adding);
+		matched.addPosition(new Index(adding));
 	}
+	
+	 public void addMatchedPosition(Index adding){
+	   addMatchedPosition(adding);
+  }
+
 	
 	public Cursor getCursor(TokenKind tokenKind){
 		return tokenKind == TokenKind.consumed ? consumed : matched;
 	}
 	
-	public int getPosition(TokenKind tokenKind){
+	public Index getPosition(TokenKind tokenKind){
 		return getCursor(tokenKind).getPosition(); 
 	}
 	
