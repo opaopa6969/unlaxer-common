@@ -1,11 +1,8 @@
 package org.unlaxer.parser.clang;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.listener.OutputLevel;
-import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.elementary.WordParser;
 
@@ -33,7 +30,7 @@ public class CStyleDelimitedLazyChainTest extends ParserTestBase{
   public static class FooCStyleDelimitedLazyChain extends CStyleDelimitedLazyChain{
 
     @Override
-    public List<Parser> getLazyParsers() {
+    public Parsers getLazyParsers() {
       return 
         new Parsers(
           new WordParser("ABC"),

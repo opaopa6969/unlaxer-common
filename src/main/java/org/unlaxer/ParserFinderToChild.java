@@ -1,12 +1,11 @@
 package org.unlaxer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public interface ParserFinderToChild extends ParserHierarchy{
 	
@@ -15,16 +14,16 @@ public interface ParserFinderToChild extends ParserHierarchy{
 	}
 	
 	public default Stream<Parser> findToChild(Predicate<Parser> predicate) {
-		List<Parser> flatten = flatten(RecursiveMode.childrenOnly);
+		Parsers flatten = flatten(RecursiveMode.childrenOnly);
 		return flatten.stream().filter(predicate);
 	}
 	
-	public default List<Parser> flatten(){
+	public default Parsers flatten(){
 		return flatten(RecursiveMode.containsRoot);
 	}
 	
-	public default List<Parser> flatten(RecursiveMode recursiveMode){
-		List<Parser> list = new ArrayList<Parser>();
+	public default Parsers flatten(RecursiveMode recursiveMode){
+		Parsers list = new Parsers();
 		if(recursiveMode.isContainsRoot()){
 			list.add(getThisParser());
 		}

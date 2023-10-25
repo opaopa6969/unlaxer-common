@@ -14,7 +14,7 @@ public class WildCardLineParserTest extends ParserTestBase{
 
 	@Test
 	public void test() {
-		OneOrMore oneOrMore = new OneOrMore(new WildCardLineParser());
+		OneOrMore oneOrMore = new OneOrMore(WildCardLineParser.class);
 		String text=
 				"\n"+
 				"  asda \n"+

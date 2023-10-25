@@ -8,20 +8,25 @@ public class Optional extends ChildOccursWithTerminator {
 
 	private static final long serialVersionUID = 9178853471703766611L;
 
-	public Optional(Parser inner) {
+	public Optional(Class<? extends Parser> inner) {
 		super(inner);
 	}
 
-	public Optional(Name name, Parser inner) {
+	public Optional(Name name, Class<? extends Parser> inner) {
 		super(name, inner);
 	}
 	
-	public Optional(ASTNodeKind astNodeKind ,  Parser inner) {
+	 public Optional(Name name, Parser inner) {
+	    super(name, ()->inner);
+	  }
+
+	
+	public Optional(ASTNodeKind astNodeKind ,  Class<? extends Parser> inner) {
 		super(inner);
 		addTag(astNodeKind.tag());
 	}
 
-	public Optional(Name name, ASTNodeKind astNodeKind ,  Parser inner) {
+	public Optional(Name name, ASTNodeKind astNodeKind ,  Class<? extends Parser> inner) {
 		super(name, inner);
 		addTag(astNodeKind.tag());
 	}

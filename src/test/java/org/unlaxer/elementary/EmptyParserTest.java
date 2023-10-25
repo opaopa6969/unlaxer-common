@@ -24,8 +24,8 @@ public class EmptyParserTest extends ParserTestBase{
 			new AlphabetParser(),
 			new WordParser("="),
 			new Choice(
-				new NumberParser(),
-				new EmptyParser()
+				NumberParser.class,
+				EmptyParser.class
 			),
 			new WordParser(";")
 		);
@@ -58,7 +58,7 @@ public class EmptyParserTest extends ParserTestBase{
 		
 		setLevel(OutputLevel.detail);
 
-		ZeroOrMore zeroOrMore = new ZeroOrMore(new EmptyParser());
+		ZeroOrMore zeroOrMore = new ZeroOrMore(EmptyParser.class);
 		
 		testSucceededOnly(zeroOrMore, "");
 		

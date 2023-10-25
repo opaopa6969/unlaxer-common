@@ -1,7 +1,5 @@
 package org.unlaxer.parser.elementary;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
@@ -28,7 +26,7 @@ public class NumberParser extends LazyChain implements StaticParser{
 	}
 
 	@Override
-	public List<Parser> getLazyParsers() {
+	public Parsers getLazyParsers() {
 		return new Parsers(				
 				// + or -
 				new Optional(Name.of("optional-signParser"),signParser),
@@ -55,7 +53,7 @@ public class NumberParser extends LazyChain implements StaticParser{
 					)
 				),
 				// e-3
-				new Optional(new ExponentParser())
+				new Optional(ExponentParser.class)
 		);
 	}
 

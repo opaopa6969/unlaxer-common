@@ -1,14 +1,11 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.TestResult;
 import org.unlaxer.Token;
 import org.unlaxer.TokenPrinter;
 import org.unlaxer.listener.OutputLevel;
-import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.elementary.WordParser;
 import org.unlaxer.reducer.TagBasedReducer;
@@ -36,7 +33,7 @@ public class WhiteSpaceDelimitedLazyChainTest extends ParserTestBase{
 		private static final long serialVersionUID = -4138533725870179243L;
 //		List<Parser> parsers;
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 			return 
 				new Parsers(
 					new WordParser("1"),

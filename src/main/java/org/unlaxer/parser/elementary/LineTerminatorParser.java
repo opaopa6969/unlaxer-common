@@ -1,7 +1,5 @@
 package org.unlaxer.parser.elementary;
 
-import java.util.List;
-
 import org.unlaxer.Cursor;
 import org.unlaxer.Parsed;
 import org.unlaxer.ParserCursor;
@@ -22,7 +20,7 @@ public class LineTerminatorParser extends LazyChoice{
 	static final String CRLF = new String(new byte[] {0x0d/*cr*/,0x0a/*lf*/});
 
 	@Override
-	public List<Parser> getLazyParsers() {
+	public Parsers getLazyParsers() {
 		return new Parsers(
 			new WordParser(CRLF),
 			new WordParser(CR),

@@ -1,6 +1,5 @@
 package org.unlaxer.parser;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.unlaxer.Name;
@@ -17,11 +16,11 @@ public class PseudoRootParser extends AbstractParser{
 		super();
 	}
 
-	public PseudoRootParser(List<Parser> children) {
+	public PseudoRootParser(Parsers children) {
 		super(children);
 	}
 
-	public PseudoRootParser(Name name, List<Parser> children) {
+	public PseudoRootParser(Name name, Parsers children) {
 		super(name, children);
 	}
 
@@ -79,6 +78,6 @@ public class PseudoRootParser extends AbstractParser{
 	}
 
 	@Override
-	public void prepareChildren(List<Parser> childrenContainer) {
+	public void prepareChildren(Parsers childrenContainer) {
 	}
 }

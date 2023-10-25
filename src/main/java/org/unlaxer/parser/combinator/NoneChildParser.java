@@ -1,11 +1,10 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 import org.unlaxer.parser.AbstractParser;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public abstract class NoneChildParser extends AbstractParser {
 
@@ -25,7 +24,7 @@ public abstract class NoneChildParser extends AbstractParser {
 	}
 
 	@Override
-	public final void prepareChildren(List<Parser> childrenContainer) {
+	public final void prepareChildren(Parsers childrenContainer) {
 		
 	}
 	

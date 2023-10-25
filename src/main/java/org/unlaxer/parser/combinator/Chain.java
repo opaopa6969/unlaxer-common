@@ -10,12 +10,13 @@ import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.HasChildrenParser;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public class Chain extends ConstructedCombinatorParser implements ChainInterface{
 
 	private static final long serialVersionUID = 6972883578352108945L;
 
-	public Chain(List<Parser> children) {
+	public Chain(Parsers children) {
 		super(children);
 	}
 
@@ -24,7 +25,7 @@ public class Chain extends ConstructedCombinatorParser implements ChainInterface
 		super(children);
 	}
 	
-	public Chain(Name name, List<Parser> children) {
+	public Chain(Name name, Parsers children) {
 		super(name, children);
 	}
 
@@ -45,11 +46,11 @@ public class Chain extends ConstructedCombinatorParser implements ChainInterface
 			.filter(passFilter)
 			.collect(Collectors.toList());
 		
-		return new Chain(getName() , newChildren);
+		return new Chain(getName() , Parsers.of(newChildren));
 	}
 
 	@Override
-	public HasChildrenParser createWith(List<Parser> children) {
+	public HasChildrenParser createWith(Parsers children) {
 		return new Chain(getName() , children);
 	}
 }

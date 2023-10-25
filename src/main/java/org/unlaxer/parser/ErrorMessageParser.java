@@ -1,7 +1,5 @@
 package org.unlaxer.parser;
 
-import java.util.List;
-
 import org.unlaxer.ErrorMessage;
 import org.unlaxer.Name;
 import org.unlaxer.Range;
@@ -20,7 +18,7 @@ public class ErrorMessageParser extends ContainerParser<String>{
 		this.message = message;
 	}
 
-	public ErrorMessageParser(String message , List<Parser> children) {
+	public ErrorMessageParser(String message , Parsers children) {
 		this.message = message;
 	}
 

@@ -24,8 +24,8 @@ public class MatchedChoiceParserTest extends ParserTestBase{
 		Chain parser = new Chain(
 			new ParenthesesParser(//
 				new Choice(elementsName,//
-					new OneOrMore(new AlphabetParser()),//
-					new OneOrMore(new DigitParser()),//
+					new OneOrMore(AlphabetParser.class),//
+					new OneOrMore(DigitParser.class),//
 					// punctuation contains '(' and ')' -> excludes '()'//
 					new OneOrMore(//
 						new PunctuationParser().newWithout("()")//

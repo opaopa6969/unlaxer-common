@@ -1,6 +1,5 @@
 package sample;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -76,7 +75,7 @@ public class Usage002_01_SimpleXmlTag extends ParserTestBase {
 		private static final long serialVersionUID = -2182936361245898255L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			return new Parsers(
 				new WordParser("<"),
@@ -94,7 +93,7 @@ public class Usage002_01_SimpleXmlTag extends ParserTestBase {
 		private static final long serialVersionUID = 791155244371219245L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			return new Parsers(
 				new WordParser("<"),
@@ -114,7 +113,7 @@ public class Usage002_01_SimpleXmlTag extends ParserTestBase {
 		private static final long serialVersionUID = 6450422344705494726L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			return new Parsers(
 				new WordParser("<"),
@@ -155,7 +154,7 @@ public class Usage002_01_SimpleXmlTag extends ParserTestBase {
 		private static final long serialVersionUID = -7796147663108046605L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 			return new Parsers(
 				new PlusParser(),
 				new MinusParser(),

@@ -1,7 +1,5 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
 import org.unlaxer.TokenKind;
@@ -9,16 +7,17 @@ import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.HasChildrenParser;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public class Choice extends ConstructedCombinatorParser implements ChoiceInterface{
 
 	private static final long serialVersionUID = 1464495138641251351L;
 
-	public Choice(Name name, List<Parser> parsers) {
+	public Choice(Name name, Parsers parsers) {
 		super(name, parsers);
 	}
 
-	public Choice(List<Parser> parsers) {
+	public Choice(Parsers parsers) {
 		super(parsers);
 	}
 
@@ -33,12 +32,19 @@ public class Choice extends ConstructedCombinatorParser implements ChoiceInterfa
 		setASTNodeKind(ASTNodeKind.ChoicedOperator);
 	}
 	
-	public Choice(Name name, ASTNodeKind astNodeKind ,  List<Parser> parsers) {
+	@SafeVarargs
+	public Choice(Class<? extends Parser>... parsers) {
+		super(parsers);
+		setASTNodeKind(ASTNodeKind.ChoicedOperator);
+	}
+
+	
+	public Choice(Name name, ASTNodeKind astNodeKind ,  Parsers parsers) {
 		super(name, parsers);
 		addTag(astNodeKind.tag());
 	}
 
-	public Choice(ASTNodeKind astNodeKind ,  List<Parser> parsers) {
+	public Choice(ASTNodeKind astNodeKind ,  Parsers parsers) {
 		super(parsers);
 		addTag(astNodeKind.tag());
 	}
@@ -72,7 +78,7 @@ public class Choice extends ConstructedCombinatorParser implements ChoiceInterfa
 //	}
 
 	@Override
-	public HasChildrenParser createWith(List<Parser> children) {
+	public HasChildrenParser createWith(Parsers children) {
 		return new Choice(getName() , children);
 	}
 }

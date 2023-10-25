@@ -11,13 +11,22 @@ public abstract class ConstructedSingleChildParser extends ConstructedAbstractPa
 
 	private static final long serialVersionUID = 2620160704955343801L;
 	
+	public ConstructedSingleChildParser(Class<? extends Parser> child) {
+		super(new Parsers(child));
+	}
+	
 	public ConstructedSingleChildParser(Parser child) {
 		super(new Parsers(child));
 	}
 
+	public ConstructedSingleChildParser(Name name, Class<? extends Parser> child) {
+		super(name, new Parsers(child));
+	}
+	
 	public ConstructedSingleChildParser(Name name, Parser child) {
 		super(name, new Parsers(child));
 	}
+
 
 	@Override
 	public ChildOccurs getChildOccurs() {

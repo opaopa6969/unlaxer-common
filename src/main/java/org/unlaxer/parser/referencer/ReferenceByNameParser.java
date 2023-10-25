@@ -1,7 +1,5 @@
 package org.unlaxer.parser.referencer;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
 import org.unlaxer.TokenKind;
@@ -9,6 +7,7 @@ import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.AbstractParser;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public class ReferenceByNameParser extends AbstractParser{
 
@@ -47,6 +46,6 @@ public class ReferenceByNameParser extends AbstractParser{
 	}
 
 	@Override
-	public void prepareChildren(List<Parser> childrenContainer) {
+	public void prepareChildren(Parsers childrenContainer) {
 	}
 }

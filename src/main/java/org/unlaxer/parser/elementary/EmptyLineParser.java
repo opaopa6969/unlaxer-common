@@ -1,6 +1,4 @@
 package org.unlaxer.parser.elementary;
-import java.util.List;
-
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.combinator.LazyChain;
@@ -10,11 +8,13 @@ import org.unlaxer.parser.posix.SpaceParser;
 
 public class EmptyLineParser extends LazyChain{
   
-  @Override
-  public List<Parser> getLazyParsers() {
+	private static final long serialVersionUID = -2954119020777951724L;
+
+@Override
+  public Parsers getLazyParsers() {
     return new Parsers(
         Parser.get(StartOfLineParser.class),
-        new ZeroOrMore(Parser.get(SpaceParser.class))
+        new ZeroOrMore(SpaceParser.class)
           .newWithTerminator( 
               new MatchOnly(Parser.get(LineTerminatorParser.class))
         ),

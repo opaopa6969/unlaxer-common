@@ -1,6 +1,5 @@
 package sample;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -43,12 +42,12 @@ public class Usage001_createParserAndParseWithNamedConcrete extends Usage001_cre
 		
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			return new Parsers(
 				new NumberParser(),
 				new ZeroOrMore(
-					new OperatorAndOperandParser()
+					OperatorAndOperandParser.class
 				)
 			);
 		}
@@ -74,7 +73,7 @@ public class Usage001_createParserAndParseWithNamedConcrete extends Usage001_cre
 		private static final long serialVersionUID = 950963055579566582L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 			return new Parsers(
 				new PlusParser(),
 				new MinusParser(),
@@ -89,7 +88,7 @@ public class Usage001_createParserAndParseWithNamedConcrete extends Usage001_cre
 		private static final long serialVersionUID = -4010004059839314592L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 			return new Parsers(
 				new OperatorParser(),
 				new NumberParser()

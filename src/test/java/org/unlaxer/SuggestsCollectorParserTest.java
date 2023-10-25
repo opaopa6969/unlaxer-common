@@ -29,10 +29,10 @@ public class SuggestsCollectorParserTest extends ParserTestBase{
 			new DigitParser(),
 			new PlusParser(),
 			new Choice(
-				new CosParser(),
-				new SinParser(),
-				new SqrtParser(),
-				new SuggestsCollectorParser()
+				CosParser.class,
+				SinParser.class,
+				SqrtParser.class,
+				SuggestsCollectorParser.class
 			)
 		);
 		
@@ -52,10 +52,10 @@ public class SuggestsCollectorParserTest extends ParserTestBase{
 			new DigitParser(),
 			new PlusParser(),
 			new Choice(
-				new CosParser(),
-				new SinParser(),
-				new SqrtParser(),
-				new SuggestsCollectorParser()
+				CosParser.class,
+				SinParser.class,
+				SqrtParser.class,
+				SuggestsCollectorParser.class
 			),
 			new MinusParser(),
 			new DigitParser()

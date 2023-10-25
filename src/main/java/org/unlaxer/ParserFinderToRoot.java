@@ -1,11 +1,10 @@
 package org.unlaxer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.RootParserIndicator;
 
 public interface ParserFinderToRoot extends ParserHierarchy{
@@ -45,7 +44,7 @@ public interface ParserFinderToRoot extends ParserHierarchy{
 	 * @param predicate to find match Parser
 	 * @return matched parsers ordered first parser is near.
 	 */
-	public default List<Parser> findParents(Predicate<Parser> predicate) {
+	public default Parsers findParents(Predicate<Parser> predicate) {
 		
 		return findParents(predicate,false);
 	}
@@ -56,10 +55,10 @@ public interface ParserFinderToRoot extends ParserHierarchy{
 	 * @param containCallerParser add first element to callerParser(this parser)
 	 * @return matched parsers ordered first parser is near.
 	 */
-	public default List<Parser> findParents(
+	public default Parsers findParents(
 			Predicate<Parser> predicate,boolean containCallerParser) {
 		
-		List<Parser> parents = new ArrayList<Parser>();
+		Parsers parents = new Parsers();
 		if(containCallerParser){
 			parents.add(getThisParser());
 		}

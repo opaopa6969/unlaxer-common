@@ -28,14 +28,14 @@ public class ChainTest extends ParserTestBase{
 	@Test
 	public void testDigitsAndOperatorAndDigits() {
 		Chain chain = new Chain(
-			new OneOrMore(new DigitParser()),
+			new OneOrMore(DigitParser.class),
 			new Choice(
-				new PlusParser(),
-				new MinusParser(),
-				new MultipleParser(),
-				new DivisionParser()
+				PlusParser.class,
+				MinusParser.class,
+				MultipleParser.class,
+				DivisionParser.class
 			),
-			new OneOrMore(new DigitParser())
+			new OneOrMore(DigitParser.class)
 		);
 			
 		testPartialMatch(chain, "1+1", "1+1");
@@ -72,16 +72,16 @@ public class ChainTest extends ParserTestBase{
 	private Parser createDigitsAndOperatorsParser() {
 		//<Clause> ::= [0-9]+([-+*/][0-9]+)*
 		Chain clauseParser = new Chain(
-			new OneOrMore(new DigitParser()),
+			new OneOrMore(DigitParser.class),
 			new ZeroOrMore(
 				new Chain(
 					new Choice(
-						new PlusParser(),
-						new MinusParser(),
-						new MultipleParser(),
-						new DivisionParser()
+						PlusParser.class,
+						MinusParser.class,
+						MultipleParser.class,
+						DivisionParser.class
 					),
-					new OneOrMore(new DigitParser())
+					new OneOrMore(DigitParser.class)
 				)
 			)
 		);
@@ -98,7 +98,7 @@ public class ChainTest extends ParserTestBase{
 			new MatchOnly(Name.of(Baz.lookahead),
 				new Chain(Name.of(Baz.declareStopWord),
 					new OneOrMore(Name.of(Baz.stopWord),
-						new AlphabetParser()
+						AlphabetParser.class
 					),
 					new WordParser(";")
 				)
@@ -111,7 +111,7 @@ public class ChainTest extends ParserTestBase{
 					new WordParser(";")
 				),
 				new OneOrMore(Name.of(Baz.contents),
-					new AlphabetNumericParser()//
+					AlphabetNumericParser.class//
 				).newWithTerminator(
 					new MatchOnly(//
 						new MatchedTokenParser(
@@ -134,7 +134,7 @@ public class ChainTest extends ParserTestBase{
 			new MatchOnly(Name.of(Baz.lookahead),
 				new Chain(Name.of(Baz.declareStopWord),
 					new OneOrMore(Name.of(Baz.stopWord),
-						new AlphabetParser()
+						AlphabetParser.class
 					),
 					new WordParser(";")
 				)
@@ -147,7 +147,7 @@ public class ChainTest extends ParserTestBase{
 					new WordParser(";")
 				),
 				new OneOrMore(Name.of(Baz.contents),
-					new AlphabetNumericParser()//
+					AlphabetNumericParser.class//
 				).newWithTerminator(
 					new MatchOnly(//
 						new OldMatchedTokenParser(

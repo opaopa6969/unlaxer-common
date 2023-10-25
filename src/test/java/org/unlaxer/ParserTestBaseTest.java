@@ -18,14 +18,14 @@ public class ParserTestBaseTest extends ParserTestBase{
 		
 		setLevel(OutputLevel.mostDetail);
 		Chain chain = new Chain(
-			new OneOrMore(new DigitParser()),
+			new OneOrMore(DigitParser.class),
 			new Choice(
-				new PlusParser(),
-				new MinusParser(),
-				new MultipleParser(),
-				new DivisionParser()
+				PlusParser.class,
+				MinusParser.class,
+				MultipleParser.class,
+				DivisionParser.class
 			),
-			new OneOrMore(new DigitParser())
+			new OneOrMore(DigitParser.class)
 		);
 			
 		testPartialMatch(chain, "1+1", "1+1");

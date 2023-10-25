@@ -1,6 +1,5 @@
 package org.unlaxer.parser;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.unlaxer.RecursiveMode;
@@ -8,13 +7,13 @@ import org.unlaxer.reducer.TagBasedReducer.NodeKind;
 
 public interface LazyParserChildrenSpecifier extends LazyInstance {
 	
-	public List<Parser> getLazyParsers();
+	public Parsers getLazyParsers();
 
 	@Override
-	public default void prepareChildren(List<Parser> childrenContainer) {
+	public default void prepareChildren(Parsers childrenContainer) {
 		
 		if(childrenContainer.isEmpty()){
-			List<Parser> lazyParsers = getLazyParsers();
+			Parsers lazyParsers = getLazyParsers();
 //			if(lazyParsers == null) {
 //				initialize();
 //				lazyParsers = getLazyParsers();

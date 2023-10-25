@@ -9,6 +9,7 @@ import org.unlaxer.TokenKind;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.MetaFunctionParser;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.PseudoRootParser;
 import org.unlaxer.util.Singletons;
 
@@ -89,7 +90,7 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 			return tokens;
 		}
 
-		List<Parser> childParsers = token.parser.getChildren();
+		Parsers childParsers = token.parser.getChildren();
 
 		if (childParsers.isEmpty()) {
 			if (false == doReduce(token.parser)) {
@@ -98,7 +99,7 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 			return tokens;
 		}
 
-		List<Parser> parsers = new ArrayList<Parser>();
+		Parsers parsers = new Parsers();
 		for (Parser childParser : childParsers) {
 			parsers.addAll(reduce(childParser));
 		}
@@ -110,9 +111,9 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 		return tokens;
 	}
 
-	private List<Parser> reduce(Parser parser) {
+	private Parsers reduce(Parser parser) {
 
-		List<Parser> parsers = new ArrayList<>();
+		Parsers parsers = new Parsers();
 
 		if (false == parser instanceof MetaFunctionParser) {
 			parsers.add(parser);

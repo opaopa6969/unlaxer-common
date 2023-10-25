@@ -13,7 +13,7 @@ public class ZeroOrOneTest extends ParserTestBase{
 		
 		setLevel(OutputLevel.detail);
 		
-		ZeroOrOne zeroOrOne = new ZeroOrOne(new AlphabetParser());
+		ZeroOrOne zeroOrOne = new ZeroOrOne(AlphabetParser.class);
 		
 		testAllMatch(zeroOrOne, "");
 		testAllMatch(zeroOrOne, "a");

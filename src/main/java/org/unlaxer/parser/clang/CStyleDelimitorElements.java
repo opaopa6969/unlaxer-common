@@ -1,21 +1,20 @@
 package org.unlaxer.parser.clang;
 
-import java.util.List;
-
-import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.combinator.LazyChoice;
 import org.unlaxer.parser.elementary.SpaceDelimitor;
 
 public class CStyleDelimitorElements extends LazyChoice{
 
-  @Override
-  public List<Parser> getLazyParsers() {
+	private static final long serialVersionUID = -5762498031382073733L;
+
+@Override
+  public Parsers getLazyParsers() {
     
     return new Parsers(
-        Parser.get(BlockComment.class),
-        Parser.get(CPPComment.class),
-        Parser.get(SpaceDelimitor.class)
+        BlockComment.class,
+        CPPComment.class,
+        SpaceDelimitor.class
     );
   }
   

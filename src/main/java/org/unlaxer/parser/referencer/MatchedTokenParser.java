@@ -15,6 +15,7 @@ import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.AbstractParser;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.elementary.WordParser;
 import org.unlaxer.parser.elementary.WordParser.RangeSpecifier;
 import org.unlaxer.parser.elementary.WordParser.WordEffector;
@@ -34,7 +35,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 	Supplier<Predicate<Token>> tokenPredicator;
 
 	public MatchedTokenParser(Parser targetParser) {
-		super(List.of(targetParser));
+		super(Parsers.of(targetParser));
 		this.targetParser = targetParser;
 		rangeSpecifier = null;
 		reverse = false;
@@ -47,7 +48,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 			Parser targetParser,
 			RangeSpecifier rangeSpecifier,
 			boolean reverse) {
-		super(List.of(targetParser));
+		super(Parsers.of(targetParser));
 		this.targetParser = targetParser;
 		this.reverse = reverse;
 		this.rangeSpecifier = rangeSpecifier;
@@ -60,7 +61,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 			Parser targetParser,
 			WordEffector wordEffector
 			) {
-		super(List.of(targetParser));
+		super(Parsers.of(targetParser));
 		this.targetParser = targetParser;
 		this.reverse = false;
 		this.rangeSpecifier = null;
@@ -73,7 +74,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 			Parser targetParser,
 			Consumer<Slicer> slicerEffector
 			) {
-		super(List.of(targetParser));
+		super(Parsers.of(targetParser));
 		this.targetParser = targetParser;
 		this.reverse = false;
 		this.rangeSpecifier = null;
@@ -252,7 +253,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 	}
 
 	@Override
-	public void prepareChildren(List<Parser> childrenContainer) {
+	public void prepareChildren(Parsers childrenContainer) {
 	}
 
 }

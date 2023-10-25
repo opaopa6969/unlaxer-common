@@ -1,8 +1,7 @@
 package org.unlaxer;
 
-import java.util.List;
-
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public interface RecursiveTaggable extends ParserTaggable{
 	
@@ -17,7 +16,7 @@ public interface RecursiveTaggable extends ParserTaggable{
 	public default Parser addTag(boolean recursive ,RecursiveMode recursiveMode , Tag... addeds){
 		
 		if(recursive){
-			List<Parser> flatten = getThisParser().flatten(recursiveMode);
+			Parsers flatten = getThisParser().flatten(recursiveMode);
 			for (Parser parser : flatten) {
 				parser.addTag(addeds);
 			}
@@ -39,7 +38,7 @@ public interface RecursiveTaggable extends ParserTaggable{
 			, Tag... removes){
 		
 		if(recursive){
-			List<Parser> flatten = getThisParser().flatten(recursiveMode);
+			Parsers flatten = getThisParser().flatten(recursiveMode);
 			for (Parser parser : flatten) {
 				parser.removeTag(removes);
 			}

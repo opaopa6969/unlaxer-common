@@ -9,6 +9,7 @@ import org.unlaxer.RecursiveMode;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.elementary.SpaceDelimitor;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
 
@@ -40,7 +41,7 @@ public abstract class WhiteSpaceDelimitedLazyChain extends LazyChain {
 	}
 
 	@Override
-	public void prepareChildren(List<Parser> childrenContainer) {
+	public void prepareChildren(Parsers childrenContainer) {
 		
 		if(childrenContainer.isEmpty()){
 			List<Parser> lazyParsers = getLazyParsers();
