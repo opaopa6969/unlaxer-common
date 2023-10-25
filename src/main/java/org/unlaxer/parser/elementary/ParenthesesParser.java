@@ -41,12 +41,18 @@ public class ParenthesesParser extends WhiteSpaceDelimitedLazyChain {
 			throw new IllegalArgumentException("this token did not generate from " + 
 				ParenthesesParser.class.getName());
 		}
-		Parser contentsParser = Parser.get(ParenthesesParser.class.cast(parenthesesed.parser).inner);
+		Parser contentsParser = ParenthesesParser.class.cast(parenthesesed.parser).getParenthesesedParser();
 		return parenthesesed.getChildWithParser(parser -> parser.equals(contentsParser));
 	}
 	
 	public Parser getParenthesesedParser(){
-		return Parser.get(inner);
+	  synchronized (this) {
+	    if(innerParser == null ) {
+	      innerParser = Parser.get(inner);
+	    }
+    }
+
+		return innerParser;
 	}
 
 	@Override
@@ -54,7 +60,7 @@ public class ParenthesesParser extends WhiteSpaceDelimitedLazyChain {
 		return 
 			Parsers.of(
 				new LeftParenthesisParser(),
-				innerParser == null ?  Parser.get(inner) : innerParser,
+				getParenthesesedParser(),
 				new RightParenthesisParser()
 			);
 
@@ -63,6 +69,6 @@ public class ParenthesesParser extends WhiteSpaceDelimitedLazyChain {
 	@TokenExtractor
 	public Token getInnerParserParsed(Token thisParserParsed) {
 //		return thisParserParsed.filteredChildren.get(1);
-		return thisParserParsed.getChildWithParser(parser->parser.equals(inner));
+		return thisParserParsed.getChildWithParser(parser->parser.equals(innerParser));
 	}
 }

@@ -4,13 +4,13 @@ package org.unlaxer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Suggest;
-import org.unlaxer.parser.SuggestableParser;
 import org.unlaxer.parser.Suggests;
 import org.unlaxer.parser.SuggestsCollectorParser;
 import org.unlaxer.parser.ascii.MinusParser;
@@ -96,53 +96,11 @@ public class SuggestsCollectorParserTest extends ParserTestBase{
 	}
 
 	
-	/**
-	 * this parser is sample for suggest. 
-	 * if you want to see applicative implementation , calculator Project org.unlaxer.sample.calc.parser.function.SinParser
-	 */
-	public class SinParser extends SuggestableParser {
-
-		private static final long serialVersionUID = 5911697205587011643L;
-
-		public SinParser() {
-			super(true, "sin");
-		}
-			
-		@Override
-		public String getSuggestString(String matchedString) {
-			return "(".concat(matchedString).concat(")");
-		}
-
-	}
-
-	public class SqrtParser extends SuggestableParser {
-
-		private static final long serialVersionUID = -6097760458963414195L;
-
-		public SqrtParser() {
-			super(true, "sqrt");
-		}
-			
-		@Override
-		public String getSuggestString(String matchedString) {
-			return "(".concat(matchedString).concat(")");
-		}
-
-	}
-
-	
-	public class CosParser extends SuggestableParser {
-
-		private static final long serialVersionUID = 5850124685962927999L;
-
-		public CosParser() {
-			super(true, "cos");
-		}
-			
-		@Override
-		public String getSuggestString(String matchedString) {
-			return "(".concat(matchedString).concat(")");
-		}
-	}
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	  
+	  CosParser newInstance = CosParser.class.getDeclaredConstructor().newInstance();
+	  CosParser cosParser = new CosParser();
+    
+  }
 
 }
