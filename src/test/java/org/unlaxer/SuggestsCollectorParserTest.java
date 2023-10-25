@@ -4,7 +4,6 @@ package org.unlaxer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,11 +95,11 @@ public class SuggestsCollectorParserTest extends ParserTestBase{
 	}
 
 	
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-	  
-	  CosParser newInstance = CosParser.class.getDeclaredConstructor().newInstance();
-	  CosParser cosParser = new CosParser();
-    
-  }
+//	public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+//	  
+//	  CosParser newInstance = CosParser.class.getDeclaredConstructor().newInstance();
+//	  CosParser cosParser = new CosParser();
+//    
+//  }
 
 }
