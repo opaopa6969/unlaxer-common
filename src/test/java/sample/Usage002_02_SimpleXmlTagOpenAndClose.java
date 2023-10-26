@@ -1,7 +1,5 @@
 package sample;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.listener.OutputLevel;
@@ -46,7 +44,7 @@ public class Usage002_02_SimpleXmlTagOpenAndClose extends ParserTestBase {
 		private static final long serialVersionUID = -4625102353325797710L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			return new Parsers(
 				new OpenCloseTags(),
@@ -60,12 +58,12 @@ public class Usage002_02_SimpleXmlTagOpenAndClose extends ParserTestBase {
 		private static final long serialVersionUID = -459175328755441487L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			return new Parsers(
 				new OpenTag(),
 				new Optional(
-					new NoMixedContentsXmlElements()
+					NoMixedContentsXmlElements.class
 				),
 				new CloseTag()
 			);

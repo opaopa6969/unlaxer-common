@@ -1,6 +1,5 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -11,6 +10,7 @@ import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.HasChildrenParser;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.elementary.SpaceDelimitor;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
 
@@ -23,7 +23,7 @@ public class WhiteSpaceDelimitedChain extends Chain {
 		spaceDelimitor.addTag(NodeKind.notNode.getTag());
 	}
 
-	public WhiteSpaceDelimitedChain(List<Parser> children) {
+	public WhiteSpaceDelimitedChain(Parsers children) {
 		super(setup(children));
 	}
 
@@ -32,7 +32,7 @@ public class WhiteSpaceDelimitedChain extends Chain {
 		super(setup(children));
 	}
 	
-	public WhiteSpaceDelimitedChain(Name name, List<Parser> children) {
+	public WhiteSpaceDelimitedChain(Name name, Parsers children) {
 		super(name, setup(children));
 	}
 
@@ -53,11 +53,11 @@ public class WhiteSpaceDelimitedChain extends Chain {
 			.filter(passFilter)
 			.collect(Collectors.toList());
 		
-		return new WhiteSpaceDelimitedChain(getName() , newChildren);
+		return new WhiteSpaceDelimitedChain(getName() ,Parsers.of(newChildren));
 	}
 
 	@Override
-	public HasChildrenParser createWith(List<Parser> children) {
+	public HasChildrenParser createWith(Parsers children) {
 		return new WhiteSpaceDelimitedChain(getName() , children);
 	}
 	
@@ -72,8 +72,8 @@ public class WhiteSpaceDelimitedChain extends Chain {
 		return newParsers;
 	}
 	
-	static List<Parser> setup(List<Parser> parsers) {
-		List<Parser> results = new ArrayList<>();
+	static Parsers setup(Parsers parsers) {
+		Parsers results = new Parsers();
 		results.add(spaceDelimitor);
 		for (Parser parser : parsers) {
 			results.add(parser);

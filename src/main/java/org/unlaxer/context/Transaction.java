@@ -26,6 +26,7 @@ import org.unlaxer.parser.CollectingParser;
 import org.unlaxer.parser.LazyInstance;
 import org.unlaxer.parser.MetaFunctionParser;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.combinator.ChoiceInterface;
 import org.unlaxer.parser.combinator.NonOrdered;
 
@@ -183,7 +184,7 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 		return Optional.ofNullable(getChosenParserByChoice().get(choice));
 	}
 
-	public default List<Parser> getOrdered(NonOrdered nonOrdered) {
+	public default Parsers getOrdered(NonOrdered nonOrdered) {
 		return getOrderedParsersByNonOrdered().get(nonOrdered);
 	}
 	

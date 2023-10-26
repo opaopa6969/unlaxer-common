@@ -1,6 +1,5 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.unlaxer.Name;
@@ -10,7 +9,7 @@ import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.HasChildrenParser;
 import org.unlaxer.parser.LazyParserChildrenSpecifier;
-import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public abstract class LazyChoice extends LazyCombinatorParser implements ChoiceInterface , LazyParserChildrenSpecifier{
 
@@ -30,13 +29,13 @@ public abstract class LazyChoice extends LazyCombinatorParser implements ChoiceI
 	}
 
 	@Override
-	public HasChildrenParser createWith(List<Parser> children) {
+	public HasChildrenParser createWith(Parsers children) {
 		return new LazyChoice(getName()) {
 			
 			private static final long serialVersionUID = 6650564064744230492L;
 
 			@Override
-			public List<Parser> getLazyParsers() {
+			public Parsers getLazyParsers() {
 				return children;
 			}
 			

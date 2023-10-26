@@ -1,6 +1,5 @@
 package org.unlaxer.parser.referencer;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -11,6 +10,7 @@ import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.AbstractParser;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public class ReferenceParser extends AbstractParser{
 
@@ -66,7 +66,9 @@ public class ReferenceParser extends AbstractParser{
 		return matchedParser;
 	}
 
+
 	@Override
-	public void prepareChildren(List<Parser> childrenContainer) {
+	public void prepareChildren(Parsers childrenContainer) {
 	}
+	
 }

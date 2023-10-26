@@ -50,16 +50,16 @@ public class Usage001_createParserAndParse extends UsageBase{
 		
 		//<Clause> ::= [0-9]+([-+*/][0-9]+)*
 		Chain clauseParser = new Chain(
-			new OneOrMore(new DigitParser()),
+			new OneOrMore(DigitParser.class),
 			new ZeroOrMore(
 				new Chain(
 					new Choice(
-						new PlusParser(),
-						new MinusParser(),
-						new MultipleParser(),
-						new DivisionParser()
+						PlusParser.class,
+						MinusParser.class,
+						MultipleParser.class,
+						DivisionParser.class
 					),
-					new OneOrMore(new DigitParser())
+					new OneOrMore(DigitParser.class)
 				)
 			)
 		);

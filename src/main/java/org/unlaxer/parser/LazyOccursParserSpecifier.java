@@ -1,6 +1,5 @@
 package org.unlaxer.parser;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -11,7 +10,7 @@ public interface LazyOccursParserSpecifier extends LazyInstance{
 	public Optional<Parser> getLazyTerminatorParser();
 	
 	@Override
-	public default void prepareChildren(List<Parser> childrenContainer) {
+	public default void prepareChildren(Parsers childrenContainer) {
 		
 		if(childrenContainer.isEmpty()){
 			childrenContainer.add(getLazyParser().get());

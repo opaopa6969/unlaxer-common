@@ -1,7 +1,5 @@
 package org.unlaxer.parser;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 
 public abstract class LazyAbstractParser extends AbstractParser{
@@ -17,12 +15,12 @@ public abstract class LazyAbstractParser extends AbstractParser{
 	}
 	
 	@SuppressWarnings("unused")
-	private LazyAbstractParser(List<Parser> children) {
+	private LazyAbstractParser(Parsers children) {
 		super(children);
 	}
 
 	@SuppressWarnings("unused")
-	private LazyAbstractParser(Name name, List<Parser> children) {
+	private LazyAbstractParser(Name name, Parsers children) {
 		super(name, children);
 	}
 	

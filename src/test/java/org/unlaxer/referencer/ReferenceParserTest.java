@@ -20,7 +20,7 @@ public class ReferenceParserTest extends ParserTestBase {
 		Name elementsName = Name.of("closure");
 		Chain parser = new Chain(
 				new ParenthesesParser(//
-					new OneOrMore(elementsName, new AlphabetParser())
+					new OneOrMore(elementsName, AlphabetParser.class)
 				),
 				new ReferenceParser(current -> 
 					current.getName().equals(elementsName))
@@ -39,7 +39,7 @@ public class ReferenceParserTest extends ParserTestBase {
 		Name elementsName = Name.of("closure");
 		Chain parser = new Chain(
 				new ParenthesesParser(//
-					new OneOrMore(elementsName, new AlphabetParser())
+					new OneOrMore(elementsName, AlphabetParser.class)
 				),
 				ReferenceParser.of(elementsName)
 		);

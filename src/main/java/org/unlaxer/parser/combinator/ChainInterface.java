@@ -1,11 +1,10 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.List;
-
 import org.unlaxer.Parsed;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public interface ChainInterface extends Parser{
 	
@@ -17,7 +16,7 @@ public interface ChainInterface extends Parser{
 		parseContext.startParse(this, parseContext, tokenKind, invertMatch);
 		parseContext.begin(this);
 		
-		List<Parser> children = getChildren();
+		Parsers children = getChildren();
 
 		for (Parser parser : children) {
 			Parsed parsed = parser.parse(parseContext,tokenKind,invertMatch);

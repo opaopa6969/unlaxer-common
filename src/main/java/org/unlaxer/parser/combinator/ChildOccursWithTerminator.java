@@ -1,6 +1,7 @@
 package org.unlaxer.parser.combinator;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.unlaxer.Name;
 import org.unlaxer.parser.ChildOccurs;
@@ -13,20 +14,38 @@ public abstract class ChildOccursWithTerminator extends ConstructedOccurs	{
 	private static final long serialVersionUID = -4411440278839259161L;
 
 	
-	Optional<Parser> terminator;
+	Optional<Supplier<Parser>> terminator;
 
-	public ChildOccursWithTerminator(Parser inner) {
+	public ChildOccursWithTerminator(Supplier<Parser> inner) {
 		this(inner,null);
 	}
-	ChildOccursWithTerminator(Parser inner,Parser terminator) {
+	
+	public ChildOccursWithTerminator(Class<? extends Parser> inner) {
+		this(()->Parser.get(inner),null);
+	}
+	
+	ChildOccursWithTerminator(Supplier<Parser> inner,Supplier<Parser> terminator) {
 		this(null,inner,terminator);
 	}
 	
-	public ChildOccursWithTerminator(Name name , Parser inner) {
+	public ChildOccursWithTerminator(Name name , Supplier<Parser> inner) {
 		this(name , inner, null);
 	}
 	
-	ChildOccursWithTerminator(Name name , Parser inner,Parser terminator) {
+	public ChildOccursWithTerminator(Name name , Class<? extends Parser> inner) {
+		this(name , ()->Parser.get(inner), null);
+	}
+	
+	public ChildOccursWithTerminator(Name name , Class<? extends Parser> inner , Class<? extends Parser> terminator) {
+		this(name , ()->Parser.get(inner) , ()->Parser.get(terminator));
+	}
+	
+	public ChildOccursWithTerminator(Name name , Parser inner , Parser terminator) {
+		this(name , ()->inner , ()->terminator);
+	}
+
+	
+	ChildOccursWithTerminator(Name name , Supplier<Parser> inner,Supplier<Parser> terminator) {
 		super(name , terminator == null ? 
 				new Parsers(inner):
 				new Parsers(inner,terminator));
@@ -45,7 +64,7 @@ public abstract class ChildOccursWithTerminator extends ConstructedOccurs	{
 	
 	@Override
 	public Optional<Parser> getTerminator(){
-		return terminator;
+		return terminator.map(Supplier::get);
 				
 	}
 }

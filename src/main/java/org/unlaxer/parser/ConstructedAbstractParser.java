@@ -1,7 +1,5 @@
 package org.unlaxer.parser;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 
 public abstract class ConstructedAbstractParser extends AbstractParser{
@@ -9,11 +7,11 @@ public abstract class ConstructedAbstractParser extends AbstractParser{
 	private static final long serialVersionUID = 37196026907568384L;
 
 
-	public ConstructedAbstractParser(List<Parser> children) {
+	public ConstructedAbstractParser(Parsers children) {
 		super(children);
 	}
 
-	public ConstructedAbstractParser(Name name, List<Parser> children) {
+	public ConstructedAbstractParser(Name name, Parsers children) {
 		super(name, children);
 	}
 	
@@ -28,7 +26,7 @@ public abstract class ConstructedAbstractParser extends AbstractParser{
 	}
 
 	@Override
-	public void prepareChildren(List<Parser> childrenContainer) {
+	public void prepareChildren(Parsers childrenContainer) {
 	}
 
 	@Override

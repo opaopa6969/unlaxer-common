@@ -13,7 +13,7 @@ public class EmptyTest extends ParserTestBase{
 		
 		setLevel(OutputLevel.detail);
 		
-		Zero emptyParser = new Zero(new WildCardCharacterParser());
+		Zero emptyParser = new Zero(WildCardCharacterParser.class);
 		
 		testAllMatch(emptyParser, "");
 		testUnMatch(emptyParser, " ");

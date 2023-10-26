@@ -14,7 +14,7 @@ public class OneOrMoreTest extends ParserTestBase{
 	  
 	  setLevel(OutputLevel.detail);
 		
-		OneOrMore digits = new OneOrMore(new DigitParser());
+		OneOrMore digits = new OneOrMore(DigitParser.class);
 		
 		testPartialMatch(digits, "123", "123");
 		testPartialMatch(digits, "123e", "123");

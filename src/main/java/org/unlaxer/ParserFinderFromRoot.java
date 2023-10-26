@@ -1,11 +1,11 @@
 package org.unlaxer;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public interface ParserFinderFromRoot extends ParserHierarchy{
 	
@@ -15,7 +15,7 @@ public interface ParserFinderFromRoot extends ParserHierarchy{
 	
 	public default Stream<Parser> findFromRoot(Predicate<Parser> predicate) {
 		//FIXME!
-		List<Parser> flattenOriginal = getRoot().flatten();
+		Parsers flattenOriginal = getRoot().flatten();
 		return flattenOriginal.stream()
 				.peek(parser->System.out.println(parser.toString()))
 				.filter(predicate);

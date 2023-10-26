@@ -17,7 +17,7 @@ public class ZeroOrMoreTest extends ParserTestBase{
 	@Test
 	public void test() {
 		
-		ZeroOrMore digits = new ZeroOrMore(new DigitParser());
+		ZeroOrMore digits = new ZeroOrMore(DigitParser.class);
 		testSucceededOnly(digits, "");
 		testPartialMatch(digits, "123", "123");
 		testPartialMatch(digits, "123e", "123");
@@ -33,7 +33,7 @@ public class ZeroOrMoreTest extends ParserTestBase{
 		{
 			ZeroOrMore terminatored = //
 					new ZeroOrMore(//
-						new AlphabetNumericParser()//
+						AlphabetNumericParser.class//
 					).newWithTerminator(
 						new ParserWrapper(//
 							new MappedSingleCharacterParser("Z")
@@ -44,7 +44,7 @@ public class ZeroOrMoreTest extends ParserTestBase{
 		{
 			ZeroOrMore terminatored = //
 					new ZeroOrMore(//
-						new AlphabetNumericParser()//
+						AlphabetNumericParser.class//
 					).newWithTerminator(
 						new ParserWrapper(//
 							new MappedSingleCharacterParser("Z"),TokenKind.matchOnly,false
@@ -55,7 +55,7 @@ public class ZeroOrMoreTest extends ParserTestBase{
 		{
 			ZeroOrMore terminatored = //
 					new ZeroOrMore(//
-						new AlphabetNumericParser()//
+						AlphabetNumericParser.class//
 					).newWithTerminator(
 						new MatchOnly(//
 							new  MappedSingleCharacterParser("Z")
@@ -66,7 +66,7 @@ public class ZeroOrMoreTest extends ParserTestBase{
 		{
 			ZeroOrMore terminatored = //
 					new ZeroOrMore(//
-						new AlphabetNumericParser()//
+						AlphabetNumericParser.class//
 					).newWithTerminator(
 						new MappedSingleCharacterParser("Z")
 					);
@@ -75,7 +75,7 @@ public class ZeroOrMoreTest extends ParserTestBase{
 		{
 			ZeroOrMore terminatored = //
 					new ZeroOrMore(//
-						new AlphabetNumericParser()//
+						AlphabetNumericParser.class//
 					).newWithTerminator(
 						new MatchOnly(//
 							new  MappedSingleCharacterParser("Z")

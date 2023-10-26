@@ -1,9 +1,8 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 /**
  * this class determined {@link NonOrdered}
@@ -13,11 +12,11 @@ public class Ordered extends Chain{
 
 	private static final long serialVersionUID = -4021651140760345185L;
 
-	public Ordered(List<Parser> children) {
+	public Ordered(Parsers children) {
 		super(children);
 	}
 
-	public Ordered(Name name, List<Parser> children) {
+	public Ordered(Name name, Parsers children) {
 		super(name, children);
 	}
 

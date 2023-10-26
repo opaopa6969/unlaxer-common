@@ -52,8 +52,8 @@ public class NotTest extends ParserTestBase{
 			new AlphabetParser(),
 			new ZeroOrMore(
 				new Choice(
-					new AlphabetParser(),
-					new DigitParser()
+					AlphabetParser.class,
+					DigitParser.class
 				) 
 			)
 			,new NotPropagatableSource(

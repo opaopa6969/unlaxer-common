@@ -1,6 +1,5 @@
 package org.unlaxer.parser.elementary;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -51,8 +50,8 @@ public class QuotedParser extends LazyChain {
 	public static final Name contentsName = Name.of(QuotedParser.class, Parts.contents.get());
 
 	@Override
-	public List<Parser> getLazyParsers() {
-		return new Parsers(
+	public Parsers getLazyParsers() {
+		return Parsers.of(
 			new ParserWrapper(
 				Name.of(QuotedParser.class, Parts.leftQuote.get()),
 				quoteParser

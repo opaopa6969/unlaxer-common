@@ -1,24 +1,22 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.CollectingParser;
 import org.unlaxer.parser.ConstructedAbstractParser;
-import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public abstract class ConstructedOccurs extends ConstructedAbstractParser implements Occurs , CollectingParser{
 
 	private static final long serialVersionUID = 7296599133826276749L;
 
-	public ConstructedOccurs(List<Parser> children) {
+	public ConstructedOccurs(Parsers children) {
 		super(children);
 	}
 
-	public ConstructedOccurs(Name name, List<Parser> children) {
+	public ConstructedOccurs(Name name, Parsers children) {
 		super(name, children);
 	}
 

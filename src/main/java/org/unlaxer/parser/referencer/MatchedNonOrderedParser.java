@@ -1,6 +1,5 @@
 package org.unlaxer.parser.referencer;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -9,6 +8,7 @@ import org.unlaxer.Parsed;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.combinator.NonOrdered;
 import org.unlaxer.parser.combinator.NoneChildParser;
 import org.unlaxer.parser.combinator.Ordered;
@@ -45,7 +45,7 @@ public class MatchedNonOrderedParser extends NoneChildParser{
 					if(false == parser instanceof NonOrdered){
 						throw new IllegalArgumentException("you must specify reference to Choice instance");
 					}
-					List<Parser> ordered = parseContext.getOrdered((NonOrdered) parser);
+					Parsers ordered = parseContext.getOrdered((NonOrdered) parser);
 					if(ordered.isEmpty()){
 						return Parsed.FAILED;
 					}
