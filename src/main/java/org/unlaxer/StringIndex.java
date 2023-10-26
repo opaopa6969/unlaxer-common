@@ -16,4 +16,9 @@ public class StringIndex extends Index{
   public StringIndex add(int adding) {
     return new StringIndex(value+adding);
   }
+  
+  public StringIndex minus(int minusing) {
+    return new StringIndex(value-minusing);
+  }
+
 }

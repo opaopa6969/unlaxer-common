@@ -2,6 +2,7 @@ package org.unlaxer.parser.combinator;
 
 import java.util.Optional;
 
+import org.unlaxer.CodePointIndex;
 import org.unlaxer.Parsed;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
@@ -20,7 +21,7 @@ public interface Occurs extends MetaFunctionParser , NonTerminallSymbol {
 		int matchCount = 0;
 		Optional<Parser> terminator = getTerminator();
 		while (true) {
-			int startPosition = parseContext.getPosition(tokenKind);
+		  CodePointIndex startPosition = parseContext.getPosition(tokenKind);
 			
 			if(terminator.isPresent()){
 				parseContext.begin(this);

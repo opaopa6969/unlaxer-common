@@ -35,16 +35,16 @@ public class CursorRange implements Comparable<CursorRange>{
 		return startIndexInclusive.getPosition() == endIndexExclusive.getPosition();
 	}
 
-	public boolean match(Index position){
+	public boolean match(CodePointIndex position){
 		return position.value >=startIndexInclusive.getPosition().value 
 		    && position.value < endIndexExclusive.getPosition().value;
 	}
 	
-	public boolean smallerThan(Index position){
+	public boolean smallerThan(CodePointIndex position){
 		return position.value >= endIndexExclusive.getPosition().value;
 	}
 	
-	public boolean biggerThan(Index position){
+	public boolean biggerThan(CodePointIndex position){
 		return position.value < startIndexInclusive.getPosition().value;
 	}
 	

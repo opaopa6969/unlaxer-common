@@ -18,6 +18,11 @@ public class CodePointIndexWithNegativeValue extends CodePointIndex{
     return new CodePointIndexWithNegativeValue(value+adding);
   }
   
+  public CodePointIndexWithNegativeValue minus(int minusing) {
+    return new CodePointIndexWithNegativeValue(value-minusing);
+  }
+
+  
   public boolean isNegative() {
     return value < 0;
   }

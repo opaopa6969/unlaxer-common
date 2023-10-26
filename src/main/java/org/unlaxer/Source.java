@@ -4,31 +4,21 @@ import java.io.Serializable;
 
 public interface Source extends Serializable{
 	
-	public RangedString peek(int startIndexInclusive, int length);
-	
-	public default RangedString peek(CodePointIndex startIndexInclusive, Length length) {
-	  return peek(startIndexInclusive.value, length.value);
-	}
+	public RangedString peek(CodePointIndex startIndexInclusive, CodePointLength length);
 	
   public default RangedString peek(CodePointIndex startIndexInclusive, Index endIndexExclusive) {
-    return peek(startIndexInclusive.value, endIndexExclusive.value - startIndexInclusive.value);
-  }
-  
-  public default RangedString peekLast(CodePointIndex endIndexInclusive, Length length) {
-    return peekLast(endIndexInclusive.value, length.value);
+    return peek(startIndexInclusive , new CodePointLength(endIndexExclusive.value - startIndexInclusive.value));
   }
 	
-	public default RangedString peekLast(int endIndexInclusive, int length) {
-		int start = endIndexInclusive-length;
+	public default RangedString peekLast(CodePointIndex endIndexInclusive, CodePointLength length) {
+		int start = endIndexInclusive.value - length.value;
 		start = start <0 ? 0 : start;
-		int end = endIndexInclusive - start;
-		return peek(start , end);
+		int end = endIndexInclusive.value - start;
+		return peek(new CodePointIndex(start) , new CodePointIndex(end));
 	}
 	
-	public int getLength();
+	public CodePointLength getLength();
 	
-	public default Length length() {
-	  return new Length(getLength());
-	}
+	public LineNumber getLineNUmber(CodePointIndex Position);
 	
 }

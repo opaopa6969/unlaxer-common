@@ -10,14 +10,14 @@ public class CursorImpl implements Serializable, Cursor{
 	
 	private NameSpecifier nameSpace;
 	private LineNumber lineNumber;
-	private Index position;
-	private Index positionInLine;
+	private CodePointIndex position;
+	private CodePointOffset positionInLine;
 	
 	public CursorImpl() {
 		super();
 		lineNumber = new LineNumber(0);
-		position = new Index(0);
-		positionInLine = new Index(0);
+		position = new CodePointIndex(0);
+		positionInLine = new CodePointOffset(0);
 		nameSpace =NameSpecifier.of("");
 	}
 	public CursorImpl(Cursor cursor) {
@@ -47,25 +47,25 @@ public class CursorImpl implements Serializable, Cursor{
 	}
 	
 	@Override
-	public Index getPosition() {
+	public CodePointIndex getPosition() {
 		return position;
 	}
 	@Override
-	public Cursor setPosition(Index position) {
+	public Cursor setPosition(CodePointIndex position) {
 		this.position = position;
 		return this;
 	}
 	@Override
-	public Cursor addPosition(Index adding) {
-		this.position = new Index(this.position.value + adding.value);
+	public Cursor addPosition(CodePointOffset adding) {
+		this.position = new CodePointIndex(this.position.value + adding.value);
 		return this;
 	}
 	@Override
-	public Index getPositionInLine() {
+	public CodePointOffset getPositionInLine() {
 		return positionInLine;
 	}
 	@Override
-	public Cursor setPositionInLine(Index positionInLine) {
+	public Cursor setPositionInLine(CodePointOffset positionInLine) {
 		this.positionInLine = positionInLine;
 		return this;
 	}
@@ -77,13 +77,13 @@ public class CursorImpl implements Serializable, Cursor{
   @Override
   public Cursor incrementLineNumber() {
     lineNumber = new LineNumber(lineNumber.value+1);
-    positionInLine = new Index(0);
+    positionInLine = new CodePointOffset(0);
     return this;
   }
   @Override
   public Cursor incrementPosition() {
-    position = new Index(position.value+1);
-    positionInLine = new Index(positionInLine.value+1);
+    position = new CodePointIndex(position.value+1);
+    positionInLine = new CodePointOffset(positionInLine.value+1);
     return this;
   }
 }

@@ -18,6 +18,10 @@ public class StringIndexWithNegativeValue extends Index{
     return new StringIndexWithNegativeValue(value+adding);
   }
   
+  public StringIndexWithNegativeValue minus(int minusing) {
+    return new StringIndexWithNegativeValue(value-minusing);
+  }
+  
   public StringIndex toStringIndex() {
     return new StringIndex(value);
   }

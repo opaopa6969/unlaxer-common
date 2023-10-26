@@ -13,4 +13,9 @@ public class CodePointIndex extends Index{
   public CodePointIndex add(int adding) {
     return new CodePointIndex(value+adding);
   }
+  
+  public CodePointIndex minus(int minusing) {
+    return new CodePointIndex(value-minusing);
+  }
+
 }

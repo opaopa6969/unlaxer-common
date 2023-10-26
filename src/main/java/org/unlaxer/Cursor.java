@@ -16,14 +16,14 @@ public interface Cursor {
 
 	CodePointIndex getPosition();
 
-	Cursor setPosition(Index position);
+	Cursor setPosition(CodePointIndex position);
 	
   Cursor incrementPosition(); 
 
-	Cursor addPosition(Index adding);
+	Cursor addPosition(CodePointOffset adding);
 
 	CodePointOffset getPositionInLine();
 
-	Cursor setPositionInLine(Index positionInLine);
+	Cursor setPositionInLine(CodePointOffset positionInLine);
 
 }

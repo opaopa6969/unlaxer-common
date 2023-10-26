@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.LineNumber;
 import org.unlaxer.Name;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.RangedString;
@@ -143,5 +145,10 @@ public class ParseContext implements
   @Override
   public void addActions(List<AdditionalCommitAction> additionalCommitActions) {
     actions.addAll(additionalCommitActions);
+  }
+
+  @Override
+  public LineNumber getLineNUmber(CodePointIndex Position) {
+    return source.getLineNUmber(Position);
   }
 }

@@ -39,15 +39,16 @@ public class StringSource implements Source{
     }
 	}
 	
+	@Override
 	public LineNumber getLineNUmber(CodePointIndex Position) {
 	  return lineNumberByIndex.floorEntry(Position).getValue();
 	}
 
 	@Override
-	public RangedString peek(int startIndexInclusive, int length) {
+	public RangedString peek(CodePointIndex startIndexInclusive, CodePointLength length) {
 		
-		if(startIndexInclusive + length > codePoints.length){
-		  CodePointIndex index = new CodePointIndex(startIndexInclusive);
+		if(startIndexInclusive.value + length.value > codePoints.length){
+		  CodePointIndex index = new CodePointIndex(startIndexInclusive.value);
 		  CursorRange cursorRange = new CursorRange(new CursorImpl()
 		      .setPosition(index)
 		      .setLineNumber(getLineNUmber(index))
@@ -55,12 +56,11 @@ public class StringSource implements Source{
 			return new RangedString(cursorRange);
 		}
 		
-		CodePointIndex startIndex = new CodePointIndex(startIndexInclusive);
-		CodePointIndex endIndex = new CodePointIndex(startIndexInclusive+length);
+		CodePointIndex endIndex = new CodePointIndex(startIndexInclusive.value +length.value);
     CursorRange cursorRange = new CursorRange(
         new CursorImpl()
-          .setPosition(startIndex)
-          .setLineNumber(getLineNUmber(startIndex)),
+          .setPosition(startIndexInclusive)
+          .setLineNumber(getLineNUmber(startIndexInclusive)),
         new CursorImpl()
           .setPosition(endIndex)
           .setLineNumber(getLineNUmber(endIndex))
@@ -70,25 +70,26 @@ public class StringSource implements Source{
 
 		return new RangedString(
 		    cursorRange,
-				subString(new Index(startIndexInclusive), new Length(length)));
+				subString(startIndexInclusive, length)
+		);
 	}
 	
-	public int[] subCodePoints(Index startIndexInclusive, Index endIndexExclusive) {
+	public int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
 	  return Arrays.copyOfRange(codePoints, startIndexInclusive.value , endIndexExclusive.value);
 	}
 	
-  public String subString(Index startIndexInclusive, Index endIndexExclusive) {
+  public String subString(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
     return new String(codePoints, startIndexInclusive.value , endIndexExclusive.value - startIndexInclusive.value);
   }
   
-  public String subString(Index startIndexInclusive, Length length) {
+  public String subString(CodePointIndex startIndexInclusive, CodePointLength length) {
     return new String(codePoints, startIndexInclusive.value , length.value);
   }
 
 
 	@Override
-	public int getLength() {
-		return codePoints.length;
+	public CodePointLength getLength() {
+		return new CodePointLength(codePoints.length);
 	}
 
 	@Override
