@@ -1,13 +1,12 @@
 package org.unlaxer;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.RootParserIndicator;
 import org.unlaxer.parser.combinator.ConstructedCombinatorParser;
 import org.unlaxer.parser.combinator.ConstructedSingleChildParser;
@@ -51,9 +50,9 @@ public interface ParserHierarchy{
 	
 	public Optional<Parser> getParent();
 	
-	public List<Parser> getChildren();
+	public Parsers getChildren();
 	
-	public void prepareChildren(List<Parser> childrenContainer);
+	public void prepareChildren(Parsers childrenContainer);
 	
 	public void setParent(Parser parent);
 	
@@ -62,14 +61,16 @@ public interface ParserHierarchy{
 	public ChildOccurs getChildOccurs();
 	
 	
-	public default List<Parser> getSiblings(boolean containsMe){
+	public default Parsers getSiblings(boolean containsMe){
 		Optional<Parser> parent = getParent();
 		if(false == parent.isPresent()){
-			return new ArrayList<>();
+			return new Parsers();
 		}
-		return parent.get().getChildren().stream()
-			.filter(parser-> containsMe ? (false == parser.equals(this)) :true)
-			.collect(Collectors.toList());
+		return  Parsers.of(
+			parent.get().getChildren().stream()
+				.filter(parser-> containsMe ? (false == parser.equals(this)) :true)
+				.collect(Collectors.toList())		
+		);
 	}
 	
 	public Optional<Parser> getParser(Name name);

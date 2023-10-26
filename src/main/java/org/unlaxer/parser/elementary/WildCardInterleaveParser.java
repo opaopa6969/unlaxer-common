@@ -21,7 +21,7 @@ public abstract class WildCardInterleaveParser extends LazyZeroOrMore{
   
   @Override
   public Supplier<Parser> getLazyParser() {
-    Parsers parsers = new Parsers(interleaveParsers());
+    Parsers parsers = Parsers.of(interleaveParsers());
     parsers.add(Parser.get(WildCardCharacterParser.class));
     return ()->   new Choice(parsers);
   }

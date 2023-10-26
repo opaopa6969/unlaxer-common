@@ -8,31 +8,37 @@ public class Zero extends ChildOccursWithTerminator {
 
 	private static final long serialVersionUID = -9115349154403135594L;
 
-	public Zero(Parser inner) {
+	public Zero(Class<? extends Parser> inner) {
 		super(inner);
 	}
 	
-	public Zero(Name name , Parser inner) {
+	public Zero(Name name , Class<? extends Parser> inner) {
 		super(name , inner);
 	}
 
 	
-	private Zero(Name name , Parser inner,Parser terminator) {
+	private Zero(Name name , Class<? extends Parser> inner,Class<? extends Parser> terminator) {
 		super(name , inner,terminator);
 	}
 	
-	public Zero(ASTNodeKind astNodeKind ,  Parser inner) {
+	private Zero(Name name , Parser inner , Parser terminator) {
+		super(name , inner,terminator);
+	}
+
+	
+	public Zero(ASTNodeKind astNodeKind ,  Class<? extends Parser> inner) {
 		super(inner);
 		addTag(astNodeKind.tag());
 	}
 	
-	public Zero(Name name , ASTNodeKind astNodeKind ,  Parser inner) {
+	public Zero(Name name , ASTNodeKind astNodeKind ,  Class<? extends Parser> inner) {
 		super(name , inner);
 		addTag(astNodeKind.tag());
 	}
 
 	
-	private Zero(Name name , ASTNodeKind astNodeKind ,  Parser inner,Parser terminator) {
+	private Zero(Name name , ASTNodeKind astNodeKind ,  Class<? extends Parser> inner , 
+			Class<? extends Parser> terminator) {
 		super(name , inner,terminator);
 		addTag(astNodeKind.tag());
 	}

@@ -1,8 +1,5 @@
 package org.unlaxer.parser.elementary;
 
-import java.util.List;
-
-import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.StaticParser;
 import org.unlaxer.parser.combinator.LazyChain;
@@ -17,14 +14,14 @@ public class ExponentParser extends LazyChain implements StaticParser{
 	private static final long serialVersionUID = 4717221978893045863L;
 	
 	@Override
-	public List<Parser> getLazyParsers(){
-		return new Parsers(
+	public Parsers getLazyParsers(){
+		return Parsers.of(
 			new EParser(),
 			new Optional(
-				new SignParser()
+				SignParser.class
 			),
 			new OneOrMore(
-				new DigitParser()
+				DigitParser.class
 			)
 		);
 	}

@@ -14,7 +14,7 @@ public class OptionalTest extends ParserTestBase{
 		
 		setLevel(OutputLevel.simple);
 		
-		Optional digits = new Optional(new DigitParser());
+		Optional digits = new Optional(DigitParser.class);
 		
 		testPartialMatch(digits, "123", "1");
 		testPartialMatch(digits, "123e", "1");

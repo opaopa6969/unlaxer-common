@@ -21,7 +21,7 @@ public class Usage003_01_Palidrome extends ParserTestBase {
 		
 		
 		OneOrMore words = new OneOrMore(
-			new AsciiParser()
+			AsciiParser.class
 		);
 		MatchOnly wordLookahead = new MatchOnly(words);
 		MatchedTokenParser matchedTokenParser = new MatchedTokenParser(wordLookahead);

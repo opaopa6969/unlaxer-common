@@ -1,7 +1,5 @@
 package org.unlaxer.parser.clang;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
@@ -12,6 +10,8 @@ import org.unlaxer.parser.posix.AlphabetUnderScoreParser;
 
 public class IdentifierParser extends LazyChain {
 
+	private static final long serialVersionUID = 1456799104515530397L;
+
 	public IdentifierParser() {
 		super();
 	}
@@ -21,12 +21,12 @@ public class IdentifierParser extends LazyChain {
 	}
 	
 	@Override
-	public List<Parser> getLazyParsers() {
+	public Parsers getLazyParsers() {
 	  return
 	      new Parsers(
 	        Parser.get(AlphabetUnderScoreParser.class),
 	        new ZeroOrMore(
-	          Parser.get(AlphabetNumericUnderScoreParser.class)
+	          AlphabetNumericUnderScoreParser.class
 	        )
       );
 	}

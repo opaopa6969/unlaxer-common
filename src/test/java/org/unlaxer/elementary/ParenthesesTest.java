@@ -10,7 +10,7 @@ public class ParenthesesTest extends ParserTestBase{
 	@Test
 	public void test() {
 		
-		ParenthesesParser parentheses = new ParenthesesParser(new DigitParser());
+		ParenthesesParser parentheses = new ParenthesesParser(DigitParser.class);
 		
 		testPartialMatch(parentheses, "(1)", "(1)");
 		testPartialMatch(parentheses, "(0)", "(0)");

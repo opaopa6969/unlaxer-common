@@ -54,6 +54,10 @@ public interface Parser extends //
   public static <T extends Parser> T get(Class<T> clazz) {
     return ParserFactoryByClass.get(clazz);
   }
+  
+  public static <T extends Parser> Supplier<T> getSupplier(Class<T> clazz) {
+    return ()->ParserFactoryByClass.get(clazz);
+  }
 
 //  public static <T extends Parser> T get(ASTNodeKind nodeKind, Class<T> clazz) {
 //    return ParserFactoryByClass.get(nodeKind, clazz);

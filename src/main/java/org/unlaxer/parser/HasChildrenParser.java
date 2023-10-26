@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public interface HasChildrenParser extends Parser{
 	
-	public List<Parser> getChildren();
+	public Parsers getChildren();
 	
 	public default HasChildrenParser newFiltered(Predicate<Parser> cutFilter){
 		
@@ -16,7 +16,7 @@ public interface HasChildrenParser extends Parser{
 			.filter(passFilter)
 			.collect(Collectors.toList());
 		
-		return createWith(newChildren);
+		return createWith(Parsers.of(newChildren));
 	}
 	
 	public default HasChildrenParser newWithoutRecursive(Predicate<Parser> cutFilter){
@@ -27,7 +27,7 @@ public interface HasChildrenParser extends Parser{
 			.map(Optional::get)
 			.collect(Collectors.toList());
 		
-		return createWith(newChildren);
+		return createWith(Parsers.of(newChildren));
 	}
 	
 	default Optional<Parser> newWithRecursiveChild(Parser target , Predicate<Parser> cutFilter){
@@ -50,12 +50,12 @@ public interface HasChildrenParser extends Parser{
 				.filter(Optional::isPresent)
 				.map(Optional::get)
 				.collect(Collectors.toList());
-			return Optional.of(createWith(children));
+			return Optional.of(createWith(Parsers.of(children)));
 		}
 		return Optional.of(target);
 	}
 
 	
-	HasChildrenParser createWith(List<Parser> children);
+	HasChildrenParser createWith(Parsers children);
 
 }

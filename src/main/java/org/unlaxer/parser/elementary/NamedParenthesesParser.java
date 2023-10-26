@@ -1,7 +1,5 @@
 package org.unlaxer.parser.elementary;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 import org.unlaxer.Token;
 import org.unlaxer.parser.Parser;
@@ -37,7 +35,7 @@ public abstract class NamedParenthesesParser extends WhiteSpaceDelimitedLazyChai
 	}
 	
 	@Override
-	public List<Parser> getLazyParsers() {
+	public Parsers getLazyParsers() {
 		return
 			new Parsers(
 				nameParser(),

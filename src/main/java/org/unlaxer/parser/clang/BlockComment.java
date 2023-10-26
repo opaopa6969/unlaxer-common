@@ -1,10 +1,8 @@
 package org.unlaxer.parser.clang;
 
-import java.util.List;
-
 import org.unlaxer.Name;
 import org.unlaxer.parser.ChainParsers;
-import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.combinator.LazyChain;
 import org.unlaxer.parser.elementary.WildCardStringTerninatorParser;
 import org.unlaxer.parser.elementary.WordParser;
@@ -23,7 +21,7 @@ public class BlockComment extends LazyChain{
 	}
 
 	@Override
-	public List<Parser> getLazyParsers() {
+	public Parsers getLazyParsers() {
 		return new ChainParsers(
 			new WordParser("/*"),
 			new WildCardStringTerninatorParser("*/"),

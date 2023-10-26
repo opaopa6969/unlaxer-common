@@ -6,11 +6,12 @@ public class ChoiceParsers extends Parsers{
 
 	private static final long serialVersionUID = -7959572145076832575L;
 
-	public ChoiceParsers(List<Parser> parsers) {
+	public ChoiceParsers(List<Class<? extends Parser>> parsers) {
 		super(parsers);
 	}
 
-	public ChoiceParsers(Parser... parsers) {
+	@SafeVarargs
+	public ChoiceParsers(Class<? extends Parser>... parsers) {
 		super(parsers);
 	}
 }

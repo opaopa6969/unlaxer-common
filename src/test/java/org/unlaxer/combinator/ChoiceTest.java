@@ -16,8 +16,8 @@ public class ChoiceTest extends ParserTestBase{
 	@Test
 	public void test() {
 		ChoiceInterface digitOrSign = new Choice(
-			new DigitParser(),
-			new SignParser()
+			DigitParser.class,
+			SignParser.class
 		);
 		
 		testPartialMatch(digitOrSign, "+1", "+");

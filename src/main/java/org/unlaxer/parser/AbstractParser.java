@@ -1,6 +1,5 @@
 package org.unlaxer.parser;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +29,7 @@ public abstract class AbstractParser implements Parser {
 
 	Parser parser;
 
-	List<Parser> children;
+	Parsers children;
 
 	public Optional<Parser> parent;
 	
@@ -45,18 +44,18 @@ public abstract class AbstractParser implements Parser {
 	ASTNodeKind astNodeKind;
 	
 	public AbstractParser() {
-		this(null, new ArrayList<>());
+		this(null, new Parsers());
 	}
 	
 	public AbstractParser(Name name) {
-		this(name,new ArrayList<>());
+		this(name,new Parsers());
 	}
 	
-	public AbstractParser(List<Parser> children) {
+	public AbstractParser(Parsers children) {
 		this(null,children);
 	}
 	
-	public AbstractParser(Name name , List<Parser> children) {
+	public AbstractParser(Name name , Parsers children) {
 		super();
 		this.specifiedName = name == null ? Name.of(getClass()) : name; 
 		this.name = name == null ? Name.of(getClass()) : Name.of(getClass(),name);
@@ -130,7 +129,7 @@ public abstract class AbstractParser implements Parser {
 	}
 
 	@Override
-	public List<Parser> getChildren() {
+	public Parsers getChildren() {
 		if(false == donePrepareChildren){
 			prepareChildren(children);
 			donePrepareChildren = true;

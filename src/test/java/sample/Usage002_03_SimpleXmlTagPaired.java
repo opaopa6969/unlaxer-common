@@ -1,6 +1,5 @@
 package sample;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 import org.junit.Test;
@@ -47,7 +46,7 @@ public class Usage002_03_SimpleXmlTagPaired extends ParserTestBase {
 		private static final long serialVersionUID = -1114527678479914911L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			return new Parsers(
 				new OpenCloseTagPaired(),
@@ -68,7 +67,7 @@ public class Usage002_03_SimpleXmlTagPaired extends ParserTestBase {
 		
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			Parser elementName = new TagIdentifier();
 			matchedElementParser = new MatchedTokenParser(elementName);
@@ -89,14 +88,14 @@ public class Usage002_03_SimpleXmlTagPaired extends ParserTestBase {
 		private static final long serialVersionUID = 73057027414137953L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			OpenTagWithReference openTagWithReference = new OpenTagWithReference();
 			
 			return new Parsers(
 				openTagWithReference,
 				new Optional(
-					new NoMixedContentsXmlElementsPaired()
+					NoMixedContentsXmlElementsPaired.class
 				),
 				new CloseTagWithReference(
 					openTagWithReference.getElementNameParser()
@@ -118,7 +117,7 @@ public class Usage002_03_SimpleXmlTagPaired extends ParserTestBase {
 		private static final long serialVersionUID = -6808910910564400230L;
 
 		@Override
-		public List<Parser> getLazyParsers() {
+		public Parsers getLazyParsers() {
 
 			return new Parsers(
 				new WordParser("<"),

@@ -27,7 +27,7 @@ public class MatchedTokenParserTest extends ParserTestBase{
 		setLevel(OutputLevel.simple);
 		
 		Name elementsName = Name.of("inner");
-		OneOrMore inner = new OneOrMore(elementsName , new AlphabetParser());
+		OneOrMore inner = new OneOrMore(elementsName , AlphabetParser.class);
 		Chain parser = new Chain(
 			new ParenthesesParser(//
 				inner//
@@ -48,7 +48,7 @@ public class MatchedTokenParserTest extends ParserTestBase{
 	public void testOccursWithoutTerminator() {
 		setLevel(OutputLevel.simple);
 		
-		OneOrMore inner = new OneOrMore(new AlphabetParser());
+		OneOrMore inner = new OneOrMore(AlphabetParser.class);
 		Chain parser = new Chain(
 			inner,//
 			new WordParser(":"),//separetor
@@ -64,7 +64,7 @@ public class MatchedTokenParserTest extends ParserTestBase{
 	public void testOccursWithTerminator() {
 		setLevel(OutputLevel.simple);
 		
-		OneOrMore inner = new OneOrMore(new WildCardStringParser())
+		OneOrMore inner = new OneOrMore(WildCardStringParser.class)
 			.newWithTerminator(new MatchOnly(new WordParser(":")));
 		
 		Chain parser = new Chain(
@@ -98,7 +98,7 @@ public class MatchedTokenParserTest extends ParserTestBase{
 		Parser varKeywordParser = new WordParser("var");
 		Parser varNameParser = new Chain(
 			new WordParser("$"),
-			new OneOrMore(new AlphabetParser())
+			new OneOrMore(AlphabetParser.class)
 		);
 		
 		Parser typeParser = new Choice(

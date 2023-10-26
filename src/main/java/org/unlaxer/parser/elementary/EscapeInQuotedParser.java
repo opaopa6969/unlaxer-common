@@ -1,9 +1,6 @@
 package org.unlaxer.parser.elementary;
 
-import java.util.List;
-
 import org.unlaxer.Name;
-import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.StaticParser;
 import org.unlaxer.parser.ascii.BackSlashParser;
@@ -22,10 +19,10 @@ public class EscapeInQuotedParser extends LazyChain implements StaticParser{
 	}
 	
 	@Override
-	public List<Parser> getLazyParsers(){
+	public Parsers getLazyParsers(){
 		return new Parsers(
-			new BackSlashParser(),
-			new WildCardStringParser()
+			BackSlashParser.class,
+			WildCardStringParser.class
 		);
 	}
 

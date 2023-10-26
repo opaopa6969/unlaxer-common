@@ -1,6 +1,5 @@
 package org.unlaxer.parser.combinator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.unlaxer.Name;
@@ -10,6 +9,7 @@ import org.unlaxer.context.ParseContext;
 import org.unlaxer.context.Transaction.AdditionalPreCommitAction;
 import org.unlaxer.parser.HasChildrenParser;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 /**
  * aka interleave in RelaxNG
@@ -18,11 +18,11 @@ public class NonOrdered extends ConstructedCombinatorParser {
 
 	private static final long serialVersionUID = 5425945419472077891L;
 
-	public NonOrdered(Name name, List<Parser> parsers) {
+	public NonOrdered(Name name, Parsers parsers) {
 		super(name, parsers);
 	}
 
-	public NonOrdered(List<Parser> parsers) {
+	public NonOrdered(Parsers parsers) {
 		super(parsers);
 	}
 
@@ -35,9 +35,15 @@ public class NonOrdered extends ConstructedCombinatorParser {
 	public NonOrdered(Parser... parsers) {
 		super(parsers);
 	}
+	
+	 @SafeVarargs
+	 public NonOrdered(Class<? extends Parser>... parsers) {
+	    super(parsers);
+	  }
+
 
 	public NonOrdered() {
-		super();
+		super(new Parser[] {});
 	}
 
 	public NonOrdered(Name name) {
@@ -53,7 +59,7 @@ public class NonOrdered extends ConstructedCombinatorParser {
 
 		List<Parser> children = getChildren();
 		
-		List<Parser> determineds = new ArrayList<Parser>();
+		Parsers determineds = new Parsers();
 
 		int size = children.size();
 		int remain = size;
@@ -92,9 +98,9 @@ public class NonOrdered extends ConstructedCombinatorParser {
 	
 	public static class NonOrderedCommitAction implements AdditionalPreCommitAction{
 
-		List<Parser> determineds;
+		Parsers determineds;
 
-		public NonOrderedCommitAction(List<Parser> determineds) {
+		public NonOrderedCommitAction(Parsers determineds) {
 			super();
 			this.determineds = determineds;
 		}
@@ -109,7 +115,7 @@ public class NonOrdered extends ConstructedCombinatorParser {
 	}
 
 	@Override
-	public HasChildrenParser createWith(List<Parser> children) {
+	public HasChildrenParser createWith(Parsers children) {
 		return new NonOrdered(children);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 
 public interface ParserPath extends ParserFinder{
 	
@@ -51,7 +52,7 @@ public interface ParserPath extends ParserFinder{
 	}
 	
 	public default Stream<Parser> getPathStream(boolean containCallerParser){
-		List<Parser> retrieveParents = findParents(Parser.isRoot,containCallerParser);
+		Parsers retrieveParents = findParents(Parser.isRoot,containCallerParser);
 		Collections.reverse(retrieveParents);
 		
 		return retrieveParents.stream();

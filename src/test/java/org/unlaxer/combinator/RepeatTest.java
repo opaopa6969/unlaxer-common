@@ -13,7 +13,7 @@ public class RepeatTest extends ParserTestBase{
 		
 		setLevel(OutputLevel.detail);
 		
-		Repeat repeat = new Repeat(new AlphabetParser(), 2, 3);
+		Repeat repeat = new Repeat(AlphabetParser.class, 2, 3);
 		
 		testAllMatch(repeat, "ab");
 		testAllMatch(repeat, "abc");

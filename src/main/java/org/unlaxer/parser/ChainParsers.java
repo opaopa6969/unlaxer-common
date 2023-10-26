@@ -6,7 +6,12 @@ public class ChainParsers extends Parsers{
 
 	private static final long serialVersionUID = -8565527389285738230L;
 
-	public ChainParsers(List<Parser> parsers) {
+	public ChainParsers(List<Class<? extends Parser>> parsers) {
+		super(parsers);
+	}
+
+	@SafeVarargs
+	public ChainParsers(Class<? extends Parser>... parsers) {
 		super(parsers);
 	}
 

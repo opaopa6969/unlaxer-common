@@ -8,28 +8,42 @@ public class ZeroOrMore extends ChildOccursWithTerminator {
 
   private static final long serialVersionUID = 4026350324813186034L;
 
-  public ZeroOrMore(Parser inner) {
+  public ZeroOrMore(Class<? extends Parser> inner) {
     super(inner);
   }
+  
+  public ZeroOrMore(Parser inner) {
+    super(()-> inner);
+  }
 
-  public ZeroOrMore(Name name, Parser inner) {
+  public ZeroOrMore(Name name, Class<? extends Parser> inner) {
     super(name, inner);
   }
-
-  public ZeroOrMore(Parser inner, Parser terminator) {
-    super(inner, terminator);
+  
+  public ZeroOrMore(Name name, Parser inner) {
+    super(name, ()->inner);
   }
+
+
+  public ZeroOrMore(Class<? extends Parser> inner, Class<? extends Parser> terminator) {
+    super(null , inner, terminator);
+  }
+  
+  public ZeroOrMore(Parser inner, Parser terminator) {
+    super(null , inner, terminator);
+  }
+
 
   public ZeroOrMore(Name name, Parser inner, Parser terminator) {
     super(name, inner, terminator);
   }
 
-  public ZeroOrMore(ASTNodeKind astNodeKind, Parser inner) {
+  public ZeroOrMore(ASTNodeKind astNodeKind, Class<? extends Parser> inner) {
     super(inner);
     addTag(astNodeKind.tag());
   }
 
-  public ZeroOrMore(Name name, ASTNodeKind astNodeKind, Parser inner) {
+  public ZeroOrMore(Name name, ASTNodeKind astNodeKind, Class<? extends Parser> inner) {
     super(name, inner);
     addTag(astNodeKind.tag());
   }

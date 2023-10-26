@@ -70,8 +70,8 @@ public class TagBasedReducerTest extends ParserTestBase{
 		
 		Chain chain = new Chain(
 				
-			new OneOrMore(new AlphabetParser()),
-			new Repeat(new DigitParser(), 1, 2)
+			new OneOrMore(AlphabetParser.class),
+			new Repeat(DigitParser.class, 1, 2)
 		);
 		return chain;
 	}
@@ -81,8 +81,8 @@ public class TagBasedReducerTest extends ParserTestBase{
 		
 		Chain chain = new Chain(
 				
-			new OneOrMore(new AlphabetParser()).addTag(NodeKind.notNode.getTag()),
-			new Repeat(new DigitParser(), 1, 2).addTag(NodeKind.notNode.getTag())
+			new OneOrMore(AlphabetParser.class).addTag(NodeKind.notNode.getTag()),
+			new Repeat(DigitParser.class, 1, 2).addTag(NodeKind.notNode.getTag())
 		);
 		return chain;
 	}
@@ -91,8 +91,8 @@ public class TagBasedReducerTest extends ParserTestBase{
 		
 		
 		Chain chain = new Chain(
-			new NotASTNode(new OneOrMore(new AlphabetParser())),
-			new NotASTNode(new Repeat(new DigitParser(), 1, 2))
+			new NotASTNode(new OneOrMore(AlphabetParser.class)),
+			new NotASTNode(new Repeat(DigitParser.class, 1, 2))
 		);
 		return chain;
 	}

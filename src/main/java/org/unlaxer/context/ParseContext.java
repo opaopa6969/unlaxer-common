@@ -20,6 +20,7 @@ import org.unlaxer.listener.ParserListenerContainer;
 import org.unlaxer.listener.TransactionListener;
 import org.unlaxer.parser.GlobalScopeTree;
 import org.unlaxer.parser.Parser;
+import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.combinator.ChoiceInterface;
 import org.unlaxer.parser.combinator.NonOrdered;
 
@@ -47,7 +48,7 @@ public class ParseContext implements
 	public Map<ChoiceInterface, Parser> chosenParserByChoice = new HashMap<>();
 	
 	//FIXME change store to ScopeTree
-	public Map<NonOrdered, List<Parser>> orderedParsersByNonOrdered = new HashMap<>();
+	public Map<NonOrdered, Parsers> orderedParsersByNonOrdered = new HashMap<>();
 	
 	Map<Parser, Map<Name, Object>> scopeTreeMapByParser = new HashMap<>();
 	
@@ -125,7 +126,7 @@ public class ParseContext implements
 	}
 
 	@Override
-	public Map<NonOrdered, List<Parser>> getOrderedParsersByNonOrdered() {
+	public Map<NonOrdered, Parsers> getOrderedParsersByNonOrdered() {
 		return orderedParsersByNonOrdered;
 	}
 
