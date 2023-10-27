@@ -25,7 +25,8 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   CodePointLength codePointLength();
   
-  String getSource();
+  String getSourceAsString();
+  Source getSource();
 
   StringIndexAccessor stringIndexAccessor();
   
@@ -77,7 +78,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default boolean regionMatches(CodePointIndex toffset, CodePointAccessor other, CodePointIndex ooffset, Length len) {
-    return stringIndexAccessor().regionMatches(toStringIndex(toffset).value(), other.getSource(), toStringIndex(ooffset).value(), len.value());
+    return stringIndexAccessor().regionMatches(toStringIndex(toffset).value(), other.getSourceAsString(), toStringIndex(ooffset).value(), len.value());
   }
   
   default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, String other, CodePointIndex ooffset, Length len) {
@@ -93,7 +94,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default boolean startsWith(CodePointAccessor prefix, CodePointIndex toffset) {
-    return stringIndexAccessor().startsWith(prefix.getSource(), toffset.value());
+    return stringIndexAccessor().startsWith(prefix.getSourceAsString(), toffset.value());
   }
   
   default boolean startsWith(CodePointAccessor prefix) {
@@ -145,7 +146,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
 
   default CodePointIndex lastIndexOf(CodePointAccessor str, CodePointIndex fromIndex) {
     return new CodePointIndex(
-        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(stringIndexAccessor().lastIndexOf(str.getSource() , 
+        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(stringIndexAccessor().lastIndexOf(str.getSourceAsString() , 
             toStringIndex(fromIndex).value()))));
   }
   
@@ -160,7 +161,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default CodePointAccessor concat(CodePointAccessor str) {
-    return stringToStringInterface().apply(concat(str.getSource()));
+    return stringToStringInterface().apply(concat(str.getSourceAsString()));
   }
   
   default CodePointAccessor replaceAsStringInterface(char oldChar, char newChar) {

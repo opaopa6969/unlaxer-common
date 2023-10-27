@@ -142,13 +142,10 @@ public class ParseContext implements
   public void addActions(List<AdditionalCommitAction> additionalCommitActions) {
     actions.addAll(additionalCommitActions);
   }
-
-  @Override
   public LineNumber getLineNUmber(CodePointIndex Position) {
     return source.getLineNUmber(Position);
   }
-
-  @Override
+  
   public RangedString peek(CodePointIndex startIndexInclusive, CodePointLength length) {
       return source.peek(startIndexInclusive, length);
   }

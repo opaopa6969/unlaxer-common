@@ -3,6 +3,7 @@ package org.unlaxer;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -10,6 +11,9 @@ public class SourceTest {
 
   @Test
   public void test() {
+    
+    String collects = List.of("abc","def").stream().collect(Collectors.joining());
+    assertEquals("abcdef" , collects);
     
     List<StringSource> list = List.of(new StringSource("abc") , new StringSource("def"));
     
@@ -19,7 +23,6 @@ public class SourceTest {
     
     
     assertEquals("abcdef" , collect.toString());
-    
   }
 
 }

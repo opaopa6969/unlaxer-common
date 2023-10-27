@@ -1,5 +1,6 @@
 package org.unlaxer.util;
 
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.unlaxer.Source;
@@ -29,6 +30,12 @@ public class SimpleBuilder implements CharSequence{
     this.index = index;
     this.builder = builder;
   }
+  
+  public SimpleBuilder(int index, SimpleBuilder builder) {
+    super();
+    this.index = index;
+    this.builder = builder.builder;
+  }
 
   public SimpleBuilder incTab() {
     ++index;
@@ -45,8 +52,7 @@ public class SimpleBuilder implements CharSequence{
     builder.append(word);
     return this;
   }
-
-
+  
   public SimpleBuilder append(String word) {
     builder.append(word);
     return this;
@@ -74,10 +80,10 @@ public class SimpleBuilder implements CharSequence{
     return this;
   }
   
-  public SimpleBuilder append(Source word) {
-    builder.append(word);
-    return this;
-  }
+//  public SimpleBuilder append(Source word) {
+//    builder.append(word);
+//    return this;
+//  }
 
   public SimpleBuilder withTab(Source word) {
     tab();
@@ -172,4 +178,234 @@ public class SimpleBuilder implements CharSequence{
   public CharSequence subSequence(int start, int end) {
     return builder.subSequence(start,end);
   }
+
+  public SimpleBuilder append(char[] chars) {
+    builder.append(chars);
+    return this;
+  }
+
+  public int hashCode() {
+    return builder.hashCode();
+  }
+
+  public int capacity() {
+    return builder.capacity();
+  }
+
+  public void ensureCapacity(int minimumCapacity) {
+    builder.ensureCapacity(minimumCapacity);
+  }
+
+  public boolean equals(Object obj) {
+    return builder.equals(obj);
+  }
+
+  public int compareTo(StringBuilder another) {
+    return builder.compareTo(another);
+  }
+
+  public StringBuilder append(Object obj) {
+    return builder.append(obj);
+  }
+
+  public SimpleBuilder append(StringBuffer sb) {
+    builder.append(sb);
+    
+    return this;
+  }
+
+  public void trimToSize() {
+    builder.trimToSize();
+  }
+
+
+  public SimpleBuilder append(CharSequence s, int start, int end) {
+    builder.append(s, start, end);
+    return this;
+  }
+
+  public SimpleBuilder setLength(int newLength) {
+    builder.setLength(newLength);
+    return this;
+  }
+
+
+  public SimpleBuilder append(char[] str, int offset, int len) {
+    builder.append(str, offset, len);
+    return this;
+  }
+
+  public SimpleBuilder append(boolean b) {
+    builder.append(b);
+    return this;
+  }
+
+  public SimpleBuilder append(char c) {
+    builder.append(c);
+    return this;
+  }
+
+  public SimpleBuilder append(int i) {
+    builder.append(i);
+    return this;
+  }
+
+  public SimpleBuilder append(long lng) {
+    builder.append(lng);
+    return this;
+  }
+
+  public SimpleBuilder append(float f) {
+    builder.append(f);
+    return this;
+  }
+
+  public SimpleBuilder append(double d) {
+    builder.append(d);
+    return this;
+  }
+
+  public SimpleBuilder appendCodePoint(int codePoint) {
+    builder.appendCodePoint(codePoint);
+    return this;
+  }
+
+  public SimpleBuilder delete(int start, int end) {
+    builder.delete(start, end);
+    return this;
+  }
+
+  public SimpleBuilder deleteCharAt(int index) {
+    builder.deleteCharAt(index);
+    return this;
+  }
+
+  public SimpleBuilder replace(int start, int end, String str) {
+    builder.replace(start, end, str);
+    return this;
+  }
+
+  public SimpleBuilder insert(int index, char[] str, int offset, int len) {
+    builder.insert(index, str, offset, len);
+    return this;
+  }
+
+  public SimpleBuilder insert(int offset, Object obj) {
+    builder.insert(offset, obj);
+    return this;
+  }
+
+  public SimpleBuilder insert(int offset, String str) {
+    builder.insert(offset, str);
+    return this;
+  }
+
+  public SimpleBuilder insert(int offset, char[] str) {
+    builder.insert(offset, str);
+    return this;
+  }
+
+  public int codePointAt(int index) {
+    return builder.codePointAt(index);
+  }
+
+  public SimpleBuilder insert(int dstOffset, CharSequence s) {
+    builder.insert(dstOffset, s);
+    return this;
+  }
+
+  public SimpleBuilder insert(int dstOffset, CharSequence s, int start, int end) {
+    builder.insert(dstOffset, s, start, end);
+    return this;
+  }
+
+  public SimpleBuilder insert(int offset, boolean b) {
+    builder.insert(offset, b);
+    return this;
+  }
+
+  public SimpleBuilder insert(int offset, char c) {
+    builder.insert(offset, c);
+    return this;
+  }
+
+  public SimpleBuilder insert(int offset, int i) {
+    builder.insert(offset, i);
+    return this;
+  }
+
+  public SimpleBuilder insert(int offset, long l) {
+    builder.insert(offset, l);
+    return this;
+  }
+
+  public int codePointBefore(int index) {
+    return builder.codePointBefore(index);
+  }
+
+  public SimpleBuilder insert(int offset, float f) {
+    builder.insert(offset, f);
+    return this;
+  }
+
+  public SimpleBuilder insert(int offset, double d) {
+    builder.insert(offset, d);
+    return this;
+  }
+
+  public int indexOf(String str) {
+    return builder.indexOf(str);
+  }
+
+  public int indexOf(String str, int fromIndex) {
+    return builder.indexOf(str, fromIndex);
+  }
+
+  public int lastIndexOf(String str) {
+    return builder.lastIndexOf(str);
+  }
+
+  public int lastIndexOf(String str, int fromIndex) {
+    return builder.lastIndexOf(str, fromIndex);
+  }
+
+  public SimpleBuilder reverse() {
+    builder.reverse();
+    return this;
+  }
+
+  public int codePointCount(int beginIndex, int endIndex) {
+    return builder.codePointCount(beginIndex, endIndex);
+  }
+
+  public int offsetByCodePoints(int index, int codePointOffset) {
+    return builder.offsetByCodePoints(index, codePointOffset);
+  }
+
+  public void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin) {
+    builder.getChars(srcBegin, srcEnd, dst, dstBegin);
+  }
+
+  public void setCharAt(int index, char ch) {
+    builder.setCharAt(index, ch);
+  }
+
+  
+  public Source substring(int start) {
+    return new StringSource(builder.substring(start));
+  }
+
+
+  public Source substring(int start, int end) {
+    return new StringSource(builder.substring(start, end));
+  }
+
+  public IntStream chars() {
+    return builder.chars();
+  }
+
+  public IntStream codePoints() {
+    return builder.codePoints();
+  }
+  
 }

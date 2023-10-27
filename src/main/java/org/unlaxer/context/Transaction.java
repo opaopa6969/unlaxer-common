@@ -29,7 +29,7 @@ import org.unlaxer.parser.Parsers;
 import org.unlaxer.parser.combinator.ChoiceInterface;
 import org.unlaxer.parser.combinator.NonOrdered;
 
-public interface Transaction extends TransactionListenerContainer , Source , ParseContextBase{
+public interface Transaction extends TransactionListenerContainer , ParseContextBase{
 	
 
 	public default TransactionElement getCurrent() {

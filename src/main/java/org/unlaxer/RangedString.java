@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.unlaxer.util.SimpleBuilder;
+
 public class RangedString{
 	
 	public final CursorRange range;
@@ -69,7 +71,7 @@ public class RangedString{
 
     List<RangedString> list = new ArrayList<>();
 
-    StringBuilder builder = new StringBuilder();
+    SimpleBuilder builder = new SimpleBuilder();
 
     boolean previousIsCR = false;
 
@@ -88,7 +90,7 @@ public class RangedString{
         list.add(new RangedString(new CursorRange(startCursor, endCursor), new StringSource(builder.toString())));
         startCursor = new CursorImpl(endCursor);
         endCursor.incrementLineNumber();
-        builder = new StringBuilder();
+        builder = new SimpleBuilder();
         previousIsCR = false;
       }
 
@@ -96,7 +98,7 @@ public class RangedString{
       builder.append(chars);
 
       if (codePoint == 0x0a) {
-        list.add(new RangedString(new CursorRange(startCursor, endCursor), builder.toString()));
+        list.add(new RangedString(new CursorRange(startCursor, endCursor), builder.toSource()));
         startCursor = new CursorImpl(endCursor);
         endCursor.incrementLineNumber();
       }

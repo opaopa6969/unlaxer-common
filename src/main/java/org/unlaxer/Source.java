@@ -41,7 +41,10 @@ public interface Source extends CodePointAccessor{
   public static Collector<CharSequence, ?, Source> joining() {
       return new CollectorImpl<CharSequence, SimpleBuilder, Source>(
               SimpleBuilder::new, SimpleBuilder::append,
-              (r1, r2) -> { r1.append(r2); return r1; },
+              (r1, r2) -> { 
+                r1.append(r2); 
+                return r1; 
+              },
               SimpleBuilder::toSource, CH_NOID);
   }
   
