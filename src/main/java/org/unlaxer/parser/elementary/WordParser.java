@@ -4,10 +4,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import org.unlaxer.CursorRange;
+import javax.xml.transform.stream.StreamSource;
+
+import org.unlaxer.CodePointLength;
 import org.unlaxer.Name;
 import org.unlaxer.Range;
 import org.unlaxer.RangedString;
+import org.unlaxer.Source;
+import org.unlaxer.StringSource;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
@@ -18,7 +22,7 @@ import org.unlaxer.util.Slicer;
 public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 	
 	private static final long serialVersionUID = 77970028727135376L;
-	public final String word;
+	public final Source word;
 	public final boolean ignoreCase;
 	
 	public WordParser(String word) {
@@ -35,20 +39,20 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 
 	public WordParser(Name name , String word, boolean ignoreCase) {
 		super(name);
-		this.word = word;
+		this.word = new StringSource(word);
 		this.ignoreCase = ignoreCase;
 	}
 
 	@Override
 	public Token getToken(ParseContext parseContext, TokenKind tokenKind,boolean invertMatch) {
+	  
 		
-		int length = word.length();
+		CodePointLength length = word.getLength();
 		
-		if(length == 0) {
-			return new Token(tokenKind , 
-				new RangedString(
-					new CursorRange(parseContext.getConsumedPosition()),""
-				)
+		
+		if(length.isZero()) {
+			return new Token(tokenKind ,
+			  parseContext.peek(parseContext.getConsumedPosition(), new CodePointLength(0))
 				, this
 			);
 		}

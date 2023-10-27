@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
 import org.unlaxer.LineNumber;
 import org.unlaxer.Name;
 import org.unlaxer.ParserCursor;
@@ -83,15 +84,10 @@ public class ParseContext implements
 	}
 
 	@Override
-	public int getLength() {
+	public CodePointLength getLength() {
 		return source.getLength();
 	}
 	
-	@Override
-	public RangedString peek(int startIndexInclusive, int length) {
-		return source.peek(startIndexInclusive, length);
-	}
-
 	@Override
 	public Map<Name, TransactionListener> getTransactionListenerByName() {
 		return listenerByName;
@@ -150,5 +146,10 @@ public class ParseContext implements
   @Override
   public LineNumber getLineNUmber(CodePointIndex Position) {
     return source.getLineNUmber(Position);
+  }
+
+  @Override
+  public RangedString peek(CodePointIndex startIndexInclusive, CodePointLength length) {
+      return source.peek(startIndexInclusive, length);
   }
 }

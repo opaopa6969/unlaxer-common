@@ -57,7 +57,7 @@ public class CursorImpl implements Serializable, Cursor{
 	}
 	@Override
 	public Cursor addPosition(CodePointOffset adding) {
-		this.position = new CodePointIndex(this.position.value + adding.value);
+		this.position = position.add(adding);
 		return this;
 	}
 	@Override
@@ -76,14 +76,14 @@ public class CursorImpl implements Serializable, Cursor{
   }
   @Override
   public Cursor incrementLineNumber() {
-    lineNumber = new LineNumber(lineNumber.value+1);
+    lineNumber = lineNumber.increments();
     positionInLine = new CodePointOffset(0);
     return this;
   }
   @Override
   public Cursor incrementPosition() {
-    position = new CodePointIndex(position.value+1);
-    positionInLine = new CodePointOffset(positionInLine.value+1);
+    position = position.increments();
+    positionInLine = positionInLine.increments();
     return this;
   }
 }

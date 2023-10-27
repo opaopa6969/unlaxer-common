@@ -1,5 +1,7 @@
 package org.unlaxer.context;
 
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
 import org.unlaxer.Cursor;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.RangedString;
@@ -10,12 +12,12 @@ public class ParserContextPrinter {
 
 	public static String get(ParseContext parseContext , OutputLevel level){
 		
-		int position = parseContext.getPosition(TokenKind.consumed);
+		CodePointIndex position = parseContext.getPosition(TokenKind.consumed);
 		if(level.isMostDetail()) {
 			ParserCursor parserCursor = parseContext.getCurrent().getParserCursor();
 			Cursor consumed= parserCursor.getCursor(TokenKind.consumed);
 			Cursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
-			RangedString peek = parseContext.peekLast(position,20);
+			RangedString peek = parseContext.peekLast(position, new CodePointLength(20));
 			
 			return String.format("CON(L:%d,P:%d) MO(L:%d,P:%d) Last20='%s' ", 
 					consumed.getLineNumber(),
@@ -27,8 +29,8 @@ public class ParserContextPrinter {
 					peek.token.map(ParserContextPrinter::normalize).orElse(""));
 		}
 		
-		int matchOnlyPosition = parseContext.getPosition(TokenKind.matchOnly);
-		RangedString peek = parseContext.peek(position,1);
+		CodePointIndex matchOnlyPosition = parseContext.getPosition(TokenKind.matchOnly);
+		RangedString peek = parseContext.peek(position,new CodePointLength(1));
 		return String.format("position:(c:%d m:%d) targetchar='%s' ", 
 				position,
 				matchOnlyPosition,

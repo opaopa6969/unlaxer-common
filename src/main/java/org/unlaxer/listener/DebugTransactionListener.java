@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.TokenPrinter;
@@ -96,7 +98,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 			return ;
 		}
 		print.format("OPEN    : '%s'\n", 
-				parseContext.source.peek(0, parseContext.source.getLength()).token.orElse(""));
+				parseContext.source.peek(new CodePointIndex(0), parseContext.source.getLength()).token.orElse(""));
 		onOutput(++count);
 		if(doTrigger()){
 			//set Break point here or this method declares!
@@ -111,7 +113,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 			return ;
 		}
 		print.format("CLOSE   : '%s' consumed:%s \n\n", 
-			parseContext.source.peek(0, parseContext.source.getLength()).token.orElse(""),
+			parseContext.source.peek(new CodePointIndex(0), parseContext.source.getLength()).token.orElse(""),
 			getConsumed(parseContext)
 		);
 		onOutput(++count);
@@ -124,8 +126,8 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 	
 	private Object getConsumed(ParseContext parseContext) {
 		TransactionElement transactionElement = parseContext.getCurrent();
-		int consumed = transactionElement.getPosition(TokenKind.consumed);
-		int remain = parseContext.source.getLength() - consumed;
+		CodePointIndex consumed = transactionElement.getPosition(TokenKind.consumed);
+		CodePointLength remain = parseContext.source.getLength().minus(consumed);
 		return parseContext.allConsumed() ? "allConsumed" : 
 			String.format("%d(%d remain)", consumed , remain);
 	}

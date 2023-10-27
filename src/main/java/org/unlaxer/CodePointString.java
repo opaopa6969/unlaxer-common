@@ -64,7 +64,7 @@ public interface CodePointString {
   char charAt(int index);
   
   default char charAt(StringIndex index) {
-    return charAt(index.value);
+    return charAt(index.value());
   }
 
 
@@ -93,7 +93,7 @@ public interface CodePointString {
   int  codePointAt(int index);
 
   default CodePoint codePointAt(CodePointIndex index) {
-    return new CodePoint(codePointAt(index.value));
+    return new CodePoint(codePointAt(index.value()));
   }
   /**
    * Returns the character (Unicode code point) before the specified
@@ -120,7 +120,7 @@ public interface CodePointString {
   int codePointBefore(int index);
   
   default CodePoint codePointBefore(CodePointIndex index) {
-    return new CodePoint(codePointBefore(index.value));
+    return new CodePoint(codePointBefore(index.value()));
   }
 
   /**
@@ -147,7 +147,7 @@ public interface CodePointString {
   int codePointCount(int beginIndex, int endIndex);
   
   default CodePoint codePointCount(StringIndex beginIndex, StringIndex endIndex) {
-    return new CodePoint(codePointCount(beginIndex.value, endIndex.value));
+    return new CodePoint(codePointCount(beginIndex.value(), endIndex.value()));
   }
 
   /**
@@ -173,7 +173,7 @@ public interface CodePointString {
   int offsetByCodePoints(int index, int codePointOffset);
   
   default StringIndex offsetByCodePoints(StringIndex index, CodePointOffset codePointOffset) {
-    return new StringIndex(offsetByCodePoints(index.value, codePointOffset.value));
+    return new StringIndex(offsetByCodePoints(index.value(), codePointOffset.value()));
   }
 
   /**
@@ -209,7 +209,7 @@ public interface CodePointString {
   void getChars(int srcBegin, int srcEnd, char dst[], int dstBegin);
   
   default void getChars(StringIndex srcBegin, StringIndex srcEnd, char dst[], StringIndex dstBegin) {
-    getChars(srcBegin.value, srcEnd.value, dst, dstBegin.value);
+    getChars(srcBegin.value(), srcEnd.value(), dst, dstBegin.value());
   }
 
   /**
@@ -258,7 +258,7 @@ public interface CodePointString {
   void getBytes(int srcBegin, int srcEnd, byte dst[], int dstBegin);
 
   default void getBytes(StringIndex srcBegin, StringIndex srcEnd, byte dst[], StringIndex dstBegin) {
-    getBytes(srcBegin.value, srcEnd.value, dst, dstBegin.value);
+    getBytes(srcBegin.value(), srcEnd.value(), dst, dstBegin.value());
   }
   
   /**
@@ -526,11 +526,12 @@ public interface CodePointString {
   boolean regionMatches(int toffset, String other, int ooffset, int len);
   
   default boolean regionMatches(CodePointIndex toffset, String other, CodePointIndex ooffset, Length len) {
-    return regionMatches(toStringIndex(toffset).value, other , toStringIndex(ooffset).value, len.value);
+    return regionMatches(toStringIndex(toffset).value(), other , toStringIndex(ooffset).value(), len.value());
   }
   
   default boolean regionMatches(CodePointIndex toffset, CodePointString other, CodePointIndex ooffset, Length len) {
-    return regionMatches(toStringIndex(toffset).value, other.getSource(), toStringIndex(ooffset).value, len.value);
+    return regionMatches(toStringIndex(toffset).value() 
+, other.getSource(), toStringIndex(ooffset).value(), len.value());
   }
   
   /**
@@ -586,11 +587,11 @@ public interface CodePointString {
   boolean regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len);
   
   default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, String other, CodePointIndex ooffset, Length len) {
-    return regionMatches(ignoreCase, toStringIndex(toffset).value, other, toStringIndex(ooffset).value, len.value);
+    return regionMatches(ignoreCase, toStringIndex(toffset).value(), other, toStringIndex(ooffset).value(), len.value());
   }
   
   default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, CodePointString other, CodePointIndex ooffset, Length len) {
-    return regionMatches(ignoreCase, toStringIndex(toffset).value, other.getSource(), toStringIndex(ooffset).value, len.value);
+    return regionMatches(ignoreCase, toStringIndex(toffset).value(), other.getSource(), toStringIndex(ooffset).value(), len.value());
   }
 
   /**
@@ -613,11 +614,11 @@ public interface CodePointString {
   boolean startsWith(String prefix, int toffset);
   
   default boolean startsWith(String prefix, CodePointIndex toffset) {
-    return startsWith(prefix, toStringIndex(toffset).value);
+    return startsWith(prefix, toStringIndex(toffset).value());
   }
   
   default boolean startsWith(CodePointString prefix, CodePointIndex toffset) {
-    return startsWith(prefix.getSource(), toStringIndex(toffset).value);
+    return startsWith(prefix.getSource(), toStringIndex(toffset).value());
   }
 
   /**
@@ -699,7 +700,7 @@ public interface CodePointString {
   
   default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(indexOf(codePoint.value))));
+        toCodePointIndex(new StringIndex(indexOf(codePoint.value()))));
   }
 
   /**
@@ -745,7 +746,7 @@ public interface CodePointString {
   
   default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint, CodePointIndex fromIndex) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(indexOf(codePoint.value,toStringIndex(fromIndex).value))));
+        toCodePointIndex(new StringIndex(indexOf(codePoint.value(),toStringIndex(fromIndex).value()))));
   }
 
   /**
@@ -775,7 +776,7 @@ public interface CodePointString {
   
   default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value))));
+        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value()))));
   }
 
   /**
@@ -816,7 +817,7 @@ public interface CodePointString {
   
   default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint, CodePointIndex fromIndex) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value, toStringIndex(fromIndex).value))));
+        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value(), toStringIndex(fromIndex).value()))));
   }
 
   /**
@@ -862,7 +863,7 @@ public interface CodePointString {
   default CodePointIndex indexOf(CodePointString str, CodePointIndex fromIndex) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(indexOf(str.getSource(),
-            toStringIndex(fromIndex).value))));
+            toStringIndex(fromIndex).value()))));
   }
 
 
@@ -910,7 +911,7 @@ public interface CodePointString {
   default CodePointIndex lastIndexOf(CodePointString str, CodePointIndex fromIndex) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(lastIndexOf(str.getSource() , 
-            toStringIndex(fromIndex).value))));
+            toStringIndex(fromIndex).value()))));
   }
   
   /**

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.unlaxer.Range;
+import org.unlaxer.Cursor;
+import org.unlaxer.CursorRange;
 import org.unlaxer.RangedString;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
@@ -34,7 +35,7 @@ public abstract class WildCardInterleaveParser extends LazyZeroOrMore{
     List<Token> flatten = thisParserParsed.filteredChildren;
     
     StringBuilder characters = new StringBuilder();
-    Integer current = null;
+    Cursor current = null;
     
     for (Token token : flatten) {
       token = ChoiceInterface.choiced(token);
@@ -47,7 +48,7 @@ public abstract class WildCardInterleaveParser extends LazyZeroOrMore{
         if(characters.length()>0) {
           Token token2 = new Token(
               TokenKind.consumed, 
-              new RangedString(new Range(current , token.tokenRange.endIndexExclusive), characters.toString()), 
+              new RangedString(new CursorRange(current , token.tokenRange.endIndexExclusive), characters.toString()), 
               Parser.get(WildCardStringParser.class)
            );
           concatted.add(token2);

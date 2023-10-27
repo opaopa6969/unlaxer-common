@@ -23,7 +23,7 @@ public interface StringIndexAccessor {
   char charAt(int index);
   
   default char charAt(StringIndex index) {
-    return charAt(index.value);
+    return charAt(index.value());
   }
 
   /**
@@ -98,7 +98,7 @@ public interface StringIndexAccessor {
   int codePointCount(int beginIndex, int endIndex);
   
   default Count codePointCount(StringIndex beginIndex, StringIndex endIndex) {
-    return new Count(codePointCount(beginIndex.value, endIndex.value));
+    return new Count(codePointCount(beginIndex.value(), endIndex.value()));
   }
   
   /**
@@ -124,7 +124,7 @@ public interface StringIndexAccessor {
   int offsetByCodePoints(int index, int codePointOffset);
   
   default StringIndex offsetByCodePoints(StringIndex index, CodePointOffset codePointOffset) {
-    return new StringIndex(offsetByCodePoints(index.value, codePointOffset.value));
+    return new StringIndex(offsetByCodePoints(index.value(), codePointOffset.value()));
   }
   
   /**
@@ -160,7 +160,7 @@ public interface StringIndexAccessor {
   void getChars(int srcBegin, int srcEnd, char dst[], int dstBegin);
   
   default void getChars(StringIndex srcBegin, StringIndex srcEnd, char dst[], StringIndex dstBegin) {
-    getChars(srcBegin.value, srcEnd.value, dst, dstBegin.value);
+    getChars(srcBegin.value(), srcEnd.value(), dst, dstBegin.value());
   }
   
   /**
@@ -209,7 +209,7 @@ public interface StringIndexAccessor {
   void getBytes(int srcBegin, int srcEnd, byte dst[], int dstBegin);
 
   default void getBytes(StringIndex srcBegin, StringIndex srcEnd, byte dst[], StringIndex dstBegin) {
-    getBytes(srcBegin.value, srcEnd.value, dst, dstBegin.value);
+    getBytes(srcBegin.value(), srcEnd.value(), dst, dstBegin.value());
   }
   
   /**
@@ -250,11 +250,11 @@ public interface StringIndexAccessor {
   boolean regionMatches(int toffset, String other, int ooffset, int len);
   
   default boolean regionMatches(StringIndex toffset, String other, StringIndex ooffset, Length len) {
-    return regionMatches(toffset.value, other , ooffset.value, len.value);
+    return regionMatches(toffset.value(), other , ooffset.value(), len.value());
   }
   
   default boolean regionMatches(StringIndex toffset, CodePointAccessor other, StringIndex ooffset, Length len) {
-    return regionMatches(toffset.value, other.getSource(), ooffset.value, len.value);
+    return regionMatches(toffset.value(), other.getSource(), ooffset.value(), len.value());
   }
   
   /**
@@ -310,11 +310,11 @@ public interface StringIndexAccessor {
   boolean regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len);
   
   default boolean regionMatches(boolean ignoreCase, StringIndex toffset, String other, StringIndex ooffset, Length len) {
-    return regionMatches(ignoreCase, toffset.value, other, ooffset.value, len.value);
+    return regionMatches(ignoreCase, toffset.value(), other, ooffset.value(), len.value());
   }
   
   default boolean regionMatches(boolean ignoreCase, StringIndex toffset, CodePointAccessor other, StringIndex ooffset, Length len) {
-    return regionMatches(ignoreCase, toffset.value, other.getSource(), ooffset.value, len.value);
+    return regionMatches(ignoreCase, toffset.value(), other.getSource(), ooffset.value(), len.value());
   }
   
   /**
@@ -337,10 +337,10 @@ public interface StringIndexAccessor {
   boolean startsWith(String prefix, int toffset);
   
   default boolean startsWith(String prefix, StringIndex toffset) {
-    return startsWith(prefix, toffset.value);
+    return startsWith(prefix, toffset.value());
   }
   default boolean startsWith(CodePointAccessor prefix, StringIndex toffset) {
-    return startsWith(prefix.getSource(), toffset.value);
+    return startsWith(prefix.getSource(), toffset.value());
   }
   
   /**
@@ -385,7 +385,7 @@ public interface StringIndexAccessor {
   int indexOf(int ch, int fromIndex);
   
   default StringIndexWithNegativeValue indexOf(CodePoint codePoint, StringIndex fromIndex) {
-    return new StringIndexWithNegativeValue(indexOf(codePoint.value,fromIndex.value));
+    return new StringIndexWithNegativeValue(indexOf(codePoint.value(),fromIndex.value()));
   }
 
   /**
@@ -425,7 +425,7 @@ public interface StringIndexAccessor {
   int lastIndexOf(int ch, int fromIndex);
   
   default StringIndexWithNegativeValue lastIndexOf(CodePoint codePoint, StringIndex fromIndex) {
-    return new StringIndexWithNegativeValue(lastIndexOf(codePoint.value, fromIndex.value));
+    return new StringIndexWithNegativeValue(lastIndexOf(codePoint.value(), fromIndex.value()));
   }
   
   /**
@@ -448,7 +448,7 @@ public interface StringIndexAccessor {
   int indexOf(String str, int fromIndex);
   
   default StringIndexWithNegativeValue indexOf(CodePointAccessor str, StringIndex fromIndex) {
-    return new StringIndexWithNegativeValue(indexOf(str.getSource(),fromIndex.value));
+    return new StringIndexWithNegativeValue(indexOf(str.getSource(),fromIndex.value()));
   }
 
   /**

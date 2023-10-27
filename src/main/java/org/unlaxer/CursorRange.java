@@ -36,58 +36,63 @@ public class CursorRange implements Comparable<CursorRange>{
 	}
 
 	public boolean match(CodePointIndex position){
-		return position.value >=startIndexInclusive.getPosition().value 
-		    && position.value < endIndexExclusive.getPosition().value;
+		return position.ge(startIndexInclusive.getPosition()) 
+		    && position.lt(endIndexExclusive.getPosition());
 	}
 	
 	public boolean smallerThan(CodePointIndex position){
-		return position.value >= endIndexExclusive.getPosition().value;
+		return position.ge(endIndexExclusive.getPosition());
 	}
 	
 	public boolean biggerThan(CodePointIndex position){
-		return position.value < startIndexInclusive.getPosition().value;
+		return position.lt(startIndexInclusive.getPosition());
 	}
 	
 	public boolean smallerThan(CursorRange other){
-		return other.startIndexInclusive.getPosition().value >=  endIndexExclusive.getPosition().value;
+		return other.startIndexInclusive.getPosition().ge(endIndexExclusive.getPosition());
 	}
 	
 	public boolean biggerThan(CursorRange other){
-		return other.endIndexExclusive.getPosition().value <= startIndexInclusive.getPosition().value;
+		return other.endIndexExclusive.getPosition().le(startIndexInclusive.getPosition());
 	}
 	
 	public RangesRelation relation(CursorRange other){
-		int otherStart = other.startIndexInclusive.getPosition().value;
-		int otherEnd= other.endIndexExclusive.getPosition().value;
-		if(startIndexInclusive.getPosition().value == otherStart && endIndexExclusive.getPosition().value == otherEnd){
+		CodePointIndex otherStart = other.startIndexInclusive.getPosition();
+		CodePointIndex otherEnd= other.endIndexExclusive.getPosition();
+		if(startIndexInclusive.getPosition().eq(otherStart) && 
+		    endIndexExclusive.getPosition().eq(otherEnd)){
 			
 			return RangesRelation.equal;
 			
-		}else if(startIndexInclusive.getPosition().value >= otherStart && endIndexExclusive.getPosition().value <= otherEnd){
+		}else if(startIndexInclusive.getPosition().ge(otherStart) && 
+		    endIndexExclusive.getPosition().le(otherEnd)){
 			
 			return RangesRelation.outer;
 			
-		}else if(startIndexInclusive.getPosition().value <= otherStart && endIndexExclusive.getPosition().value >= otherEnd){
+		}else if(startIndexInclusive.getPosition().le(otherStart) && 
+		    endIndexExclusive.getPosition().ge(otherEnd)){
 			
 			return RangesRelation.inner;
 			
-		}else if(startIndexInclusive.getPosition().value >= otherEnd || endIndexExclusive.getPosition().value  <= otherStart){
+		}else if(startIndexInclusive.getPosition().ge(otherEnd) || 
+		    endIndexExclusive.getPosition().le(otherStart)){
 			
 			return RangesRelation.notCrossed;
 		}
 		return RangesRelation.crossed;
 	}
 	
-	public IntStream stream() {
-		return IntStream.range(startIndexInclusive.getPosition().value, endIndexExclusive.getPosition().value);
+	public IntStream asIntStream() {
+		return IntStream.range(startIndexInclusive.getPosition().value(), 
+		    endIndexExclusive.getPosition().value());
 	}
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + endIndexExclusive.getPosition().value;
-		result = prime * result + startIndexInclusive.getPosition().value;
+		result = prime * result + endIndexExclusive.getPosition().value();
+		result = prime * result + startIndexInclusive.getPosition().value();
 		return result;
 	}
 	@Override
@@ -99,9 +104,9 @@ public class CursorRange implements Comparable<CursorRange>{
 		if (getClass() != obj.getClass())
 			return false;
 		CursorRange other = (CursorRange) obj;
-		if (endIndexExclusive.getPosition().value != other.endIndexExclusive.getPosition().value)
+		if (endIndexExclusive.getPosition().value() != other.endIndexExclusive.getPosition().value())
 			return false;
-		if (startIndexInclusive.getPosition().value != other.startIndexInclusive.getPosition().value)
+		if (startIndexInclusive.getPosition().value() != other.startIndexInclusive.getPosition().value())
 			return false;
 		return true;
 	}
@@ -109,9 +114,9 @@ public class CursorRange implements Comparable<CursorRange>{
 	
 	@Override
 	public int compareTo(CursorRange other) {
-		int value = startIndexInclusive.getPosition().value  - other.startIndexInclusive.getPosition().value;
+		int value = startIndexInclusive.getPosition().value() - other.startIndexInclusive.getPosition().value();
 		if(value == 0) {
-			return endIndexExclusive.getPosition().value - other.endIndexExclusive.getPosition().value;
+			return endIndexExclusive.getPosition().value() - other.endIndexExclusive.getPosition().value();
 		}
 		return value;
 	}

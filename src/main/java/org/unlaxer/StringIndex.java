@@ -1,24 +1,26 @@
 package org.unlaxer;
 
+import org.unlaxer.base.IntegerValue;
 import org.unlaxer.base.MinIntegerValue._MinIntegerValue;
 
 @_MinIntegerValue(0)
-public class StringIndex extends Index{
+public class StringIndex extends IntegerValue<StringIndex>{
 
   public StringIndex(int value) {
     super(value);
   }
   
-  public StringIndex increments() {
-    return new StringIndex(value+1);
+  public StringIndex(IntegerValue<?> value) {
+    super(value);
   }
   
-  public StringIndex add(int adding) {
-    return new StringIndex(value+adding);
-  }
-  
-  public StringIndex minus(int minusing) {
-    return new StringIndex(value-minusing);
+  @Override
+  public StringIndex create(int i) {
+    return new StringIndex(i);
   }
 
+  @Override
+  public StringIndex create(IntegerValue<?> i) {
+    return new StringIndex(i);
+  }
 }

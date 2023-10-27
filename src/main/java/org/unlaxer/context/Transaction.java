@@ -11,10 +11,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
 import org.unlaxer.Committed;
 import org.unlaxer.Cursor;
-import org.unlaxer.Index;
-import org.unlaxer.Length;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.RangedString;
 import org.unlaxer.Source;
@@ -141,24 +140,24 @@ public interface Transaction extends TransactionListenerContainer , Source , Par
 	}
 	
 	public default String getRemain(TokenKind tokenKind) {
-		int position = getPosition(tokenKind).value;
-		return getSource().peek(position, getLength() - position).token.orElse("");
+		CodePointIndex position = getPosition(tokenKind);
+		return getSource().peek(position, getLength().minus(position)).token.orElse("");
 	}
 
 	public default String getConsumed(TokenKind tokenKind) {
-		int position = getPosition(tokenKind).value;
-		return getSource().peek(0, position).token.orElse("");
+		CodePointIndex position = getPosition(tokenKind);
+		return getSource().peek(new CodePointIndex(0), position).token.orElse("");
 	}
 
 	public default boolean allMatched() {
-		return getPosition(TokenKind.matchOnly).value == getSource().getLength();
+		return getPosition(TokenKind.matchOnly).eq(getSource().getLength());
 	}
 
 	public default boolean allConsumed() {
-		return getPosition(TokenKind.consumed).value == getSource().getLength();
+		return getPosition(TokenKind.consumed).eq(getSource().getLength());
 	}
 
-	public default RangedString peek(TokenKind tokenKind, Length length) {
+	public default RangedString peek(TokenKind tokenKind, CodePointLength length) {
 		return peek(getCurrent().getPosition(tokenKind), length);
 	}
 

@@ -1,21 +1,25 @@
 package org.unlaxer;
 
-public class CodePointIndex extends Index{
+import org.unlaxer.base.IntegerValue;
+
+public class CodePointIndex extends IntegerValue<CodePointIndex>{
 
   public CodePointIndex(int value) {
     super(value);
   }
   
-  public CodePointIndex increments() {
-    return new CodePointIndex(value+1);
-  }
-  
-  public CodePointIndex add(int adding) {
-    return new CodePointIndex(value+adding);
-  }
-  
-  public CodePointIndex minus(int minusing) {
-    return new CodePointIndex(value-minusing);
+  public CodePointIndex(IntegerValue<?> value) {
+    super(value);
   }
 
+  @Override
+  public CodePointIndex create(int i) {
+    return new CodePointIndex(i);
+  }
+
+  @Override
+  public CodePointIndex create(IntegerValue<?> i) {
+    return new CodePointIndex(i);
+  }
+  
 }

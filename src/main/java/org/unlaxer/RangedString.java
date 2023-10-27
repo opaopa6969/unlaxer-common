@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 public class RangedString{
 	
 	public final CursorRange range;
-	public Optional<String> token;
+	public Optional<Source> token;
 	
   public RangedString(Cursor cursor) {
     this(new CursorRange(cursor));
   }
 	
-	public RangedString(CursorRange range, Optional<String> token) {
+	public RangedString(CursorRange range, Optional<Source> token) {
 		super();
 		this.range = range;
 		this.token = token;

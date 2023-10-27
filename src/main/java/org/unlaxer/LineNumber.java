@@ -1,20 +1,26 @@
 package org.unlaxer;
 
-import org.unlaxer.base.IntegerValue;
 import org.unlaxer.base.MinIntegerValue._MinIntegerValue;
+import org.unlaxer.base.IntegerValue;
 
 @_MinIntegerValue(0)
-public class LineNumber extends IntegerValue{
+public class LineNumber extends IntegerValue<LineNumber>{
 
   public LineNumber(int value) {
     super(value);
   }
   
-  public LineNumber increments() {
-    return new LineNumber(value+1);
+  public LineNumber(IntegerValue<?> value) {
+    super(value);
   }
-  
-  public LineNumber add(int adding) {
-    return new LineNumber(value+adding);
+
+  @Override
+  public LineNumber create(int i) {
+    return new LineNumber(i);
+  }
+
+  @Override
+  public LineNumber create(IntegerValue<?> i) {
+    return new LineNumber(i);
   }
 }

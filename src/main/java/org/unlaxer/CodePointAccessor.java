@@ -34,11 +34,11 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
 
 
   default CodePoint codePointAt(CodePointIndex index) {
-    return new CodePoint(stringIndexAccessor().codePointAt(toStringIndex(index).value));
+    return new CodePoint(stringIndexAccessor().codePointAt(toStringIndex(index).value()));
   }
   
   default CodePoint codePointBefore(CodePointIndex index) {
-    return new CodePoint(stringIndexAccessor().codePointBefore(toStringIndex(index).value));
+    return new CodePoint(stringIndexAccessor().codePointBefore(toStringIndex(index).value()));
   }
   
   default Count codePointCount(CodePointIndex beginIndex, CodePointIndex endIndex) {
@@ -73,11 +73,11 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   }
   
   default boolean regionMatches(CodePointIndex toffset, String other, CodePointIndex ooffset, Length len) {
-    return stringIndexAccessor().regionMatches(toStringIndex(toffset).value, other , toStringIndex(ooffset).value, len.value);
+    return stringIndexAccessor().regionMatches(toStringIndex(toffset).value(), other , toStringIndex(ooffset).value(), len.value());
   }
   
   default boolean regionMatches(CodePointIndex toffset, CodePointAccessor other, CodePointIndex ooffset, Length len) {
-    return stringIndexAccessor().regionMatches(toStringIndex(toffset).value, other.getSource(), toStringIndex(ooffset).value, len.value);
+    return stringIndexAccessor().regionMatches(toStringIndex(toffset).value(), other.getSource(), toStringIndex(ooffset).value(), len.value());
   }
   
   default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, String other, CodePointIndex ooffset, Length len) {
@@ -93,7 +93,7 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   }
   
   default boolean startsWith(CodePointAccessor prefix, CodePointIndex toffset) {
-    return stringIndexAccessor().startsWith(prefix.getSource(), toffset.value);
+    return stringIndexAccessor().startsWith(prefix.getSource(), toffset.value());
   }
   
   default boolean startsWith(CodePointAccessor prefix) {
@@ -108,7 +108,7 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint) {
     return new CodePointIndexWithNegativeValue(
         toCodePointIndex(new StringIndex(
-            indexOf(codePoint.value))));
+            indexOf(codePoint.value()))));
   }
   
   default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint, CodePointIndex fromIndex) {
@@ -119,7 +119,7 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   
   default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value))));
+        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value()))));
   }
   
   default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint, CodePointIndex fromIndex) {
@@ -134,29 +134,29 @@ public interface CodePointAccessor extends java.io.Serializable, Comparable<Code
   }
     
   default CodePointIndex indexOf(CodePointAccessor str, CodePointIndex fromIndex) {
-    return new CodePointIndexWithNegativeValue(
+    return new CodePointIndex(
         toCodePointIndexWithNegativeValue(stringIndexAccessor().indexOf(str,toStringIndex(fromIndex))));
   }
 
   default CodePointIndex lastIndexOf(CodePointAccessor str) {
-    return new CodePointIndexWithNegativeValue(
+    return new CodePointIndex(
         toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(lastIndexOf(str.getSource()))));
   }
 
   default CodePointIndex lastIndexOf(CodePointAccessor str, CodePointIndex fromIndex) {
-    return new CodePointIndexWithNegativeValue(
+    return new CodePointIndex(
         toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(stringIndexAccessor().lastIndexOf(str.getSource() , 
-            toStringIndex(fromIndex).value))));
+            toStringIndex(fromIndex).value()))));
   }
   
   default CodePointAccessor substring(CodePointIndex beginIndex) {
     return stringToStringInterface().apply(
-        stringIndexAccessor().substring(toStringIndex(beginIndex).value));
+        stringIndexAccessor().substring(toStringIndex(beginIndex).value()));
   }
   
   default CodePointAccessor substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
       return stringToStringInterface().apply(
-          stringIndexAccessor().substring(toStringIndex(beginIndex).value,toStringIndex(endIndex).value));
+          stringIndexAccessor().substring(toStringIndex(beginIndex).value(),toStringIndex(endIndex).value()));
   }
   
   default CodePointAccessor concat(CodePointAccessor str) {

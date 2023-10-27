@@ -38,7 +38,8 @@ public class CodePointsSource implements CodePointAccessor{
     
       int codePointAt = codePoints[i];
       
-      stringIndex = stringIndex.add(Character.isBmpCodePoint(codePointAt) ? 1:2);
+      int adding = Character.isBmpCodePoint(codePointAt) ? 1:2;
+      stringIndex = stringIndex.add(adding);
       
       if(codePointAt == SymbolMap.lf.codes[0]) {
         lineNumberByIndex.put(new CodePointIndex(i+1), lineNumber.increments());

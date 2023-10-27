@@ -1,19 +1,28 @@
 package org.unlaxer;
 
+import org.unlaxer.base.IntegerValue;
 import org.unlaxer.base.MinIntegerValue._MinIntegerValue;
 
 @_MinIntegerValue(0)
-public class StringLength extends Length{
+public class StringLength extends IntegerValue<StringLength>{
   
   public StringLength(int value) {
     super(value);
   }
   
-  public StringLength increments() {
-    return new StringLength(value+1);
+  public StringLength(IntegerValue<?> value) {
+    super(value);
   }
   
-  public StringLength add(int adding) {
-    return new StringLength(value+adding);
+  @Override
+  public StringLength create(int i) {
+    return new StringLength(i);
   }
+
+  @Override
+  public StringLength create(IntegerValue<?> i) {
+    return new StringLength(i);
+  }
+
+  
 }
