@@ -1,6 +1,13 @@
 package org.unlaxer;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.CharSequence;
+import java.lang.Character;
+import java.lang.IllegalArgumentException;
+import java.lang.IndexOutOfBoundsException;
+import java.lang.Object;
+import java.lang.String;
+import java.lang.StringBuffer;
 import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.function.Function;
@@ -861,9 +868,9 @@ public interface CodePointString {
   int indexOf(String str, int fromIndex);
   
   default CodePointIndex indexOf(CodePointString str, CodePointIndex fromIndex) {
-    return new CodePointIndexWithNegativeValue(
+    return 
         toCodePointIndex(new StringIndex(indexOf(str.getSource(),
-            toStringIndex(fromIndex).value()))));
+            toStringIndex(fromIndex).value())));
   }
 
 
@@ -885,8 +892,8 @@ public interface CodePointString {
   int lastIndexOf(String str);
 
   default CodePointIndex lastIndexOf(CodePointString str) {
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(lastIndexOf(str.getSource()))));
+    return 
+        toCodePointIndex(new StringIndex(lastIndexOf(str.getSource())));
   }
 
   /**
@@ -909,9 +916,9 @@ public interface CodePointString {
   int lastIndexOf(String str, int fromIndex);
 
   default CodePointIndex lastIndexOf(CodePointString str, CodePointIndex fromIndex) {
-    return new CodePointIndexWithNegativeValue(
+    return 
         toCodePointIndex(new StringIndex(lastIndexOf(str.getSource() , 
-            toStringIndex(fromIndex).value()))));
+            toStringIndex(fromIndex).value())));
   }
   
   /**
@@ -934,7 +941,7 @@ public interface CodePointString {
   String substring(int beginIndex);
   
   default CodePointString substring(CodePointIndex beginIndex) {
-    return stringToStringInterface().apply(substring(toStringIndex(beginIndex).value));
+    return stringToStringInterface().apply(substring(toStringIndex(beginIndex).value()));
   }
 
   /**
@@ -963,7 +970,7 @@ public interface CodePointString {
   
   default CodePointString substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
       return stringToStringInterface().apply(substring(
-          toStringIndex(beginIndex).value,toStringIndex(endIndex).value));
+          toStringIndex(beginIndex).value(),toStringIndex(endIndex).value()));
   }
 
   /**
@@ -1391,7 +1398,7 @@ public interface CodePointString {
   /**
    * Converts all of the characters in this {@code String} to lower
    * case using the rules of the given {@code Locale}.  Case mapping is based
-   * on the Unicode Standard version specified by the {@link java.lang.Character Character}
+   * on the Unicode Standard version specified by the {@link org.unlaxer.java.lang.Character Character}
    * class. Since case mappings are not always 1:1 char mappings, the resulting
    * {@code String} may be a different length than the original {@code String}.
    * <p>
@@ -1476,7 +1483,7 @@ public interface CodePointString {
   /**
    * Converts all of the characters in this {@code String} to upper
    * case using the rules of the given {@code Locale}. Case mapping is based
-   * on the Unicode Standard version specified by the {@link java.lang.Character Character}
+   * on the Unicode Standard version specified by the {@link org.unlaxer.java.lang.Character Character}
    * class. Since case mappings are not always 1:1 char mappings, the resulting
    * {@code String} may be a different length than the original {@code String}.
    * <p>

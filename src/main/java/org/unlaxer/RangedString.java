@@ -19,7 +19,7 @@ public class RangedString{
 		this.token = token;
 	}
 	
-	public RangedString(CursorRange range, String token) {
+	public RangedString(CursorRange range, Source token) {
 		super();
 		this.range = range;
 		this.token = Optional.of(token);
@@ -46,7 +46,7 @@ public class RangedString{
 	      token = Optional.empty();
 	      range = new CursorRange();
 	    }else {
-	      token = Optional.of(
+	      Optional.of(
 	          tokens.stream()
 	          .map(Token::getToken)
 	          .filter(Optional::isPresent)
@@ -85,7 +85,7 @@ public class RangedString{
       endCursor.incrementPosition();
 
       if (previousIsCR && codePoint != 0x0a) {
-        list.add(new RangedString(new CursorRange(startCursor, endCursor), builder.toString()));
+        list.add(new RangedString(new CursorRange(startCursor, endCursor), new StringSource(builder.toString())));
         startCursor = new CursorImpl(endCursor);
         endCursor.incrementLineNumber();
         builder = new StringBuilder();

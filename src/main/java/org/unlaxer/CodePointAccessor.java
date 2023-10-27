@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public interface CodePointAccessor extends java.io.Serializable, Comparable<CodePointAccessor>, StringBase {
+public interface CodePointAccessor extends Comparable<CodePointAccessor>, StringBase {
   
   Function<String,CodePointAccessor> stringToStringInterface();
   Function<CodePointAccessor,String> stringInterfaceToStgring();

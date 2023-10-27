@@ -1,6 +1,12 @@
 package org.unlaxer;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.CharSequence;
+import java.lang.Character;
+import java.lang.IllegalArgumentException;
+import java.lang.Object;
+import java.lang.String;
+import java.lang.StringBuffer;
 import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.regex.PatternSyntaxException;
@@ -705,7 +711,7 @@ public interface StringBase extends CharSequence{
   /**
    * Converts all of the characters in this {@code String} to lower
    * case using the rules of the given {@code Locale}.  Case mapping is based
-   * on the Unicode Standard version specified by the {@link java.lang.Character Character}
+   * on the Unicode Standard version specified by the {@link org.unlaxer.java.lang.Character Character}
    * class. Since case mappings are not always 1:1 char mappings, the resulting
    * {@code String} may be a different length than the original {@code String}.
    * <p>
@@ -782,7 +788,7 @@ public interface StringBase extends CharSequence{
   /**
    * Converts all of the characters in this {@code String} to upper
    * case using the rules of the given {@code Locale}. Case mapping is based
-   * on the Unicode Standard version specified by the {@link java.lang.Character Character}
+   * on the Unicode Standard version specified by the {@link org.unlaxer.java.lang.Character Character}
    * class. Since case mappings are not always 1:1 char mappings, the resulting
    * {@code String} may be a different length than the original {@code String}.
    * <p>

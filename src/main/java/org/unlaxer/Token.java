@@ -31,7 +31,7 @@ public class Token implements Serializable{
 
 	
 	
-	public final Optional<String> tokenString;
+	public final Optional<Source> tokenString;
 	public Parser parser;
 	public final CursorRange tokenRange;
 	
@@ -99,7 +99,7 @@ public class Token implements Serializable{
 		return new Token(tokenKind , empties.get(position),parser);
 	}
 	
-	public Optional<String> getToken() {
+	public Optional<Source> getToken() {
 		return tokenString;
 	}
 	
