@@ -11,18 +11,24 @@ public class SourceTest {
 
   @Test
   public void test() {
+
+    {
+      String collects = List.of("abc","def").stream().collect(Collectors.joining());
+      assertEquals("abcdef" , collects);
+    }
+    {
+      List<StringSource> list = List.of(new StringSource("abc") , new StringSource("def"));
+      Source collect = list.stream().collect(Source.joining(","));
+      System.out.println(collect);
+      assertEquals("abc,def" , collect.toString());
+    }
     
-    String collects = List.of("abc","def").stream().collect(Collectors.joining());
-    assertEquals("abcdef" , collects);
-    
-    List<StringSource> list = List.of(new StringSource("abc") , new StringSource("def"));
-    
-    Source collect = list.stream().collect(Source.joining());
-    
-    System.out.println(collect);
-    
-    
-    assertEquals("abcdef" , collect.toString());
+    {
+      List<StringSource> list = List.of(new StringSource("abc") , new StringSource("def"));
+      Source collect = list.stream().collect(Source.joining());
+      System.out.println(collect);
+      assertEquals("abcdef" , collect.toString());
+    }
   }
 
 }

@@ -1,5 +1,7 @@
 package org.unlaxer;
 
+import org.unlaxer.util.SimpleBuilder;
+
 public enum SymbolMap{
   crlf(0x21b2,13,10),
   tab(0x21a6,9),
@@ -45,6 +47,40 @@ public enum SymbolMap{
       }
     }
     return buillder.toString();
+  }
+  
+  public static Source replaceSymbol(Source original , SymbolMap lineTerminator) {
+    if(lineTerminator == tab) {
+      throw new IllegalArgumentException();
+    }
+    SimpleBuilder buillder = new SimpleBuilder();
+    int[] codePoints = original.codePoints().toArray();
+    
+    int codePointCount = codePoints.length;
+    for (int i = 0; i < codePointCount; i++) {
+      int codePointAt = codePoints[i];
+      if(codePointAt == tab.codes[0]) {
+        buillder.appendCodePoint(tab.arrowSymbol);
+      }else if(codePointAt == lf.codes[0]) {
+        buillder.appendCodePoint(lf.arrowSymbol);
+        for(int code:lineTerminator.codes) {
+          buillder.appendCodePoint(code);            
+        }
+      }else if(codePointAt == cr.codes[0]) {
+        if(codePointCount-1!=i && codePoints[i+1] ==lf.codes[0]) {
+          buillder.appendCodePoint(crlf.arrowSymbol);
+          i++;
+        }else {
+          buillder.appendCodePoint(cr.arrowSymbol);
+        }
+        for(int code:lineTerminator.codes) {
+          buillder.appendCodePoint(code);            
+        }
+      }else {
+        buillder.appendCodePoint(codePointAt);
+      }
+    }
+    return buillder.toSource();
   }
   
 }

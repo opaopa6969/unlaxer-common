@@ -83,7 +83,6 @@ public class ParseContext implements
 		onClose(this);
 	}
 
-	@Override
 	public CodePointLength getLength() {
 		return source.getLength();
 	}

@@ -8,8 +8,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import org.unlaxer.util.SimpleBuilder;
-
 public interface Source extends CodePointAccessor{
 	
 	public RangedString peek(CodePointIndex startIndexInclusive, CodePointLength length);
@@ -31,22 +29,68 @@ public interface Source extends CodePointAccessor{
 	
 	public LineNumber getLineNUmber(CodePointIndex Position);
 	
-	/**
-   * Returns a {@code Collector} that concatenates the input elements into a
-   * {@code String}, in encounter order.
+//	/**
+//   * Returns a {@code Collector} that concatenates the input elements into a
+//   * {@code String}, in encounter order.
+//   *
+//   * @return a {@code Collector} that concatenates the input elements into a
+//   * {@code String}, in encounter order
+//   */
+//  public static Collector<CharSequence, ?, Source> joining() {
+//      return new CollectorImpl<CharSequence, SimpleBuilder, Source>(
+//              SimpleBuilder::new, SimpleBuilder::append,
+//              (r1, r2) -> { 
+//                SimpleBuilder append = r1.append(r2); 
+//                return append; 
+//              },
+//              SimpleBuilder::toSource, CH_NOID);
+//  }
+	
+  /**
+  * Returns a {@code Collector} that concatenates the input elements into a
+  * {@code String}, in encounter order.
+  *
+  * @return a {@code Collector} that concatenates the input elements into a
+  * {@code String}, in encounter order
+  */
+	public static Collector<CharSequence, ?, Source> joining() {
+	  return joining("");
+	}
+  
+  /**
+   * Returns a {@code Collector} that concatenates the input elements,
+   * separated by the specified delimiter, in encounter order.
    *
-   * @return a {@code Collector} that concatenates the input elements into a
-   * {@code String}, in encounter order
+   * @param delimiter the delimiter to be used between each element
+   * @return A {@code Collector} which concatenates CharSequence elements,
+   * separated by the specified delimiter, in encounter order
    */
-  public static Collector<CharSequence, ?, Source> joining() {
-      return new CollectorImpl<CharSequence, SimpleBuilder, Source>(
-              SimpleBuilder::new, SimpleBuilder::append,
-              (r1, r2) -> { 
-                r1.append(r2); 
-                return r1; 
-              },
-              SimpleBuilder::toSource, CH_NOID);
+  public static Collector<CharSequence, ?, Source> joining(CharSequence delimiter) {
+      return joining(delimiter, "", "");
   }
+
+  /**
+   * Returns a {@code Collector} that concatenates the input elements,
+   * separated by the specified delimiter, with the specified prefix and
+   * suffix, in encounter order.
+   *
+   * @param delimiter the delimiter to be used between each element
+   * @param  prefix the sequence of characters to be used at the beginning
+   *                of the joined result
+   * @param  suffix the sequence of characters to be used at the end
+   *                of the joined result
+   * @return A {@code Collector} which concatenates CharSequence elements,
+   * separated by the specified delimiter, in encounter order
+   */
+  public static Collector<CharSequence, ?, Source> joining(CharSequence delimiter,
+                                                           CharSequence prefix,
+                                                           CharSequence suffix) {
+      return new CollectorImpl<>(
+              () -> new SourceJoiner(delimiter, prefix, suffix),
+              SourceJoiner::add, SourceJoiner::merge,
+              SourceJoiner::toSource, CH_NOID);
+  }
+
   
   
   /**
@@ -113,5 +157,8 @@ public interface Source extends CodePointAccessor{
   }
   
   static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
+  
+  
+  public static final Source EMPTY = new StringSource(""); 
 	
 }

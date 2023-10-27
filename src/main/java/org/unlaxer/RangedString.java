@@ -112,7 +112,7 @@ public class RangedString{
 
   @Override
   public String toString() {
-    return SymbolMap.replaceSymbol(token.orElse(""),SymbolMap.lf)
+    return SymbolMap.replaceSymbol(token.orElse(Source.EMPTY),SymbolMap.lf)
         +range.toString();
   }
 }
