@@ -29,6 +29,13 @@ public interface Source extends CodePointAccessor{
 	
 	public LineNumber getLineNUmber(CodePointIndex Position);
 	
+  public Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
+  
+  public Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
+  
+  public int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
+
+	
 //	/**
 //   * Returns a {@code Collector} that concatenates the input elements into a
 //   * {@code String}, in encounter order.
@@ -159,6 +166,8 @@ public interface Source extends CodePointAccessor{
   static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
   
   
-  public static final Source EMPTY = new StringSource(""); 
+  public static final Source EMPTY = new StringSource("");
+  
+  
 	
 }

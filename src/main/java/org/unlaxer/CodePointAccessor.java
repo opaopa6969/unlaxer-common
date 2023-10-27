@@ -32,8 +32,6 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
 //  StringBase stringBase();
 
-
-
   default CodePoint codePointAt(CodePointIndex index) {
     return new CodePoint(stringIndexAccessor().codePointAt(toStringIndex(index).value()));
   }
@@ -251,4 +249,10 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
     
     return stringToStringInterface().apply(repeat(count));
   }
+  
+  public default CodePointIndex endIndexExclusive() {
+    return new CodePointIndex(codePointLength());
+  }
+  
+  
 }

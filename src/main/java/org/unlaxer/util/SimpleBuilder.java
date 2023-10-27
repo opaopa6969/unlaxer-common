@@ -36,6 +36,11 @@ public class SimpleBuilder implements CharSequence{
     this.index = index;
     this.builder = builder.builder;
   }
+  
+  public SimpleBuilder(Source source) {
+    this(0,new StringBuilder(source.toString()));
+  }
+
 
   public SimpleBuilder incTab() {
     ++index;

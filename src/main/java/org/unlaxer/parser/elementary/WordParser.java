@@ -62,10 +62,10 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 		return peeked.token.map(baseString->
 			equals(word,baseString)).orElse(false) ^ invertMatch ?
 			new Token(tokenKind , peeked, this):
-			Token.empty(tokenKind ,parseContext.getConsumedPosition(), this);
+			Token.empty(tokenKind ,parseContext.getCursor(TokenKind.consumed), this);
 	}
 	
-	boolean equals(String targetString , String baseString){
+	boolean equals(Source targetString , Source baseString){
 		return ignoreCase ? 
 				targetString.equalsIgnoreCase(baseString):
 				targetString.equals(baseString);

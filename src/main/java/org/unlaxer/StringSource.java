@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class StringSource implements Source {
   
-  private String source;
+  private String sourceString;
   private int[] codePoints;
   NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
   Map<CodePointIndex,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
@@ -22,7 +22,7 @@ public class StringSource implements Source {
   
   public StringSource(String source) {
     super();
-    this.source = source;
+    this.sourceString = source;
     codePoints = source.codePoints().toArray();
     int codePointCount = codePoints.length;
     
@@ -74,7 +74,7 @@ public class StringSource implements Source {
 
   @Override
   public StringLength stringLength() {
-    return new StringLength(source.length());
+    return new StringLength(sourceString.length());
   }
   
   public CodePointLength codePointLength() {
@@ -83,207 +83,207 @@ public class StringSource implements Source {
 
   @Override
   public boolean isEmpty() {
-    return source.isEmpty();
+    return sourceString.isEmpty();
   }
 
   @Override
   public char charAt(int index) {
-    return source.charAt(index);
+    return sourceString.charAt(index);
   }
 
   @Override
   public byte[] getBytes(String charsetName) throws UnsupportedEncodingException {
-    return source.getBytes(charsetName);
+    return sourceString.getBytes(charsetName);
   }
 
   @Override
   public byte[] getBytes(Charset charset) {
-    return source.getBytes(charset);
+    return sourceString.getBytes(charset);
   }
 
   @Override
   public byte[] getBytes() {
-    return source.getBytes();
+    return sourceString.getBytes();
   }
 
   @Override
   public boolean contentEquals(StringBuffer sb) {
-    return source.contentEquals(sb);
+    return sourceString.contentEquals(sb);
   }
 
   @Override
   public boolean contentEquals(CharSequence cs) {
-    return source.contentEquals(cs);
+    return sourceString.contentEquals(cs);
   }
 
   @Override
   public boolean equalsIgnoreCase(String anotherString) {
-    return source.equalsIgnoreCase(anotherString);
+    return sourceString.equalsIgnoreCase(anotherString);
   }
 
   @Override
   public int compareTo(String anotherString) {
-    return source.compareTo(anotherString);
+    return sourceString.compareTo(anotherString);
   }
 
   @Override
   public int compareToIgnoreCase(String str) {
-    return source.compareToIgnoreCase(str);
+    return sourceString.compareToIgnoreCase(str);
   }
 
   @Override
   public boolean startsWith(String prefix) {
-    return source.startsWith(prefix);
+    return sourceString.startsWith(prefix);
   }
 
   @Override
   public boolean endsWith(String suffix) {
-    return source.endsWith(suffix);
+    return sourceString.endsWith(suffix);
   }
 
   @Override
   public int indexOf(int ch) {
-    return source.indexOf(ch);
+    return sourceString.indexOf(ch);
   }
 
   @Override
   public int lastIndexOf(int ch) {
-    return source.lastIndexOf(ch);
+    return sourceString.lastIndexOf(ch);
   }
 
   @Override
   public int indexOf(String str) {
-    return source.indexOf(str);
+    return sourceString.indexOf(str);
   }
 
   @Override
   public int lastIndexOf(String str) {
-    return source.lastIndexOf(str);
+    return sourceString.lastIndexOf(str);
   }
 
   @Override
   public CharSequence subSequence(int beginIndex, int endIndex) {
-    return source.subSequence(beginIndex, endIndex);
+    return sourceString.subSequence(beginIndex, endIndex);
   }
 
   @Override
   public String concat(String str) {
-    return source.concat(str);
+    return sourceString.concat(str);
   }
 
   @Override
   public String replace(char oldChar, char newChar) {
-    return source.replace(oldChar, newChar);
+    return sourceString.replace(oldChar, newChar);
   }
 
   @Override
   public boolean matches(String regex) {
-    return source.matches(regex);
+    return sourceString.matches(regex);
   }
 
   @Override
   public boolean contains(CharSequence s) {
-    return source.contains(s);
+    return sourceString.contains(s);
   }
 
   @Override
   public String replaceFirst(String regex, String replacement) {
-    return source.replaceFirst(regex, replacement);
+    return sourceString.replaceFirst(regex, replacement);
   }
 
   @Override
   public String replaceAll(String regex, String replacement) {
-    return source.replaceAll(regex, replacement);
+    return sourceString.replaceAll(regex, replacement);
   }
 
   @Override
   public String replace(CharSequence target, CharSequence replacement) {
-    return source.replace(target, replacement);
+    return sourceString.replace(target, replacement);
   }
 
   @Override
   public String[] split(String regex, int limit) {
-    return source.split(regex,limit);
+    return sourceString.split(regex,limit);
   }
 
   @Override
   public String[] split(String regex) {
-    return source.split(regex);
+    return sourceString.split(regex);
   }
 
   @Override
   public String toLowerCase(Locale locale) {
-    return source.toLowerCase(locale);
+    return sourceString.toLowerCase(locale);
   }
 
   @Override
   public String toLowerCase() {
-    return source.toLowerCase();
+    return sourceString.toLowerCase();
   }
 
   @Override
   public String toUpperCase(Locale locale) {
-    return source.toUpperCase(locale);
+    return sourceString.toUpperCase(locale);
   }
 
   @Override
   public String toUpperCase() {
-    return source.toUpperCase();
+    return sourceString.toUpperCase();
   }
 
   @Override
   public String trim() {
-    return source.trim();
+    return sourceString.trim();
   }
 
   @Override
   public String strip() {
-    return source.strip();
+    return sourceString.strip();
   }
 
   @Override
   public String stripLeading() {
-    return source.stripLeading();
+    return sourceString.stripLeading();
   }
 
   @Override
   public String stripTrailing() {
-    return source.stripTrailing();
+    return sourceString.stripTrailing();
   }
 
   @Override
   public boolean isBlank() {
-    return source.isBlank();
+    return sourceString.isBlank();
   }
 
   @Override
   public Stream<String> lines() {
-    return source.lines();
+    return sourceString.lines();
   }
 
   @Override
   public IntStream chars() {
-    return source.chars();
+    return sourceString.chars();
   }
 
   @Override
   public IntStream codePoints() {
-    return source.codePoints();
+    return sourceString.codePoints();
   }
 
   @Override
   public char[] toCharArray() {
-    return source.toCharArray();
+    return sourceString.toCharArray();
   }
 
   @Override
   public String intern() {
-    return source.intern();
+    return sourceString.intern();
   }
 
   @Override
   public String repeat(int count) {
-    return source.repeat(count);
+    return sourceString.repeat(count);
   }
 
   @Override
@@ -298,22 +298,22 @@ public class StringSource implements Source {
 
   @Override
   public int hashCode() {
-    return source.hashCode();
+    return sourceString.hashCode();
   }
 
   @Override
   public boolean equals(Object obj) {
-    return source.equals(obj);
+    return sourceString.equals(obj);
   }
 
   @Override
   public String toString() {
-    return source;
+    return sourceString;
   }
 
   @Override
-  public String getSource() {
-    return source;
+  public Source getSource() {
+    return this;
   }
 
   @Override
@@ -376,14 +376,17 @@ public class StringSource implements Source {
     );
   }
   
+  @Override
   public Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
     return new StringSource(subString(startIndexInclusive,endIndexExclusive));
   }
   
+  @Override
   public Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength) {
     return new StringSource(subString(startIndexInclusive,codePointLength));
   }
  
+  @Override
   public int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
     return Arrays.copyOfRange(codePoints, startIndexInclusive.value() , endIndexExclusive.value());
   }
@@ -396,8 +399,6 @@ public class StringSource implements Source {
     return new String(codePoints, startIndexInclusive.value() , length.value());
   }
 
-
-
   @Override
   public CodePointLength getLength() {
     return new CodePointLength(codePoints.length);
@@ -406,5 +407,10 @@ public class StringSource implements Source {
   @Override
   public LineNumber getLineNUmber(CodePointIndex Position) {
     return lineNumberByIndex.floorEntry(Position).getValue();
+  }
+
+  @Override
+  public String getSourceAsString() {
+    return sourceString;
   }
 }
