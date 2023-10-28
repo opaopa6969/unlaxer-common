@@ -113,7 +113,7 @@ public class QuotedParser extends LazyChain {
 				.flatMap(Token::getToken)
 				//FIXME! this is work around for BUG...
 				.orElseGet(
-					()->thisParsersToken.tokenString
+					()->thisParsersToken.tokenSource
 						.map(quoted->quoted.substring(1, quoted.length()-1))
 						.orElse("")
 				);

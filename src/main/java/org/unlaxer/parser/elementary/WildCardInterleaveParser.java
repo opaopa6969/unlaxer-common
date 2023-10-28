@@ -44,7 +44,7 @@ public abstract class WildCardInterleaveParser extends LazyZeroOrMore{
         if(current == null) {
           current = token.tokenRange.startIndexInclusive;
         }
-        token.tokenString.ifPresent(characters::append);
+        token.tokenSource.ifPresent(characters::append);
       }else {
         if(characters.length()>0) {
           Token token2 = new Token(

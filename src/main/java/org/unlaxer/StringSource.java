@@ -15,6 +15,7 @@ public class StringSource implements Source {
   private final Source root;
   private final Source parent;
   private final String sourceString;
+//private final CodePoint[] codePoints;
   private final int[] codePoints;
   IndexAndLineNumber indexAndLineNumber;
   
@@ -23,6 +24,7 @@ public class StringSource implements Source {
     root = this;
     parent = null;
     this.sourceString = source;
+//    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     indexAndLineNumber = createIndexAndLineNumber(codePoints);
     
@@ -32,6 +34,7 @@ public class StringSource implements Source {
     super();
     this.sourceString = source.toString();
     this.parent = parent;
+//    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     indexAndLineNumber = createIndexAndLineNumber(codePoints);
     
@@ -41,6 +44,7 @@ public class StringSource implements Source {
         root = _root;
         break;
       }
+      _root = parent;
     }
   }
   
@@ -306,7 +310,7 @@ public class StringSource implements Source {
 
   @Override
   public int length() {
-    return 0;
+    return sourceAsString().length();
   }
 
   @Override
@@ -375,7 +379,7 @@ public class StringSource implements Source {
   }
 
   @Override
-  public LineNumber lineNUmber(CodePointIndex Position) {
+  public LineNumber lineNumber(CodePointIndex Position) {
     return indexAndLineNumber.lineNumberByIndex.floorEntry(Position).getValue();
   }
 
@@ -397,6 +401,11 @@ public class StringSource implements Source {
   @Override
   public Source root() {
     return root;
+  }
+
+  @Override
+  public Source thisSource() {
+    return this;
   }
 
 }

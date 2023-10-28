@@ -147,7 +147,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
     return new CodePointIndex(codePointLength());
   }
   
-  public LineNumber lineNUmber(CodePointIndex Position);
+  public LineNumber lineNumber(CodePointIndex Position);
   
   default CursorRange cursorRange(CodePointIndex startIndexInclusive, CodePointLength length) {
 
@@ -170,11 +170,13 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
       CursorRange cursorRange = new CursorRange(
           new CursorImpl()
             .setPosition(startIndexInclusive)
-            .setLineNumber(lineNUmber(startIndexInclusive)),
+            .setLineNumber(lineNumber(startIndexInclusive)),
           new CursorImpl()
             .setPosition(endIndexExclusive)
-            .setLineNumber(lineNUmber(endIndexExclusive))
+            .setLineNumber(lineNumber(endIndexExclusive))
       );
       return cursorRange;
   }
+  
+  int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
 }

@@ -16,6 +16,28 @@ public interface Source extends CodePointAccessor{
   
   CursorRange cursorRange();
   
+  default CursorRange cursorRangeOnParent() {
+    
+  }
+  
+  default CursorRange cursorRangeOnRoot() {
+    
+  }
+  
+  CodePointOffset offsetInParent();
+  
+  default CodePointOffset offsetInRoot() {
+    CodePointOffset codePointOffset = new CodePointOffset(0);
+    Source current = thisSource();
+    while(true) {
+      if(current.parent().isEmpty()) {
+        return codePointOffset;
+      }
+      current = current.parent().get();
+      codePointOffset.plus(current.offsetInParent());
+    }
+  }
+  
   Source peek(CodePointIndex startIndexInclusive, CodePointLength length);
 	
   default Source peek(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
@@ -34,8 +56,6 @@ public interface Source extends CodePointAccessor{
   Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
   
   Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
-  
-  int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
   
   Optional<Source> parent();
   
@@ -291,9 +311,6 @@ public interface Source extends CodePointAccessor{
   
   static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
   
-  
   public static final Source EMPTY = new StringSource("");
-  
-  
 	
 }

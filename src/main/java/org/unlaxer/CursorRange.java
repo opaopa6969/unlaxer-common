@@ -136,4 +136,8 @@ public class CursorRange implements Comparable<CursorRange>{
 	public Range toRange() {
 	   return new Range(startIndexInclusive.getPosition() , endIndexExclusive.getPosition());
 	}
+	
+	public CursorRange plus() {
+	  
+	}
 }

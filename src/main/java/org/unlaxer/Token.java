@@ -31,9 +31,8 @@ public class Token implements Serializable{
 
 	
 	
-	public final Source tokenString;
+	public final Source tokenSource;
 	public Parser parser;
-	public final CursorRange tokenRange;
 	
 	public Optional<Token> parent;
 	private final TokenList originalChildren;
@@ -70,7 +69,7 @@ public class Token implements Serializable{
 	public Token(TokenKind tokenKind , Source token, Parser parser , TokenList children) {
 		super();
 		this.tokenKind = tokenKind;
-		this.tokenString = token.token;
+		this.tokenSource = token.token;
 		this.tokenRange = token.range;
 		this.parser = parser;
 		this.originalChildren = children;
@@ -100,7 +99,7 @@ public class Token implements Serializable{
 	}
 	
 	public Optional<Source> getToken() {
-		return tokenString;
+		return tokenSource;
 	}
 	
 	public CursorRange getTokenRange() {
@@ -108,7 +107,7 @@ public class Token implements Serializable{
 	}
 	
 	public RangedString getRangedString(){
-		return new RangedString(tokenRange , tokenString);
+		return new RangedString(tokenRange , tokenSource);
 	}
 	
 	public Parser getParser(){
@@ -221,14 +220,14 @@ public class Token implements Serializable{
 		if(false == children(childrenKind).isEmpty()){
 			throw new IllegalArgumentException("not support collected token");
 		}
-		return new Token(tokenKind,new RangedString(tokenRange, tokenString),replace).setParent(parent);
+		return new Token(tokenKind,new RangedString(tokenRange, tokenSource),replace).setParent(parent);
 	}
 	
 	public <P extends Parser>TypedToken<P> newWithReplacedParserConstructRangedStringTyped(P replace , ChildrenKind childrenKind){
 		if(false == children(childrenKind).isEmpty()){
 			throw new IllegalArgumentException("not support collected token");
 		}
-		return new Token(tokenKind,new RangedString(tokenRange, tokenString),replace)
+		return new Token(tokenKind,new RangedString(tokenRange, tokenSource),replace)
 				.typed(replace).setParent(parent);
 	}
 

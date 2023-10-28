@@ -78,8 +78,8 @@ public class MatchOnlyTest {
 			
 			assertTrue(parsed.isSucceeded());
 			assertEquals(2,parsed.getOriginalTokens().size());
-			assertEquals(1,rootToken.tokenString.get().length());
-			assertEquals(1,parsed.getConsumed().tokenString.get().length());
+			assertEquals(1,rootToken.tokenSource.get().length());
+			assertEquals(1,parsed.getConsumed().tokenSource.get().length());
 			assertTrue(parseContext.allMatched());
 			assertFalse(parseContext.allConsumed());
 			assertEquals(3, parseContext.getLength());
