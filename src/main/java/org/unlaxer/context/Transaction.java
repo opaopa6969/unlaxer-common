@@ -139,25 +139,25 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
 		onRollback(get(), parser , pollFirst.getTokens());
 	}
 	
-	public default String getRemain(TokenKind tokenKind) {
+	public default Source getRemain(TokenKind tokenKind) {
 		CodePointIndex position = getPosition(tokenKind);
-		return getSource().peek(position, getLength().minus(position)).token.orElse("");
+		return getSource().peek(position, codepointLength().minus(position)).token.orElse("");
 	}
 
-	public default String getConsumed(TokenKind tokenKind) {
+	public default Source getConsumed(TokenKind tokenKind) {
 		CodePointIndex position = getPosition(tokenKind);
-		return getSource().peek(new CodePointIndex(0), position).token.orElse("");
+		return getSource().peek(new CodePointIndex(0), position);
 	}
 
 	public default boolean allMatched() {
-		return getPosition(TokenKind.matchOnly).eq(getSource().getLength());
+		return getPosition(TokenKind.matchOnly).eq(getSource().codepointLength());
 	}
 
 	public default boolean allConsumed() {
-		return getPosition(TokenKind.consumed).eq(getSource().getLength());
+		return getPosition(TokenKind.consumed).eq(getSource().codepointLength());
 	}
 
-	public default RangedString peek(TokenKind tokenKind, CodePointLength length) {
+	public default Source peek(TokenKind tokenKind, CodePointLength length) {
 		return peek(getCurrent().getPosition(tokenKind), length);
 	}
 

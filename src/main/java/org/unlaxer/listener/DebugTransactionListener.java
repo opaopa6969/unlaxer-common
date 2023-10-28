@@ -98,7 +98,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 			return ;
 		}
 		print.format("OPEN    : '%s'\n", 
-				parseContext.source.peek(new CodePointIndex(0), parseContext.source.getLength()).token.orElse(""));
+				parseContext.source.peek(new CodePointIndex(0), parseContext.source.codepointLength()).token.orElse(""));
 		onOutput(++count);
 		if(doTrigger()){
 			//set Break point here or this method declares!
@@ -113,7 +113,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 			return ;
 		}
 		print.format("CLOSE   : '%s' consumed:%s \n\n", 
-			parseContext.source.peek(new CodePointIndex(0), parseContext.source.getLength()).token.orElse(""),
+			parseContext.source.peek(new CodePointIndex(0), parseContext.source.codepointLength()).token.orElse(""),
 			getConsumed(parseContext)
 		);
 		onOutput(++count);
@@ -127,7 +127,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 	private Object getConsumed(ParseContext parseContext) {
 		TransactionElement transactionElement = parseContext.getCurrent();
 		CodePointIndex consumed = transactionElement.getPosition(TokenKind.consumed);
-		CodePointLength remain = parseContext.source.getLength().minus(consumed);
+		CodePointLength remain = parseContext.source.codepointLength().minus(consumed);
 		return parseContext.allConsumed() ? "allConsumed" : 
 			String.format("%d(%d remain)", consumed , remain);
 	}

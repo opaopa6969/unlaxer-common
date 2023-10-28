@@ -3,72 +3,59 @@ package org.unlaxer;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class StringSource implements Source {
   
-  private String sourceString;
-  private int[] codePoints;
-  NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
-  Map<CodePointIndex,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
-  Map<StringIndex,CodePointIndex> codePointIndexByStringIndex = new HashMap<>();
+  private final Source root;
+  private final Source parent;
+  private final String sourceString;
+  private final int[] codePoints;
+  IndexAndLineNumber indexAndLineNumber;
   
   public StringSource(String source) {
     super();
+    root = this;
+    parent = null;
     this.sourceString = source;
     codePoints = source.codePoints().toArray();
-    int codePointCount = codePoints.length;
+    indexAndLineNumber = createIndexAndLineNumber(codePoints);
     
-    LineNumber lineNumber = new LineNumber(0);
-    CodePointIndex index = new CodePointIndex(0);
-    lineNumberByIndex.put(index, lineNumber);
+  }
+  
+  private StringSource(Source parent , Source source) {
+    super();
+    this.sourceString = source.toString();
+    this.parent = parent;
+    codePoints = source.codePoints().toArray();
+    indexAndLineNumber = createIndexAndLineNumber(codePoints);
     
-    StringIndex stringIndex = new StringIndex(0);
-    CodePointIndex codePointIndex = new CodePointIndex(0);
-    
-    for (int i = 0; i < codePointCount; i++) {
-      stringIndexByCodePointIndex.put(codePointIndex, stringIndex);
-      codePointIndexByStringIndex.put(stringIndex,codePointIndex);
-    
-      int codePointAt = codePoints[i];
-      
-      int adding = Character.isBmpCodePoint(codePointAt) ? 1:2;
-      stringIndex = stringIndex.add(adding);
-      
-      if(codePointAt == SymbolMap.lf.codes[0]) {
-        lineNumberByIndex.put(new CodePointIndex(i+1), lineNumber.increments());
-      }else if(codePointAt == SymbolMap.cr.codes[0]) {
-        if(codePointCount-1!=i && codePoints[i+1] ==SymbolMap.lf.codes[0]) {
-          i++;
-          lineNumberByIndex.put(new CodePointIndex(i+1), lineNumber.increments());
-          
-          stringIndex = stringIndex.add(1);
-          stringIndexByCodePointIndex.put(codePointIndex.add(1), stringIndex);
-          codePointIndexByStringIndex.put(stringIndex,codePointIndex.add(1));
-        }else {
-          lineNumberByIndex.put(new CodePointIndex(i+1), lineNumber.increments());
-        }
+    Source _root = parent;
+    while(true) {
+      if(_root.parent().isEmpty()) {
+        root = _root;
+        break;
       }
     }
   }
   
-  static Function<String, CodePointAccessor> stringToStringInterface = StringSource::new;
-  static Function<CodePointAccessor, String> stringInterfaceToStgring = StringSource::toString;
+  static Function<String, Source> stringToStringInterface = StringSource::new;
+  static BiFunction<Source , String, Source> parentSourceAndStringToSource = 
+      (parent,sourceAsString)-> new StringSource(parent, new StringSource(sourceAsString));
+  static Function<Source, String> stringInterfaceToStgring = StringSource::toString;
   
   @Override
-  public Function<String, CodePointAccessor> stringToStringInterface() {
-    return stringToStringInterface;
+  public BiFunction<Source, String, Source> parentSourceAndStringToSource() {
+    return parentSourceAndStringToSource;
   }
 
   @Override
-  public Function<CodePointAccessor, String> stringInterfaceToStgring() {
+  public Function<Source, String> sourceToStgring() {
     return stringInterfaceToStgring;
   }
 
@@ -77,6 +64,7 @@ public class StringSource implements Source {
     return new StringLength(sourceString.length());
   }
   
+  @Override
   public CodePointLength codePointLength() {
     return new CodePointLength(codePoints.length);
   }
@@ -288,12 +276,12 @@ public class StringSource implements Source {
 
   @Override
   public StringIndex toStringIndex(CodePointIndex codePointIndex) {
-    return stringIndexByCodePointIndex.get(codePointIndex);
+    return indexAndLineNumber.stringIndexByCodePointIndex.get(codePointIndex);
   }
 
   @Override
   public CodePointIndex toCodePointIndex(StringIndex stringIndex) {
-    return codePointIndexByStringIndex.get(stringIndex);
+    return indexAndLineNumber.codePointIndexByStringIndex.get(stringIndex);
   }
 
   @Override
@@ -312,7 +300,7 @@ public class StringSource implements Source {
   }
 
   @Override
-  public Source getSource() {
+  public Source source() {
     return this;
   }
 
@@ -348,32 +336,19 @@ public class StringSource implements Source {
   }
 
   @Override
-  public RangedString peek(CodePointIndex startIndexInclusive, CodePointLength length) {
+  public Source peek(CodePointIndex startIndexInclusive, CodePointLength length) {
     
     if(startIndexInclusive.value() + length.value() > codePoints.length){
-      CodePointIndex index = new CodePointIndex(startIndexInclusive.value());
-      CursorRange cursorRange = new CursorRange(new CursorImpl()
-          .setPosition(index)
-          .setLineNumber(getLineNUmber(index))
-      );
-      return new RangedString(cursorRange);
+//      CodePointIndex index = new CodePointIndex(startIndexInclusive.value());
+//      CursorRange cursorRange = new CursorRange(new CursorImpl()
+//          .setPosition(index)
+//          .setLineNumber(lineNUmber(index))
+//      );
+//      return new StringSource(this , cursorRange , null);
+      return new StringSource(this , subSource(startIndexInclusive, new CodePointLength(0)));
     }
     
-    CodePointIndex endIndex = new CodePointIndex(startIndexInclusive.value() +length.value());
-    CursorRange cursorRange = new CursorRange(
-        new CursorImpl()
-          .setPosition(startIndexInclusive)
-          .setLineNumber(getLineNUmber(startIndexInclusive)),
-        new CursorImpl()
-          .setPosition(endIndex)
-          .setLineNumber(getLineNUmber(endIndex))
-        
-    );
-
-    return new RangedString(
-        cursorRange,
-        subSource(startIndexInclusive, length)
-    );
+    return new StringSource(this , subSource(startIndexInclusive, length));
   }
   
   @Override
@@ -400,17 +375,28 @@ public class StringSource implements Source {
   }
 
   @Override
-  public CodePointLength getLength() {
-    return new CodePointLength(codePoints.length);
+  public LineNumber lineNUmber(CodePointIndex Position) {
+    return indexAndLineNumber.lineNumberByIndex.floorEntry(Position).getValue();
   }
 
   @Override
-  public LineNumber getLineNUmber(CodePointIndex Position) {
-    return lineNumberByIndex.floorEntry(Position).getValue();
-  }
-
-  @Override
-  public String getSourceAsString() {
+  public String sourceAsString() {
     return sourceString;
   }
+
+  @Override
+  public CursorRange cursorRange() {
+    return indexAndLineNumber.cursorRange;
+  }
+
+  @Override
+  public Optional<Source> parent() {
+    return Optional.of(parent);
+  }
+
+  @Override
+  public Source root() {
+    return root;
+  }
+
 }

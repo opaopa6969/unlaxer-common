@@ -6,41 +6,41 @@ import java.util.stream.Collectors;
 
 import org.unlaxer.util.SimpleBuilder;
 
-public class RangedString{
+class _RangedString{
 	
 	public final CursorRange range;
 	public Optional<Source> token;
 	
-  public RangedString(Cursor cursor) {
+  public _RangedString(Cursor cursor) {
     this(new CursorRange(cursor));
   }
 	
-	public RangedString(CursorRange range, Optional<Source> token) {
+	public _RangedString(CursorRange range, Optional<Source> token) {
 		super();
 		this.range = range;
 		this.token = token;
 	}
 	
-	public RangedString(CursorRange range, Source token) {
+	public _RangedString(CursorRange range, Source token) {
 		super();
 		this.range = range;
 		this.token = Optional.of(token);
 	}
 
 	
-	public RangedString(CursorRange cursorRange) {
+	public _RangedString(CursorRange cursorRange) {
 		super();
 		this.range = cursorRange;
 		this.token = Optional.empty();
 	}
 	
-	 public RangedString() {
+	 public _RangedString() {
       super();
       this.range = new CursorRange();
       this.token = Optional.empty();
     }
 	 
-	 public RangedString(List<Token> tokens) {
+	 public _RangedString(List<Token> tokens) {
 	   
 	   super();
 	   
@@ -67,9 +67,9 @@ public class RangedString{
 //		this.token = Optional.of(token);
 //	}
 	
-  public static List<RangedString> tokeizeWithLineTerminator(String text) {
+  public static List<_RangedString> tokeizeWithLineTerminator(String text) {
 
-    List<RangedString> list = new ArrayList<>();
+    List<_RangedString> list = new ArrayList<>();
 
     SimpleBuilder builder = new SimpleBuilder();
 
@@ -87,7 +87,7 @@ public class RangedString{
       endCursor.incrementPosition();
 
       if (previousIsCR && codePoint != 0x0a) {
-        list.add(new RangedString(new CursorRange(startCursor, endCursor), new StringSource(builder.toString())));
+        list.add(new _RangedString(new CursorRange(startCursor, endCursor), new StringSource(builder.toString())));
         startCursor = new CursorImpl(endCursor);
         endCursor.incrementLineNumber();
         builder = new SimpleBuilder();
@@ -98,7 +98,7 @@ public class RangedString{
       builder.append(chars);
 
       if (codePoint == 0x0a) {
-        list.add(new RangedString(new CursorRange(startCursor, endCursor), builder.toSource()));
+        list.add(new _RangedString(new CursorRange(startCursor, endCursor), builder.toSource()));
         startCursor = new CursorImpl(endCursor);
         endCursor.incrementLineNumber();
       }

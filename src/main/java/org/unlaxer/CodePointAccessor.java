@@ -1,13 +1,7 @@
 package org.unlaxer;
 
-import java.util.Locale;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
 public interface CodePointAccessor extends Comparable<CodePointAccessor>, StringBase {
   
-  Function<String,CodePointAccessor> stringToStringInterface();
-  Function<CodePointAccessor,String> stringInterfaceToStgring();
   
   StringIndex toStringIndex(CodePointIndex codePointIndex);
   StringIndexWithNegativeValue toStringIndex(CodePointIndexWithNegativeValue codePointIndex);
@@ -25,8 +19,8 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   CodePointLength codePointLength();
   
-  String getSourceAsString();
-  Source getSource();
+  String sourceAsString();
+  Source source();
 
   StringIndexAccessor stringIndexAccessor();
   
@@ -60,11 +54,11 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default boolean equalsIgnoreCase(CodePointAccessor anotherString) {
-    return equalsIgnoreCase(anotherString.getSource());
+    return equalsIgnoreCase(anotherString.source());
   }
 
   default int compareTo(CodePointAccessor  anotherString) {
-    return compareTo(anotherString.getSource());
+    return compareTo(anotherString.source());
   }
 
   default int compareToIgnoreCase(CodePointAccessor str) {
@@ -76,7 +70,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default boolean regionMatches(CodePointIndex toffset, CodePointAccessor other, CodePointIndex ooffset, Length len) {
-    return stringIndexAccessor().regionMatches(toStringIndex(toffset).value(), other.getSourceAsString(), toStringIndex(ooffset).value(), len.value());
+    return stringIndexAccessor().regionMatches(toStringIndex(toffset).value(), other.sourceAsString(), toStringIndex(ooffset).value(), len.value());
   }
   
   default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, String other, CodePointIndex ooffset, Length len) {
@@ -84,7 +78,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, CodePointAccessor other, CodePointIndex ooffset, Length len) {
-    return stringIndexAccessor().regionMatches(ignoreCase, toStringIndex(toffset), other.getSource(), toStringIndex(ooffset), len);
+    return stringIndexAccessor().regionMatches(ignoreCase, toStringIndex(toffset), other.source(), toStringIndex(ooffset), len);
   }
 
   default boolean startsWith(String prefix, CodePointIndex toffset) {
@@ -92,16 +86,16 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default boolean startsWith(CodePointAccessor prefix, CodePointIndex toffset) {
-    return stringIndexAccessor().startsWith(prefix.getSourceAsString(), toffset.value());
+    return stringIndexAccessor().startsWith(prefix.sourceAsString(), toffset.value());
   }
   
   default boolean startsWith(CodePointAccessor prefix) {
-    return startsWith(prefix.getSource());
+    return startsWith(prefix.source());
   }
 
   
   default boolean endsWith(CodePointAccessor suffix) {
-    return endsWith(suffix.getSource());
+    return endsWith(suffix.source());
   }
 
   default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint) {
@@ -129,7 +123,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   default CodePointIndexWithNegativeValue indexOf(CodePointAccessor str) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(indexOf(str.getSource()))));
+        toCodePointIndex(new StringIndex(indexOf(str.source()))));
   }
     
   default CodePointIndex indexOf(CodePointAccessor str, CodePointIndex fromIndex) {
@@ -139,120 +133,48 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
 
   default CodePointIndex lastIndexOf(CodePointAccessor str) {
     return new CodePointIndex(
-        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(lastIndexOf(str.getSource()))));
+        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(lastIndexOf(str.source()))));
   }
 
   default CodePointIndex lastIndexOf(CodePointAccessor str, CodePointIndex fromIndex) {
     return new CodePointIndex(
-        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(stringIndexAccessor().lastIndexOf(str.getSourceAsString() , 
+        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(stringIndexAccessor().lastIndexOf(str.sourceAsString() , 
             toStringIndex(fromIndex).value()))));
   }
   
-  default CodePointAccessor substring(CodePointIndex beginIndex) {
-    return stringToStringInterface().apply(
-        stringIndexAccessor().substring(toStringIndex(beginIndex).value()));
-  }
-  
-  default CodePointAccessor substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
-      return stringToStringInterface().apply(
-          stringIndexAccessor().substring(toStringIndex(beginIndex).value(),toStringIndex(endIndex).value()));
-  }
-  
-  default CodePointAccessor concat(CodePointAccessor str) {
-    return stringToStringInterface().apply(concat(str.getSourceAsString()));
-  }
-  
-  default CodePointAccessor replaceAsStringInterface(char oldChar, char newChar) {
-    return stringToStringInterface().apply(replace(oldChar, newChar));
-  }
-  
-  
-  default CodePointAccessor replaceFirst(String regex, CodePointAccessor replacement) {
-    return stringToStringInterface().apply(replaceFirst(regex, replacement.toString()));
-  }
-  
-  default CodePointAccessor replaceAll(String regex, CodePointAccessor replacement) {
-    return stringToStringInterface().apply(replaceAll(regex, replacement.toString()));
-  }
-  
-  default CodePointAccessor replaceaAsStringInterface(CharSequence target, CharSequence replacement) {
-    return stringToStringInterface().apply(replace(target, replacement));
-  }
-
-  default CodePointAccessor[] splitAsStringInterface(String regex, int limit) {
-    
-    String[] returning = split(regex, limit);
-    
-    CodePointAccessor[] result = new CodePointAccessor[returning.length];
-    
-    int i =0;
-    for (String string : returning) {
-      
-      result[i++] = stringToStringInterface().apply(string);
-    }
-    return result;
-  }
-  
-  default CodePointAccessor[] splitAsStringInterface(String regex) {
-    
-    String[] returning = split(regex);
-    
-    CodePointAccessor[] result = new CodePointAccessor[returning.length];
-    
-    int i =0;
-    for (String string : returning) {
-      
-      result[i++] = stringToStringInterface().apply(string);
-    }
-    return result;
-  }
-  
-  default CodePointAccessor toLowerCaseAsStringInterface(Locale locale){
-    return stringToStringInterface().apply(toLowerCase(locale));
-  }
-  
-  default CodePointAccessor toLowerCaseAsStringInterface(){
-    return stringToStringInterface().apply(toLowerCase());
-  }
-
-  default CodePointAccessor toUpperCaseAsStringInterface(Locale locale){
-    return stringToStringInterface().apply(toUpperCase(locale));
-  }
-  
-  default CodePointAccessor toUpperCaseAsStringInterface(){
-    return stringToStringInterface().apply(toUpperCase());
-  }
-  
-  default CodePointAccessor trimAsStringInterface() {
-    return stringToStringInterface().apply(trim());
-  }
-  
-  default CodePointAccessor stripAsStringInterface() {
-    
-    return stringToStringInterface().apply(strip());
-  }
-  
-  default CodePointAccessor stripLeadingAsStringInterface() {
-    return stringToStringInterface().apply((stripLeading()));
-  }
-  
-  default CodePointAccessor stripTrailingAsStringInterface() {
-    return stringToStringInterface().apply(stripTrailing());
-  }
-  
-  default Stream<CodePointAccessor> linesAsStringInterface(){
-    Function<String, CodePointAccessor> stringToStringInterface = stringToStringInterface();
-    return lines().map(stringToStringInterface);
-  }
-
-  default CodePointAccessor repeatAsStringInterface(int count) {
-    
-    return stringToStringInterface().apply(repeat(count));
-  }
   
   public default CodePointIndex endIndexExclusive() {
     return new CodePointIndex(codePointLength());
   }
   
+  public LineNumber lineNUmber(CodePointIndex Position);
   
+  default CursorRange cursorRange(CodePointIndex startIndexInclusive, CodePointLength length) {
+
+    //こういう処理が入っていたけどとりあえず無視してみる。
+//  if(startIndexInclusive.value() + length.value() > codePoints.length){
+//  CodePointIndex index = new CodePointIndex(startIndexInclusive.value());
+//  CursorRange cursorRange = new CursorRange(new CursorImpl()
+//      .setPosition(index)
+//      .setLineNumber(lineNUmber(index))
+//  );
+//  return new StringSource(this , cursorRange , null);
+//}
+
+    
+    CodePointIndex endIndexExclusive = new CodePointIndex(startIndexInclusive.plus(length));
+    return cursorRange(startIndexInclusive, endIndexExclusive);
+  }
+  
+  default CursorRange cursorRange(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+      CursorRange cursorRange = new CursorRange(
+          new CursorImpl()
+            .setPosition(startIndexInclusive)
+            .setLineNumber(lineNUmber(startIndexInclusive)),
+          new CursorImpl()
+            .setPosition(endIndexExclusive)
+            .setLineNumber(lineNUmber(endIndexExclusive))
+      );
+      return cursorRange;
+  }
 }

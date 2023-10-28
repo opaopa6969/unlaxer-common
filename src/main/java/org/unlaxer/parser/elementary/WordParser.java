@@ -4,12 +4,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import javax.xml.transform.stream.StreamSource;
-
 import org.unlaxer.CodePointLength;
 import org.unlaxer.Name;
 import org.unlaxer.Range;
-import org.unlaxer.RangedString;
 import org.unlaxer.Source;
 import org.unlaxer.StringSource;
 import org.unlaxer.Token;
@@ -47,7 +44,7 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 	public Token getToken(ParseContext parseContext, TokenKind tokenKind,boolean invertMatch) {
 	  
 		
-		CodePointLength length = word.getLength();
+		CodePointLength length = word.codepointLength();
 		
 		
 		if(length.isZero()) {
@@ -57,7 +54,7 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 			);
 		}
 		
-		RangedString peeked = parseContext.peek(tokenKind , length);
+		Source peeked = parseContext.peek(tokenKind , length);
 		
 		return peeked.token.map(baseString->
 			equals(word,baseString)).orElse(false) ^ invertMatch ?

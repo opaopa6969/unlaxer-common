@@ -22,8 +22,8 @@ public class Token implements Serializable{
 	
 	private static final long serialVersionUID = -2232289508694932061L;
 
-	static final FactoryBoundCache<Cursor, RangedString> empties = 
-			new FactoryBoundCache<>(RangedString::new);
+	static final FactoryBoundCache<Cursor, Source> empties = 
+			new FactoryBoundCache<>(StringSource::new);
 	
 	static final FactoryBoundCache<Token, String> displayString = 
 			new FactoryBoundCache<>(
@@ -31,7 +31,7 @@ public class Token implements Serializable{
 
 	
 	
-	public final Optional<Source> tokenString;
+	public final Source tokenString;
 	public Parser parser;
 	public final CursorRange tokenRange;
 	
@@ -51,7 +51,7 @@ public class Token implements Serializable{
 	public final TokenKind tokenKind;
 	
 	
-	public Token(TokenKind tokenKind , RangedString token, Parser parser) {
+	public Token(TokenKind tokenKind , Source token, Parser parser) {
 		this(tokenKind , token , parser , new TokenList());
 	}
 	
@@ -67,7 +67,7 @@ public class Token implements Serializable{
   Predicate<Token> AST_NODES = token -> false == token.parser.hasTag(NodeKind.notNode.getTag());
 
 	
-	public Token(TokenKind tokenKind , RangedString token, Parser parser , TokenList children) {
+	public Token(TokenKind tokenKind , Source token, Parser parser , TokenList children) {
 		super();
 		this.tokenKind = tokenKind;
 		this.tokenString = token.token;
