@@ -56,7 +56,8 @@ public class Token implements Serializable{
 	
 	public Token(TokenKind tokenKind , TokenList tokens , Parser parser) {
 		this(tokenKind , 
-			new RangedString(tokens),
+		    tokens.so
+			new StringSource(tokens),
 			parser,
 			tokens);
 	}
@@ -69,8 +70,7 @@ public class Token implements Serializable{
 	public Token(TokenKind tokenKind , Source token, Parser parser , TokenList children) {
 		super();
 		this.tokenKind = tokenKind;
-		this.tokenSource = token.token;
-		this.tokenRange = token.range;
+		this.tokenSource = token;
 		this.parser = parser;
 		this.originalChildren = children;
 		parent= Optional.empty();

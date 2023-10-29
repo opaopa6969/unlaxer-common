@@ -9,12 +9,16 @@ public interface Cursor {
 	Cursor setNameSpace(NameSpecifier nameSpace);
 
 	LineNumber getLineNumber();
+	
+	SubLineNumber getLineNumberOnThisSequence();
 
 	Cursor setLineNumber(LineNumber lineNumber);
 	
   Cursor incrementLineNumber();
 
 	CodePointIndex getPosition();
+	
+	SubCodePointIndex getPositionOnThisSequence();
 
 	Cursor setPosition(CodePointIndex position);
 	

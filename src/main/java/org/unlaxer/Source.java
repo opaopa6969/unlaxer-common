@@ -14,11 +14,11 @@ import java.util.stream.Stream;
 
 public interface Source extends CodePointAccessor{
   
-  CursorRange cursorRange();
+  CursorRange cursorRangeOnThis();
   
-  default CursorRange cursorRangeOnParent() {
-    
-  }
+//  default CursorRange cursorRangeOnParent() {
+//    
+//  }
   
   default CursorRange cursorRangeOnRoot() {
     
@@ -62,6 +62,8 @@ public interface Source extends CodePointAccessor{
   Source root();
   
   Source thisSource();
+  
+  Depth depth();
   
   default boolean hasParent() {
     return parent().isPresent();

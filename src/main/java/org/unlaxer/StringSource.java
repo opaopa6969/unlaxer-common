@@ -18,22 +18,24 @@ public class StringSource implements Source {
 //private final CodePoint[] codePoints;
   private final int[] codePoints;
   IndexAndLineNumber indexAndLineNumber;
+  private final Depth depth;
   
   public StringSource(String source) {
     super();
     root = this;
     parent = null;
+    depth = new Depth(0);
     this.sourceString = source;
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     indexAndLineNumber = createIndexAndLineNumber(codePoints);
-    
   }
   
   private StringSource(Source parent , Source source) {
     super();
     this.sourceString = source.toString();
     this.parent = parent;
+    depth = parent.depth().increments();
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     indexAndLineNumber = createIndexAndLineNumber(codePoints);
@@ -389,7 +391,7 @@ public class StringSource implements Source {
   }
 
   @Override
-  public CursorRange cursorRange() {
+  public CursorRange cursorRangeOnThis() {
     return indexAndLineNumber.cursorRange;
   }
 
@@ -406,6 +408,16 @@ public class StringSource implements Source {
   @Override
   public Source thisSource() {
     return this;
+  }
+
+  @Override
+  public CodePointOffset offsetInParent() {
+    return null;
+  }
+
+  @Override
+  public Depth depth() {
+    return depth;
   }
 
 }

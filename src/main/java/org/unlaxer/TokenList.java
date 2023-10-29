@@ -120,6 +120,10 @@ public class TokenList implements List<Token>{
     return tokens.hashCode();
   }
 
+  public Token get(TokenIndex index) {
+    return tokens.get(index.value());
+  }
+  
   public Token get(int index) {
     return tokens.get(index);
   }
@@ -131,13 +135,25 @@ public class TokenList implements List<Token>{
   public Token set(int index, Token element) {
     return tokens.set(index, element);
   }
+  
+  public Token set(TokenIndex index, Token element) {
+    return tokens.set(index.value(), element);
+  }
 
   public void add(int index, Token element) {
     tokens.add(index, element);
   }
+  
+  public void add(TokenIndex index, Token element) {
+    tokens.add(index.value(), element);
+  }
 
   public Token remove(int index) {
     return tokens.remove(index);
+  }
+  
+  public Token remove(TokenIndex index) {
+    return tokens.remove(index.value());
   }
 
   public int indexOf(Object o) {
@@ -155,9 +171,17 @@ public class TokenList implements List<Token>{
   public ListIterator<Token> listIterator(int index) {
     return tokens.listIterator(index);
   }
+  
+  public ListIterator<Token> listIterator(TokenIndex index) {
+    return tokens.listIterator(index.value());
+  }
 
   public List<Token> subList(int fromIndex, int toIndex) {
     return tokens.subList(fromIndex, toIndex);
+  }
+  
+  public List<Token> subList(TokenIndex fromIndexInclusive , TokenIndex toIndexExclusive) {
+    return tokens.subList(fromIndexInclusive.value(), toIndexExclusive.value());
   }
 
   public Spliterator<Token> spliterator() {
@@ -188,9 +212,8 @@ public class TokenList implements List<Token>{
       return new CursorRange(new CursorImpl(), new CursorImpl().incrementPosition());
     }
     
-    CursorRange first = tokens.get(0).tokenRange;
-    CursorRange last = tokens.get(tokens.size()-1).tokenRange;
-    
+    CursorRange first = tokens.get(0).getTokenRange();
+    CursorRange last = tokens.get(tokens.size()-1).getTokenRange();
     
     return new CursorRange(
           new CursorImpl()
@@ -202,7 +225,16 @@ public class TokenList implements List<Token>{
             .setPositionInLine(last.endIndexExclusive.getPositionInLine())
             .setPosition(last.endIndexExclusive.getPosition())
      );
+  }
+  
+  public Source toSource() {
+    
+    if(tokens.isEmpty()) {
+      return  new StringSource("");
+    }
+    Source root = tokens.get(0).tokenSource.root();
     
   }
+  
   
 }
