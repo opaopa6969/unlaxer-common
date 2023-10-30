@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.unlaxer.ParserHierarchy.NameKind;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.reducer.TagBasedReducer.NodeKind;
@@ -23,13 +24,12 @@ public class Token implements Serializable{
 	private static final long serialVersionUID = -2232289508694932061L;
 
 	static final FactoryBoundCache<Cursor, Source> empties = 
-			new FactoryBoundCache<>(StringSource::new);
+			new FactoryBoundCache<>(cursor->new StringSource("", SourceKind.detached, 
+			    new CodePointOffset(cursor.getPosition())));
 	
 	static final FactoryBoundCache<Token, String> displayString = 
 			new FactoryBoundCache<>(
 					token->TokenPrinter.get(token,0,OutputLevel.detail,false));
-
-	
 	
 	public final Source source;
 	public Parser parser;
@@ -56,7 +56,7 @@ public class Token implements Serializable{
 	
 	public Token(TokenKind tokenKind , TokenList tokens , Parser parser) {
 		this(tokenKind , 
-			tokens.toSource(),
+			tokens.toSource(SourceKind.subSource),
 			parser,
 			tokens);
 	}

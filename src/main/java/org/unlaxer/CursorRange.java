@@ -23,6 +23,19 @@ public class CursorRange implements Comparable<CursorRange>{
 		this.endIndexExclusive = new CursorImpl();
 	}
 	
+	public static CursorRange of(
+	    CodePointIndex startIndexInclusive,
+	    LineNumber startLineNumber,
+      CodePointIndex endIndexExclusive,
+      LineNumber endLineNumber
+	    ) {
+	  return new CursorRange(
+        new CursorImpl().setLineNumber(startLineNumber).setPosition(startIndexInclusive),
+        new CursorImpl().setLineNumber(endLineNumber).setPosition(endIndexExclusive)
+	  );
+	  
+	}
+	
 	public final Cursor startIndexInclusive() {
 		return startIndexInclusive;
 	}

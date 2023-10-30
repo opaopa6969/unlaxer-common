@@ -3,6 +3,7 @@ package org.unlaxer;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -35,18 +36,21 @@ public class RangedStringTest {
     System.out.println(lines);
     System.out.println(SymbolMap.replaceSymbol(lines, SymbolMap.lf));
     
-    List<RangedString> tokeizeWithLineTerminator = RangedString.tokeizeWithLineTerminator(lines);
+    Source  source = StringSource.createRootSource(lines);
     
-    assertEquals(word+cr, tokeizeWithLineTerminator.get(0).token.get());
-    assertEquals(word+crlf, tokeizeWithLineTerminator.get(1).token.get());
-    assertEquals(word+lf, tokeizeWithLineTerminator.get(2).token.get());
-    assertEquals(word+crlf, tokeizeWithLineTerminator.get(3).token.get());
-    assertEquals(lf, tokeizeWithLineTerminator.get(4).token.get());
-    assertEquals(cr, tokeizeWithLineTerminator.get(5).token.get());
-    assertEquals(surrogatePare+cr, tokeizeWithLineTerminator.get(6).token.get());
-    assertEquals(surrogatePare+crlf, tokeizeWithLineTerminator.get(7).token.get());
-    assertEquals(surrogatePare+lf, tokeizeWithLineTerminator.get(8).token.get());
-    assertEquals(surrogatePare, tokeizeWithLineTerminator.get(9).token.get());
+    List<Source> sources = source.linesAsSource().collect(Collectors.toList());
+    
+    
+    assertEquals(word+cr, sources.get(0).toString());
+    assertEquals(word+crlf, sources.get(1).toString());
+    assertEquals(word+lf, sources.get(2).toString());
+    assertEquals(word+crlf, sources.get(3).toString());
+    assertEquals(lf, sources.get(4).toString());
+    assertEquals(cr, sources.get(5).toString());
+    assertEquals(surrogatePare+cr, sources.get(6).toString());
+    assertEquals(surrogatePare+crlf, sources.get(7).toString());
+    assertEquals(surrogatePare+lf, sources.get(8).toString());
+    assertEquals(surrogatePare, sources.get(9).toString());
   }
   /*
       a⇠[[L:0,X:0,P:0],[L:11,X:0,P:20]]

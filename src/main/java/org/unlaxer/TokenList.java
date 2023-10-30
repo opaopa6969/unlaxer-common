@@ -229,9 +229,15 @@ public class TokenList implements List<Token>{
             .setPosition(last.endIndexExclusive.getPosition())
      );
   }
+  
+  public Source toSource(SourceKind sourceKind) {
+    return toSource(tokens , sourceKind);
+  }
+
   public static Source toSource(TokenList tokens, SourceKind sourceKind) {
     return toSource(tokens.tokens , sourceKind);
   }
+  
   public static Source toSource(List<Token> tokens , SourceKind sourceKind) {
     
     if(tokens.isEmpty()) {

@@ -26,6 +26,8 @@ public interface Source extends CodePointAccessor{
   
   CursorRange cursorRange();
   
+  Stream<Source> linesAsSource();
+  
 //  default CursorRange cursorRangeOnParent() {
 //    
 //  }
@@ -59,6 +61,10 @@ public interface Source extends CodePointAccessor{
 	  
 	  CodePointIndex end = endIndexInclusive.minus(start);
 		return peek(start , end);
+	}
+	
+	default Source subSource(CursorRange cursorRange) {
+	  return subSource(cursorRange.startIndexInclusive.getPosition(), cursorRange.endIndexExclusive.getPosition());
 	}
 	
   Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);

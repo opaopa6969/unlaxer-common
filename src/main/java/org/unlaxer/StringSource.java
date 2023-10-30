@@ -5,7 +5,6 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -51,7 +50,6 @@ public class StringSource implements Source {
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     indexAndLineNumber = createIndexAndLineNumber(codePoints);
-    
   }
 
   
@@ -470,7 +468,7 @@ public class StringSource implements Source {
 
   @Override
   public Optional<Source> parent() {
-    return Optional.of(parent);
+    return Optional.ofNullable(parent);
   }
 
   @Override
@@ -511,6 +509,11 @@ public class StringSource implements Source {
   @Override
   public SourceKind sourceKind() {
     return sourceKind;
+  }
+
+  @Override
+  public Stream<Source> linesAsSource() {
+    return indexAndLineNumber.lines(this);
   }
 
 }

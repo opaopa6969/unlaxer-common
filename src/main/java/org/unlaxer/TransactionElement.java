@@ -1,10 +1,10 @@
 package org.unlaxer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import org.unlaxer.Source.SourceKind;
 
 
 
@@ -17,7 +17,7 @@ public class TransactionElement implements Serializable{
 	
 	boolean resetMatchedWithConsumed = true;
 	
-	public final List<Token> tokens = new ArrayList<Token>();
+	public final TokenList tokens = new TokenList();
 	
 	public TransactionElement(ParserCursor parserCursor) {
 		super();
@@ -54,16 +54,8 @@ public class TransactionElement implements Serializable{
 		this.tokenKind = Optional.of(tokenKind);
 	}
 	
-	public Optional<String> getTokenString(){
-		if(tokens.isEmpty()){
-			return Optional.empty();
-		}
-		String parsedString = tokens.stream()
-			.map(Token::getSource)
-			.filter(Optional::isPresent)
-			.map(Optional::get)
-			.collect(Collectors.joining());
-		return Optional.of(parsedString);
+	public Source getTokenString(){
+	  return tokens.toSource(SourceKind.detached);
 	}
 	
 	public CodePointIndex getPosition(TokenKind tokenKind){
