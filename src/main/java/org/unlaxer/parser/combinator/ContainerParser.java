@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.unlaxer.CursorRange;
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
-import org.unlaxer.Range;
 import org.unlaxer.RangedContent;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
@@ -29,7 +28,7 @@ public abstract class ContainerParser<T> extends NoneChildParser {
 	public Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch) {
 		Token token = Token.empty(
 				tokenKind, 
-				parseContext.getPosition(TokenKind.consumed),
+				parseContext.getCursor(TokenKind.consumed),
 				this);
 		parseContext.getCurrent().addToken(token);
 		return new Parsed(token);
@@ -51,7 +50,7 @@ public abstract class ContainerParser<T> extends NoneChildParser {
 		
 		return rootToken.flatten().stream()
 			.filter(token-> targetContainerParserClass.isInstance(token.parser))
-			.map(token->targetContainerParserClass.cast(token.parser).get(token.getTokenRange()))
+			.map(token->targetContainerParserClass.cast(token.parser).get(token.getSource().cursorRange()))
 			.collect(Collectors.toList());
 	}
 	

@@ -219,6 +219,11 @@ implements Comparable<T> , Serializable , MinIntegerValue , MaxIntegerValue , Nu
     return value>=0;
   }
   
+  public boolean isGreaterThanZero() {
+    return value>0;
+  }
+
+  
   public boolean isZero() {
     return value==0;
   }

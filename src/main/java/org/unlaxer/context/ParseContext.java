@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
 import org.unlaxer.Name;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.Source;
@@ -133,5 +135,16 @@ public class ParseContext implements
   public void addActions(List<AdditionalCommitAction> additionalCommitActions) {
     actions.addAll(additionalCommitActions);
   }
-
+  
+  public Source peekLast(CodePointIndex endIndexInclusive, CodePointLength length) {
+    return getSource().peekLast(endIndexInclusive, length);
+  }
+  
+  public Source peek(CodePointIndex startIndexInclusive, CodePointLength length) {
+    return getSource().peek(startIndexInclusive, length);
+  }
+  
+  public  Source peek(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+    return peek(startIndexInclusive, endIndexExclusive);
+  }
 }

@@ -11,27 +11,27 @@ public class TokenEnclosureUtil{
 	public static Optional<Token> getEnclosureWithToken(
 			Token baseToken,
 			EnclosureDirection direction ,
-			Index position,
+			CodePointIndex position,
 			Optional<Token> currentToken,
 			ParsersSpecifier parserSpecifier){
-		return getEnclosureWithRange(baseToken , direction , position , currentToken.map(x->x.tokenRange), parserSpecifier);
+		return getEnclosureWithRange(baseToken , direction , position , currentToken.map(x->x.getSource().cursorRange()), parserSpecifier);
 	}
 
 	
 	public static Optional<Token> getEnclosureWithRange(
 			Token baseToken,
 			EnclosureDirection direction ,
-			Index position,
+			CodePointIndex position,
 			Optional<CursorRange> currentRange,
 			ParsersSpecifier parserSepcifier){
 		
 		List<Token> collect = baseToken.flatten().stream()
 			.filter(parserSepcifier::contains)
-			.filter(token-> token.tokenRange.match(position))
+			.filter(token-> token.getSource().cursorRange().match(position))
 			.filter(token-> {
 				return currentRange.map(
-					range->range.relation(token.tokenRange) == rangeRelation(direction))
-					.orElse(token.tokenRange.match(position));
+					range->range.relation(token.getSource().cursorRange()) == rangeRelation(direction))
+					.orElse(token.getSource().cursorRange().match(position));
 			})
 			.collect(Collectors.toList());
 		return collect.isEmpty() ? Optional.empty() : 

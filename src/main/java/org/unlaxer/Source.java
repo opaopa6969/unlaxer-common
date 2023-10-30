@@ -79,6 +79,14 @@ public interface Source extends CodePointAccessor{
   
   Depth depth();
   
+  default boolean isPresent() {
+    return stringLength().value() > 0;
+  }
+  
+  default boolean isEmpty() {
+    return stringLength().value() == 0;
+  }
+  
   default boolean hasParent() {
     return parent().isPresent();
   }

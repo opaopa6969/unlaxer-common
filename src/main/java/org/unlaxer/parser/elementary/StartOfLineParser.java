@@ -1,8 +1,10 @@
 package org.unlaxer.parser.elementary;
 
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
 import org.unlaxer.Parsed;
 import org.unlaxer.Parsed.Status;
-import org.unlaxer.RangedString;
+import org.unlaxer.Source;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.AbstractParser;
@@ -35,14 +37,14 @@ public class StartOfLineParser extends AbstractParser{
 	@Override
 	public Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch) {
 		
-		int position = parseContext.getPosition(tokenKind);
-		if(position == 0) {
-			boolean match = (position == 0) ^ invertMatch;
+		CodePointIndex position = parseContext.getPosition(tokenKind);
+		if(position.isZero()) {
+			boolean match = (position.isZero()) ^ invertMatch;
 			return new Parsed(match ? Status.succeeded : Status.failed);
 		}
-		if(position >0) {
-			RangedString peekLast = parseContext.source.peekLast(position, 1);
-			String string = peekLast.token.get();
+		if(position.isGreaterThanZero()) {
+			Source peekLast = parseContext.peekLast(position, new CodePointLength(1));
+			String string = peekLast.toString();
 			if(string.equals(CR) || string.equals(LF)) {
 				boolean match = true ^ invertMatch;
 				return new Parsed(match ? Status.succeeded : Status.failed);
