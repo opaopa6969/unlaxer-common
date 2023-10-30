@@ -29,7 +29,7 @@ public abstract class AbstractTokenParser extends NoneChildParser {
 		
 		Token token = getToken(parseContext,tokenKind,invertMatch);
 		
-		if(token.tokenSource.isPresent()){
+		if(token.source.isPresent()){
 			
 			parseContext.getCurrent().addToken(token,tokenKind);
 		}
@@ -38,8 +38,8 @@ public abstract class AbstractTokenParser extends NoneChildParser {
 		Consumer<Integer> positionIncrement = tokenKind.isConsumed() ? 
 				parseContext::consume : parseContext::matchOnly;
 		
-		token.tokenSource.map(String::length).ifPresent(positionIncrement);
-		return token.tokenSource.isPresent() ?
+		token.source.map(String::length).ifPresent(positionIncrement);
+		return token.source.isPresent() ?
 				new Parsed(token):
 				Parsed.FAILED;
 	}

@@ -31,7 +31,7 @@ public class Token implements Serializable{
 
 	
 	
-	public final Source tokenSource;
+	public final Source source;
 	public Parser parser;
 	
 	public Optional<Token> parent;
@@ -56,8 +56,7 @@ public class Token implements Serializable{
 	
 	public Token(TokenKind tokenKind , TokenList tokens , Parser parser) {
 		this(tokenKind , 
-		    tokens.so
-			new StringSource(tokens),
+			tokens.toSource(),
 			parser,
 			tokens);
 	}
@@ -70,7 +69,7 @@ public class Token implements Serializable{
 	public Token(TokenKind tokenKind , Source token, Parser parser , TokenList children) {
 		super();
 		this.tokenKind = tokenKind;
-		this.tokenSource = token;
+		this.source = token;
 		this.parser = parser;
 		this.originalChildren = children;
 		parent= Optional.empty();
@@ -98,16 +97,8 @@ public class Token implements Serializable{
 		return new Token(tokenKind , empties.get(position),parser);
 	}
 	
-	public Optional<Source> getToken() {
-		return tokenSource;
-	}
-	
-	public CursorRange getTokenRange() {
-		return tokenRange;
-	}
-	
-	public RangedString getRangedString(){
-		return new RangedString(tokenRange , tokenSource);
+	public Source getSource() {
+		return source;
 	}
 	
 	public Parser getParser(){
@@ -206,28 +197,28 @@ public class Token implements Serializable{
 	}
 
 	
-	public <P extends Parser>TypedToken<P> newWithReplacedParserConstructRangedStringTyped(P replace){
-		return newWithReplacedParserConstructRangedStringTyped(replace , ChildrenKind.astNodes)
+	public <P extends Parser>TypedToken<P> newWithReplacedParserTyped(P replace){
+		return newWithReplacedParserTyped(replace , ChildrenKind.astNodes)
 				.setParent(parent);
 	}
 	
-	public Token newWithReplacedParserConstructRangedString(Parser replace){
-		return newWithReplacedParserConstructRangedString(replace , ChildrenKind.astNodes);
+	public Token newWithReplacedParser(Parser replace){
+		return newWithReplacedParser(replace , ChildrenKind.astNodes);
 	}
 
 	
-	public Token newWithReplacedParserConstructRangedString(Parser replace , ChildrenKind childrenKind){
+	public Token newWithReplacedParser(Parser replace , ChildrenKind childrenKind){
 		if(false == children(childrenKind).isEmpty()){
 			throw new IllegalArgumentException("not support collected token");
 		}
-		return new Token(tokenKind,new RangedString(tokenRange, tokenSource),replace).setParent(parent);
+		return new Token(tokenKind,source,replace).setParent(parent);
 	}
 	
-	public <P extends Parser>TypedToken<P> newWithReplacedParserConstructRangedStringTyped(P replace , ChildrenKind childrenKind){
+	public <P extends Parser>TypedToken<P> newWithReplacedParserTyped(P replace , ChildrenKind childrenKind){
 		if(false == children(childrenKind).isEmpty()){
 			throw new IllegalArgumentException("not support collected token");
 		}
-		return new Token(tokenKind,new RangedString(tokenRange, tokenSource),replace)
+		return new Token(tokenKind,source,replace)
 				.typed(replace).setParent(parent);
 	}
 

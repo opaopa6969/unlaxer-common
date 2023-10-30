@@ -11,7 +11,10 @@ import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.unlaxer.Source.SourceKind;
 
 public class TokenList implements List<Token>{
   
@@ -212,8 +215,8 @@ public class TokenList implements List<Token>{
       return new CursorRange(new CursorImpl(), new CursorImpl().incrementPosition());
     }
     
-    CursorRange first = tokens.get(0).getTokenRange();
-    CursorRange last = tokens.get(tokens.size()-1).getTokenRange();
+    CursorRange first = tokens.get(0).source.cursorRange();
+    CursorRange last = tokens.get(tokens.size()-1).source.cursorRange();
     
     return new CursorRange(
           new CursorImpl()
@@ -226,15 +229,30 @@ public class TokenList implements List<Token>{
             .setPosition(last.endIndexExclusive.getPosition())
      );
   }
-  
-  public Source toSource() {
+  public static Source toSource(TokenList tokens, SourceKind sourceKind) {
+    return toSource(tokens.tokens , sourceKind);
+  }
+  public static Source toSource(List<Token> tokens , SourceKind sourceKind) {
     
     if(tokens.isEmpty()) {
-      return  new StringSource("");
+      return  new StringSource("",sourceKind,new CodePointOffset(0));
     }
-    Source root = tokens.get(0).tokenSource.root();
+    Token firstToken = tokens.get(0);
     
+    Source root = firstToken.source.root();
+        
+    String collect = tokens.stream()
+      .map(Token::getSource)
+      .map(Source::toString)
+      .collect(Collectors.joining());
+    
+    Source source = firstToken.getSource();
+    CodePointOffset offsetFromRoot = source.offsetFromRoot();
+    
+    if(sourceKind == SourceKind.subSource) {
+      return new StringSource(root , collect , offsetFromRoot);
+    }else {
+      return StringSource.create(collect, sourceKind);
+    }
   }
-  
-  
 }

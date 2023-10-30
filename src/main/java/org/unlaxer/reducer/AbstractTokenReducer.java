@@ -44,7 +44,7 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 		}
 
 		for (Token childToken : token.getAstNodeChildren()) {
-			if(childToken.tokenSource.isEmpty()) {
+			if(childToken.source.isEmpty()) {
 				continue;
 			}
 			children.addAll(reduce(childToken));

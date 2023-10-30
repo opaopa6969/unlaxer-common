@@ -137,9 +137,9 @@ public class CursorRange implements Comparable<CursorRange>{
 	   return new Range(startIndexInclusive.getPosition() , endIndexExclusive.getPosition());
 	}
 	
-	public CursorRange plus(CodePointOffset codePointOffset) {
-	  lineNumerの更新も行う
-	  position in lineはそもそもsubシーケンスでの扱いをどうするか？subシーケンスの中で全体的に新たなものになるか。
-	  rootは良いとしてもparentの中での扱いはどうするか？
-	}
+//	public CursorRange plus(CodePointOffset codePointOffset) {
+//	  lineNumerの更新も行う
+//	  position in lineはそもそもsubシーケンスでの扱いをどうするか？subシーケンスの中で全体的に新たなものになるか。
+//	  rootは良いとしてもparentの中での扱いはどうするか？
+//	}
 }

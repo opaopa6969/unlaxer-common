@@ -10,7 +10,7 @@ public interface Cursor {
 
 	LineNumber getLineNumber();
 	
-	SubLineNumber getLineNumberOnThisSequence();
+//	SubLineNumber getLineNumberOnThisSequence();
 
 	Cursor setLineNumber(LineNumber lineNumber);
 	
@@ -18,7 +18,7 @@ public interface Cursor {
 
 	CodePointIndex getPosition();
 	
-	SubCodePointIndex getPositionOnThisSequence();
+//	SubCodePointIndex getPositionOnThisSequence();
 
 	Cursor setPosition(CodePointIndex position);
 	

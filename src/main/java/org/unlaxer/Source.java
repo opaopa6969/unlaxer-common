@@ -4,29 +4,37 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import org.unlaxer.util.function.TriFunction;
+
 public interface Source extends CodePointAccessor{
   
-  CursorRange cursorRangeOnThis();
+  public enum SourceKind{
+    root,
+    detached,
+    subSource
+  }
+  
+  SourceKind sourceKind();
+  
+  CursorRange cursorRange();
   
 //  default CursorRange cursorRangeOnParent() {
 //    
 //  }
   
-  default CursorRange cursorRangeOnRoot() {
-    
-  }
+//  CursorRange cursorRangeOnRoot();
   
-  CodePointOffset offsetInParent();
+  CodePointOffset offsetFromParent();
   
-  default CodePointOffset offsetInRoot() {
+  default CodePointOffset offsetFromRoot() {
     CodePointOffset codePointOffset = new CodePointOffset(0);
     Source current = thisSource();
     while(true) {
@@ -34,7 +42,7 @@ public interface Source extends CodePointAccessor{
         return codePointOffset;
       }
       current = current.parent().get();
-      codePointOffset.plus(current.offsetInParent());
+      codePointOffset.plus(current.offsetFromParent());
     }
   }
   
@@ -75,38 +83,64 @@ public interface Source extends CodePointAccessor{
   
 //  Function<String,Source> stringToSource();
   Function<Source,String> sourceToStgring();
-  BiFunction<Source , String, Source> parentSourceAndStringToSource();
+  TriFunction<Source , String, CodePointOffset , Source> parentSourceAndStringToSource();
 
   
   default Source substring(CodePointIndex beginIndex) {
-    return parentSourceAndStringToSource().apply(thisSource(),
-        stringIndexAccessor().substring(toStringIndex(beginIndex).value()));
+    return parentSourceAndStringToSource().apply(
+        thisSource(),
+        stringIndexAccessor().substring(toStringIndex(beginIndex).value()),
+        new CodePointOffset(beginIndex)
+    );
   }
   
   default Source substring(CodePointIndex beginIndex, CodePointIndex endIndex) {
-      return parentSourceAndStringToSource().apply(thisSource(),
-          stringIndexAccessor().substring(toStringIndex(beginIndex).value(),toStringIndex(endIndex).value()));
+      return parentSourceAndStringToSource().apply(
+          thisSource(),
+          stringIndexAccessor().substring(toStringIndex(beginIndex).value(),toStringIndex(endIndex).value()),
+          new CodePointOffset(beginIndex)
+      );
   }
   
   default Source concat(CodePointAccessor str) {
-    return parentSourceAndStringToSource().apply(thisSource() , concat(str.sourceAsString()));
+    return parentSourceAndStringToSource().apply(
+        thisSource() , 
+        concat(str.sourceAsString()),
+        CodePointOffset.ZERO
+    );
   }
   
   default Source replaceAsStringInterface(char oldChar, char newChar) {
-    return parentSourceAndStringToSource().apply(thisSource() , replace(oldChar, newChar));
+    return parentSourceAndStringToSource().apply(
+        thisSource() , 
+        replace(oldChar, newChar),
+        CodePointOffset.ZERO
+    );
   }
   
   
   default Source replaceFirst(String regex, CodePointAccessor replacement) {
-    return parentSourceAndStringToSource().apply(thisSource() , replaceFirst(regex, replacement.toString()));
+    return parentSourceAndStringToSource().apply(
+        thisSource() , 
+        replaceFirst(regex, replacement.toString()),
+        CodePointOffset.ZERO
+    );
   }
   
   default Source replaceAll(String regex, CodePointAccessor replacement) {
-    return parentSourceAndStringToSource().apply(thisSource() , replaceAll(regex, replacement.toString()));
+    return parentSourceAndStringToSource().apply(
+        thisSource() , 
+        replaceAll(regex, replacement.toString()),
+        CodePointOffset.ZERO
+    );
   }
   
   default Source replaceaAsStringInterface(CharSequence target, CharSequence replacement) {
-    return parentSourceAndStringToSource().apply(thisSource() , replace(target, replacement));
+    return parentSourceAndStringToSource().apply(
+        thisSource() , 
+        replace(target, replacement),
+        CodePointOffset.ZERO
+    );
   }
 
   default Source[] splitAsStringInterface(String regex, int limit) {
@@ -116,9 +150,18 @@ public interface Source extends CodePointAccessor{
     Source[] result = new Source[returning.length];
     
     int i =0;
+    int index =0;
     for (String string : returning) {
+      int indexOf = indexOf(string, index);
+      if(indexOf ==-1) {
+        throw new IllegalArgumentException();
+      }
+      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf));
       
-      result[i++] = parentSourceAndStringToSource().apply(thisSource() , string);
+      result[i++] = parentSourceAndStringToSource().apply(
+          thisSource() , string , new CodePointOffset(codePointIndex));
+      
+      index++;
     }
     return result;
   }
@@ -130,54 +173,82 @@ public interface Source extends CodePointAccessor{
     Source[] result = new Source[returning.length];
     
     int i =0;
+    int index =0;
     for (String string : returning) {
+      int indexOf = indexOf(string, index);
+      if(indexOf ==-1) {
+        throw new IllegalArgumentException();
+      }
+      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf));
       
-      result[i++] = parentSourceAndStringToSource().apply(thisSource() , string);
+      result[i++] = parentSourceAndStringToSource().apply(
+          thisSource() , string , new CodePointOffset(codePointIndex));
+
+      index++;
     }
     return result;
   }
   
   default Source toLowerCaseAsStringInterface(Locale locale){
-    return parentSourceAndStringToSource().apply(thisSource() , toLowerCase(locale));
+    return parentSourceAndStringToSource().apply(
+        thisSource() , toLowerCase(locale),CodePointOffset.ZERO);
   }
   
   default Source toLowerCaseAsStringInterface(){
-    return parentSourceAndStringToSource().apply(thisSource() , toLowerCase());
+    return parentSourceAndStringToSource().apply(
+        thisSource() , toLowerCase(),CodePointOffset.ZERO);
   }
 
   default Source toUpperCaseAsStringInterface(Locale locale){
-    return parentSourceAndStringToSource().apply(thisSource() , toUpperCase(locale));
+    return parentSourceAndStringToSource().apply(
+        thisSource() , toUpperCase(locale),CodePointOffset.ZERO);
   }
   
   default Source toUpperCaseAsStringInterface(){
-    return parentSourceAndStringToSource().apply(thisSource() , toUpperCase());
+    return parentSourceAndStringToSource().apply(
+        thisSource() , toUpperCase(),CodePointOffset.ZERO);
   }
   
   default Source trimAsStringInterface() {
-    return parentSourceAndStringToSource().apply(thisSource() , trim());
+    return parentSourceAndStringToSource().apply(
+        thisSource() , trim(),CodePointOffset.ZERO);
   }
   
   default Source stripAsStringInterface() {
     
-    return parentSourceAndStringToSource().apply(thisSource() , strip());
+    return parentSourceAndStringToSource().apply(
+        thisSource() , strip(),CodePointOffset.ZERO);
   }
   
   default Source stripLeadingAsStringInterface() {
-    return parentSourceAndStringToSource().apply(thisSource() , stripLeading());
+    return parentSourceAndStringToSource().apply(
+        thisSource() , stripLeading(),CodePointOffset.ZERO);
   }
   
   default Source stripTrailingAsStringInterface() {
-    return parentSourceAndStringToSource().apply(thisSource() , stripTrailing());
+    return parentSourceAndStringToSource().apply(
+        thisSource() , stripTrailing(),CodePointOffset.ZERO);
   }
   
   default Stream<Source> linesAsStringInterface(){
-    BiFunction<Source, String, Source> parentSourceAndStringToSource = parentSourceAndStringToSource();
-    return lines().map(line ->  parentSourceAndStringToSource.apply(thisSource(), line));
+    TriFunction<Source , String, CodePointOffset , Source> parentSourceAndStringToSource =
+        parentSourceAndStringToSource();
+    
+    AtomicInteger index = new AtomicInteger();
+    return lines().map(line -> { 
+      
+      int indexOf = indexOf(line, index.intValue());
+      index.set(indexOf);
+      index.incrementAndGet();
+      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf));
+      return parentSourceAndStringToSource.apply(thisSource(), line , new CodePointOffset(codePointIndex));
+    });
   }
 
   default Source repeatAsStringInterface(int count) {
     
-    return parentSourceAndStringToSource().apply(thisSource() , repeat(count));
+    return parentSourceAndStringToSource().apply(
+        thisSource() , repeat(count),CodePointOffset.ZERO);
   }
 
   
@@ -313,6 +384,5 @@ public interface Source extends CodePointAccessor{
   
   static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
   
-  public static final Source EMPTY = new StringSource("");
-	
+  public static final Source EMPTY = new StringSource("" , SourceKind.detached , CodePointOffset.ZERO);
 }

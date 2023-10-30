@@ -161,7 +161,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		
 		for (Token token : matchedTokens) {
 			
-			Optional<WordParser> wordParser = token.getToken().map(WordParser::new);
+			Optional<WordParser> wordParser = token.getSource().map(WordParser::new);
 			if(wordParser.isEmpty()) {
 				continue;
 			}

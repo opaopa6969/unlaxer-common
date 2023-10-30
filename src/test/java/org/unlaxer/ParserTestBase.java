@@ -119,14 +119,14 @@ public class ParserTestBase {
 					if("".equals(sourceString)){
 						
 						testResult.add(
-								checkAssertFalse(parsed.getConsumed().tokenSource.isPresent() , doAssert)
+								checkAssertFalse(parsed.getConsumed().source.isPresent() , doAssert)
 						);
 
 						
 					}else{
 						
 						testResult.add(
-								checkAssertEquals(matchedString, parsed.getConsumed().tokenSource.get() , doAssert)
+								checkAssertEquals(matchedString, parsed.getConsumed().source.get() , doAssert)
 						);
 					}
 				}

@@ -3,6 +3,8 @@ package org.unlaxer;
 import org.unlaxer.base.IntegerValue;
 
 public class CodePointOffset extends IntegerValue<CodePointOffset>{
+  
+  public static final CodePointOffset ZERO = new CodePointOffset(0);
 
   public CodePointOffset(int value) {
     super(value);

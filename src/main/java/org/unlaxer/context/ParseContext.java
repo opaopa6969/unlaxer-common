@@ -10,14 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.unlaxer.CodePointIndex;
-import org.unlaxer.CodePointLength;
-import org.unlaxer.CursorImpl;
-import org.unlaxer.CursorRange;
-import org.unlaxer.LineNumber;
 import org.unlaxer.Name;
 import org.unlaxer.ParserCursor;
-import org.unlaxer.RangedString;
 import org.unlaxer.Source;
 import org.unlaxer.TransactionElement;
 import org.unlaxer.listener.ParserListener;
@@ -86,16 +80,6 @@ public class ParseContext implements
 	}
 
 	@Override
-	public int getLength() {
-		return source.getLength();
-	}
-	
-	@Override
-	public RangedString peek(int startIndexInclusive, int length) {
-		return source.peek(startIndexInclusive, length);
-	}
-
-	@Override
 	public Map<Name, TransactionListener> getTransactionListenerByName() {
 		return listenerByName;
 	}
@@ -150,12 +134,4 @@ public class ParseContext implements
     actions.addAll(additionalCommitActions);
   }
 
-  @Override
-  public LineNumber getLineNUmber(CodePointIndex Position) {
-    return source.getLineNUmber(Position);
-  }
-  
-  public CursorRange createCursorRange(CodePointIndex startIndexInclusive , CodePointLength codePointLength) {
-    new CursorRange(new CursorImpl(null))
-  }
 }

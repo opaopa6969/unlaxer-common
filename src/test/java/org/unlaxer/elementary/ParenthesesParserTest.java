@@ -25,7 +25,7 @@ public class ParenthesesParserTest extends ParserTestBase{
 //		System.out.println(JSON.encode(getResultParsed()));
 		
 		Token parenthesesed = ParenthesesParser.getParenthesesed(result.parsed.getRootToken());
-		System.out.println(parenthesesed.getToken().get());
+		System.out.println(parenthesesed.getSource().get());
 		
 		testAllMatch(parenthesesParser, "( a)");
 		testAllMatch(parenthesesParser, "(a )");

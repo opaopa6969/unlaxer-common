@@ -59,7 +59,7 @@ public class TransactionElement implements Serializable{
 			return Optional.empty();
 		}
 		String parsedString = tokens.stream()
-			.map(Token::getToken)
+			.map(Token::getSource)
 			.filter(Optional::isPresent)
 			.map(Optional::get)
 			.collect(Collectors.joining());

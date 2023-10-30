@@ -65,7 +65,7 @@ public class EmptyLineParserTest {
 	        StringSource stringSource = new StringSource(text);
 	        ParseContext parseContext = new ParseContext(stringSource);
 	        Parsed parse = chain.parse(parseContext);
-	        String consumed = parse.getConsumed().getToken().orElse("");
+	        String consumed = parse.getConsumed().getSource().orElse("");
 	        System.out.println("test:" + text);
 	        System.out.println("consumed:"+consumed);
 	        assertTrue(parse.status.isSucceeded());
@@ -106,7 +106,7 @@ public class EmptyLineParserTest {
 	        StringSource stringSource = new StringSource(text);
 	        ParseContext parseContext = new ParseContext(stringSource);
 	        Parsed parse = emptyLineParser.parse(parseContext);
-	        String consumed = parse.getConsumed().getToken().orElse("");
+	        String consumed = parse.getConsumed().getSource().orElse("");
 	        System.out.println("test:" + text);
 	        System.out.println("consumed:"+consumed);
 	        assertNotEquals(text,consumed);

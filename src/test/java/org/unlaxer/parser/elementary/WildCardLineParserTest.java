@@ -25,7 +25,7 @@ public class WildCardLineParserTest extends ParserTestBase{
 		List<Token> filteredChildren = testAllMatch.parsed.getRootToken().filteredChildren;
 		for (Token token : filteredChildren) {
 			System.out.print(token.getParser());
-			System.out.println(":"+token.getToken().orElse("null"));
+			System.out.println(":"+token.getSource().orElse("null"));
 		}
 
 		assertEquals(6, filteredChildren.size());

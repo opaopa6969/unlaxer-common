@@ -15,7 +15,6 @@ import org.unlaxer.CodePointLength;
 import org.unlaxer.Committed;
 import org.unlaxer.Cursor;
 import org.unlaxer.ParserCursor;
-import org.unlaxer.RangedString;
 import org.unlaxer.Source;
 import org.unlaxer.Token;
 import org.unlaxer.Token.ScanDirection;
@@ -141,7 +140,8 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
 	
 	public default Source getRemain(TokenKind tokenKind) {
 		CodePointIndex position = getPosition(tokenKind);
-		return getSource().peek(position, codepointLength().minus(position)).token.orElse("");
+		Source source = getSource();
+    return source.peek(position, source.codePointLength().minus(position));
 	}
 
 	public default Source getConsumed(TokenKind tokenKind) {
@@ -150,15 +150,15 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
 	}
 
 	public default boolean allMatched() {
-		return getPosition(TokenKind.matchOnly).eq(getSource().codepointLength());
+		return getPosition(TokenKind.matchOnly).eq(getSource().codePointLength());
 	}
 
 	public default boolean allConsumed() {
-		return getPosition(TokenKind.consumed).eq(getSource().codepointLength());
+		return getPosition(TokenKind.consumed).eq(getSource().codePointLength());
 	}
 
 	public default Source peek(TokenKind tokenKind, CodePointLength length) {
-		return peek(getCurrent().getPosition(tokenKind), length);
+		return getSource().peek(getCurrent().getPosition(tokenKind), length);
 	}
 
 	public default CodePointIndex getConsumedPosition() {

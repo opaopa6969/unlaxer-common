@@ -36,7 +36,7 @@ public class TokenPrinter{
 	public static void output(Token token , PrintStream out, int level, 
 			OutputLevel detailLevel,boolean outputChildren){
 		
-		Optional<String> tokenString = token.getToken();
+		Optional<String> tokenString = token.getSource();
 		
 		for(int i = 0 ; i < level ; i++){
 			out.print(" ");
@@ -141,7 +141,7 @@ public class TokenPrinter{
 	
 	public static String get(String header , List<Token> tokens){
 		String collect = tokens.stream()
-			.map(Token::getToken)
+			.map(Token::getSource)
 			.filter(Optional::isPresent)
 			.map(Optional::get)
 			.collect(Collectors.joining());
