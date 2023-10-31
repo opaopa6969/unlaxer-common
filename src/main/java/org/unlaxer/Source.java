@@ -79,6 +79,8 @@ public interface Source extends CodePointAccessor{
   
   Depth depth();
   
+  boolean isRoot();
+  
   default boolean isPresent() {
     return stringLength().value() > 0;
   }

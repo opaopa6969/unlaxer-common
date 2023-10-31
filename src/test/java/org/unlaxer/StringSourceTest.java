@@ -7,14 +7,14 @@ public class StringSourceTest {
   @Test
   public void test() {
     
-    StringSource stringSource = new StringSource("ABC");
+    StringSource stringSource = StringSource.createRootSource("ABC");
     
-    RangedString peek = stringSource.peek(new CodePointIndex(1), new CodePointLength(0));
+    Source peek = stringSource.peek(new CodePointIndex(1), new CodePointLength(0));
     
-    CursorRange range = peek.range;
+    CursorRange range = peek.cursorRange();
     
     System.out.println(range);
-    String orElse = peek.token.orElse("null!!");
+    String orElse = peek.toString();
     System.out.println("a:" + orElse);
     
     if(orElse.isBlank()) {

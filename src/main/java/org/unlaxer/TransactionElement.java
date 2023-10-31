@@ -1,7 +1,6 @@
 package org.unlaxer;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 
 import org.unlaxer.Source.SourceKind;
@@ -37,12 +36,12 @@ public class TransactionElement implements Serializable{
 		return new TransactionElement(new ParserCursor(parserCursor,resetMatchedWithConsumed),resetMatchedWithConsumed);
 	}
 	
-	public void consume(int length){
-		parserCursor.addPosition(length);
+	public void consume(CodePointLength length){
+		parserCursor.addPosition(length.toOffset());
 	}
 	
-	public void matchOnly(int length){
-		parserCursor.addMatchedPosition(length);
+	public void matchOnly(CodePointLength length){
+		parserCursor.addMatchedPosition(length.toOffset());
 	}
 	
 	public void addToken(Token token){
@@ -54,7 +53,7 @@ public class TransactionElement implements Serializable{
 		this.tokenKind = Optional.of(tokenKind);
 	}
 	
-	public Source getTokenString(){
+	public Source source(){
 	  return tokens.toSource(SourceKind.detached);
 	}
 	
@@ -66,7 +65,7 @@ public class TransactionElement implements Serializable{
 	   return parserCursor.getCursor(tokenKind);
   }
 	
-	public List<Token> getTokens(){
+	public TokenList getTokens(){
 		return tokens;
 	}
 

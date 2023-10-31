@@ -4,9 +4,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import org.unlaxer.CodePointIndex;
 import org.unlaxer.CodePointLength;
+import org.unlaxer.CursorRange;
 import org.unlaxer.Name;
-import org.unlaxer.Range;
 import org.unlaxer.Source;
 import org.unlaxer.StringSource;
 import org.unlaxer.Token;
@@ -35,16 +36,34 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 	}
 
 	public WordParser(Name name , String word, boolean ignoreCase) {
-		super(name);
-		this.word = new StringSource(word);
-		this.ignoreCase = ignoreCase;
+		this(name , StringSource.createDetachedSource(word) , ignoreCase);
 	}
+	
+  public WordParser(Source word) {
+    this(null , word, false);
+  }
+  
+  public WordParser(Name name,Source word) {
+    this(name, word, false);
+  }
+  
+  public WordParser(Source word, boolean ignoreCase) {
+    this(null,word,ignoreCase);
+  }
+
+	
+  public WordParser(Name name , Source word, boolean ignoreCase) {
+    super(name);
+    this.word = word;
+    this.ignoreCase = ignoreCase;
+  }
+
 
 	@Override
 	public Token getToken(ParseContext parseContext, TokenKind tokenKind,boolean invertMatch) {
 	  
 		
-		CodePointLength length = word.codepointLength();
+		CodePointLength length = word.codePointLength();
 		
 		
 		if(length.isZero()) {
@@ -56,8 +75,8 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 		
 		Source peeked = parseContext.peek(tokenKind , length);
 		
-		return peeked.token.map(baseString->
-			equals(word,baseString)).orElse(false) ^ invertMatch ?
+		return 
+			equals(word,peeked) ^ invertMatch ?
 			new Token(tokenKind , peeked, this):
 			Token.empty(tokenKind ,parseContext.getCursor(TokenKind.consumed), this);
 	}
@@ -107,10 +126,10 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 		return new WordParser(wordEffector.apply(word) , ignoreCase);
 	}
 	
-	public interface BeginSpecifier extends Function<String, Integer>{};
-	public interface EndSpecifier extends Function<String, Integer>{};
-	public interface RangeSpecifier extends Function<String,Range>{}; 
-	public interface WordEffector extends UnaryOperator<String>{}
+	public interface BeginSpecifier extends Function<Source, CodePointIndex>{};
+	public interface EndSpecifier extends Function<Source, CodePointIndex>{};
+	public interface RangeSpecifier extends Function<Source,CursorRange>{}; 
+	public interface WordEffector extends UnaryOperator<Source>{}
 	
 	public String toString() {
 		return "wordParser("+word+")";

@@ -41,7 +41,10 @@ public class TokenList implements List<Token>{
   public static TokenList of(List<Token> tokens) {
     return new TokenList(tokens);
   }
-
+  
+  public static TokenList of(Token... tokens) {
+    return new TokenList(tokens);
+  }
 
   public void forEach(Consumer<? super Token> action) {
     tokens.forEach(action);

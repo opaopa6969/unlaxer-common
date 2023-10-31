@@ -45,7 +45,7 @@ public class ConditionalParserTest {
 			)
 		);
 		
-		ParseContext parseContext = new ParseContext(new StringSource("aca"));
+		ParseContext parseContext = new ParseContext(StringSource.createDetachedSource("aca"));
 		
 		Parsed parse = chain.parse(parseContext);
 		Token rootToken = parse.getRootToken();
@@ -98,7 +98,7 @@ public class ConditionalParserTest {
 		);
 		
 		{
-			ParseContext parseContext = new ParseContext(new StringSource("bcb"));
+			ParseContext parseContext = new ParseContext(StringSource.createRootSource("bcb"));
 			
 			Parsed parse = predicateAnyMatchForParsedParser.parse(parseContext);
 			Token rootToken = parse.getRootToken();
@@ -110,7 +110,7 @@ public class ConditionalParserTest {
 		}
 
 		{
-			ParseContext parseContext = new ParseContext(new StringSource("aca"));
+			ParseContext parseContext = new ParseContext(StringSource.createRootSource("aca"));
 			
 			Parsed parse = predicateAnyMatchForParsedParser.parse(parseContext);
 			Token rootToken = parse.getRootToken();
@@ -122,7 +122,7 @@ public class ConditionalParserTest {
 		}
 		
 		{
-			ParseContext parseContext = new ParseContext(new StringSource("bcb"));
+			ParseContext parseContext = new ParseContext(StringSource.createRootSource("bcb"));
 			
 			Parsed parse = chain.parse(parseContext);
 			Token rootToken = parse.getRootToken();
@@ -187,7 +187,7 @@ public class ConditionalParserTest {
 		);
 		
 		{
-			ParseContext parseContext = new ParseContext(new StringSource("acaa"));
+			ParseContext parseContext = new ParseContext(StringSource.createRootSource("acaa"));
 			
 			Parsed parse = predicateAnyMatchForParsedParser.parse(parseContext);
 			Token rootToken = parse.getRootToken();
@@ -199,7 +199,7 @@ public class ConditionalParserTest {
 		}
 		
 		{
-			ParseContext parseContext = new ParseContext(new StringSource("bcba"));
+			ParseContext parseContext = new ParseContext(StringSource.createRootSource("bcba"));
 			
 			Parsed parse = predicateAnyMatchForParsedParser.parse(parseContext);
 			Token rootToken = parse.getRootToken();
@@ -211,7 +211,7 @@ public class ConditionalParserTest {
 		}
 
 		{
-			ParseContext parseContext = new ParseContext(new StringSource("bcaa"));
+			ParseContext parseContext = new ParseContext(StringSource.createRootSource("bcaa"));
 			
 			Parsed parse = chain.parse(parseContext);
 			Token rootToken = parse.getRootToken();
@@ -279,7 +279,7 @@ public class ConditionalParserTest {
 		);
 		
 		{
-			ParseContext parseContext = new ParseContext(new StringSource("acaa"));
+			ParseContext parseContext = new ParseContext(StringSource.createRootSource("acaa"));
 			
 			Parsed parse = predicateAnyMatchForParsedParser.parse(parseContext);
 			Token rootToken = parse.getRootToken();
@@ -291,7 +291,7 @@ public class ConditionalParserTest {
 		}
 		
 		{
-			ParseContext parseContext = new ParseContext(new StringSource("bcba"));
+			ParseContext parseContext = new ParseContext(StringSource.createRootSource("bcba"));
 			
 			Parsed parse = predicateAnyMatchForParsedParser.parse(parseContext);
 			Token rootToken = parse.getRootToken();
@@ -303,7 +303,7 @@ public class ConditionalParserTest {
 		}
 
 		{
-			ParseContext parseContext = new ParseContext(new StringSource("bcaa"));
+			ParseContext parseContext = new ParseContext(StringSource.createRootSource("bcaa"));
 			
 			Parsed parse = chain.parse(parseContext);
 			Token rootToken = parse.getRootToken();

@@ -3,7 +3,6 @@ package org.unlaxer;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,14 +28,14 @@ public class Committed implements Serializable {
 		this.collected = committed.isCollected();
 	}
 
-	public Committed(List<Token> originalTokens) {
+	public Committed(TokenList originalTokens) {
 		super();
 		this.originalTokens = TokenList.of(originalTokens);
 		collected = false;
 		collectedToken = Optional.empty();
 	}
 
-	public Committed(Token token, List<Token> originalTokens) {
+	public Committed(Token token, TokenList originalTokens) {
 		super();
 		this.collectedToken = Optional.of(token);
 		this.originalTokens = TokenList.of(originalTokens);
@@ -54,7 +53,7 @@ public class Committed implements Serializable {
 		return collectedToken;
 	}
 
-	public List<Token> getOriginalTokens() {
+	public TokenList getOriginalTokens() {
 		return originalTokens;
 	}
 

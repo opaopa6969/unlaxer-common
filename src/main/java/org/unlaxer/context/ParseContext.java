@@ -30,9 +30,7 @@ public class ParseContext implements
 	ParserListenerContainer,
 	GlobalScopeTree , ParserContextScopeTree{
 
-	private static final long serialVersionUID = 1202780890703131636L;
-
-	// TODO store successfully token's <position,tokens> map
+  // TODO store successfully token's <position,tokens> map
 	boolean doMemoize;
 
 	public final Source source;

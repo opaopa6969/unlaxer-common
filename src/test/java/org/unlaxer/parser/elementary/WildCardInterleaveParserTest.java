@@ -9,6 +9,7 @@ import org.unlaxer.ParserTestBase;
 import org.unlaxer.TestResult;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
+import org.unlaxer.TokenList;
 import org.unlaxer.TokenPrinter;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Parser;
@@ -39,9 +40,9 @@ public class WildCardInterleaveParserTest extends ParserTestBase{
       TokenPrinter.output(rootToken , System.err);
       System.err.println();
       
-      List<Token> parsedWithConcattedCharcter = mixedContentParser.getParsedWithConcattedCharcter(rootToken);
+      TokenList parsedWithConcattedCharcter = mixedContentParser.getParsedWithConcattedCharcter(rootToken);
       
-      Token token = new Token(TokenKind.consumed, parsedWithConcattedCharcter, mixedContentParser, 0);
+      Token token = new Token(TokenKind.consumed, parsedWithConcattedCharcter, mixedContentParser);
       TokenPrinter.output(token , System.err);
       System.err.println();
 

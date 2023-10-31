@@ -1,12 +1,11 @@
 package org.unlaxer.context;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import org.unlaxer.Name;
-import org.unlaxer.Token;
+import org.unlaxer.TokenList;
 import org.unlaxer.listener.TransactionListener;
 import org.unlaxer.parser.Parser;
 
@@ -38,12 +37,12 @@ public interface TransactionListenerContainer{
 	}
 	
 	public default void onCommit(
-			ParseContext parseContext , Parser parser , List<Token> committedTokens){
+			ParseContext parseContext , Parser parser , TokenList committedTokens){
 		getTransactionListenerByName().values().stream()
 			.forEach(listener->listener.onCommit(parseContext,parser,committedTokens));
 	}
 	public default void onRollback(
-			ParseContext parseContext , Parser parser , List<Token> rollbackedTokens){
+			ParseContext parseContext , Parser parser , TokenList rollbackedTokens){
 		getTransactionListenerByName().values().stream()
 			.forEach(listener->listener.onRollback(parseContext,parser,rollbackedTokens));
 	}

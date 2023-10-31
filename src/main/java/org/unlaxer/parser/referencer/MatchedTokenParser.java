@@ -1,13 +1,13 @@
 package org.unlaxer.parser.referencer;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
+import org.unlaxer.Source;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.TokenPredicators;
@@ -161,26 +161,26 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 		
 		for (Token token : matchedTokens) {
 			
-			Optional<WordParser> wordParser = token.getSource().map(WordParser::new);
-			if(wordParser.isEmpty()) {
-				continue;
+			Source source = token.getSource();
+			if(source.isEmpty()) {
+			  continue;
 			}
+      WordParser wordParser = new WordParser(source);
 			
 			if(rangeSpecifier != null){
 				
-				wordParser = wordParser.map(original->original.slice(rangeSpecifier,reverse));
+				wordParser = wordParser.slice(rangeSpecifier,reverse);
 			}else if(wordEffector != null){
 				
-				wordParser = wordParser.map(original->original.effect(wordEffector));
+				wordParser = wordParser.effect(wordEffector);
 			}else if(slicerEffector != null){
 				
-				wordParser = wordParser.map(original->original.slice(slicerEffector));
+				wordParser = wordParser.slice(slicerEffector);
 			}
 			
-			Optional<Parsed> map = wordParser
-				.map(parser->parser.parse(parseContext,tokenKind,invertMatch));
-			if(map.isPresent() && map.get().isSucceeded()) {
-				return map.get();
+			Parsed parsed = wordParser.parse(parseContext,tokenKind,invertMatch);
+			if(parsed.isSucceeded()) {
+				return parsed;
 			}
 		}
 		return Parsed.FAILED;

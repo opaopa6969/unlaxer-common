@@ -16,10 +16,14 @@ public class Slicer implements Supplier<Source>{
 	private CodePointIndex endIndexExclusive;
 	private int step;
 	
-
+	
 	public Slicer(String word) {
+	  this(StringSource.createDetachedSource(word));
+	}
+
+	public Slicer(Source word) {
 		super();
-		this.word = new StringSource(word);
+		this.word = word;
 		beginIndexInclusive = new CodePointIndex(0);
 		endIndexExclusive = this.word.endIndexExclusive();
 		step=1;

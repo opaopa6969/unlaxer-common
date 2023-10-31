@@ -3,13 +3,12 @@ package org.unlaxer.listener;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.unlaxer.Parsed;
-import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
+import org.unlaxer.TokenList;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.util.MultipleIOException;
@@ -108,7 +107,7 @@ public class CombinedDebugListener implements
 	}
 
 	@Override
-	public void onCommit(ParseContext parseContext, Parser parser, List<Token> committedTokens) {
+	public void onCommit(ParseContext parseContext, Parser parser, TokenList committedTokens) {
 		debugTransactionListener.onCommit(parseContext, parser, committedTokens);
 		count++;
 		if(doTrigger()){
@@ -120,7 +119,7 @@ public class CombinedDebugListener implements
 	}
 
 	@Override
-	public void onRollback(ParseContext parseContext, Parser parser, List<Token> rollbackedTokens) {
+	public void onRollback(ParseContext parseContext, Parser parser, TokenList rollbackedTokens) {
 		debugTransactionListener.onRollback(parseContext, parser, rollbackedTokens);
 		count++;
 		if(doTrigger()){

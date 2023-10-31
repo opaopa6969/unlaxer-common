@@ -20,6 +20,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   CodePointLength codePointLength();
   
   String sourceAsString();
+  
   Source source();
 
   StringIndexAccessor stringIndexAccessor();

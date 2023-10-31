@@ -29,19 +29,16 @@ public class ParserCursor{
 		}
 	}
 
-	public void addPosition(int adding){
-	  addPosition(new Index(adding));
-	}
 	
-	 public void addPosition(Index adding){
-	    consumed.addPosition(adding);
+	 public void addPosition(CodePointOffset adding){
+	   consumed.addPosition(adding);
 //	    matched.addPosition(adding);
-	    matched.setPosition(consumed.getPosition());
+	   matched.setPosition(consumed.getPosition());
 	  }
 
 	
-	public void addMatchedPosition(int adding){
-		matched.addPosition(new Index(adding));
+	public void addMatchedPosition(CodePointOffset adding){
+		matched.addPosition(adding);
 	}
 	
 	 public void addMatchedPosition(Index adding){

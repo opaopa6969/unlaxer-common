@@ -191,7 +191,7 @@ public final class SourceJoiner {
     }
     
     public Source toSource() {
-      return new StringSource(toString());
+      return StringSource.createDetachedSource(toString());
     }
 
     /**

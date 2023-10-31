@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import org.unlaxer.Source;
 import org.unlaxer.StringSource;
 
+// FIXME! current implementation is base on string. change to Source
 public class SimpleBuilder implements CharSequence{
 
   int index;
@@ -143,13 +144,13 @@ public class SimpleBuilder implements CharSequence{
   }
   
   public SimpleBuilder w(Source word) {
-    word = word == null ? new StringSource("") : word;
+    word = word == null ? StringSource.EMPTY : word;
     append("\"" + word.replaceAll("\"", "\\\"") + "\"");
     return this;
   }
 
   public SimpleBuilder p(Source word) {
-    word = word == null ? new StringSource("") : word;
+    word = word == null ? StringSource.EMPTY : word;
     append("(" + word + ")");
     return this;
   }
@@ -161,7 +162,7 @@ public class SimpleBuilder implements CharSequence{
   }
   
   public Source toSource() {
-    return new StringSource(builder.toString());
+    return StringSource.createDetachedSource(builder.toString());
   }
 
   public SimpleBuilder n() {
@@ -397,12 +398,12 @@ public class SimpleBuilder implements CharSequence{
 
   
   public Source substring(int start) {
-    return new StringSource(builder.substring(start));
+    return StringSource.createDetachedSource(builder.substring(start));
   }
 
 
   public Source substring(int start, int end) {
-    return new StringSource(builder.substring(start, end));
+    return StringSource.createDetachedSource(builder.substring(start, end));
   }
 
   public IntStream chars() {

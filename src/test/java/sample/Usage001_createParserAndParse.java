@@ -24,7 +24,7 @@ public class Usage001_createParserAndParse extends UsageBase{
 		
 		//create parseContext with default behavior. no createMeta specifier
 		ParseContext parseContext = 
-				new ParseContext(new StringSource("1+2+3"));
+				new ParseContext(StringSource.createRootSource("1+2+3"));
 		
 		parse(parser, parseContext);
 	}
@@ -37,7 +37,7 @@ public class Usage001_createParserAndParse extends UsageBase{
 		//create parseContext with createMeta specifier
 		ParseContext parseContext = 
 			new ParseContext(
-				new StringSource("1+2+3"),
+				StringSource.createRootSource("1+2+3"),
 				CreateMetaTokenSpecifier.createMetaOn
 			);
 		

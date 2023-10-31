@@ -17,14 +17,14 @@ public class SourceTest {
       assertEquals("abcdef" , collects);
     }
     {
-      List<StringSource> list = List.of(new StringSource("abc") , new StringSource("def"));
+      List<StringSource> list = List.of(StringSource.createDetachedSource("abc") , StringSource.createDetachedSource("def"));
       Source collect = list.stream().collect(Source.joining(","));
       System.out.println(collect);
       assertEquals("abc,def" , collect.toString());
     }
     
     {
-      List<StringSource> list = List.of(new StringSource("abc") , new StringSource("def"));
+      List<StringSource> list = List.of(StringSource.createDetachedSource("abc") , StringSource.createDetachedSource("def"));
       Source collect = list.stream().collect(Source.joining());
       System.out.println(collect);
       assertEquals("abcdef" , collect.toString());

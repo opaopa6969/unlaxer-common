@@ -27,7 +27,7 @@ public class WildCardStringTerninatorParserTest extends ParserTestBase{
     	TestResult testAllMatch = testPartialMatch(wildCardStringTerninatorParser, "u\n---END_OF_PART--/\nsushi","u\n");
     	Token rootToken = testAllMatch.parsed.getRootToken();
     	System.out.println(TokenPrinter.get(rootToken)); 
-		String token = rootToken.getSource().orElse("!!");
+		String token = rootToken.getSource().sourceAsString();
     	System.out.println(token);
     }
     

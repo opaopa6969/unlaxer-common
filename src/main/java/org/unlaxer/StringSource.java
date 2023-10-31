@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -39,8 +40,14 @@ public class StringSource implements Source {
     return new StringSource(source , SourceKind.detached , new CodePointOffset(0));
   }
   
+  public static StringSource createDetachedSource(String source , CodePointOffset codePointOffset) {
+    return new StringSource(source , SourceKind.detached , codePointOffset);
+  }
+
+  
   public StringSource(String source , SourceKind sourceKind , CodePointOffset offsetFromParent) {
     super();
+    Objects.requireNonNull(source,"source require non null");
     root = this;
     parent = null;
     depth = new Depth(0);
@@ -66,7 +73,7 @@ public class StringSource implements Source {
     
     Source _root = parent;
     while(true) {
-      if(_root.parent().isEmpty()) {
+      if(_root == null || _root.parent().isEmpty()) {
         root = _root;
         break;
       }
@@ -77,6 +84,7 @@ public class StringSource implements Source {
   
   public StringSource(Source parent , String source , CodePointOffset codePointOffset) {
     super();
+    Objects.requireNonNull(source,"source require non null");
     this.sourceString = source.toString();
     this.parent = parent;
     depth = parent.depth().increments();
@@ -88,7 +96,7 @@ public class StringSource implements Source {
     
     Source _root = parent;
     while(true) {
-      if(_root.parent().isEmpty()) {
+      if(_root == null || _root.parent().isEmpty()) {
         root = _root;
         break;
       }
@@ -497,7 +505,7 @@ public class StringSource implements Source {
     CodePointOffset offset = offsetFromParent;
     Source _root = parent;
     while(true) {
-      if(_root.parent().isEmpty()) {
+      if(_root == null || _root.parent().isEmpty()) {
         break;
       }
       _root = parent;
@@ -514,6 +522,11 @@ public class StringSource implements Source {
   @Override
   public Stream<Source> linesAsSource() {
     return indexAndLineNumber.lines(this);
+  }
+
+  @Override
+  public boolean isRoot() {
+    return parent == null && sourceKind == SourceKind.root;
   }
 
 }

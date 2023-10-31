@@ -24,4 +24,8 @@ public class CodePointLength extends IntegerValue<CodePointLength>{
   public CodePointLength create(IntegerValue<?> i) {
     return new CodePointLength(i);
   }
+  
+  public CodePointOffset toOffset() {
+    return new CodePointOffset(value());
+  }
 }

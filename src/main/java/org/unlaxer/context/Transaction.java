@@ -1,7 +1,6 @@
 package org.unlaxer.context;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +18,7 @@ import org.unlaxer.Source;
 import org.unlaxer.Token;
 import org.unlaxer.Token.ScanDirection;
 import org.unlaxer.TokenKind;
+import org.unlaxer.TokenList;
 import org.unlaxer.TransactionElement;
 import org.unlaxer.parser.CollectingParser;
 import org.unlaxer.parser.LazyInstance;
@@ -41,11 +41,11 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
 		return iterator.hasNext() ? Optional.of(iterator.next()) : Optional.empty();
 	}
 	
-	public default void consume(int length) {
+	public default void consume(CodePointLength length) {
 		getCurrent().consume(length);
 	}
 
-	public default void matchOnly(int length) {
+	public default void matchOnly(CodePointLength length) {
 		getCurrent().matchOnly(length);
 	}
 	
@@ -108,7 +108,7 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
           current.tokens, tokenKind , tokenKind.passFilter);
       
       parent.tokens.add(collected);
-      onCommit(parseContext, parser, Arrays.asList(collected));
+      onCommit(parseContext, parser, TokenList.of(collected));
       committed = new Committed(collected, current.tokens);
 
     } else {
@@ -208,18 +208,20 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
 				.findFirst();
 	}
 	
-	public default List<Token> getMatchedTokens(
+	public default TokenList getMatchedTokens(
 			Predicate<Token> targetTokenPredicate , 
 			ScanDirection breadthOrDepth) {
 
-		return getTokenStack().stream()//
-				.flatMap(transactionElement -> transactionElement.getTokens().stream())//
-				.flatMap(token -> token.flatten(breadthOrDepth).stream())//
-				.filter(targetTokenPredicate)//
-				.collect(Collectors.toList());
+		return TokenList.of( 
+		    getTokenStack().stream()//
+  				.flatMap(transactionElement -> transactionElement.getTokens().stream())//
+  				.flatMap(token -> token.flatten(breadthOrDepth).stream())//
+  				.filter(targetTokenPredicate)//
+  				.collect(Collectors.toList())
+  	);
 	}
 	
-	public default List<Token> getMatchedTokens(
+	public default TokenList getMatchedTokens(
 			Predicate<Token> targetTokenPredicate) {
 		return getMatchedTokens(targetTokenPredicate, ScanDirection.Depth);
 	}

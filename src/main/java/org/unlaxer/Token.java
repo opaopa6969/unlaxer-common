@@ -2,7 +2,6 @@ package org.unlaxer;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,7 @@ public class Token implements Serializable{
 	public Optional<Token> parent;
 	private final TokenList originalChildren;
 	//TODO make private and rename astNodeChildren
-	public  final List<Token> filteredChildren; // astNodeChildren
+	public  final TokenList filteredChildren; // astNodeChildren
 	
 	private Map<Name,Object> extraObjectByName = new NullSafetyConcurrentHashMap<>();
 	private Map<Name,Token> relatedTokenByName = new NullSafetyConcurrentHashMap<>();
@@ -77,9 +76,13 @@ public class Token implements Serializable{
 			child.parent = Optional.of(this);
 //			child.parser.setParent(parser);
 		});
-		this.filteredChildren = children.stream()
-			.filter(AST_NODES)
-			.collect(Collectors.toList());
+		this.filteredChildren =
+		    TokenList.of(
+		        children.stream()
+		        .filter(AST_NODES)
+		        .collect(Collectors.toList())
+		    );
+		    
 	}
 	
 	public Token setParent(Token parentToken) {
@@ -127,21 +130,21 @@ public class Token implements Serializable{
   	return new TypedToken<T>(this, parserInterface.cast(parser)).setParent(parent);
   }
 		
-	public List<Token> flatten(){
+	public TokenList flatten(){
 		return flatten(ScanDirection.Depth ,ChildrenKind.astNodes);
 	}
 	
-	public List<Token> flatten(ScanDirection breadthOrDepth){
+	public TokenList flatten(ScanDirection breadthOrDepth){
 		return flatten(breadthOrDepth , ChildrenKind.astNodes);
 	}
 	
-	public List<Token> flatten(ScanDirection breadthOrDepth , ChildrenKind childrenKind){
+	public TokenList flatten(ScanDirection breadthOrDepth , ChildrenKind childrenKind){
 		return breadthOrDepth == ScanDirection.Depth ?
 				flattenDepth(childrenKind) : flattenBreadth(childrenKind);
 	}
 	
-	public List<Token> flattenDepth(ChildrenKind childrenKind){
-		List<Token> list = new ArrayList<Token>();
+	public TokenList flattenDepth(ChildrenKind childrenKind){
+	  TokenList list = new TokenList();
 		list.add(this);
 		for(Token child :children(childrenKind)){
 			list.addAll(child.flattenDepth(childrenKind));
@@ -149,8 +152,8 @@ public class Token implements Serializable{
 		return list;
 	}
 	
-	public List<Token> flattenBreadth(ChildrenKind childrenKind){
-		List<Token> list = new ArrayList<Token>();
+	public TokenList flattenBreadth(ChildrenKind childrenKind){
+	  TokenList list = new TokenList();
 		Deque<Token> deque = new ArrayDeque<Token>();
 		deque.add(this);
 		while (false == deque.isEmpty()) {
@@ -223,7 +226,7 @@ public class Token implements Serializable{
 	}
 
 	
-	List<Token> children(ChildrenKind kind){
+	TokenList children(ChildrenKind kind){
 		return kind == ChildrenKind.astNodes ? 
 				filteredChildren :
 				originalChildren;
@@ -243,9 +246,11 @@ public class Token implements Serializable{
 	
 	@SuppressWarnings("unchecked")
 	public Token newCreatesOf(Predicate<Token>... filterForChildrens) {
-		List<Token> newChildren = Stream.of(filterForChildrens)
-			.flatMap(this::getChildren)
-			.collect(Collectors.toList());
+	  TokenList newChildren = TokenList.of( 
+	      Stream.of(filterForChildrens)
+    			.flatMap(this::getChildren)
+    			.collect(Collectors.toList())
+    );
 		return newCreatesOf(TokenList.of(newChildren));
 	}
 	
@@ -255,16 +260,18 @@ public class Token implements Serializable{
 	}
 	
 	public Token newCreatesOf(ChildrenKind kind , TokenEffecterWithMatcher... tokenEffecterWithMatchers) {
-		List<Token> newChildren = children(kind).stream()
-			.map(token->{
-				for (TokenEffecterWithMatcher tokenEffecterWithMatcher : tokenEffecterWithMatchers) {
-					if(tokenEffecterWithMatcher.target.test(token)) {
-						return tokenEffecterWithMatcher.effector.apply(token);
-					}
-				}
-				return token;
-			})
-			.collect(Collectors.toList());
+	  TokenList newChildren = TokenList.of(
+	      children(kind).stream()
+    			.map(token->{
+    				for (TokenEffecterWithMatcher tokenEffecterWithMatcher : tokenEffecterWithMatchers) {
+    					if(tokenEffecterWithMatcher.target.test(token)) {
+    						return tokenEffecterWithMatcher.effector.apply(token);
+    					}
+    				}
+    				return token;
+    			})
+    			.collect(Collectors.toList())
+		);
 		return newCreatesOf(TokenList.of(newChildren));
 	}
 	
@@ -433,15 +440,15 @@ public class Token implements Serializable{
 	}
 
 	
-	public List<Token> getChildrenAsList(Predicate<Token> predicates) {
-		return getChildren(predicates).collect(Collectors.toList());
+	public TokenList getChildrenAsList(Predicate<Token> predicates) {
+		return TokenList.of(getChildren(predicates).collect(Collectors.toList()));
 	}
 	
-	public List<Token> getChildrenWithParserAsList(Predicate<Parser> predicatesWithTokensParser) {
-		return getChildrenWithParser(predicatesWithTokensParser).collect(Collectors.toList());
+	public TokenList getChildrenWithParserAsList(Predicate<Parser> predicatesWithTokensParser) {
+		return TokenList.of(getChildrenWithParser(predicatesWithTokensParser).collect(Collectors.toList()));
 	}
 	
-	public List<Token> getChildrenWithParserAsList(Class<? extends Parser> parserClass) {
+	public TokenList getChildrenWithParserAsList(Class<? extends Parser> parserClass) {
 		return getChildrenWithParserAsList(parser -> parser.getClass() == parserClass);
 	}
 	
@@ -458,11 +465,11 @@ public class Token implements Serializable{
 		return filteredChildren.get(index);
 	}
 	
-	public List<Token> getOriginalChildren() {
+	public TokenList getOriginalChildren() {
 		return originalChildren;
 	}
 
-	public List<Token> getAstNodeChildren() {
+	public TokenList getAstNodeChildren() {
 		return filteredChildren;
 	}
 	

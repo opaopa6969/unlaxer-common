@@ -1,11 +1,9 @@
 package org.unlaxer.reducer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.unlaxer.Committed;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
+import org.unlaxer.TokenList;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.MetaFunctionParser;
 import org.unlaxer.parser.Parser;
@@ -24,20 +22,20 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 				new Token(//
 						TokenKind.consumed, //
 						committed.getOriginalTokens(), //
-						Singletons.get(PseudoRootParser.class), //
-						0);
+						Singletons.get(PseudoRootParser.class) //
+				);
 
 		// TokenPrinter.output(token, System.out, 0, DetailLevel.detail,
 		// true);
 
-		List<Token> children = new ArrayList<>();
+		TokenList children = new TokenList();
 
 		if (doReduce(token.getParser())) {
 			PseudoRootParser root = new PseudoRootParser();
 			root.getChildren().add(token.parser);
 			Token newRootToken = new Token(//
 					token.getTokenKind(), //
-					token.getRangedString(), //
+					token.getSource(), //
 					root);
 			newRootToken.addChildren(token);
 			token = newRootToken;
@@ -58,7 +56,7 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 		return token;
 	}
 
-	List<Token> reduce(Token token) {
+	TokenList reduce(Token token) {
 
 		// TokenPrinter.output(token, System.out, 0, DetailLevel.detail,
 		// false);
@@ -67,7 +65,7 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 		if (token.getAstNodeChildren().isEmpty()) {
 			return reduceWithLeaf(token);
 		}
-		List<Token> tokens = new ArrayList<Token>();
+		TokenList tokens = new TokenList();
 
 		token.getAstNodeChildren().stream().map(this::reduce)
 			.forEach(tokens::addAll);
@@ -77,15 +75,15 @@ public abstract class AbstractTokenReducer implements CommittedReducer {
 		}
 		token.getAstNodeChildren().clear();
 		token.getAstNodeChildren().addAll(tokens);
-		List<Token> tokenContainer = new ArrayList<Token>();
+		TokenList tokenContainer = new TokenList();
 		tokenContainer.add(token);
 		return tokenContainer;
 
 	}
 
-	private List<Token> reduceWithLeaf(Token token) {
+	private TokenList reduceWithLeaf(Token token) {
 
-		ArrayList<Token> tokens = new ArrayList<Token>();
+	  TokenList tokens = new TokenList();
 		if (doReduce(token.parser)) {
 			return tokens;
 		}

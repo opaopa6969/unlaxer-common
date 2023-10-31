@@ -3,7 +3,9 @@ package org.unlaxer.parser.elementary;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.unlaxer.CodePointIndex;
 import org.unlaxer.Name;
+import org.unlaxer.Source;
 import org.unlaxer.Token;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
@@ -96,7 +98,7 @@ public class QuotedParser extends LazyChain {
 		}
 	}
 	
-	public static String contents(Token thisParsersToken) {
+	public static Source contents(Token thisParsersToken) {
 //		Name target = Parts.contents.get();
 		Optional<Token> collect = thisParsersToken.flatten().stream()
 //			.peek(token->System.out.println(TokenPrinter.get(token)))
@@ -109,14 +111,20 @@ public class QuotedParser extends LazyChain {
 //			.map(Optional::get)
 //			.collect(Collectors.joining());
 		
-		String contents = collect
-				.flatMap(Token::getToken)
-				//FIXME! this is work around for BUG...
-				.orElseGet(
-					()->thisParsersToken.source
-						.map(quoted->quoted.substring(1, quoted.length()-1))
-						.orElse("")
-				);
+		Source contents = collect
+				.map(Token::getSource)
+        .orElseGet(
+        ()->{
+          Source source = thisParsersToken.getSource();
+          return source.subSource(new CodePointIndex(1), source.codePointLength().minus(1));
+        });
+				
+//				//FIXME! this is work around for BUG...
+//				.orElseGet(
+//					()->thisParsersToken.source
+//						.map(quoted->quoted.substring(1, quoted.length()-1))
+//						.orElse("")
+//				);
 		return contents;
 		
 	}

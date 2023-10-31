@@ -1,7 +1,5 @@
 package org.unlaxer.parser.elementary;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class WordParserTest {

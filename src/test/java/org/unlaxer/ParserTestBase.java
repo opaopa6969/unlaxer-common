@@ -18,7 +18,6 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -100,7 +99,7 @@ public class ParserTestBase {
 			(parseContext , parsed)->{
 
 				resultParsed.set(parsed);
-				Optional<String> lastToken = parseContext.getCurrent().getTokenString();
+				Source lastToken = parseContext.getCurrent().source();
 				resultTokenString.set(lastToken);
 				
 				TestResult testResult = new TestResult(parsed, parseContext, lastToken);
@@ -119,14 +118,14 @@ public class ParserTestBase {
 					if("".equals(sourceString)){
 						
 						testResult.add(
-								checkAssertFalse(parsed.getConsumed().source.isPresent() , doAssert)
+								checkAssertFalse(parsed.getConsumed().source.isEmpty() , doAssert)
 						);
 
 						
 					}else{
 						
 						testResult.add(
-								checkAssertEquals(matchedString, parsed.getConsumed().source.get() , doAssert)
+								checkAssertEquals(matchedString, parsed.getConsumed().source.toString() , doAssert)
 						);
 					}
 				}
@@ -177,7 +176,7 @@ public class ParserTestBase {
 	
 	public Parsed parse(Parser parser , String source) {
 		
-		StringSource stringSource = new StringSource(source);
+		StringSource stringSource = StringSource.createRootSource(source);
 		ParseContext parseContext = new ParseContext(stringSource,CreateMetaTokenSpecifier.createMetaOn);
 		Parsed parsed = parser.parse(parseContext);
 		return parsed;
@@ -246,7 +245,7 @@ public class ParserTestBase {
 		return test(parser, sourceString, createMeta,
 			(parseContext , parsed)->{
 				resultParsed.set(parsed);
-				Optional<String> lastToken = parseContext.getCurrent().getTokenString();
+				Source lastToken = parseContext.getCurrent().source();
 				TestResult testResult = new TestResult(parsed, parseContext, lastToken);
 				
 				testResult.add(
@@ -269,7 +268,7 @@ public class ParserTestBase {
 		return test(parser, sourceString, createMeta, 
 			(parseContext , parsed)->{
 				resultParsed.set(parsed);
-				Optional<String> lastToken = parseContext.getCurrent().getTokenString();
+				Source lastToken = parseContext.getCurrent().source();
 				TestResult testResult = new TestResult(parsed, parseContext, lastToken);
 				testResult.add(
 						checkAssertEquals(true, parsed.isSucceeded()  ,doAssert)
@@ -284,7 +283,7 @@ public class ParserTestBase {
 		int count = counts.get();
 		counts.set(count+1);
 
-		StringSource source = new StringSource(sourceString);
+		StringSource source = StringSource.createDetachedSource(sourceString);
 		try (OutputStream transactionFile = createFileOutputSream("transaction" , count);
 			OutputStream parseFile = createFileOutputSream("parse" , count);
 			OutputStream bothFile = createFileOutputSream("combined" , count);
@@ -525,7 +524,7 @@ public class ParserTestBase {
 	static ThreadLocal<String> callerClassName = new ThreadLocal<>();
 	static ThreadLocal<String> callerMethodName = new ThreadLocal<>();
 	
-	ThreadLocal<Optional<String>> resultTokenString = new ThreadLocal<>();
+	ThreadLocal<Source> resultTokenString = new ThreadLocal<>();
 	ThreadLocal<Parsed> resultParsed = new ThreadLocal<>();
 
 	static ThreadLocal<OutputLevel> outputLevel = new ThreadLocal<OutputLevel>() {

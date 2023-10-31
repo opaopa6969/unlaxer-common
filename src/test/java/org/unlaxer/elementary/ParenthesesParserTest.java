@@ -20,12 +20,12 @@ public class ParenthesesParserTest extends ParserTestBase{
 		TestResult result = testAllMatch(parenthesesParser, "(a)");
 		assertTrue(result.lastToken.isPresent());
 		
-		result.lastToken.ifPresent(System.out::println);
+		System.out.println(result.lastToken.sourceAsString()); 
 		
 //		System.out.println(JSON.encode(getResultParsed()));
 		
 		Token parenthesesed = ParenthesesParser.getParenthesesed(result.parsed.getRootToken());
-		System.out.println(parenthesesed.getSource().get());
+		System.out.println(parenthesesed.getSource().sourceAsString());
 		
 		testAllMatch(parenthesesParser, "( a)");
 		testAllMatch(parenthesesParser, "(a )");
