@@ -371,19 +371,24 @@ public class ParserTestBase {
 		);
 	}
 	
+	static boolean outputStackTraceElements = false;
+	
 	public static LastAndFirst getCallerIndex(Class<?> thisClass , StackTraceElement[] stackTraces){
 		String thisClassName = thisClass.getName();
 		LastAndFirst lastAndFirst = new LastAndFirst();
 		System.out.format("this class name %s\n",thisClassName);
 
-		for(int i = 0 ; i < stackTraces.length ; i++){
-			StackTraceElement stackTraceElement = stackTraces[i];
-			String currentClassName = stackTraceElement.getClassName();
-			System.out.format("\tstackTrace element class name %s\n",currentClassName);
-			if(currentClassName.equals(thisClassName)){
-				lastAndFirst.apply(i);
-			}
-		}
+		  
+	  for(int i = 0 ; i < stackTraces.length ; i++){
+	    StackTraceElement stackTraceElement = stackTraces[i];
+	    String currentClassName = stackTraceElement.getClassName();
+	    if(outputStackTraceElements) {
+	      System.out.format("\tstackTrace element class name %s\n",currentClassName);
+	    }
+	    if(currentClassName.equals(thisClassName)){
+	      lastAndFirst.apply(i);
+	    }
+	  }
 		return lastAndFirst;
 	}
 	

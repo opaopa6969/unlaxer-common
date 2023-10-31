@@ -8,7 +8,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-public class IndexAndLineNumber{
+public class RootPositionResolver implements PositionResolver{
   
   public final NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
   public final Map<CodePointIndex,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
@@ -16,7 +16,7 @@ public class IndexAndLineNumber{
   public final List<CursorRange> cursorRanges = new ArrayList<>();
   public final CursorRange cursorRange;
   
-  public IndexAndLineNumber(int[] codePoints) {
+  public RootPositionResolver(int[] codePoints) {
     int codePointCount = codePoints.length;
     
     LineNumber lineNumber = new LineNumber(0);
@@ -77,4 +77,20 @@ public class IndexAndLineNumber{
     return cursorRanges.stream()
       .map(root::subSource);
   }
+
+  @Override
+  public StringIndex stringIndexFrom(CodePointIndex codePointIndex) {
+    return stringIndexByCodePointIndex.get(codePointIndex);
+  }
+
+  @Override
+  public LineNumber lineNUmberFrom(CodePointIndex codePointIndex) {
+    return lineNumberByIndex.floorEntry(codePointIndex).getValue();
+  }
+
+  @Override
+  public CodePointIndex codePointIndexFrom(StringIndex stringIndex) {
+    return codePointIndexByStringIndex.get(stringIndex);
+  }
+  
 }

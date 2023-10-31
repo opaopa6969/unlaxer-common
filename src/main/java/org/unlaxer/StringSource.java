@@ -19,36 +19,36 @@ public class StringSource implements Source {
   private final String sourceString;
 //private final CodePoint[] codePoints;
   private final int[] codePoints;
-  IndexAndLineNumber indexAndLineNumber;
+  private final RootPositionResolver rootPositionResolver;
   private final Depth depth;
   private final SourceKind sourceKind;
   private final CodePointOffset offsetFromParent;
   
   
-  public static StringSource create(String source , SourceKind sourceKind) {
-    if(sourceKind == SourceKind.subSource) {
-      throw new IllegalArgumentException();
-    }
-    return new StringSource(source , sourceKind , new CodePointOffset(0));
-  }
+//  public static StringSource create(String source , SourceKind sourceKind) {
+//    if(sourceKind == SourceKind.subSource) {
+//      throw new IllegalArgumentException();
+//    }
+//    return new StringSource(source , sourceKind , new CodePointOffset(0));
+//  }
   
   public static StringSource createRootSource(String source) {
-    return new StringSource(source , SourceKind.root , new CodePointOffset(0));
+    return new StringSource(source , SourceKind.root , null ,  new CodePointOffset(0));
   }
   
-  public static StringSource createDetachedSource(String source) {
-    return new StringSource(source , SourceKind.detached , new CodePointOffset(0));
+  public static StringSource createDetachedSource(String source , Source root) {
+    return new StringSource(source , SourceKind.detached , root , new CodePointOffset(0));
   }
   
-  public static StringSource createDetachedSource(String source , CodePointOffset codePointOffset) {
-    return new StringSource(source , SourceKind.detached , codePointOffset);
+  public static StringSource createDetachedSource(String source , Source root , CodePointOffset codePointOffset) {
+    return new StringSource(source , SourceKind.detached , root , codePointOffset);
   }
 
   
-  public StringSource(String source , SourceKind sourceKind , CodePointOffset offsetFromParent) {
+  StringSource(String source , SourceKind sourceKind , Source root , CodePointOffset offsetFromParent) {
     super();
     Objects.requireNonNull(source,"source require non null");
-    root = this;
+    this.root = root == null ? this : root;
     parent = null;
     depth = new Depth(0);
     this.sourceKind = sourceKind;
@@ -56,29 +56,35 @@ public class StringSource implements Source {
     this.offsetFromParent = offsetFromParent;
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
-    indexAndLineNumber = createIndexAndLineNumber(codePoints);
+    rootPositionResolver = root == null ? 
+        new RootPositionResolver(codePoints) : 
+        root.rootPositionResolver(); 
   }
 
   
   private StringSource(Source parent , Source source , CodePointOffset offsetFromParent) {
     super();
     this.sourceString = source.toString();
+    this.root = parent.root();
+    if(false == this.root.isRoot()) {
+      throw new IllegalArgumentException();
+    }
     this.parent = parent;
     this.offsetFromParent = offsetFromParent;
     depth = parent.depth().increments();
     sourceKind = SourceKind.subSource;
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
-    indexAndLineNumber = createIndexAndLineNumber(codePoints);
+    rootPositionResolver = createIndexAndLineNumber(codePoints , offsetFromParent);
     
-    Source _root = parent;
-    while(true) {
-      if(_root == null || _root.parent().isEmpty()) {
-        root = _root;
-        break;
-      }
-      _root = parent;
-    }
+//    Source _root = parent;
+//    while(true) {
+//      if(_root == null || _root.parent().isEmpty()) {
+//        root = _root;
+//        break;
+//      }
+//      _root = parent;
+//    }
   }
   
   
@@ -92,7 +98,7 @@ public class StringSource implements Source {
     offsetFromParent = codePointOffset;
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
-    indexAndLineNumber = createIndexAndLineNumber(codePoints);
+    rootPositionResolver = createIndexAndLineNumber(codePoints , codePointOffset);
     
     Source _root = parent;
     while(true) {
@@ -107,7 +113,9 @@ public class StringSource implements Source {
   static Function<String, Source> stringToStringInterface = string-> StringSource.createRootSource(string);
   static TriFunction<Source , String, CodePointOffset , Source> parentSourceAndStringToSource = 
       (parent,sourceAsString , codePointOffset)-> 
-        new StringSource(parent, StringSource.createDetachedSource(sourceAsString),codePointOffset);
+        new StringSource(parent, 
+            StringSource.createDetachedSource(sourceAsString,parent.root()),
+            codePointOffset);
   static Function<Source, String> stringInterfaceToStgring = StringSource::toString;
   
   @Override
@@ -357,12 +365,12 @@ public class StringSource implements Source {
 
   @Override
   public StringIndex toStringIndex(CodePointIndex codePointIndex) {
-    return indexAndLineNumber.stringIndexByCodePointIndex.get(codePointIndex);
+    return rootPositionResolver.stringIndexByCodePointIndex.get(codePointIndex);
   }
 
   @Override
   public CodePointIndex toCodePointIndex(StringIndex stringIndex) {
-    return indexAndLineNumber.codePointIndexByStringIndex.get(stringIndex);
+    return rootPositionResolver.codePointIndexByStringIndex.get(stringIndex);
   }
 
   @Override
@@ -466,7 +474,7 @@ public class StringSource implements Source {
 
   @Override
   public LineNumber lineNumber(CodePointIndex Position) {
-    return indexAndLineNumber.lineNumberByIndex.floorEntry(Position).getValue();
+    return rootPositionResolver.lineNumberByIndex.floorEntry(Position).getValue();
   }
 
   @Override
@@ -496,7 +504,7 @@ public class StringSource implements Source {
 
   @Override
   public CursorRange cursorRange() {
-    return indexAndLineNumber.cursorRange;
+    return rootPositionResolver.cursorRange;
   }
 
   @Override
@@ -521,12 +529,17 @@ public class StringSource implements Source {
 
   @Override
   public Stream<Source> linesAsSource() {
-    return indexAndLineNumber.lines(this);
+    return rootPositionResolver.lines(this);
   }
 
   @Override
   public boolean isRoot() {
     return parent == null && sourceKind == SourceKind.root;
+  }
+
+  @Override
+  public RootPositionResolver rootPositionResolver() {
+    return rootPositionResolver;
   }
 
 }

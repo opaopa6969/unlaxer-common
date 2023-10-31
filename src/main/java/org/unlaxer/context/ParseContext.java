@@ -15,6 +15,7 @@ import org.unlaxer.CodePointLength;
 import org.unlaxer.Name;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.Source;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.TransactionElement;
 import org.unlaxer.listener.ParserListener;
 import org.unlaxer.listener.ParserListenerContainer;
@@ -56,6 +57,9 @@ public class ParseContext implements
 	Collection<AdditionalCommitAction> actions;
 
 	public ParseContext(Source source, ParseContextEffector... parseContextEffectors) {
+	  if(source.sourceKind() != SourceKind.root) {
+	    throw new IllegalArgumentException();
+	  }
 		this.source = source;
 		actions = new ArrayList<>();
 		tokenStack.add(new TransactionElement(new ParserCursor()));

@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import org.unlaxer.util.FactoryBoundCache;
 import org.unlaxer.util.function.TriFunction;
 
 public interface Source extends CodePointAccessor{
@@ -20,7 +21,19 @@ public interface Source extends CodePointAccessor{
     root,
     detached,
     subSource
+    ;
+    public boolean isRoot() {
+      return this == root;
+    }
+    public boolean isDetached() {
+      return this == detached;
+    }
+    public boolean isSubSource() {
+      return this == subSource;
+    }
   }
+  
+  RootPositionResolver rootPositionResolver();
   
   SourceKind sourceKind();
   
@@ -93,8 +106,8 @@ public interface Source extends CodePointAccessor{
     return parent().isPresent();
   }
   
-  default IndexAndLineNumber createIndexAndLineNumber(int[] codePoints) {
-    return new IndexAndLineNumber(codePoints);
+  default RootPositionResolver createRootPositionResolver(int[] codePoints) {
+    return new RootPositionResolver(codePoints);
   }
   
 //  Function<String,Source> stringToSource();
@@ -400,5 +413,8 @@ public interface Source extends CodePointAccessor{
   
   static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
   
-  public static final Source EMPTY = new StringSource("" , SourceKind.detached , CodePointOffset.ZERO);
+  public static final FactoryBoundCache<Source, Source> EMPTY = 
+      new FactoryBoundCache<>(
+          rootSource -> new StringSource("" , SourceKind.detached , rootSource ,CodePointOffset.ZERO)
+      );
 }
