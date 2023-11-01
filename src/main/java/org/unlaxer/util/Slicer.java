@@ -15,14 +15,19 @@ public class Slicer implements Supplier<Source>{
 	private CodePointIndex beginIndexInclusive;
 	private CodePointIndex endIndexExclusive;
 	private int step;
+	private Source rootSource;
 	
+	public static Slicer of(String rootString) {
+	  return new Slicer(StringSource.createRootSource(rootString));
+	}
 	
-	public Slicer(String word) {
-	  this(StringSource.createDetachedSource(word));
+	public Slicer(Source rootSource , String word) {
+	  this(StringSource.createDetachedSource(word,rootSource));
 	}
 
 	public Slicer(Source word) {
 		super();
+		rootSource = word.root();
 		this.word = word;
 		beginIndexInclusive = new CodePointIndex(0);
 		endIndexExclusive = this.word.endIndexExclusive();
@@ -91,7 +96,7 @@ public class Slicer implements Supplier<Source>{
 			return word.subSource(beginIndexInclusive, endIndexExclusive);
 		}else if(step ==0){
 			
-			return Source.EMPTY;
+			return Source.SUB_EMPTY.get(rootSource);
 		}
 		int start = step < 0 ? endIndexExclusive.value() -1 : beginIndexInclusive.value();
 		int end = step < 0 ? beginIndexInclusive.value() : endIndexExclusive.value() ;

@@ -162,7 +162,7 @@ public class SimpleBuilder implements CharSequence{
   }
   
   public Source toSource() {
-    return StringSource.createDetachedSource(builder.toString());
+    return StringSource.createRootSource(builder.toString());
   }
 
   public SimpleBuilder n() {
@@ -398,12 +398,12 @@ public class SimpleBuilder implements CharSequence{
 
   
   public Source substring(int start) {
-    return StringSource.createDetachedSource(builder.substring(start));
+    return StringSource.createRootSource(builder.substring(start));
   }
 
 
   public Source substring(int start, int end) {
-    return StringSource.createDetachedSource(builder.substring(start, end));
+    return StringSource.createRootSource(builder.substring(start, end));
   }
 
   public IntStream chars() {

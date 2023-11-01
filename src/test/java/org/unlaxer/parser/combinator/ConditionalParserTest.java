@@ -45,7 +45,7 @@ public class ConditionalParserTest {
 			)
 		);
 		
-		ParseContext parseContext = new ParseContext(StringSource.createDetachedSource("aca"));
+		ParseContext parseContext = new ParseContext(StringSource.createRootSource("aca"));
 		
 		Parsed parse = chain.parse(parseContext);
 		Token rootToken = parse.getRootToken();

@@ -17,7 +17,7 @@ public class TokenTest {
 	public void testFlatten() {
 		
 		
-		TokenList third = TokenList.of(new Token(TokenKind.matchOnly, StringSource.createDetachedSource(""), new HashParser()));
+		TokenList third = TokenList.of(new Token(TokenKind.matchOnly, Source.EMPTY, new HashParser()));
 		TokenList second = TokenList.of(
 			new Token(TokenKind.matchOnly, third, new DotParser()),
 			new Token(TokenKind.matchOnly, third, new DotParser())

@@ -106,8 +106,8 @@ public interface Source extends CodePointAccessor{
     return parent().isPresent();
   }
   
-  default RootPositionResolver createRootPositionResolver(int[] codePoints) {
-    return new RootPositionResolver(codePoints);
+  default RootPositionResolverImpl createRootPositionResolver(int[] codePoints) {
+    return new RootPositionResolverImpl(codePoints);
   }
   
 //  Function<String,Source> stringToSource();
@@ -413,7 +413,9 @@ public interface Source extends CodePointAccessor{
   
   static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
   
-  public static final FactoryBoundCache<Source, Source> EMPTY = 
+  public static final Source EMPTY = StringSource.createRootSource("");
+  
+  public static final FactoryBoundCache<Source, Source> SUB_EMPTY = 
       new FactoryBoundCache<>(
           rootSource -> new StringSource("" , SourceKind.detached , rootSource ,CodePointOffset.ZERO)
       );

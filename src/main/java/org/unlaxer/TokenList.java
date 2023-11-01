@@ -261,7 +261,7 @@ public class TokenList implements List<Token>{
     if(sourceKind == SourceKind.subSource) {
       return new StringSource(root , collect , offsetFromRoot);
     }else {
-      return StringSource.create(collect, sourceKind);
+      return StringSource.create(collect, sourceKind );
     }
   }
 }

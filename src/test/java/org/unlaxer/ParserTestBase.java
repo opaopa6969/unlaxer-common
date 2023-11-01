@@ -283,7 +283,7 @@ public class ParserTestBase {
 		int count = counts.get();
 		counts.set(count+1);
 
-		StringSource source = StringSource.createDetachedSource(sourceString);
+		StringSource source = StringSource.createRootSource(sourceString);
 		try (OutputStream transactionFile = createFileOutputSream("transaction" , count);
 			OutputStream parseFile = createFileOutputSream("parse" , count);
 			OutputStream bothFile = createFileOutputSream("combined" , count);
