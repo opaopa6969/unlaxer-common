@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 import org.unlaxer.util.FactoryBoundCache;
 import org.unlaxer.util.function.TriFunction;
 
-public interface Source extends CodePointAccessor{
+public interface Source extends CodePointAccessor , SubPositionResolver , RootPositionResolver {
   
   public enum SourceKind{
     root,

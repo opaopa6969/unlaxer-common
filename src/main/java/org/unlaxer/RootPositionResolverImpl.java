@@ -41,14 +41,16 @@ public class RootPositionResolverImpl implements RootPositionResolver{
         previousStartIndex = startIndex;
         startIndex = new CodePointIndex(i+1);
         cursorRanges.add(CursorRange.of(previousStartIndex, lineNumber, startIndex, lineNumber));
-        lineNumberByIndex.put(startIndex, lineNumber.increments());
+        lineNumber = lineNumber.increments();
+        lineNumberByIndex.put(startIndex, lineNumber);
       }else if(codePointAt == SymbolMap.cr.codes[0]) {
         if(codePointCount-1!=i && codePoints[i+1] ==SymbolMap.lf.codes[0]) {
           i++;
           previousStartIndex = startIndex;
           startIndex = new CodePointIndex(i+1);
           cursorRanges.add(CursorRange.of(previousStartIndex, lineNumber, startIndex, lineNumber));
-          lineNumberByIndex.put(startIndex, lineNumber.increments());
+          lineNumber = lineNumber.increments();
+          lineNumberByIndex.put(startIndex, lineNumber);
           
           stringIndex = stringIndex.add(1);
           stringIndexByCodePointIndex.put(codePointIndex.add(1), stringIndex);
@@ -57,7 +59,8 @@ public class RootPositionResolverImpl implements RootPositionResolver{
           previousStartIndex = startIndex;
           startIndex = new CodePointIndex(i+1);
           cursorRanges.add(CursorRange.of(previousStartIndex, lineNumber, startIndex, lineNumber));
-          lineNumberByIndex.put(startIndex, lineNumber.increments());
+          lineNumber = lineNumber.increments();
+          lineNumberByIndex.put(startIndex, lineNumber);
         }
       }
     }
@@ -66,7 +69,7 @@ public class RootPositionResolverImpl implements RootPositionResolver{
     CodePointIndex position = new CodePointIndex(codePointCount);
     Cursor end = new CursorImpl().setPosition(position).setLineNumber(lineNumber);
     cursorRange = new CursorRange(start, end);
-    cursorRanges.add(CursorRange.of(startIndex, lineNumber, position, lineNumber));
+//    cursorRanges.add(CursorRange.of(startIndex, lineNumber, position, lineNumber));
   }
   
   @Override

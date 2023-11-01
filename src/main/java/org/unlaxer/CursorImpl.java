@@ -86,4 +86,9 @@ public class CursorImpl implements Serializable, Cursor{
     positionInLine = positionInLine.increments();
     return this;
   }
+  @Override
+  public Cursor resolveLineNumber(RootPositionResolver rootPositionResolver) {
+    setLineNumber(rootPositionResolver.lineNumberFrom(position));
+    return this;
+  }
 }

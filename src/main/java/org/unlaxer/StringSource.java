@@ -24,7 +24,7 @@ public class StringSource implements Source {
   private final Depth depth;
   private final SourceKind sourceKind;
   private final CodePointOffset offsetFromParent;
-  
+  private final StringIndexAccessor stringIndexAccessor;
   
   public static StringSource create(String source , SourceKind sourceKind) {
     if(sourceKind == SourceKind.subSource) {
@@ -70,6 +70,7 @@ public class StringSource implements Source {
         new RootPositionResolverImpl(codePoints) : 
         root.rootPositionResolver(); 
     subPositionResolver = new SubPositionResolverImpl(codePoints,rootPositionResolver, offsetFromParent);
+    stringIndexAccessor = new StringIndexAccessorImpl(source);
   }
 
   
@@ -88,7 +89,8 @@ public class StringSource implements Source {
     codePoints = source.codePoints().toArray();
     rootPositionResolver = root.rootPositionResolver();
     subPositionResolver = new SubPositionResolverImpl(codePoints,rootPositionResolver, offsetFromParent);
-    
+    stringIndexAccessor = new StringIndexAccessorImpl(source.sourceAsString());
+
 //    Source _root = parent;
 //    while(true) {
 //      if(_root == null || _root.parent().isEmpty()) {
@@ -113,6 +115,7 @@ public class StringSource implements Source {
     codePoints = source.codePoints().toArray();
     rootPositionResolver = root.rootPositionResolver();
     subPositionResolver = new SubPositionResolverImpl(codePoints,rootPositionResolver, offsetFromParent);
+    stringIndexAccessor = new StringIndexAccessorImpl(source);
     
 //    Source _root = parent;
 //    while(true) {
@@ -158,10 +161,6 @@ public class StringSource implements Source {
 
   public CodePointIndex subCodePointIndexFrom(StringIndex subStringIndex) {
     return subPositionResolver.subCodePointIndexFrom(subStringIndex);
-  }
-
-  public CursorRange subCursorRange() {
-    return subPositionResolver.subCursorRange();
   }
 
   static Function<String, Source> stringToStringInterface = string-> StringSource.createRootSource(string);
@@ -470,7 +469,7 @@ public class StringSource implements Source {
 
   @Override
   public StringIndexAccessor stringIndexAccessor() {
-    return null;
+    return stringIndexAccessor;
   }
   
   public static String toString(CodePointAccessor codePointAccessor) {
@@ -558,7 +557,7 @@ public class StringSource implements Source {
 
   @Override
   public CursorRange cursorRange() {
-    return rootPositionResolver.rootCursorRange();
+    return subPositionResolver.cursorRange();
   }
 
   @Override

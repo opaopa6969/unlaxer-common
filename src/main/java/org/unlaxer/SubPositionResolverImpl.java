@@ -70,9 +70,13 @@ public class SubPositionResolverImpl implements RootPositionResolver , SubPositi
       }
     }
 
-    Cursor start = new CursorImpl();
-    CodePointIndex position = new CodePointIndex(codePointCount);
-    Cursor end = new CursorImpl().setPosition(position).setLineNumber(lineNumber);
+    Cursor start = new CursorImpl()
+        .addPosition(codePointOffset)
+        .resolveLineNumber(rootPositionResolver);
+    CodePointIndex position = new CodePointIndex(codePointCount).add(codePointOffset);
+    Cursor end = new CursorImpl()
+        .setPosition(position)
+        .resolveLineNumber(rootPositionResolver);
     cursorRange = new CursorRange(start, end);
     cursorRanges.add(CursorRange.of(startIndex, lineNumber, position, lineNumber));
   }
@@ -122,7 +126,7 @@ public class SubPositionResolverImpl implements RootPositionResolver , SubPositi
   }
 
   @Override
-  public CursorRange subCursorRange() {
+  public CursorRange cursorRange() {
     return cursorRange;
   }
 }

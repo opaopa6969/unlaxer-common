@@ -65,5 +65,10 @@ public class StringSourceTest {
     
     assertEquals(3, position.value());
   }
+  
+  
+  public static void main(String[] args) {
+    new StringSourceTest().testLines();
+  }
 
 }

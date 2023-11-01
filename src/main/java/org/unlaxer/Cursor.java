@@ -29,5 +29,7 @@ public interface Cursor {
 	CodePointOffset getPositionInLine();
 
 	Cursor setPositionInLine(CodePointOffset positionInLine);
+	
+	Cursor resolveLineNumber(RootPositionResolver rootPositionResolver);
 
 }
