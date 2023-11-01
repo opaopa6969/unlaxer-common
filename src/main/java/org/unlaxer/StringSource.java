@@ -559,19 +559,26 @@ public class StringSource implements Source {
   public CursorRange cursorRange() {
     return subPositionResolver.cursorRange();
   }
+  
+//  ThreadLocal<Integer> count = new ThreadLocal<>();
 
   @Override
   public CodePointOffset offsetFromParent() {
-    
     CodePointOffset offset = offsetFromParent;
     Source _root = parent;
     while(true) {
-      if(_root == null || _root.parent().isEmpty()) {
+      if(_root == null || _root.isRoot() ) {
         break;
       }
+//      Integer integer = count.get();
+//      count.set(integer+1);
+//      if(integer > 10) {
+//        System.out.println("too Loop");
+//      }
       _root = parent;
       offset = offset.add(_root.offsetFromParent());
     }
+//    count.set(0);
     return offset;
   }
 
@@ -587,7 +594,9 @@ public class StringSource implements Source {
 
   @Override
   public boolean isRoot() {
-    return /*parent == null && */sourceKind == SourceKind.root;
+    return /*parent == null && */sourceKind == SourceKind.root &&
+        (parent == null || parent == root)
+        ;
   }
 
   @Override

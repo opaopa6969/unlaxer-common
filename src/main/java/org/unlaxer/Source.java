@@ -53,7 +53,7 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
     CodePointOffset codePointOffset = new CodePointOffset(0);
     Source current = thisSource();
     while(true) {
-      if(current.parent().isEmpty()) {
+      if(current.isRoot()) {
         return codePointOffset;
       }
       current = current.parent().get();
