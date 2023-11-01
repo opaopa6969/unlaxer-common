@@ -433,6 +433,9 @@ public class StringSource implements Source {
 
   @Override
   public boolean equals(Object obj) {
+    if(obj instanceof Source) {
+      return sourceString.equals(((Source)obj).sourceAsString());
+    }
     return sourceString.equals(obj);
   }
 
