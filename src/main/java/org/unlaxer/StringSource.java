@@ -587,7 +587,7 @@ public class StringSource implements Source {
 
   @Override
   public boolean isRoot() {
-    return parent == null && sourceKind == SourceKind.root;
+    return /*parent == null && */sourceKind == SourceKind.root;
   }
 
   @Override
