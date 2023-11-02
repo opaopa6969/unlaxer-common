@@ -35,8 +35,9 @@ public class LineTerminatorParser extends LazyChoice{
 		Parsed parse = super.parse(parseContext, tokenKind, invertMatch);
 		TransactionElement current = parseContext.getCurrent();
 		ParserCursor parserCursor = current.getParserCursor();
-		Cursor cursor = parserCursor.getCursor(TokenKind.consumed);
-		cursor.setLineNumber(cursor.getLineNumber().plus(1));
+		parserCursor.getCursor(TokenKind.consumed)
+		    .resolveLineNumber(parseContext.source.rootPositionResolver());
+//		cursor.setLineNumber(cursor.getLineNumber().plus(1));
 		return parse;
 	}
 	

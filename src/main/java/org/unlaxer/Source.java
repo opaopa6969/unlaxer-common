@@ -71,9 +71,7 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
 	  
 	  CodePointIndex start = endIndexInclusive.minus(length)
 	      .createIfMatch(CodePointIndex::isNegative, ()->new CodePointIndex(0));
-	  
-	  CodePointIndex end = endIndexInclusive.minus(start);
-		return peek(start , end);
+		return peek(start , endIndexInclusive);
 	}
 	
 	default Source subSource(CursorRange cursorRange) {
