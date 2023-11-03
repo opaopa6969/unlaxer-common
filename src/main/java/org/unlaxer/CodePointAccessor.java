@@ -55,7 +55,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default boolean equalsIgnoreCase(CodePointAccessor anotherString) {
-    return equalsIgnoreCase(anotherString.source());
+    return sourceAsString().equalsIgnoreCase(anotherString.sourceAsString());
   }
 
   default int compareTo(CodePointAccessor  anotherString) {

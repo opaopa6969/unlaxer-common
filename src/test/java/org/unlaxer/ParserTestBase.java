@@ -376,7 +376,7 @@ public class ParserTestBase {
 	public static LastAndFirst getCallerIndex(Class<?> thisClass , StackTraceElement[] stackTraces){
 		String thisClassName = thisClass.getName();
 		LastAndFirst lastAndFirst = new LastAndFirst();
-		System.out.format("this class name %s\n",thisClassName);
+//		System.out.format("this class name %s\n",thisClassName);
 
 		  
 	  for(int i = 0 ; i < stackTraces.length ; i++){
