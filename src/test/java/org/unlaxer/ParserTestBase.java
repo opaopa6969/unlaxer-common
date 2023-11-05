@@ -115,19 +115,19 @@ public class ParserTestBase {
 					);
 
 				} else {
-					if("".equals(sourceString)){
-						
-						testResult.add(
-								checkAssertFalse(parsed.getConsumed().source.isEmpty() , doAssert)
-						);
-
-						
-					}else{
+//					if("".equals(sourceString)){
+//						
+//						testResult.add(
+//								checkAssertFalse(parsed.getConsumed().source.isEmpty() , doAssert)
+//						);
+//
+//						
+//					}else{
 						
 						testResult.add(
 								checkAssertEquals(matchedString, parsed.getConsumed().source.toString() , doAssert)
 						);
-					}
+//					}
 				}
 				return testResult;
 			}

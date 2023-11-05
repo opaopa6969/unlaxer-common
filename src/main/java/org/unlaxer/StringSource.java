@@ -418,7 +418,11 @@ public class StringSource implements Source {
 
   @Override
   public StringIndex toStringIndex(CodePointIndex codePointIndex) {
-    return rootPositionResolver.stringIndexFrom(codePointIndex);
+    StringIndex stringIndexFrom = rootPositionResolver.stringIndexFrom(codePointIndex);
+    if(stringIndexFrom == null) {
+      stringIndexFrom = rootPositionResolver.stringIndexFrom(codePointIndex.minus(1)).add(1);
+    }
+    return stringIndexFrom;
   }
 
   @Override

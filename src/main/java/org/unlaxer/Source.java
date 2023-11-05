@@ -13,6 +13,7 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import org.unlaxer.util.FactoryBoundCache;
+import org.unlaxer.util.InfiniteLoopDetector;
 import org.unlaxer.util.function.TriFunction;
 
 public interface Source extends CodePointAccessor , SubPositionResolver , RootPositionResolver {
@@ -49,11 +50,15 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
   
   CodePointOffset offsetFromParent();
   
+  static InfiniteLoopDetector infiniteLoopDetector = new InfiniteLoopDetector();
+  
   default CodePointOffset offsetFromRoot() {
     CodePointOffset codePointOffset = new CodePointOffset(0);
     Source current = thisSource();
     while(true) {
+      infiniteLoopDetector.incrementsAndThrow(20);
       if(current.isRoot()) {
+        infiniteLoopDetector.reset();
         return codePointOffset;
       }
       current = current.parent().get();
