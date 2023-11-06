@@ -52,7 +52,7 @@ public interface Occurs extends MetaFunctionParser , NonTerminallSymbol {
 			}
 			
 			matchCount++;
-			if (startPosition == parseContext.getPosition(tokenKind)) {
+			if (startPosition.eq(parseContext.getPosition(tokenKind))) {
 				break;
 			}
 			

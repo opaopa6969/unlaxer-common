@@ -1,6 +1,5 @@
 package org.unlaxer.parser.elementary;
 
-import org.unlaxer.Cursor;
 import org.unlaxer.Parsed;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.Token;

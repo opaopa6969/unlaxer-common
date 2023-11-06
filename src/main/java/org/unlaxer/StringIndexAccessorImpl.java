@@ -41,7 +41,6 @@ public class StringIndexAccessorImpl implements StringIndexAccessor{
 
   @Override
   public void getBytes(int srcBegin, int srcEnd, byte[] dst, int dstBegin) {
-      source.getBytes(srcBegin, srcEnd, dst, dstBegin);
   }
 
   @Override
