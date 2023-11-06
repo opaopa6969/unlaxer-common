@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.unlaxer.Cursor.EndExclusiveCursor;
 import org.unlaxer.ParserHierarchy.NameKind;
 import org.unlaxer.Source.SourceKind;
 import org.unlaxer.listener.OutputLevel;
@@ -22,7 +23,7 @@ public class Token implements Serializable{
 	
 	private static final long serialVersionUID = -2232289508694932061L;
 
-	static final FactoryBoundCache<Cursor, Source> empties = 
+	static final FactoryBoundCache<EndExclusiveCursor, Source> empties = 
 			new FactoryBoundCache<>(cursor->new StringSource("", SourceKind.detached, 
 			    new CodePointOffset(cursor.getPosition())));
 	
@@ -96,7 +97,7 @@ public class Token implements Serializable{
 	}
 
 	
-	public static Token empty(TokenKind tokenKind , Cursor position , Parser parser){
+	public static Token empty(TokenKind tokenKind , EndExclusiveCursor position , Parser parser){
 		return new Token(tokenKind , empties.get(position),parser);
 	}
 	

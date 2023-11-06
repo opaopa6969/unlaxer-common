@@ -13,7 +13,6 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import org.unlaxer.util.FactoryBoundCache;
-import org.unlaxer.util.InfiniteLoopDetector;
 import org.unlaxer.util.function.TriFunction;
 
 public interface Source extends CodePointAccessor , SubPositionResolver , RootPositionResolver {
@@ -50,31 +49,31 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
   
   CodePointOffset offsetFromParent();
   
-  static InfiniteLoopDetector infiniteLoopDetector = new InfiniteLoopDetector();
+//  static InfiniteLoopDetector infiniteLoopDetector = new InfiniteLoopDetector();
   
   default CodePointOffset offsetFromRoot() {
     CodePointOffset codePointOffset = new CodePointOffset(0);
     Source current = thisSource();
     while(true) {
-      infiniteLoopDetector.incrementsAndThrow(20);
+//      infiniteLoopDetector.incrementsAndThrow(20);
       if(current.isRoot()) {
-        infiniteLoopDetector.reset();
+//        infiniteLoopDetector.reset();
         return codePointOffset;
       }
       current = current.parent().get();
-      codePointOffset.plus(current.offsetFromParent());
+      codePointOffset.newWithPlus(current.offsetFromParent());
     }
   }
   
   Source peek(CodePointIndex startIndexInclusive, CodePointLength length);
 	
   default Source peek(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
-    return peek(startIndexInclusive , new CodePointLength(endIndexExclusive.minus(startIndexInclusive)));
+    return peek(startIndexInclusive , new CodePointLength(endIndexExclusive.newWithMinus(startIndexInclusive)));
   }
 	
 	default Source peekLast(CodePointIndex endIndexInclusive, CodePointLength length) {
 	  
-	  CodePointIndex start = endIndexInclusive.minus(length)
+	  CodePointIndex start = endIndexInclusive.newWithMinus(length)
 	      .createIfMatch(CodePointIndex::isNegative, ()->new CodePointIndex(0));
 		return peek(start , endIndexInclusive);
 	}

@@ -8,6 +8,9 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
+import org.unlaxer.Cursor.EndExclusiveCursor;
+import org.unlaxer.Cursor.StartInclusiveCursor;
+
 public class RootPositionResolverImpl implements RootPositionResolver{
   
   final NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
@@ -29,20 +32,20 @@ public class RootPositionResolverImpl implements RootPositionResolver{
     CodePointIndex codePointIndex = new CodePointIndex(0);
     
     for (int i = 0; i < codePointCount; i++) {
-      codePointIndex = codePointIndex.add(i);
+      codePointIndex = codePointIndex.newWithAdd(i);
       stringIndexByCodePointIndex.put(codePointIndex, stringIndex);
       codePointIndexByStringIndex.put(stringIndex,codePointIndex);
     
       int codePointAt = codePoints[i];
       
       int adding = Character.isBmpCodePoint(codePointAt) ? 1:2;
-      stringIndex = stringIndex.add(adding);
+      stringIndex = stringIndex.newWithAdd(adding);
       
       if(codePointAt == SymbolMap.lf.codes[0]) {
         previousStartIndex = startIndex;
         startIndex = new CodePointIndex(i+1);
         cursorRanges.add(CursorRange.of(previousStartIndex, lineNumber, startIndex, lineNumber));
-        lineNumber = lineNumber.increments();
+        lineNumber = lineNumber.newWithIncrements();
         lineNumberByIndex.put(startIndex, lineNumber);
       }else if(codePointAt == SymbolMap.cr.codes[0]) {
         if(codePointCount-1!=i && codePoints[i+1] ==SymbolMap.lf.codes[0]) {
@@ -50,27 +53,32 @@ public class RootPositionResolverImpl implements RootPositionResolver{
           previousStartIndex = startIndex;
           startIndex = new CodePointIndex(i+1);
           cursorRanges.add(CursorRange.of(previousStartIndex, lineNumber, startIndex, lineNumber));
-          lineNumber = lineNumber.increments();
+          lineNumber = lineNumber.newWithIncrements();
           lineNumberByIndex.put(startIndex, lineNumber);
           
-          stringIndex = stringIndex.add(1);
-          stringIndexByCodePointIndex.put(codePointIndex.add(1), stringIndex);
-          codePointIndexByStringIndex.put(stringIndex,codePointIndex.add(1));
+          stringIndex = stringIndex.newWithAdd(1);
+          stringIndexByCodePointIndex.put(codePointIndex.newWithAdd(1), stringIndex);
+          codePointIndexByStringIndex.put(stringIndex,codePointIndex.newWithAdd(1));
         }else {
           previousStartIndex = startIndex;
           startIndex = new CodePointIndex(i+1);
           cursorRanges.add(CursorRange.of(previousStartIndex, lineNumber, startIndex, lineNumber));
-          lineNumber = lineNumber.increments();
+          lineNumber = lineNumber.newWithIncrements();
           lineNumberByIndex.put(startIndex, lineNumber);
         }
       }
     }
 
-    Cursor start = new CursorImpl();
+    StartInclusiveCursor start = new StartInclusiveCursorImpl();
     CodePointIndex position = new CodePointIndex(codePointCount);
-    Cursor end = new CursorImpl().setPosition(position).setLineNumber(lineNumber);
+    EndExclusiveCursor end = new EndExclusiveCursorImpl().setPosition(position).setLineNumber(lineNumber);
     cursorRange = new CursorRange(start, end);
-//    cursorRanges.add(CursorRange.of(startIndex, lineNumber, position, lineNumber));
+    if(cursorRanges.size()>0) {
+      CursorRange last = cursorRanges.get(cursorRanges.size()-1);
+      if(last.lessThan(codePointIndex) && startIndex.lessThan(position)) {
+        cursorRanges.add(CursorRange.of(startIndex, lineNumber, position, lineNumber));
+      }
+    }
   }
   
   @Override

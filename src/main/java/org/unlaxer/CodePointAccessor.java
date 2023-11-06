@@ -163,16 +163,16 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
 //}
 
     
-    CodePointIndex endIndexExclusive = new CodePointIndex(startIndexInclusive.plus(length));
+    CodePointIndex endIndexExclusive = new CodePointIndex(startIndexInclusive.newWithPlus(length));
     return cursorRange(startIndexInclusive, endIndexExclusive);
   }
   
   default CursorRange cursorRange(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
       CursorRange cursorRange = new CursorRange(
-          new CursorImpl()
+          new StartInclusiveCursorImpl()
             .setPosition(startIndexInclusive)
             .setLineNumber(lineNumber(startIndexInclusive)),
-          new CursorImpl()
+          new EndExclusiveCursorImpl()
             .setPosition(endIndexExclusive)
             .setLineNumber(lineNumber(endIndexExclusive))
       );

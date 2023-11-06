@@ -9,11 +9,10 @@ import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.MetaFunctionParser;
 import org.unlaxer.parser.NonTerminallSymbol;
 import org.unlaxer.parser.Parser;
-import org.unlaxer.util.InfiniteLoopDetector;
 
 public interface Occurs extends MetaFunctionParser , NonTerminallSymbol {
   
-  InfiniteLoopDetector infiniteLoopDetector = new InfiniteLoopDetector();
+//  InfiniteLoopDetector infiniteLoopDetector = new InfiniteLoopDetector();
 	
 	@Override
 	public default Parsed parse(ParseContext parseContext,TokenKind tokenKind,boolean invertMatch) {
@@ -25,7 +24,7 @@ public interface Occurs extends MetaFunctionParser , NonTerminallSymbol {
 		Optional<Parser> terminator = getTerminator();
 		while (true) {
 		  
-		  infiniteLoopDetector.incrementsAndThrow(1000);
+//		  infiniteLoopDetector.incrementsAndThrow(1000);
 		  
 		  CodePointIndex startPosition = parseContext.getPosition(tokenKind);
 			

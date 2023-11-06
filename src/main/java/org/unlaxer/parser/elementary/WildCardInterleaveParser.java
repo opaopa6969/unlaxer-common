@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.unlaxer.CodePointOffset;
-import org.unlaxer.Cursor;
+import org.unlaxer.Cursor.StartInclusiveCursor;
 import org.unlaxer.StringSource;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
@@ -36,7 +36,7 @@ public abstract class WildCardInterleaveParser extends LazyZeroOrMore{
     TokenList flatten = thisParserParsed.filteredChildren;
     
     SimpleBuilder characters = new SimpleBuilder();
-    Cursor current = null;
+    StartInclusiveCursor current = null;
     
     for (Token token : flatten) {
       token = ChoiceInterface.choiced(token);

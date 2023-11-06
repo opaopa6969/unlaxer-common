@@ -68,7 +68,28 @@ public class StringSourceTest {
   
   
   public static void main(String[] args) {
-    new StringSourceTest().testLines();
+    
+    String word ="a";
+    
+    String surrogatePare = "𪛊";
+    
+//    String cr = new String( new byte[] {0x0d});
+    String lf = new String(new byte[] {0x0a});
+//    String crlf = new String(new byte[] {0x0d , 0x0a});
+    
+    String lines =
+        word + lf + 
+        surrogatePare
+        ;
+    
+    StringSource createRootSource = StringSource.createRootSource(lines);
+    
+    List<Source> sources = createRootSource.linesAsSource().collect(Collectors.toList());
+    
+    for (Source source : sources) {
+      
+      System.out.println(source.sourceAsString());
+      
+    }
   }
-
 }

@@ -2,25 +2,28 @@ package org.unlaxer;
 
 import java.util.stream.IntStream;
 
+import org.unlaxer.Cursor.EndExclusiveCursor;
+import org.unlaxer.Cursor.StartInclusiveCursor;
+
 public class CursorRange implements Comparable<CursorRange>{
 	
-	public final Cursor startIndexInclusive;
-	public final Cursor endIndexExclusive;
+	public final StartInclusiveCursor startIndexInclusive;
+	public final EndExclusiveCursor endIndexExclusive;
 	
-	public CursorRange(Cursor startIndexInclusive, Cursor endIndexExclusive) {
+	public CursorRange(StartInclusiveCursor startIndexInclusive, EndExclusiveCursor endIndexExclusive) {
 		super();
 		this.startIndexInclusive = startIndexInclusive;
 		this.endIndexExclusive = endIndexExclusive;
 	}
-	public CursorRange(Cursor startIndexInclusive) {
+	public CursorRange(StartInclusiveCursor startIndexInclusive) {
 		super();
 		this.startIndexInclusive = startIndexInclusive;
-		this.endIndexExclusive = startIndexInclusive;
+		this.endIndexExclusive = new EndExclusiveCursorImpl(startIndexInclusive);
 	}
 	public CursorRange() {
 		super();
-		this.startIndexInclusive = new CursorImpl();
-		this.endIndexExclusive = new CursorImpl();
+		this.startIndexInclusive = new StartInclusiveCursorImpl();
+		this.endIndexExclusive = new EndExclusiveCursorImpl();
 	}
 	
 	public static CursorRange of(
@@ -30,17 +33,17 @@ public class CursorRange implements Comparable<CursorRange>{
       LineNumber endLineNumber
 	    ) {
 	  return new CursorRange(
-        new CursorImpl().setLineNumber(startLineNumber).setPosition(startIndexInclusive),
-        new CursorImpl().setLineNumber(endLineNumber).setPosition(endIndexExclusive)
+        new StartInclusiveCursorImpl().setLineNumber(startLineNumber).setPosition(startIndexInclusive),
+        new EndExclusiveCursorImpl().setLineNumber(endLineNumber).setPosition(endIndexExclusive)
 	  );
 	  
 	}
 	
-	public final Cursor startIndexInclusive() {
+	public final StartInclusiveCursor startIndexInclusive() {
 		return startIndexInclusive;
 	}
 	
-	public final Cursor endIndexExclusive() {
+	public final EndExclusiveCursor endIndexExclusive() {
 		return endIndexExclusive;
 	}
 	
@@ -52,20 +55,37 @@ public class CursorRange implements Comparable<CursorRange>{
 		return position.ge(startIndexInclusive.getPosition()) 
 		    && position.lt(endIndexExclusive.getPosition());
 	}
+
 	
-	public boolean smallerThan(CodePointIndex position){
+  public boolean lt(CodePointIndex position){
+	  return position.ge(endIndexExclusive.getPosition());
+	}
+
+	public boolean lessThan(CodePointIndex position){
 		return position.ge(endIndexExclusive.getPosition());
 	}
 	
-	public boolean biggerThan(CodePointIndex position){
+	public boolean graterThan(CodePointIndex position){
 		return position.lt(startIndexInclusive.getPosition());
 	}
 	
-	public boolean smallerThan(CursorRange other){
+  public boolean gt(CodePointIndex position){
+    return position.lt(startIndexInclusive.getPosition());
+	}
+	
+	public boolean lessThan(CursorRange other){
 		return other.startIndexInclusive.getPosition().ge(endIndexExclusive.getPosition());
 	}
 	
-	public boolean biggerThan(CursorRange other){
+  public boolean lt(CursorRange other){
+	  return other.startIndexInclusive.getPosition().ge(endIndexExclusive.getPosition());
+	}
+	
+  public boolean gt(CursorRange other){
+    return other.endIndexExclusive.getPosition().le(startIndexInclusive.getPosition());
+  }
+  
+	public boolean graterThan(CursorRange other){
 		return other.endIndexExclusive.getPosition().le(startIndexInclusive.getPosition());
 	}
 	

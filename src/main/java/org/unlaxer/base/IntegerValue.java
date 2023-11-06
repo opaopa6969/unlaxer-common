@@ -67,52 +67,52 @@ implements Comparable<T> , Serializable , MinIntegerValue , MaxIntegerValue , Nu
     return false;
   }
   
-  public T increments() {
+  public T newWithIncrements() {
     return create(value+1);
   }
   
-  public T decrements() {
+  public T newWithDecrements() {
     return create(value-1);
   }
   
-  public T add(int adding) {
+  public T newWithAdd(int adding) {
     return create(value+adding);
   }
   
-  public T plus(int adding) {
+  public T newWithPlus(int adding) {
     return create(value+adding);
   }
   
-  public T minus(int minusing) {
+  public T newWithMinus(int minusing) {
     return create(value-minusing);
   }
   
-  public T multiply(int multiplying) {
+  public T newWithMultiply(int multiplying) {
     return create(value*multiplying);
   }
   
-  public T divide(int dividing) {
+  public T newWithDivide(int dividing) {
     return create(value/dividing);
   }
   
-  public T add(IntegerValue<?> adding) {
+  public T newWithAdd(IntegerValue<?> adding) {
     return create(value+adding.value);
   }
   
-  public T plus(IntegerValue<?> adding) {
+  public T newWithPlus(IntegerValue<?> adding) {
     return create(value+adding.value);
   }
 
   
-  public T minus(IntegerValue<?> minusing) {
+  public T newWithMinus(IntegerValue<?> minusing) {
     return create(value-minusing.value);
   }
   
-  public T multiply(IntegerValue<?> multiplying) {
+  public T newWithMultiply(IntegerValue<?> multiplying) {
     return create(value*multiplying.value);
   }
   
-  public T divide(IntegerValue<?> dividing) {
+  public T newWithDivide(IntegerValue<?> dividing) {
     return create(value/dividing.value);
   }
 

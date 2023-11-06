@@ -83,7 +83,7 @@ public class StringSource implements Source {
     }
     this.parent = parent;
     this.offsetFromParent = offsetFromParent;
-    depth = parent.depth().increments();
+    depth = parent.depth().newWithIncrements();
     sourceKind = SourceKind.subSource;
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
@@ -108,7 +108,7 @@ public class StringSource implements Source {
     this.sourceString = source.toString();
     this.parent = parent;
     this.root = parent.root();
-    depth = parent.depth().increments();
+    depth = parent.depth().newWithIncrements();
     sourceKind = SourceKind.subSource;
     offsetFromParent = codePointOffset;
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
@@ -420,7 +420,7 @@ public class StringSource implements Source {
   public StringIndex toStringIndex(CodePointIndex codePointIndex) {
     StringIndex stringIndexFrom = rootPositionResolver.stringIndexFrom(codePointIndex);
     if(stringIndexFrom == null) {
-      stringIndexFrom = rootPositionResolver.stringIndexFrom(codePointIndex.minus(1)).add(1);
+      stringIndexFrom = rootPositionResolver.stringIndexFrom(codePointIndex.newWithMinus(1)).newWithAdd(1);
     }
     return stringIndexFrom;
   }
@@ -594,7 +594,7 @@ public class StringSource implements Source {
       }
 
       _root = parent;
-      offset = offset.add(_root.offsetFromParent());
+      offset = offset.newWithAdd(_root.offsetFromParent());
     }
     if(infLoopDebugging) {
       count.set(0);

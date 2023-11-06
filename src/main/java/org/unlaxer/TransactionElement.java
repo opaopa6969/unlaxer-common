@@ -3,6 +3,7 @@ package org.unlaxer;
 import java.io.Serializable;
 import java.util.Optional;
 
+import org.unlaxer.Cursor.EndExclusiveCursor;
 import org.unlaxer.Source.SourceKind;
 
 
@@ -61,7 +62,7 @@ public class TransactionElement implements Serializable{
 		return parserCursor.getPosition(tokenKind);
 	}
 	
-	public Cursor getCursor(TokenKind tokenKind){
+	public EndExclusiveCursor getCursor(TokenKind tokenKind){
 	   return parserCursor.getCursor(tokenKind);
   }
 	

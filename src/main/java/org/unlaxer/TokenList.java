@@ -215,18 +215,18 @@ public class TokenList implements List<Token>{
   public static CursorRange combinedCursorRange(List<Token> tokens) {
     
     if(tokens.isEmpty()) {
-      return new CursorRange(new CursorImpl(), new CursorImpl().incrementPosition());
+      return new CursorRange(new StartInclusiveCursorImpl(), new EndExclusiveCursorImpl().incrementPosition());
     }
     
     CursorRange first = tokens.get(0).source.cursorRange();
     CursorRange last = tokens.get(tokens.size()-1).source.cursorRange();
     
     return new CursorRange(
-          new CursorImpl()
+          new StartInclusiveCursorImpl()
             .setLineNumber(first.startIndexInclusive.getLineNumber())
             .setPositionInLine(first.startIndexInclusive.getPositionInLine())
             .setPosition(first.startIndexInclusive.getPosition()),
-          new CursorImpl()
+          new EndExclusiveCursorImpl()
             .setLineNumber(last.endIndexExclusive.getLineNumber())
             .setPositionInLine(last.endIndexExclusive.getPositionInLine())
             .setPosition(last.endIndexExclusive.getPosition())

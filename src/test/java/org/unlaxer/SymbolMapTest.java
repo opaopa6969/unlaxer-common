@@ -7,7 +7,7 @@ public class SymbolMapTest {
   @Test
   public void test() {
     
-    String word ="a";
+//    String word ="a";
     String surrogatePare = "𪛊";
     
     String cr = new String( new byte[] {0x0d});

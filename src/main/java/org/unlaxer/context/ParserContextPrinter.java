@@ -2,7 +2,7 @@ package org.unlaxer.context;
 
 import org.unlaxer.CodePointIndex;
 import org.unlaxer.CodePointLength;
-import org.unlaxer.Cursor;
+import org.unlaxer.Cursor.EndExclusiveCursor;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.Source;
 import org.unlaxer.TokenKind;
@@ -15,8 +15,8 @@ public class ParserContextPrinter {
 		CodePointIndex position = parseContext.getPosition(TokenKind.consumed);
 		if(level.isMostDetail()) {
 			ParserCursor parserCursor = parseContext.getCurrent().getParserCursor();
-			Cursor consumed= parserCursor.getCursor(TokenKind.consumed);
-			Cursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
+			EndExclusiveCursor consumed= parserCursor.getCursor(TokenKind.consumed);
+			EndExclusiveCursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
 			Source peek = parseContext.peekLast(position, new CodePointLength(20));
 			
 			return String.format("CON(L:%d,P:%d) MO(L:%d,P:%d) Last20='%s' ", 

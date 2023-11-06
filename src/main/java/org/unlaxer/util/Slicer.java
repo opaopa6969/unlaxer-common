@@ -42,7 +42,7 @@ public class Slicer implements Supplier<Source>{
 	 */
 	public Slicer begin(CodePointIndex beginIndexInclusive){
 		this.beginIndexInclusive = beginIndexInclusive.isNegative() ?
-				beginIndexInclusive.plus(word.length()):
+				beginIndexInclusive.newWithPlus(word.length()):
 				beginIndexInclusive;
 		return this;
 	}
@@ -59,7 +59,7 @@ public class Slicer implements Supplier<Source>{
 	 */
 	public Slicer end(CodePointIndex endIndexExclusive){
 		this.endIndexExclusive = endIndexExclusive.isNegative() ?
-				endIndexExclusive.plus(word.length()):
+				endIndexExclusive.newWithPlus(word.length()):
 				endIndexExclusive;
 		return this;
 	}

@@ -53,12 +53,12 @@ public class TokenPredicators{
 	
 	public final static Predicate<Token> afterToken(Token targetToken){
 		return token-> targetToken.getSource().cursorRange()
-		    .smallerThan(token.getSource().cursorRange());
+		    .lessThan(token.getSource().cursorRange());
 	}
 	
 	public final static Predicate<Token> beforeToken(Token targetToken){
 		return token-> targetToken.getSource().cursorRange()
-		    .biggerThan(token.getSource().cursorRange());
+		    .graterThan(token.getSource().cursorRange());
 	}
 	
 	public final static Predicate<Token> relation(Token targetToken , RangesRelation rangesRelation){

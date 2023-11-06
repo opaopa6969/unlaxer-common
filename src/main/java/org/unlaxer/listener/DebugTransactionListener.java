@@ -126,7 +126,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 	private Object getConsumed(ParseContext parseContext) {
 		TransactionElement transactionElement = parseContext.getCurrent();
 		CodePointIndex consumed = transactionElement.getPosition(TokenKind.consumed);
-		CodePointLength remain = parseContext.source.codePointLength().minus(consumed);
+		CodePointLength remain = parseContext.source.codePointLength().newWithMinus(consumed);
 		return parseContext.allConsumed() ? "allConsumed" : 
 			String.format("%d(%d remain)", consumed.value() , remain.value());
 	}

@@ -3,6 +3,7 @@ package org.unlaxer;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
@@ -39,6 +40,18 @@ public class RangedStringTest {
     Source  source = StringSource.createRootSource(lines);
     
     List<Source> sources = source.linesAsSource().collect(Collectors.toList());
+    
+    System.out.println("size = " +sources.size());
+    
+    AtomicInteger counter = new AtomicInteger();
+    
+    sources.stream().forEach(x->{
+      int andIncrement = counter.getAndIncrement();
+      
+      System.out.println(andIncrement + ": " + x);
+      
+    });
+    
     
     
     assertEquals(word+cr, sources.get(0).toString());

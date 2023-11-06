@@ -1,13 +1,15 @@
 package org.unlaxer;
 
+import org.unlaxer.Cursor.EndExclusiveCursor;
+
 public class ParserCursor{
 	
-	final Cursor consumed;
-	final Cursor matched;
+	final EndExclusiveCursor consumed;
+	final EndExclusiveCursor matched;
 	
 	public ParserCursor(ParserCursor parserCursor ,boolean resetMatched){
-		consumed = new CursorImpl(parserCursor.consumed);
-		matched = new CursorImpl(parserCursor.matched);
+		consumed = new EndExclusiveCursorImpl(parserCursor.consumed);
+		matched = new EndExclusiveCursorImpl(parserCursor.matched);
 		if(resetMatched){
 			resetMatchedWithConsumed(consumed, matched);
 		}
@@ -15,12 +17,12 @@ public class ParserCursor{
 	
 	public ParserCursor() {
 		super();
-		consumed = new CursorImpl();
-		matched = new CursorImpl();
+		consumed = new EndExclusiveCursorImpl();
+		matched = new EndExclusiveCursorImpl();
 	}
 	
 
-	public ParserCursor(Cursor consumed, Cursor matched , boolean resetMatched) {
+	public ParserCursor(EndExclusiveCursor consumed, EndExclusiveCursor matched , boolean resetMatched) {
 		super();
 		this.consumed = consumed;
 		this.matched = matched;
@@ -45,7 +47,7 @@ public class ParserCursor{
 	   addMatchedPosition(adding);
   }
 	
-	public Cursor getCursor(TokenKind tokenKind){
+	public EndExclusiveCursor getCursor(TokenKind tokenKind){
 		return tokenKind == TokenKind.consumed ? consumed : matched;
 	}
 	
@@ -53,7 +55,7 @@ public class ParserCursor{
 		return getCursor(tokenKind).getPosition(); 
 	}
 	
-	void resetMatchedWithConsumed(Cursor consumed, Cursor matched){
+	void resetMatchedWithConsumed(EndExclusiveCursor consumed, EndExclusiveCursor matched){
 		matched.setPosition(consumed.getPosition());
 		matched.setLineNumber(consumed.getLineNumber());
 	}

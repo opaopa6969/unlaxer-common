@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import org.unlaxer.CodePointIndex;
 import org.unlaxer.CodePointLength;
 import org.unlaxer.Committed;
-import org.unlaxer.Cursor;
+import org.unlaxer.Cursor.EndExclusiveCursor;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.Source;
 import org.unlaxer.Token;
@@ -141,7 +141,7 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
 	public default Source getRemain(TokenKind tokenKind) {
 		CodePointIndex position = getPosition(tokenKind);
 		Source source = getSource();
-    return source.peek(position, source.codePointLength().minus(position));
+    return source.peek(position, source.codePointLength().newWithMinus(position));
 	}
 
 	public default Source getConsumed(TokenKind tokenKind) {
@@ -174,7 +174,7 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
 	}
 	
 	
-   public default Cursor getCursor(TokenKind tokenKind) {
+   public default EndExclusiveCursor getCursor(TokenKind tokenKind) {
 	    return getCurrent().getCursor(tokenKind);
 	 }
 

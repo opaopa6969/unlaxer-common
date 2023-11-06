@@ -6,9 +6,7 @@ public class WordParserTest {
 
   @Test
   public void test() {
-    
-    
-    WordParser wordParser = new WordParser("");
+    new WordParser("");
   }
 
 }
