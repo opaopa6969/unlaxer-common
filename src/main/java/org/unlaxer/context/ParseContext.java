@@ -57,6 +57,7 @@ public class ParseContext implements
 	Collection<AdditionalCommitAction> actions;
 
 	public ParseContext(Source source, ParseContextEffector... parseContextEffectors) {
+	  parseContextByThread.set(this);
 	  if(source.sourceKind() != SourceKind.root) {
 	    throw new IllegalArgumentException();
 	  }
@@ -77,6 +78,7 @@ public class ParseContext implements
 
 	@Override
 	public void close() {
+	  parseContextByThread.set(null);
 		if (tokenStack.size() != 1) {
 			throw new IllegalStateException("transaction nest is illegal. check source code.");
 		}
@@ -148,5 +150,11 @@ public class ParseContext implements
   
   public  Source peek(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
     return peek(startIndexInclusive, endIndexExclusive);
+  }
+  
+  static ThreadLocal<ParseContext> parseContextByThread = new ThreadLocal<>();
+  
+  public static ParseContext getParseContextWithCurrentThread() {
+    return parseContextByThread.get();
   }
 }
