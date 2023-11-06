@@ -33,4 +33,8 @@ public class InfiniteLoopDetector {
   }
   
   static class InfiniteLoopException extends RuntimeException{}
+  
+  public String toString() {
+    return String.valueOf(counter.get());
+  }
 }
