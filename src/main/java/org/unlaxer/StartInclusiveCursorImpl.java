@@ -17,6 +17,13 @@ public class StartInclusiveCursorImpl extends AbstractCursorImpl<StartInclusiveC
   }
   
   @Override
+  public StartInclusiveCursor resolveLineNumber(RootPositionResolver rootPositionResolver) {
+    setLineNumber(rootPositionResolver.lineNumberFrom(position));
+    return thisObject();
+  }
+
+  
+  @Override
   StartInclusiveCursor thisObject() {
     return this;
   }

@@ -15,6 +15,18 @@ public class EndExclusiveCursorImpl extends AbstractCursorImpl<EndExclusiveCurso
   public EndExclusiveCursorImpl(StartInclusiveCursor cursor) {
     super(cursor);
   }
+  
+  
+  @Override
+  public EndExclusiveCursor resolveLineNumber(RootPositionResolver rootPositionResolver) {
+    
+    CodePointIndex _codePointIndex = position.isZero() ? 
+        position : 
+        position.newWithDecrements();
+    
+    setLineNumber(rootPositionResolver.lineNumberFrom(_codePointIndex));
+    return thisObject();
+  }
 
   @Override
   EndExclusiveCursor thisObject() {

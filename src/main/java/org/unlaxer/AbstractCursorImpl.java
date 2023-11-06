@@ -83,11 +83,6 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
     positionInLine = positionInLine.newWithIncrements();
     return thisObject();
   }
-  @Override
-  public T resolveLineNumber(RootPositionResolver rootPositionResolver) {
-    setLineNumber(rootPositionResolver.lineNumberFrom(position));
-    return thisObject();
-  }
   
   @Override
   public NameSpecifier getNameSpace() {

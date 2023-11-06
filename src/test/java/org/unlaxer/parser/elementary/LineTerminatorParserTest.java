@@ -26,8 +26,9 @@ public class LineTerminatorParserTest extends ParserTestBase{
 			EndExclusiveCursor consumed = parserCursor.getCursor(TokenKind.consumed);
 			EndExclusiveCursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
 			
-      assertEquals(1, consumed.getLineNumber().value());
+      assertEquals(0, consumed.getLineNumber().value());
       assertEquals(4, consumed.getPosition().value());
+      //commitが行われると、consumedとmatchOnlyは等しくなる
       assertEquals(0, matchOnly.getLineNumber().value());
       assertEquals(4, matchOnly.getPosition().value());
 		}
@@ -38,9 +39,12 @@ public class LineTerminatorParserTest extends ParserTestBase{
       
       ParserCursor parserCursor = testAllMatch.parseContext.getCurrent().getParserCursor();
       EndExclusiveCursor consumed = parserCursor.getCursor(TokenKind.consumed);
-      parserCursor.getCursor(TokenKind.matchOnly);
+      assertEquals(0, consumed.getLineNumber().value());
       
-      assertEquals(1, consumed.getLineNumber().value());
+      //commitが行われると、consumedとmatchOnlyは等しくなる
+      EndExclusiveCursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
+      assertEquals(0, matchOnly.getLineNumber().value());
+
     }
 		
 		{
@@ -49,9 +53,13 @@ public class LineTerminatorParserTest extends ParserTestBase{
       
       ParserCursor parserCursor = testAllMatch.parseContext.getCurrent().getParserCursor();
       EndExclusiveCursor consumed = parserCursor.getCursor(TokenKind.consumed);
-      parserCursor.getCursor(TokenKind.matchOnly);
       
       assertEquals(0, consumed.getLineNumber().value());
+      
+      //commitが行われると、consumedとmatchOnlyは等しくなる
+      EndExclusiveCursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
+      assertEquals(0, matchOnly.getLineNumber().value());
+
     }
 		
 		{
@@ -63,6 +71,12 @@ public class LineTerminatorParserTest extends ParserTestBase{
 			parserCursor.getCursor(TokenKind.matchOnly);
 			
 			assertEquals(1, consumed.getLineNumber().value());
+			
+      //commitが行われると、consumedとmatchOnlyは等しくなる
+      EndExclusiveCursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
+//      assertEquals(0, matchOnly.getLineNumber().value());
+      assertEquals(1, matchOnly.getLineNumber().value());
+
 		}
 		
 		{
@@ -75,6 +89,9 @@ public class LineTerminatorParserTest extends ParserTestBase{
       parserCursor.getCursor(TokenKind.matchOnly);
       
       assertEquals(2, consumed.getLineNumber().value());
+      
+      EndExclusiveCursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
+      assertEquals(2, matchOnly.getLineNumber().value());
     }
 		
 		{
@@ -88,6 +105,12 @@ public class LineTerminatorParserTest extends ParserTestBase{
       parserCursor.getCursor(TokenKind.matchOnly);
       
       assertEquals(3, consumed.getLineNumber().value());
+      
+      //commitが行われると、consumedとmatchOnlyは等しくなる
+      EndExclusiveCursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
+//      assertEquals(3, matchOnly.getLineNumber().value());
+      assertEquals(3, matchOnly.getLineNumber().value());
+
     }
 		
 	}
