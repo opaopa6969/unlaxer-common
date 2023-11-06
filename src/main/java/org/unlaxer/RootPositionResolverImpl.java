@@ -32,7 +32,7 @@ public class RootPositionResolverImpl implements RootPositionResolver{
     CodePointIndex codePointIndex = new CodePointIndex(0);
     
     for (int i = 0; i < codePointCount; i++) {
-      codePointIndex = codePointIndex.newWithAdd(i);
+      codePointIndex = new CodePointIndex(i);
       stringIndexByCodePointIndex.put(codePointIndex, stringIndex);
       codePointIndexByStringIndex.put(stringIndex,codePointIndex);
     
