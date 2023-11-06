@@ -29,7 +29,7 @@ public class MatchOnlyTest {
 			new MatchOnly(new  MinusParser())
 		);
 		
-		StringSource stringSource = new StringSource("1-");
+		StringSource stringSource = StringSource.createRootSource("1-");
 		ParseContext parseContext = new ParseContext(stringSource);
 		
 		Parsed parsed = chain.parse(parseContext);
@@ -37,8 +37,8 @@ public class MatchOnlyTest {
 		assertEquals(2,parsed.getOriginalTokens().size());
 		assertTrue(parseContext.allMatched());
 		assertFalse(parseContext.allConsumed());
-		assertEquals(2, parseContext.getLength());
-		assertEquals(1, parseContext.getPosition(TokenKind.consumed));
+		assertEquals(2, parseContext.getSource().codePointLength().value());
+		assertEquals(1, parseContext.getPosition(TokenKind.consumed).value());
 	}
 	
 	@Test
@@ -53,7 +53,7 @@ public class MatchOnlyTest {
 		);
 		
 		{
-			StringSource stringSource = new StringSource("2-");
+			StringSource stringSource = StringSource.createRootSource("2-");
 			ParseContext parseContext = new ParseContext(stringSource);
 			
 			Parsed parse = chain.parse(parseContext);
@@ -63,7 +63,7 @@ public class MatchOnlyTest {
 
 		{
 
-			StringSource stringSource = new StringSource("3--");
+			StringSource stringSource = StringSource.createRootSource("3--");
 			ParseContext parseContext = 
 				new ParseContext(
 					stringSource,
@@ -78,12 +78,12 @@ public class MatchOnlyTest {
 			
 			assertTrue(parsed.isSucceeded());
 			assertEquals(2,parsed.getOriginalTokens().size());
-			assertEquals(1,rootToken.tokenString.get().length());
-			assertEquals(1,parsed.getConsumed().tokenString.get().length());
+			assertEquals(1,rootToken.getSource().codePointLength().value());
+			assertEquals(1,parsed.getConsumed().getSource().codePointLength().value());
 			assertTrue(parseContext.allMatched());
 			assertFalse(parseContext.allConsumed());
-			assertEquals(3, parseContext.getLength());
-			assertEquals(1, parseContext.getConsumedPosition());
+			assertEquals(3, parseContext.getSource().codePointLength().value());
+			assertEquals(1, parseContext.getConsumedPosition().value());
 		}
 	}
 	
@@ -100,25 +100,25 @@ public class MatchOnlyTest {
 				)
 			);
 		{
-			StringSource stringSource = new StringSource("1");
+			StringSource stringSource = StringSource.createRootSource("1");
 			ParseContext parseContext = new ParseContext(stringSource);
 			Parsed parsed = chain.parse(parseContext);
 			assertTrue(parsed.isSucceeded());
 		}
 		{
-			StringSource stringSource = new StringSource("1-");
+			StringSource stringSource = StringSource.createRootSource("1-");
 			ParseContext parseContext = new ParseContext(stringSource);
 			Parsed parsed = chain.parse(parseContext);
 			assertTrue(parsed.isSucceeded());
 		}
 		{
-			StringSource stringSource = new StringSource("1++");
+			StringSource stringSource = StringSource.createRootSource("1++");
 			ParseContext parseContext = new ParseContext(stringSource);
 			Parsed parsed = chain.parse(parseContext);
 			assertTrue(parsed.isSucceeded());
 		}
 		{
-			StringSource stringSource = new StringSource("1--");
+			StringSource stringSource = StringSource.createRootSource("1--");
 			ParseContext parseContext = new ParseContext(stringSource);
 			Parsed parsed = chain.parse(parseContext);
 			assertTrue(parsed.isFailed());

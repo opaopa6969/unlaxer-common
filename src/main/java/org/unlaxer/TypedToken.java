@@ -1,6 +1,5 @@
 package org.unlaxer;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -10,17 +9,23 @@ public class TypedToken<P extends Parser> extends Token{
 	
 	P parser;
 
-	public TypedToken(TokenKind tokenKind, List<Token> tokens, P parser, int position) {
-		super(tokenKind, tokens, parser, position);
-		this.parser = parser;
-	}
+	// 必要になったら実装を行う
+//  public TypedToken(TokenKind tokenKind, TokenList tokens, P parser, int position) {
+//    super(tokenKind, tokens, parser, position);
+//    this.parser = parser;
+//  }
+	
+  public TypedToken(TokenKind tokenKind, TokenList tokens, P parser ){
+    super(tokenKind, tokens, parser);
+    this.parser = parser;
+  }
 
-	public TypedToken(TokenKind tokenKind, RangedString token, P parser, List<Token> children) {
+	public TypedToken(TokenKind tokenKind, Source token, P parser, TokenList children) {
 		super(tokenKind, token, parser, children);
 		this.parser = parser;
 	}
 
-	public TypedToken(TokenKind tokenKind, RangedString token, P parser) {
+	public TypedToken(TokenKind tokenKind, Source token, P parser) {
 		super(tokenKind, token, parser);
 		this.parser = parser;
 	}
@@ -28,7 +33,7 @@ public class TypedToken<P extends Parser> extends Token{
 	public TypedToken(Token token , P parser) {
 		super(
 			token.tokenKind, 
-			Token.createRangedString(token.getOriginalChildren(), token.tokenRange.startIndexInclusive) ,
+			token.source,
 			parser,
 			token.getOriginalChildren()
 		);
@@ -54,7 +59,7 @@ public class TypedToken<P extends Parser> extends Token{
 		return (Class<? extends P>) getParser().getClass();
 	}
 
-	public TypedToken<P> newCreatesOfTyped(List<Token> newChildrens) {
+	public TypedToken<P> newCreatesOfTyped(TokenList newChildrens) {
 		return super.newCreatesOf(newChildrens).typed(parser);
 	}
 

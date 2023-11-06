@@ -27,7 +27,7 @@ public class EmptyLineParserTest {
 	      };
 	      
 	      for(String text: texts) {
-	        StringSource stringSource = new StringSource(text);
+	        StringSource stringSource = StringSource.createRootSource(text);
 	        ParseContext parseContext = new ParseContext(stringSource);
 	        Parsed parse = emptyLineParser.parse(parseContext);
 	        assertTrue(parse.status.isSucceeded());
@@ -45,7 +45,7 @@ public class EmptyLineParserTest {
 	      };
 	      
 	      for(String text: texts) {
-	        StringSource stringSource = new StringSource(text);
+	        StringSource stringSource = StringSource.createRootSource(text);
 	        ParseContext parseContext = new ParseContext(stringSource);
 	        Parsed parse = chain.parse(parseContext);
 	        assertTrue(parse.status.isSucceeded());
@@ -62,10 +62,10 @@ public class EmptyLineParserTest {
 	      };
 	      
 	      for(String text: texts) {
-	        StringSource stringSource = new StringSource(text);
+	        StringSource stringSource = StringSource.createRootSource(text);
 	        ParseContext parseContext = new ParseContext(stringSource);
 	        Parsed parse = chain.parse(parseContext);
-	        String consumed = parse.getConsumed().getToken().orElse("");
+	        String consumed = parse.getConsumed().getSource().toString();
 	        System.out.println("test:" + text);
 	        System.out.println("consumed:"+consumed);
 	        assertTrue(parse.status.isSucceeded());
@@ -82,7 +82,7 @@ public class EmptyLineParserTest {
 	      };
 	      
 	      for(String text: texts) {
-	        StringSource stringSource = new StringSource(text);
+	        StringSource stringSource = StringSource.createRootSource(text);
 	        ParseContext parseContext = new ParseContext(stringSource);
 	        Parsed parse = chain.parse(parseContext);
 	        assertTrue(parse.status.isSucceeded());
@@ -103,10 +103,10 @@ public class EmptyLineParserTest {
 	      };
 	      
 	      for(String text: texts) {
-	        StringSource stringSource = new StringSource(text);
+	        StringSource stringSource = StringSource.createRootSource(text);
 	        ParseContext parseContext = new ParseContext(stringSource);
 	        Parsed parse = emptyLineParser.parse(parseContext);
-	        String consumed = parse.getConsumed().getToken().orElse("");
+	        String consumed = parse.getConsumed().getSource().toString();
 	        System.out.println("test:" + text);
 	        System.out.println("consumed:"+consumed);
 	        assertNotEquals(text,consumed);

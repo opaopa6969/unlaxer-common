@@ -1,8 +1,5 @@
 package org.unlaxer;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class Parsed extends Committed{
 	
 	private static final long serialVersionUID = 2547695723275359572L;
@@ -45,12 +42,12 @@ public class Parsed extends Committed{
 		this.status = status;
 	}
 	
-	public Parsed(List<Token> originalTokens , Status status) {
+	public Parsed(TokenList originalTokens , Status status) {
 		super(originalTokens);
 		this.status = status;
 	}
 
-	public Parsed(Token token, List<Token> originalTokens , Status status) {
+	public Parsed(Token token, TokenList originalTokens , Status status) {
 		super(token, originalTokens);
 		this.status = status;
 	}
@@ -60,7 +57,7 @@ public class Parsed extends Committed{
 	}
 	
 	public Parsed(Token token,Status status) {
-		this(token,Arrays.asList(token),status);
+		this(token,TokenList.of(token),status);
 	}
 	
 	public Parsed(Status status) {

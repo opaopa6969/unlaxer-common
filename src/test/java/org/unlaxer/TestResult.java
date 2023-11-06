@@ -2,7 +2,6 @@ package org.unlaxer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.unlaxer.context.ParseContext;
 
@@ -10,11 +9,11 @@ public class TestResult{
 	
 	public final Parsed parsed;
 	public final ParseContext parseContext;
-	public final Optional<String> lastToken;
+	public final Source lastToken;
 	public final List<Boolean> assertValues;
 
 	
-	public TestResult(Parsed parsed, ParseContext parseContext, Optional<String> lastToken  , List<Boolean> assertValues) {
+	public TestResult(Parsed parsed, ParseContext parseContext, Source lastToken  , List<Boolean> assertValues) {
 		super();
 		this.parsed = parsed;
 		this.parseContext = parseContext;
@@ -23,7 +22,7 @@ public class TestResult{
 	}
 	
 	
-	public TestResult(Parsed parsed, ParseContext parseContext, Optional<String> lastToken  , Boolean...  assertValues) {
+	public TestResult(Parsed parsed, ParseContext parseContext, Source lastToken  , Boolean...  assertValues) {
 		super();
 		this.parsed = parsed;
 		this.parseContext = parseContext;
@@ -31,7 +30,7 @@ public class TestResult{
 		this.assertValues = List.of(assertValues);
 	}
 	
-	public TestResult(Parsed parsed, ParseContext parseContext, Optional<String> lastToken) {
+	public TestResult(Parsed parsed, ParseContext parseContext, Source lastToken) {
 		super();
 		this.parsed = parsed;
 		this.parseContext = parseContext;

@@ -13,7 +13,7 @@ public class SingletonsTest {
 	@Test
 	public void test() {
 		AlphabetParser singleton = Singletons.get(AlphabetParser.class);
-		Parsed parse = singleton.parse(new ParseContext(new StringSource("abcde")));
+		Parsed parse = singleton.parse(new ParseContext(StringSource.createRootSource("abcde")));
 		assertTrue(parse.isSucceeded());
 	}
 

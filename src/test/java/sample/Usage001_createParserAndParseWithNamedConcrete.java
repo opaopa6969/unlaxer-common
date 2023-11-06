@@ -29,7 +29,7 @@ public class Usage001_createParserAndParseWithNamedConcrete extends Usage001_cre
 		//create parseContext with createMeta specifier
 		ParseContext parseContext = 
 				new ParseContext(
-					new StringSource("1+2+3")
+					StringSource.createRootSource("1+2+3")
 				);
 		
 		parse(parser, parseContext);

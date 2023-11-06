@@ -1,9 +1,9 @@
 package org.unlaxer.ast;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.unlaxer.Token;
+import org.unlaxer.TokenList;
 
 public interface RecursiveZeroOrMoreBinaryOperator extends ASTMapper{
 
@@ -21,7 +21,7 @@ public interface RecursiveZeroOrMoreBinaryOperator extends ASTMapper{
 	@Override
 	default Token toAST(ASTMapperContext context , Token parsedToken) {
 		
-		List<Token> originalTokens = parsedToken.getAstNodeChildren();
+		TokenList originalTokens = parsedToken.getAstNodeChildren();
 		Iterator<Token> iterator = originalTokens.iterator();
 		
 		Token left = context.toAST(iterator.next());

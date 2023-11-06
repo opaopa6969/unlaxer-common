@@ -1,7 +1,9 @@
 package org.unlaxer.parser.elementary;
 
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
 import org.unlaxer.Name;
-import org.unlaxer.RangedString;
+import org.unlaxer.Source;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
@@ -23,11 +25,12 @@ public abstract class SingleStringParser extends AbstractTokenParser implements 
 	@Override
 	public Token getToken(ParseContext parseContext,TokenKind tokenKind,boolean invertMatch) {
 		
-		RangedString peeked = parseContext.peek(tokenKind , 1);
+		Source peeked = parseContext.peek(tokenKind , new CodePointLength(1));
 		Token token = 
-			peeked.token.isPresent() && (invertMatch ^ isMatch(peeked.token.get().substring(0,1)))?
+			peeked.isPresent() && (invertMatch ^ isMatch(
+			    peeked.substring(new CodePointIndex(0),new CodePointIndex(1)).toString()))?
 				new Token(tokenKind , peeked, this) : 
-				Token.empty(tokenKind , parseContext.getConsumedPosition(),this);
+				Token.empty(tokenKind , parseContext.getCursor(TokenKind.consumed),this);
 		return token;
 	}
 

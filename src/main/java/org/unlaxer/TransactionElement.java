@@ -1,10 +1,10 @@
 package org.unlaxer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import org.unlaxer.Cursor.EndExclusiveCursor;
+import org.unlaxer.Source.SourceKind;
 
 
 
@@ -13,36 +13,36 @@ public class TransactionElement implements Serializable{
 	private static final long serialVersionUID = -4168699143819523755L;
 
 	Optional<TokenKind> tokenKind;
-	ParserCursor cursor ;
+	ParserCursor parserCursor ;
 	
 	boolean resetMatchedWithConsumed = true;
 	
-	public final List<Token> tokens = new ArrayList<Token>();
+	public final TokenList tokens = new TokenList();
 	
 	public TransactionElement(ParserCursor parserCursor) {
 		super();
-		this.cursor = new ParserCursor(parserCursor,true);
+		this.parserCursor = new ParserCursor(parserCursor,true);
 		tokenKind = Optional.empty();
 	}
 	
 	
 	public TransactionElement(ParserCursor cursor, boolean resetMatchedWithConsumed) {
 		super();
-		this.cursor = cursor;
+		this.parserCursor = cursor;
 		this.resetMatchedWithConsumed = resetMatchedWithConsumed;
 	}
 
 
 	public TransactionElement createNew() {
-		return new TransactionElement(new ParserCursor(cursor,resetMatchedWithConsumed),resetMatchedWithConsumed);
+		return new TransactionElement(new ParserCursor(parserCursor,resetMatchedWithConsumed),resetMatchedWithConsumed);
 	}
 	
-	public void consume(int length){
-		cursor.addPosition(length);
+	public void consume(CodePointLength length){
+		parserCursor.addPosition(length.toOffset());
 	}
 	
-	public void matchOnly(int length){
-		cursor.addMatchedPosition(length);
+	public void matchOnly(CodePointLength length){
+		parserCursor.addMatchedPosition(length.toOffset());
 	}
 	
 	public void addToken(Token token){
@@ -54,23 +54,19 @@ public class TransactionElement implements Serializable{
 		this.tokenKind = Optional.of(tokenKind);
 	}
 	
-	public Optional<String> getTokenString(){
-		if(tokens.isEmpty()){
-			return Optional.empty();
-		}
-		String parsedString = tokens.stream()
-			.map(Token::getToken)
-			.filter(Optional::isPresent)
-			.map(Optional::get)
-			.collect(Collectors.joining());
-		return Optional.of(parsedString);
+	public Source source(){
+	  return tokens.toSource(SourceKind.detached);
 	}
 	
-	public int getPosition(TokenKind tokenKind){
-		return cursor.getPosition(tokenKind);
+	public CodePointIndex getPosition(TokenKind tokenKind){
+		return parserCursor.getPosition(tokenKind);
 	}
 	
-	public List<Token> getTokens(){
+	public EndExclusiveCursor getCursor(TokenKind tokenKind){
+	   return parserCursor.getCursor(tokenKind);
+  }
+	
+	public TokenList getTokens(){
 		return tokens;
 	}
 
@@ -79,11 +75,11 @@ public class TransactionElement implements Serializable{
 	}
 
 	public ParserCursor getParserCursor() {
-		return cursor;
+		return parserCursor;
 	}
 
 	public void setCursor(ParserCursor cursor) {
-		this.cursor = cursor;
+		this.parserCursor = cursor;
 	}
 	
 	public void setResetMatchedWithConsumed(boolean resetMatchedWithConsumed) {

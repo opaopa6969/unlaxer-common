@@ -10,10 +10,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
 import org.unlaxer.Name;
 import org.unlaxer.ParserCursor;
-import org.unlaxer.RangedString;
 import org.unlaxer.Source;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.TransactionElement;
 import org.unlaxer.listener.ParserListener;
 import org.unlaxer.listener.ParserListenerContainer;
@@ -29,9 +31,7 @@ public class ParseContext implements
 	ParserListenerContainer,
 	GlobalScopeTree , ParserContextScopeTree{
 
-	private static final long serialVersionUID = 1202780890703131636L;
-
-	// TODO store successfully token's <position,tokens> map
+  // TODO store successfully token's <position,tokens> map
 	boolean doMemoize;
 
 	public final Source source;
@@ -57,6 +57,9 @@ public class ParseContext implements
 	Collection<AdditionalCommitAction> actions;
 
 	public ParseContext(Source source, ParseContextEffector... parseContextEffectors) {
+	  if(source.sourceKind() != SourceKind.root) {
+	    throw new IllegalArgumentException();
+	  }
 		this.source = source;
 		actions = new ArrayList<>();
 		tokenStack.add(new TransactionElement(new ParserCursor()));
@@ -78,16 +81,6 @@ public class ParseContext implements
 			throw new IllegalStateException("transaction nest is illegal. check source code.");
 		}
 		onClose(this);
-	}
-
-	@Override
-	public int getLength() {
-		return source.getLength();
-	}
-	
-	@Override
-	public RangedString peek(int startIndexInclusive, int length) {
-		return source.peek(startIndexInclusive, length);
 	}
 
 	@Override
@@ -143,5 +136,17 @@ public class ParseContext implements
   @Override
   public void addActions(List<AdditionalCommitAction> additionalCommitActions) {
     actions.addAll(additionalCommitActions);
+  }
+  
+  public Source peekLast(CodePointIndex endIndexInclusive, CodePointLength length) {
+    return getSource().peekLast(endIndexInclusive, length);
+  }
+  
+  public Source peek(CodePointIndex startIndexInclusive, CodePointLength length) {
+    return getSource().peek(startIndexInclusive, length);
+  }
+  
+  public  Source peek(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+    return peek(startIndexInclusive, endIndexExclusive);
   }
 }

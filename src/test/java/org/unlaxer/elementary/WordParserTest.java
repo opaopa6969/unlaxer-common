@@ -1,6 +1,7 @@
 package org.unlaxer.elementary;
 
 import org.junit.Test;
+import org.unlaxer.CodePointIndex;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.parser.elementary.WordParser;
 
@@ -28,7 +29,10 @@ public class WordParserTest extends ParserTestBase{
 		testPartialMatch(wordParser, source, source);
 		testUnMatch(wordParser, source.toLowerCase());
 		
-		WordParser slice = wordParser.slice(slicer->{slicer.begin(0).end(word->word.indexOf(" "));});
+		WordParser slice = wordParser.slice(slicer->{slicer
+		    .begin(new CodePointIndex(0))
+		    .end(word->new CodePointIndex(word.indexOf(" ")));
+		});
 		testAllMatch(slice, "This");
 
 	}

@@ -3,22 +3,34 @@ package org.unlaxer.util;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.unlaxer.Range;
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CursorRange;
+import org.unlaxer.Source;
+import org.unlaxer.StringSource;
 
-public class Slicer implements Supplier<String>{
+public class Slicer implements Supplier<Source>{
 	
-	private String word;
+	private Source word;
 	
-	private int beginIndexInclusive;
-	private int endIndexExclusive;
+	private CodePointIndex beginIndexInclusive;
+	private CodePointIndex endIndexExclusive;
 	private int step;
+	private Source rootSource;
 	
+	public static Slicer of(String rootString) {
+	  return new Slicer(StringSource.createRootSource(rootString));
+	}
+	
+	public Slicer(Source rootSource , String word) {
+	  this(StringSource.createDetachedSource(word,rootSource));
+	}
 
-	public Slicer(String word) {
+	public Slicer(Source word) {
 		super();
+		rootSource = word.root();
 		this.word = word;
-		beginIndexInclusive = 0;
-		endIndexExclusive = word.length();
+		beginIndexInclusive = new CodePointIndex(0);
+		endIndexExclusive = this.word.endIndexExclusive();
 		step=1;
 	}
 	
@@ -28,14 +40,14 @@ public class Slicer implements Supplier<String>{
 	 *        (like python slice style)
 	 * @return this object
 	 */
-	public Slicer begin(int beginIndexInclusive){
-		this.beginIndexInclusive = beginIndexInclusive < 0 ?
-				word.length() + beginIndexInclusive:
+	public Slicer begin(CodePointIndex beginIndexInclusive){
+		this.beginIndexInclusive = beginIndexInclusive.isNegative() ?
+				beginIndexInclusive.newWithPlus(word.length()):
 				beginIndexInclusive;
 		return this;
 	}
 	
-	public Slicer begin(Function<String,Integer> positionSpecifier){
+	public Slicer begin(Function<Source,CodePointIndex> positionSpecifier){
 		beginIndexInclusive = positionSpecifier.apply(word);
 		return this;
 	}
@@ -45,22 +57,22 @@ public class Slicer implements Supplier<String>{
 	 *        (like python slice style)
 	 * @return this object
 	 */
-	public Slicer end(int endIndexExclusive){
-		this.endIndexExclusive = endIndexExclusive < 0 ?
-				word.length() + endIndexExclusive:
+	public Slicer end(CodePointIndex endIndexExclusive){
+		this.endIndexExclusive = endIndexExclusive.isNegative() ?
+				endIndexExclusive.newWithPlus(word.length()):
 				endIndexExclusive;
 		return this;
 	}
 	
-	public Slicer end(Function<String,Integer> positionSpecifier){
+	public Slicer end(Function<Source,CodePointIndex> positionSpecifier){
 		endIndexExclusive = positionSpecifier.apply(word);
 		return this;
 	}
 	
-	public Slicer range(Function<String,Range> rangeSpecifier){
-		Range range = rangeSpecifier.apply(word);
-		begin(range.startIndexInclusive);
-		end(range.endIndexExclusive);
+	public Slicer range(Function<Source,CursorRange> rangeSpecifier){
+	  CursorRange range = rangeSpecifier.apply(word);
+		begin(range.startIndexInclusive.getPosition());
+		end(range.endIndexExclusive.getPosition());
 		return this;
 	}
 	
@@ -70,47 +82,47 @@ public class Slicer implements Supplier<String>{
 	}
 	
 	public Slicer invalidate(){
-		begin(0);
-		end(0);
+		begin(new CodePointIndex(0));
+		end(new CodePointIndex(0));
 		return this;
 	}
 
 	// TODO improve performance see AbstractStringBuilder#reverse
 	@Override
-	public String get() {
+	public Source get() {
 		
 		if(step == 1){
 			
-			return word.substring(beginIndexInclusive, endIndexExclusive);
+			return word.subSource(beginIndexInclusive, endIndexExclusive);
 		}else if(step ==0){
 			
-			return "";
+			return Source.SUB_EMPTY.get(rootSource);
 		}
-		int start = step < 0 ? endIndexExclusive-1 : beginIndexInclusive;
-		int end = step < 0 ? beginIndexInclusive : endIndexExclusive ;
-		StringBuilder builder = new StringBuilder();
+		int start = step < 0 ? endIndexExclusive.value() -1 : beginIndexInclusive.value();
+		int end = step < 0 ? beginIndexInclusive.value() : endIndexExclusive.value() ;
+		SimpleBuilder builder = new SimpleBuilder();
 		if(step < 0){
 			
 			for(int i = start ; i >= end ; i = i + step){
-				builder.append(word.substring(i,i+1));
+				builder.append(word.subSource(new CodePointIndex(i) ,new CodePointIndex(i+1)));
 			}
 		}else{
 			
 			for(int i = start ; i < end ; i = i + step){
-				builder.append(word.substring(i,i+1));
+				builder.append(word.subSource(new CodePointIndex(i) ,new CodePointIndex(i+1)));
 			}
 		}
-		return builder.toString();
+		return builder.toSource();
 	}
 	
-	public String reverse() {
+	public Source reverse() {
 		return reverse(true);
 	}
 	
-	public String reverse(boolean reverse) {
+	public Source reverse(boolean reverse) {
 		
 		return reverse ? //
-				new StringBuilder(get()).reverse().toString():
+				new SimpleBuilder(get()).reverse().toSource():
 				get();
 	}
 	
@@ -125,10 +137,10 @@ public class Slicer implements Supplier<String>{
 			step(Integer.parseInt(splits[2]));
 		}
 		if(splits.length>1 && false ==splits[1].isEmpty()){
-			end(Integer.parseInt(splits[1]));
+			end(new CodePointIndex(Integer.parseInt(splits[1])));
 		}
 		if(false ==splits[0].isEmpty()){
-			begin(Integer.parseInt(splits[0]));
+			begin(new CodePointIndex(Integer.parseInt(splits[0])));
 		}
 		return this;
 	}

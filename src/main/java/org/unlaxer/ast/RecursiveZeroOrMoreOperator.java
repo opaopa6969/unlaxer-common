@@ -1,9 +1,9 @@
 package org.unlaxer.ast;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.unlaxer.Token;
+import org.unlaxer.TokenList;
 
 public interface RecursiveZeroOrMoreOperator extends ASTMapper{
 
@@ -18,7 +18,7 @@ public interface RecursiveZeroOrMoreOperator extends ASTMapper{
 	@Override
 	default Token toAST(ASTMapperContext context , Token parsedToken) {
 		
-		List<Token> tokens = parsedToken.getAstNodeChildren();
+	  TokenList tokens = parsedToken.getAstNodeChildren();
 		Iterator<Token> iterator = tokens.iterator();
 		
 		// get operand

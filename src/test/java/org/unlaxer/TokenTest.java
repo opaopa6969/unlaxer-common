@@ -17,12 +17,12 @@ public class TokenTest {
 	public void testFlatten() {
 		
 		
-		List<Token> third = List.of(new Token(TokenKind.matchOnly, new RangedString(0), new HashParser()));
-		List<Token> second = List.of(
-			new Token(TokenKind.matchOnly, third, new DotParser(),0),
-			new Token(TokenKind.matchOnly, third, new DotParser(),0)
+		TokenList third = TokenList.of(new Token(TokenKind.matchOnly, Source.EMPTY, new HashParser()));
+		TokenList second = TokenList.of(
+			new Token(TokenKind.matchOnly, third, new DotParser()),
+			new Token(TokenKind.matchOnly, third, new DotParser())
 		);
-		Token root = new Token(TokenKind.matchOnly, second, new PlusParser(),0);
+		Token root = new Token(TokenKind.matchOnly, second, new PlusParser());
 		{
 			List<Token> flatten = root.flatten(ScanDirection.Breadth);
 			String collect = flatten.stream()

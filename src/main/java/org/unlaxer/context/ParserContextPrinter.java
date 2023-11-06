@@ -1,8 +1,10 @@
 package org.unlaxer.context;
 
-import org.unlaxer.Cursor;
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
+import org.unlaxer.Cursor.EndExclusiveCursor;
 import org.unlaxer.ParserCursor;
-import org.unlaxer.RangedString;
+import org.unlaxer.Source;
 import org.unlaxer.TokenKind;
 import org.unlaxer.listener.OutputLevel;
 
@@ -10,29 +12,29 @@ public class ParserContextPrinter {
 
 	public static String get(ParseContext parseContext , OutputLevel level){
 		
-		int position = parseContext.getPosition(TokenKind.consumed);
+		CodePointIndex position = parseContext.getPosition(TokenKind.consumed);
 		if(level.isMostDetail()) {
 			ParserCursor parserCursor = parseContext.getCurrent().getParserCursor();
-			Cursor consumed= parserCursor.getCursor(TokenKind.consumed);
-			Cursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
-			RangedString peek = parseContext.peekLast(position,20);
+			EndExclusiveCursor consumed= parserCursor.getCursor(TokenKind.consumed);
+			EndExclusiveCursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
+			Source peek = parseContext.peekLast(position, new CodePointLength(20));
 			
 			return String.format("CON(L:%d,P:%d) MO(L:%d,P:%d) Last20='%s' ", 
-					consumed.getLineNumber(),
+					consumed.getLineNumber().value(),
 //					consumed.getPositionInLine(), // きちんと実装されてない
-					consumed.getPosition(),
-					matchOnly.getLineNumber(),
+					consumed.getPosition().value(),
+					matchOnly.getLineNumber().value(),
 //					matchOnly.getPositionInLine(),
-					matchOnly.getPosition(),
-					peek.token.map(ParserContextPrinter::normalize).orElse(""));
+					matchOnly.getPosition().value(),
+					normalize(peek.toString()));
 		}
 		
-		int matchOnlyPosition = parseContext.getPosition(TokenKind.matchOnly);
-		RangedString peek = parseContext.peek(position,1);
+		CodePointIndex matchOnlyPosition = parseContext.getPosition(TokenKind.matchOnly);
+		Source peek = parseContext.peek(position,new CodePointLength(1));
 		return String.format("position:(c:%d m:%d) targetchar='%s' ", 
-				position,
-				matchOnlyPosition,
-				peek.token.map(ParserContextPrinter::normalize).orElse(""));
+				position.value(),
+				matchOnlyPosition.value(),
+				normalize(peek.toString()));
 	}
 	
 	static String normalize(String word){

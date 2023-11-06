@@ -1,5 +1,6 @@
 package org.unlaxer.parser.elementary;
 
+import org.unlaxer.CodePointIndex;
 import org.unlaxer.Parsed;
 import org.unlaxer.Parsed.Status;
 import org.unlaxer.TokenKind;
@@ -30,8 +31,9 @@ public class StartOfSourceParser extends AbstractParser{
 	@Override
 	public Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch) {
 		
-		int position = parseContext.getPosition(tokenKind);
-		boolean match = (position == 0) ^ invertMatch;
+		CodePointIndex position = parseContext.getPosition(tokenKind);
+		
+		boolean match = position.isZero() ^ invertMatch;
 		return new Parsed(match ? Status.succeeded : Status.failed);
 	}
 }

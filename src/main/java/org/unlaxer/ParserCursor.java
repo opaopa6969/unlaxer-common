@@ -1,13 +1,15 @@
 package org.unlaxer;
 
+import org.unlaxer.Cursor.EndExclusiveCursor;
+
 public class ParserCursor{
 	
-	final Cursor consumed;
-	final Cursor matched;
+	final EndExclusiveCursor consumed;
+	final EndExclusiveCursor matched;
 	
 	public ParserCursor(ParserCursor parserCursor ,boolean resetMatched){
-		consumed = new CursorImpl(parserCursor.consumed);
-		matched = new CursorImpl(parserCursor.matched);
+		consumed = new EndExclusiveCursorImpl(parserCursor.consumed);
+		matched = new EndExclusiveCursorImpl(parserCursor.matched);
 		if(resetMatched){
 			resetMatchedWithConsumed(consumed, matched);
 		}
@@ -15,12 +17,12 @@ public class ParserCursor{
 	
 	public ParserCursor() {
 		super();
-		consumed = new CursorImpl();
-		matched = new CursorImpl();
+		consumed = new EndExclusiveCursorImpl();
+		matched = new EndExclusiveCursorImpl();
 	}
 	
 
-	public ParserCursor(Cursor consumed, Cursor matched , boolean resetMatched) {
+	public ParserCursor(EndExclusiveCursor consumed, EndExclusiveCursor matched , boolean resetMatched) {
 		super();
 		this.consumed = consumed;
 		this.matched = matched;
@@ -29,27 +31,33 @@ public class ParserCursor{
 		}
 	}
 
-	public void addPosition(int adding){
-		consumed.addPosition(adding);
-//		matched.addPosition(adding);
-		matched.setPosition(consumed.getPosition());
-	}
 	
-	public void addMatchedPosition(int adding){
+	 public void addPosition(CodePointOffset adding){
+	   consumed.addPosition(adding);
+//	    matched.addPosition(adding);
+	   matched.setPosition(consumed.getPosition());
+	  }
+
+	
+	public void addMatchedPosition(CodePointOffset adding){
 		matched.addPosition(adding);
 	}
 	
-	public Cursor getCursor(TokenKind tokenKind){
+	 public void addMatchedPosition(Index adding){
+	   addMatchedPosition(adding);
+  }
+	
+	public EndExclusiveCursor getCursor(TokenKind tokenKind){
 		return tokenKind == TokenKind.consumed ? consumed : matched;
 	}
 	
-	public int getPosition(TokenKind tokenKind){
+	public CodePointIndex getPosition(TokenKind tokenKind){
 		return getCursor(tokenKind).getPosition(); 
 	}
 	
-	void resetMatchedWithConsumed(Cursor consumed, Cursor matched){
+	void resetMatchedWithConsumed(EndExclusiveCursor consumed, EndExclusiveCursor matched){
 		matched.setPosition(consumed.getPosition());
 		matched.setLineNumber(consumed.getLineNumber());
 	}
-
+	
 }

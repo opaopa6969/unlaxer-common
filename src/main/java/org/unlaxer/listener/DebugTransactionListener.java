@@ -3,11 +3,12 @@ package org.unlaxer.listener;
 import java.io.Closeable;
 import java.io.PrintStream;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import org.unlaxer.Token;
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
 import org.unlaxer.TokenKind;
+import org.unlaxer.TokenList;
 import org.unlaxer.TokenPrinter;
 import org.unlaxer.TransactionElement;
 import org.unlaxer.context.ParseContext;
@@ -61,7 +62,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 	}
 
 	@Override
-	public void onCommit(ParseContext parseContext, Parser parser, List<Token> committedTokens) {
+	public void onCommit(ParseContext parseContext, Parser parser, TokenList committedTokens) {
 		if(level.isNone()){
 			return ;
 		}
@@ -76,7 +77,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 	}
 
 	@Override
-	public void onRollback(ParseContext parseContext, Parser parser , List<Token> rollbackedTokens) {
+	public void onRollback(ParseContext parseContext, Parser parser , TokenList rollbackedTokens) {
 		if(level.isNone()){
 			return ;
 		}
@@ -96,7 +97,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 			return ;
 		}
 		print.format("OPEN    : '%s'\n", 
-				parseContext.source.peek(0, parseContext.source.getLength()).token.orElse(""));
+				parseContext.source.peek(new CodePointIndex(0), parseContext.source.codePointLength()).toString());
 		onOutput(++count);
 		if(doTrigger()){
 			//set Break point here or this method declares!
@@ -111,7 +112,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 			return ;
 		}
 		print.format("CLOSE   : '%s' consumed:%s \n\n", 
-			parseContext.source.peek(0, parseContext.source.getLength()).token.orElse(""),
+			parseContext.source.peek(new CodePointIndex(0), parseContext.source.codePointLength()).toString(),
 			getConsumed(parseContext)
 		);
 		onOutput(++count);
@@ -124,10 +125,10 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 	
 	private Object getConsumed(ParseContext parseContext) {
 		TransactionElement transactionElement = parseContext.getCurrent();
-		int consumed = transactionElement.getPosition(TokenKind.consumed);
-		int remain = parseContext.source.getLength() - consumed;
+		CodePointIndex consumed = transactionElement.getPosition(TokenKind.consumed);
+		CodePointLength remain = parseContext.source.codePointLength().newWithMinus(consumed);
 		return parseContext.allConsumed() ? "allConsumed" : 
-			String.format("%d(%d remain)", consumed , remain);
+			String.format("%d(%d remain)", consumed.value() , remain.value());
 	}
 
 	String getDisplay(ParseContext parseContext){
@@ -138,7 +139,7 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 		return ParserPrinter.get(parser, level);
 	}
 	
-	String getDisplay(String header , List<Token> tokens){
+	String getDisplay(String header , TokenList tokens){
 		return TokenPrinter.get(header, tokens);
 	}
 	

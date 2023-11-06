@@ -7,6 +7,13 @@ public class Range implements Comparable<Range>{
 	public final int startIndexInclusive;
 	public final int endIndexExclusive;
 	
+	 
+  public Range(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+    super();
+    this.startIndexInclusive = startIndexInclusive.value();
+    this.endIndexExclusive = endIndexExclusive.value();
+  }
+	
 	public Range(int startIndexInclusive, int endIndexExclusive) {
 		super();
 		this.startIndexInclusive = startIndexInclusive;
@@ -17,6 +24,13 @@ public class Range implements Comparable<Range>{
 		this.startIndexInclusive = startIndexInclusive;
 		this.endIndexExclusive = startIndexInclusive;
 	}
+	
+	public Range(CodePointIndex startIndexInclusive) {
+    super();
+    this.startIndexInclusive = startIndexInclusive.value();
+    this.endIndexExclusive = startIndexInclusive.value();
+  }
+	
 	public Range() {
 		super();
 		this.startIndexInclusive = 0;
@@ -125,5 +139,5 @@ public class Range implements Comparable<Range>{
 		return invalidRange;
 	}
 	
-	static final Range invalidRange = new Range(); 
+	static final Range invalidRange = new Range();
 }

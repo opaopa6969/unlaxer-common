@@ -4,10 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.ErrorMessageParser;
 import org.unlaxer.parser.Parser;
@@ -36,19 +36,19 @@ public class TokenPrinter{
 	public static void output(Token token , PrintStream out, int level, 
 			OutputLevel detailLevel,boolean outputChildren){
 		
-		Optional<String> tokenString = token.getToken();
+		Source tokenString = token.getSource();
 		
 		for(int i = 0 ; i < level ; i++){
 			out.print(" ");
 		}
-		Range tokenRange = token.getTokenRange();
+		CursorRange tokenRange = tokenString.cursorRange();
 		Parser parser = token.parser;
 		if(detailLevel == OutputLevel.detail){
 			
 			out.format("%s (%d - %d): %s%s%s", 
-				tokenString.map(TokenPrinter::quote).orElse(EMPTY) ,//
-				tokenRange.startIndexInclusive,//
-				tokenRange.endIndexExclusive, //
+				tokenString.isPresent() ? quote(tokenString):EMPTY ,//
+				tokenRange.startIndexInclusive.getPosition().value(),//
+				tokenRange.endIndexExclusive.getPosition().value(), //
 				parser.getName(),
 				getInverted(token),//
 				outputChildren ? "\n":"");
@@ -56,9 +56,9 @@ public class TokenPrinter{
 		}else if(detailLevel == OutputLevel.withTag){
 			
 			out.format("%s (%d - %d): %s%s%s%S", 
-					tokenString.map(TokenPrinter::quote).orElse(EMPTY) ,//
-					tokenRange.startIndexInclusive,//
-					tokenRange.endIndexExclusive, //
+			    tokenString.isPresent() ? quote(tokenString):EMPTY ,//
+			    tokenRange.startIndexInclusive.getPosition().value(),//
+					tokenRange.endIndexExclusive.getPosition().value(), //
 					parser.getName(),
 					getInverted(token),//
 					getTag(token),
@@ -67,7 +67,7 @@ public class TokenPrinter{
 		}else if(detailLevel == OutputLevel.simple){
 			
 			out.format("%s : %s%s%s" , //
-				tokenString.map(TokenPrinter::quote).orElse(EMPTY) ,
+		    tokenString.isPresent() ? quote(tokenString):EMPTY ,//
 				parser.getName(),
 				getInverted(token),//
 				outputChildren ? "\n":"");
@@ -98,8 +98,8 @@ public class TokenPrinter{
 	}
 
 
-	static String quote(String word){
-		return "'" +word + "'";
+	static String quote(Source word){
+		return "'" +word.toString() + "'";
 	}
 	
 	static String getInverted(Token token){
@@ -135,17 +135,13 @@ public class TokenPrinter{
 	public static List<ErrorMessage> getErrorMessages(Token targetToken){
 		return targetToken.flatten().stream()
 			.filter(token-> token.parser instanceof ErrorMessageParser)
-			.map(token->new ErrorMessage(token.tokenRange, ((ErrorMessageParser)token.parser).get()))
+			.map(token->new ErrorMessage(token.source.cursorRange(), ((ErrorMessageParser)token.parser).get()))
 			.collect(Collectors.toList());
 	}
 	
-	public static String get(String header , List<Token> tokens){
-		String collect = tokens.stream()
-			.map(Token::getToken)
-			.filter(Optional::isPresent)
-			.map(Optional::get)
-			.collect(Collectors.joining());
-		return String.format("%s:%s ", header , collect);
+	public static String get(String header , TokenList tokens){
+	  String string = tokens.toSource(SourceKind.detached).toString();
+		return String.format("%s:%s ", header , string);
 	}
 
 }

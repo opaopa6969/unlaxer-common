@@ -2,24 +2,54 @@ package org.unlaxer;
 
 import org.unlaxer.util.NameSpecifier;
 
-public interface Cursor {
+public interface Cursor<T extends Cursor<T>> {
+  
+  public enum CursorKind{
+    startInclusive,
+    endExclusive
+  }
 
 	NameSpecifier getNameSpace();
 
-	void setNameSpace(NameSpecifier nameSpace);
+	T setNameSpace(NameSpecifier nameSpace);
 
-	int getLineNumber();
+	LineNumber getLineNumber();
+	
+//	SubLineNumber getLineNumberOnThisSequence();
 
-	void setLineNumber(int lineNumber);
+	T setLineNumber(LineNumber lineNumber);
+	
+  T incrementLineNumber();
 
-	int getPosition();
+	CodePointIndex getPosition();
+	
+//	SubCodePointIndex getPositionOnThisSequence();
 
-	void setPosition(int position);
+	T setPosition(CodePointIndex position);
+	
+  T incrementPosition(); 
 
-	void addPosition(int adding);
+	T addPosition(CodePointOffset adding);
 
-	int getPositionInLine();
+	CodePointOffset getPositionInLine();
 
-	void setPositionInLine(int positionInLine);
-
+	T setPositionInLine(CodePointOffset positionInLine);
+	
+	T resolveLineNumber(RootPositionResolver rootPositionResolver);
+	
+	CursorKind cursorKind();
+	
+	public interface EndExclusiveCursor extends Cursor<EndExclusiveCursor>{
+	  
+	  default CursorKind cursorKind() {
+	    return CursorKind.endExclusive;
+	  }
+	}
+	
+	public interface StartInclusiveCursor extends Cursor<StartInclusiveCursor>{
+    
+    default CursorKind cursorKind() {
+      return CursorKind.startInclusive;
+    }
+  }
 }

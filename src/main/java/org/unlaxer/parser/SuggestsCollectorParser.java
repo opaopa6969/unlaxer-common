@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.unlaxer.CursorRange;
 import org.unlaxer.Parsed;
-import org.unlaxer.Range;
-import org.unlaxer.RangedContent;
-import org.unlaxer.TokenKind;
 import org.unlaxer.Parsed.Status;
+import org.unlaxer.RangedContent;
+import org.unlaxer.Source;
+import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.combinator.ContainerParser;
 
@@ -23,11 +24,11 @@ public class SuggestsCollectorParser extends ContainerParser<Suggests>{
 		parsed.status = Status.stopped;
 		//TODO reamin with terminator. 
 		//eg. terminator=';'
-		String remain = parseContext.getRemain(TokenKind.consumed);
+		Source remain = parseContext.getRemain(TokenKind.consumed);
 		List<Suggest> collect = getSiblings(false).stream()
 			.filter(SuggestableParser.class::isInstance)
 			.map(SuggestableParser.class::cast)
-			.map(suggestableParser->suggestableParser.getSuggests(remain))
+			.map(suggestableParser->suggestableParser.getSuggests(remain.toString()))
 			.filter(Optional::isPresent)
 			.map(Optional::get)
 			.collect(Collectors.toList());
@@ -47,12 +48,12 @@ public class SuggestsCollectorParser extends ContainerParser<Suggests>{
 	}
 
 	@Override
-	public RangedContent<Suggests> get(Range position) {
+	public RangedContent<Suggests> get(CursorRange position) {
 		
 		return new RangedContent<Suggests>() {
 			
 			@Override
-			public Range getRange() {
+			public CursorRange getRange() {
 				return position;
 			}
 			
@@ -62,5 +63,4 @@ public class SuggestsCollectorParser extends ContainerParser<Suggests>{
 			}
 		};
 	}
-	
 }

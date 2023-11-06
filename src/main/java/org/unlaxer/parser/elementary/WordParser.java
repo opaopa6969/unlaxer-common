@@ -4,9 +4,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointLength;
+import org.unlaxer.CursorRange;
 import org.unlaxer.Name;
-import org.unlaxer.Range;
-import org.unlaxer.RangedString;
+import org.unlaxer.Source;
+import org.unlaxer.StringSource;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
@@ -17,7 +20,7 @@ import org.unlaxer.util.Slicer;
 public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 	
 	private static final long serialVersionUID = 77970028727135376L;
-	public final String word;
+	public final Source word;
 	public final boolean ignoreCase;
 	
 	public WordParser(String word) {
@@ -33,34 +36,52 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 	}
 
 	public WordParser(Name name , String word, boolean ignoreCase) {
-		super(name);
-		this.word = word;
-		this.ignoreCase = ignoreCase;
+		this(name , StringSource.createDetachedSource(word) , ignoreCase);
 	}
+	
+  public WordParser(Source word) {
+    this(null , word, false);
+  }
+  
+  public WordParser(Name name,Source word) {
+    this(name, word, false);
+  }
+  
+  public WordParser(Source word, boolean ignoreCase) {
+    this(null,word,ignoreCase);
+  }
+
+	
+  public WordParser(Name name , Source word, boolean ignoreCase) {
+    super(name);
+    this.word = word;
+    this.ignoreCase = ignoreCase;
+  }
+
 
 	@Override
 	public Token getToken(ParseContext parseContext, TokenKind tokenKind,boolean invertMatch) {
+	  
 		
-		int length = word.length();
+		CodePointLength length = word.codePointLength();
 		
-		if(length == 0) {
-			return new Token(tokenKind , 
-				new RangedString(
-					new Range(parseContext.getConsumedPosition()),""
-				)
+		
+		if(length.isZero()) {
+			return new Token(tokenKind ,
+			  parseContext.peek(parseContext.getConsumedPosition(), new CodePointLength(0))
 				, this
 			);
 		}
 		
-		RangedString peeked = parseContext.peek(tokenKind , length);
+		Source peeked = parseContext.peek(tokenKind , length);
 		
-		return peeked.token.map(baseString->
-			equals(word,baseString)).orElse(false) ^ invertMatch ?
+		return 
+			equals(word,peeked) ^ invertMatch ?
 			new Token(tokenKind , peeked, this):
-			Token.empty(tokenKind ,parseContext.getConsumedPosition(), this);
+			Token.empty(tokenKind ,parseContext.getCursor(TokenKind.consumed), this);
 	}
 	
-	boolean equals(String targetString , String baseString){
+	boolean equals(Source targetString , Source baseString){
 		return ignoreCase ? 
 				targetString.equalsIgnoreCase(baseString):
 				targetString.equals(baseString);
@@ -105,10 +126,10 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 		return new WordParser(wordEffector.apply(word) , ignoreCase);
 	}
 	
-	public interface BeginSpecifier extends Function<String, Integer>{};
-	public interface EndSpecifier extends Function<String, Integer>{};
-	public interface RangeSpecifier extends Function<String,Range>{}; 
-	public interface WordEffector extends UnaryOperator<String>{}
+	public interface BeginSpecifier extends Function<Source, CodePointIndex>{};
+	public interface EndSpecifier extends Function<Source, CodePointIndex>{};
+	public interface RangeSpecifier extends Function<Source,CursorRange>{}; 
+	public interface WordEffector extends UnaryOperator<Source>{}
 	
 	public String toString() {
 		return "wordParser("+word+")";

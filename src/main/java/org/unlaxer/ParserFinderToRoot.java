@@ -10,7 +10,7 @@ import org.unlaxer.parser.RootParserIndicator;
 public interface ParserFinderToRoot extends ParserHierarchy{
 	
 	//FIXME! move to parseContext ? 
-	public static int infiniteBreakCount = 10000;
+	public static int infiniteBreakCount = 1000;
 	
 	/**
 	 * @param predicate to find match Parser

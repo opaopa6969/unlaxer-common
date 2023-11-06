@@ -1,8 +1,13 @@
 package org.unlaxer.parser;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.unlaxer.RangedString;
+import org.unlaxer.CodePointIndex;
+import org.unlaxer.Source;
+import org.unlaxer.StringSource;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.TransactionElement;
@@ -14,36 +19,38 @@ public abstract class SuggestableParser extends AbstractTokenParser {
 	private static final long serialVersionUID = -7966896868712698646L;
 	
 	public final boolean ignoreCase;
-	public final String[] targetStrings;
+	public final List<Source> targetStrings;
 	
 	public SuggestableParser(boolean ignoreCase, String... targetStrings) {
 		super();
 		this.ignoreCase = ignoreCase;
-		this.targetStrings = targetStrings;
+		this.targetStrings = Stream.of(targetStrings)
+		    .map(StringSource::createDetachedSource)
+		    .collect(Collectors.toList());
 	}
 
 	@Override
 	public Token getToken(ParseContext parseContext,TokenKind tokenKind ,boolean invertMatch) {
 		
-		for (String targetString : targetStrings) {
-			RangedString peeked = parseContext.peek(tokenKind , targetString.length());
-			if(peeked.token.map(baseString->equals(targetString,baseString)).orElse(false)){
+		for (Source targetString : targetStrings) {
+			Source peeked = parseContext.peek(tokenKind , targetString.codePointLength());
+			if(equals(targetString.toString(),peeked.toString())){
 				return new Token(tokenKind ,  peeked, this);
 			}
 		}
 //		addSuggests(parseContext);
 		
-		return Token.empty(tokenKind , parseContext.getConsumedPosition(),this);
+		return Token.empty(tokenKind , parseContext.getCursor(TokenKind.consumed),this);
 	}
 	
 	//FIXME!
 	@SuppressWarnings("unused")
 	private void addSuggests(ParseContext parseContext) {
 		TransactionElement current = parseContext.getCurrent();
-		int position = current.getPosition(TokenKind.consumed);
-		for (String targetString : targetStrings) {
-			RangedString peeked = parseContext.peek(TokenKind.consumed ,targetString.length());
-			if(peeked.token.isPresent()){
+		CodePointIndex position = current.getPosition(TokenKind.consumed);
+		for (Source targetString : targetStrings) {
+		  Source peeked = parseContext.peek(TokenKind.consumed ,targetString.codePointLength());
+			if(peeked.isPresent()){
 				continue;
 			}
 //			String peekWithMax = parseContext.peekWithMax(targetString.length()-1);
@@ -60,9 +67,9 @@ public abstract class SuggestableParser extends AbstractTokenParser {
 		//TODO camel case matching, ignore case
 		for(int endIndex= test.length() ; endIndex > 0 ; endIndex--){
 			String currentTest = test.substring(0, endIndex);
-			for(String targetString :targetStrings){
+			for(Source targetString :targetStrings){
 				if(targetString.startsWith(currentTest)){
-					suggests.words.add(targetString);
+					suggests.words.add(targetString.toString());
 				}
 			}
 			if(suggests.words.size() >0){

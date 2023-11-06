@@ -2,6 +2,7 @@ package org.unlaxer.parser.elementary;
 
 import java.util.function.Consumer;
 
+import org.unlaxer.CodePointLength;
 import org.unlaxer.Name;
 import org.unlaxer.Parsed;
 import org.unlaxer.Token;
@@ -29,17 +30,17 @@ public abstract class AbstractTokenParser extends NoneChildParser {
 		
 		Token token = getToken(parseContext,tokenKind,invertMatch);
 		
-		if(token.tokenString.isPresent()){
+		if(token.source.isPresent()){
 			
 			parseContext.getCurrent().addToken(token,tokenKind);
 		}
 		
 		
-		Consumer<Integer> positionIncrement = tokenKind.isConsumed() ? 
+		Consumer<CodePointLength> positionIncrement = tokenKind.isConsumed() ? 
 				parseContext::consume : parseContext::matchOnly;
 		
-		token.tokenString.map(String::length).ifPresent(positionIncrement);
-		return token.tokenString.isPresent() ?
+		positionIncrement.accept(token.source.codePointLength());
+		return token.source.isPresent() ?
 				new Parsed(token):
 				Parsed.FAILED;
 	}

@@ -99,7 +99,7 @@ public class OldMatchedTokenParser extends ConstructedSingleChildParser{
 			matchedToken.ifPresent(token->parseContext.put(this, ScopeVariable.matchedToken.get() , token));
 		}
 		Optional<WordParser> wordParser = matchedToken
-			.flatMap(Token::getToken)
+			.map(Token::getSource)
 			.map(WordParser::new);
 		
 		if(rangeSpecifier != null){
