@@ -37,6 +37,7 @@ public class SubPositionResolverImpl implements RootPositionResolver , SubPositi
     CodePointIndex codePointIndex = new CodePointIndex(0);
     
     for (int i = 0; i < codePointCount; i++) {
+      codePointIndex = codePointIndex.add(i);
       stringIndexByCodePointIndex.put(codePointIndex, stringIndex);
       codePointIndexByStringIndex.put(stringIndex,codePointIndex);
     
