@@ -37,6 +37,10 @@ public class StringSource implements Source {
     return new StringSource(source , SourceKind.root , null ,  new CodePointOffset(0));
   }
   
+  public static StringSource createSubSource(String source , Source rootSource , CodePointOffset codePointOffset) {
+    return new StringSource(source , SourceKind.subSource, rootSource ,  codePointOffset);
+  }
+  
   public static StringSource createDetachedSource(String source , Source root) {
     return new StringSource(source , SourceKind.detached , root , new CodePointOffset(0));
   }
