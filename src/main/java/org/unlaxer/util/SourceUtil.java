@@ -12,7 +12,7 @@ public class SourceUtil {
 		if(position.isNegative() || position.newWithAdd(1).gt(length)){
 			return word;
 		}
-		return word.substring(new CodePointIndex(0),position).concat(word.subSource(position.newWithPlus(1)));
+		return word.subSource(new CodePointIndex(0),position).concat(word.subSource(position.newWithPlus(1)));
 	}
 	
 	public static Source newWithDelete(Source word, Range range){
@@ -22,7 +22,7 @@ public class SourceUtil {
 		SimpleBuilder builder = new SimpleBuilder();
 		
 		if(startIndexInclusive.isGreaterThanZero()){
-			builder.append(word.substring(new CodePointIndex(0),startIndexInclusive));
+			builder.append(word.subSource(new CodePointIndex(0),startIndexInclusive));
 		}
 		if(endIndexExclusive.le(length)){
 			builder.append(word.subSource(endIndexExclusive));
@@ -43,7 +43,7 @@ public class SourceUtil {
 		SimpleBuilder builder = new SimpleBuilder();
 		
 		if(startIndexInclusive.isGreaterThanZero()){
-			builder.append(word.substring(new CodePointIndex(0),startIndexInclusive));
+			builder.append(word.subSource(new CodePointIndex(0),startIndexInclusive));
 		}
 		
 		builder.append(insertion);
@@ -63,7 +63,7 @@ public class SourceUtil {
 		
 		SimpleBuilder builder = new SimpleBuilder();
 		if(position.isGreaterThanZero()){
-			builder.append(base.substring(new CodePointIndex(0),position));
+			builder.append(base.subSource(new CodePointIndex(0),position));
 		}
 		builder.append(insertion);
 		

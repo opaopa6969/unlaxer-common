@@ -28,7 +28,7 @@ public abstract class SingleStringParser extends AbstractTokenParser implements 
 		Source peeked = parseContext.peek(tokenKind , new CodePointLength(1));
 		Token token = 
 			peeked.isPresent() && (invertMatch ^ isMatch(
-			    peeked.substring(new CodePointIndex(0),new CodePointIndex(1)).toString()))?
+			    peeked.subSource(new CodePointIndex(0),new CodePointIndex(1)).toString()))?
 				new Token(tokenKind , peeked, this) : 
 				Token.empty(tokenKind , parseContext.getCursor(TokenKind.consumed),this);
 		return token;
