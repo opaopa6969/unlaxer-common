@@ -82,9 +82,9 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
 	  return subSource(cursorRange.startIndexInclusive.getPosition(), cursorRange.endIndexExclusive.getPosition());
 	}
 	
-//  Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
-//  
-//  Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
+  Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
+  
+  Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
   
   Optional<Source> parent();
   
@@ -125,18 +125,18 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
     );
   }
   
-  default Source subSource(CodePointIndex beginIndex, CodePointIndex endIndex) {
-      return parentSourceAndStringToSource().apply(
-          thisSource(),
-          stringIndexAccessor().substring(toStringIndex(beginIndex).value(),toStringIndex(endIndex).value()),
-          new CodePointOffset(beginIndex)
-      );
-  }
-  
-  default Source subSource(CodePointIndex beginIndex, CodePointLength length) {
-    
-    return subSource(beginIndex , beginIndex.newWithAdd(length()));
-  }
+//  default Source subSource(CodePointIndex beginIndex, CodePointIndex endIndex) {
+//      return parentSourceAndStringToSource().apply(
+//          thisSource(),
+//          stringIndexAccessor().substring(toStringIndex(beginIndex).value(),toStringIndex(endIndex).value()),
+//          new CodePointOffset(beginIndex)
+//      );
+//  }
+//  
+//  default Source subSource(CodePointIndex beginIndex, CodePointLength length) {
+//    
+//    return subSource(beginIndex , beginIndex.newWithAdd(length()));
+//  }
   
   default Source concat(CodePointAccessor str) {
     return parentSourceAndStringToSource().apply(
