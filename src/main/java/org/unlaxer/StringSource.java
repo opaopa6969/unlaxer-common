@@ -507,21 +507,21 @@ public class StringSource implements Source {
     return new StringSource(this , subSource(startIndexInclusive, length),offset);
   }
   
-  @Override
-  public Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
-    return new StringSource(this,
-        subString(startIndexInclusive,endIndexExclusive),
-        new CodePointOffset(startIndexInclusive)
-    );
-  }
-  
-  @Override
-  public Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength) {
-    return new StringSource(this,
-        subString(startIndexInclusive,codePointLength),
-        new CodePointOffset(startIndexInclusive)
-    );
-  }
+//  @Override
+//  public Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+//    return new StringSource(this,
+//        subString(startIndexInclusive,endIndexExclusive),
+//        new CodePointOffset(startIndexInclusive)
+//    );
+//  }
+//  
+//  @Override
+//  public Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength) {
+//    return new StringSource(this,
+//        subString(startIndexInclusive,codePointLength),
+//        new CodePointOffset(startIndexInclusive)
+//    );
+//  }
  
   @Override
   public int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {

@@ -53,5 +53,16 @@ public class SourceTest {
     }
     assertFalse(StringSource.createRootSource("").isPresent());
     assertTrue(StringSource.createRootSource("").isEmpty());
+    
+    {
+      StringSource createRootSource = StringSource.createRootSource("ABC");
+      
+      Source subSource = createRootSource.subSource(new CodePointIndex(1) , new CodePointIndex(3));
+      Source substring = createRootSource.subSource(new CodePointIndex(1));
+      
+      System.out.println(subSource);
+      System.out.println(substring);
+      assertEquals(subSource, substring);
+    }
   }
 }
