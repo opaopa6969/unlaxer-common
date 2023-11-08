@@ -1,6 +1,9 @@
 package org.unlaxer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +32,26 @@ public class SourceTest {
       System.out.println(collect);
       assertEquals("abcdef" , collect.toString());
     }
+    
+    {
+      StringSource source = StringSource.createRootSource("1");
+      Source subSource = source.subSource(new CodePointIndex(0), new CodePointIndex(0));
+      System.out.println("subSource:" + subSource.sourceAsString());
+    }
+    
+    
+    {
+      try {
+        StringSource source = StringSource.createRootSource("");
+        Source subSource = source.subSource(new CodePointIndex(0), new CodePointIndex(-1));
+        System.out.println("subSource:" + subSource.sourceAsString());
+        fail();
+        
+      }catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    assertFalse(StringSource.createRootSource("").isPresent());
+    assertTrue(StringSource.createRootSource("").isEmpty());
   }
-
 }

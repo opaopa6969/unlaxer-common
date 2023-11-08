@@ -23,6 +23,13 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   String sourceAsString();
   
+  default Optional<String> nonEmptyString(){
+    if(isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(sourceAsString());
+  }
+  
   Source source();
 
   StringIndexAccessor stringIndexAccessor();
