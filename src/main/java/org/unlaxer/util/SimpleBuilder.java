@@ -169,6 +169,22 @@ public class SimpleBuilder implements CharSequence{
     append(lf);
     return this;
   }
+  
+  public SimpleBuilder lf() {
+    append(lf);
+    return this;
+  }
+  
+  public SimpleBuilder cr() {
+    append(cr);
+    return this;
+  }
+  
+  public SimpleBuilder crlf() {
+    append(crlf);
+    return this;
+  }
+
 
   @Override
   public int length() {
