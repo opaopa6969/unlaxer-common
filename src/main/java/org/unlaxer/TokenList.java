@@ -257,7 +257,8 @@ public class TokenList implements List<Token>{
   
   public static Source toSource(TokenList tokens , SourceKind sourceKind) {
     
-    if(tokens.isEmpty()) {
+    Optional<Token> firstPrintableToken = tokens.firstPrintableToken();
+    if(tokens.isEmpty() || firstPrintableToken.isEmpty()) {
       return StringSource.createSubSource("", null , new CodePointOffset(0));
     }
     
@@ -266,7 +267,7 @@ public class TokenList implements List<Token>{
       .map(Source::toString)
       .collect(Collectors.joining());
     
-    Token token = tokens.firstPrintableToken().get();
+    Token token = firstPrintableToken.get();
     
     CodePointOffset offsetFromRoot = token.source.offsetFromRoot();
     
