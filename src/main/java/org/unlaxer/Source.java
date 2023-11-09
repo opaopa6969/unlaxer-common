@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import org.unlaxer.Source.SourceKind;
 import org.unlaxer.util.FactoryBoundCache;
 import org.unlaxer.util.function.TriFunction;
 

@@ -41,7 +41,7 @@ public abstract class SuggestableParser extends AbstractTokenParser {
 //		addSuggests(parseContext);
 		
 		return Token.empty(tokenKind , 
-		    parseContext.getCursor(TokenKind.consumed),this , parseContext.getSource());
+		    parseContext.getCursor(TokenKind.consumed),this);
 	}
 	
 	//FIXME!

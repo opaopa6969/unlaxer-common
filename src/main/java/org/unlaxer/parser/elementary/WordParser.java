@@ -78,7 +78,7 @@ public class WordParser extends AbstractTokenParser implements TerminalSymbol{
 		return 
 			equals(word,peeked) ^ invertMatch ?
 			new Token(tokenKind , peeked, this):
-			Token.empty(tokenKind ,parseContext.getCursor(TokenKind.consumed), this , parseContext.getSource());
+			Token.empty(tokenKind ,parseContext.getCursor(TokenKind.consumed), this);
 	}
 	
 	boolean equals(Source targetString , Source baseString){

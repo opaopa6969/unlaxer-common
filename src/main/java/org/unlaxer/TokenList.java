@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
@@ -209,17 +210,13 @@ public class TokenList implements List<Token>{
   
   public static CursorRange combinedCursorRange(TokenList tokens) {
     
-    return combinedCursorRange(tokens.tokens);
-  }
-
-  public static CursorRange combinedCursorRange(List<Token> tokens) {
-    
-    if(tokens.isEmpty()) {
+    Optional<Token> firstPrintableToken = tokens.firstPrintableToken();
+    if(tokens.isEmpty() || firstPrintableToken.isEmpty()) {
       return new CursorRange(new StartInclusiveCursorImpl(), new EndExclusiveCursorImpl().incrementPosition());
     }
     
-    CursorRange first = tokens.get(0).source.cursorRange();
-    CursorRange last = tokens.get(tokens.size()-1).source.cursorRange();
+    CursorRange first = firstPrintableToken.get().getSource().cursorRange();
+    CursorRange last = tokens.lastPrintableToken().get().getSource().cursorRange();
     
     return new CursorRange(
           new StartInclusiveCursorImpl()
@@ -233,33 +230,48 @@ public class TokenList implements List<Token>{
      );
   }
   
-  public Source toSource(SourceKind sourceKind) {
-    return toSource(tokens , sourceKind);
-  }
-
-  public static Source toSource(TokenList tokens, SourceKind sourceKind) {
-    return toSource(tokens.tokens , sourceKind);
+  public Optional<Token> firstPrintableToken(){
+    for(int i = 0 ; i < tokens.size() ; i++) {
+      Token token = tokens.get(i);
+      if(token.getSource().isPresent()) {
+        return Optional.of(token);
+      }
+    }
+    return Optional.empty();
   }
   
-  public static Source toSource(List<Token> tokens , SourceKind sourceKind) {
+  public Optional<Token> lastPrintableToken(){
+    for(int i = tokens.size()-1 ; i >=0 ; i--) {
+      Token token = tokens.get(i);
+      if(token.getSource().isPresent()) {
+        return Optional.of(token);
+      }
+    }
+    return Optional.empty();
+  }
+  
+  public Source toSource(SourceKind sourceKind) {
+    return toSource(TokenList.of(tokens) , sourceKind);
+  }
+
+  
+  public static Source toSource(TokenList tokens , SourceKind sourceKind) {
     
     if(tokens.isEmpty()) {
-      throw new IllegalArgumentException();
+      return StringSource.createSubSource("", null , new CodePointOffset(0));
     }
-    Token firstToken = tokens.get(0);
     
-    Source root = firstToken.source.root();
-        
     String collect = tokens.stream()
       .map(Token::getSource)
       .map(Source::toString)
       .collect(Collectors.joining());
     
-    Source source = firstToken.getSource();
-    CodePointOffset offsetFromRoot = source.offsetFromRoot();
+    Token token = tokens.firstPrintableToken().get();
+    
+    CodePointOffset offsetFromRoot = token.source.offsetFromRoot();
     
     if(sourceKind == SourceKind.subSource) {
-      return new StringSource(root , collect , offsetFromRoot);
+      return StringSource.createSubSource(collect , token.source.root() , offsetFromRoot);
     }else {
       return StringSource.create(collect, sourceKind );
     }

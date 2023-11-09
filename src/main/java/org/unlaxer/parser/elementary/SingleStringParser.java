@@ -30,7 +30,7 @@ public abstract class SingleStringParser extends AbstractTokenParser implements 
 			peeked.isPresent() && (invertMatch ^ isMatch(
 			    peeked.subSource(new CodePointIndex(0),new CodePointIndex(1)).toString()))?
 				new Token(tokenKind , peeked, this) : 
-				Token.empty(tokenKind , parseContext.getCursor(TokenKind.consumed),this , parseContext.getSource());
+				Token.empty(tokenKind , parseContext.getCursor(TokenKind.consumed),this);
 		return token;
 	}
 

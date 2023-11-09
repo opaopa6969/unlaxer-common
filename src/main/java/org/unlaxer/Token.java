@@ -97,12 +97,9 @@ public class Token implements Serializable{
 	}
 
 	
-	public static Token empty(TokenKind tokenKind , EndExclusiveCursor position , Parser parser , Source rootSource){
-	  if(false == rootSource.isRoot()) {
-	    throw new IllegalArgumentException();
-	  }
+	public static Token empty(TokenKind tokenKind , EndExclusiveCursor position , Parser parser){
 	  StringSource empty = 
-	      StringSource.createSubSource("", rootSource, new CodePointOffset(position.getPosition()));
+	      StringSource.createDetachedSource("", null ,  new CodePointOffset(position.getPosition()));
 	  
 		return new Token(tokenKind , empty ,parser);
 	}

@@ -627,5 +627,7 @@ public class StringSource implements Source {
   public RootPositionResolver rootPositionResolver() {
     return rootPositionResolver;
   }
+  
+  public static Source EMPTY = StringSource.createDetachedSource("");
 
 }

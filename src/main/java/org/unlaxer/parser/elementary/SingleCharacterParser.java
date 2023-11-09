@@ -27,7 +27,7 @@ public abstract class SingleCharacterParser extends AbstractTokenParser implemen
 		Token token = 
 			peeked.isPresent() && (invertMatch ^ isMatch(peeked.charAt(0)))?
 				new Token(tokenKind , peeked, this) : 
-				Token.empty(tokenKind , parseContext.getCursor(TokenKind.consumed),this,parseContext.getSource());
+				Token.empty(tokenKind , parseContext.getCursor(TokenKind.consumed),this);
 		return token;
 	}
 
