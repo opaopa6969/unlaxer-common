@@ -29,7 +29,8 @@ public abstract class ContainerParser<T> extends NoneChildParser {
 		Token token = Token.empty(
 				tokenKind, 
 				parseContext.getCursor(TokenKind.consumed),
-				this);
+				this,
+				parseContext.getSource());
 		parseContext.getCurrent().addToken(token);
 		return new Parsed(token);
 	}

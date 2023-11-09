@@ -244,7 +244,7 @@ public class TokenList implements List<Token>{
   public static Source toSource(List<Token> tokens , SourceKind sourceKind) {
     
     if(tokens.isEmpty()) {
-      return  new StringSource("",sourceKind,new CodePointOffset(0));
+      throw new IllegalArgumentException();
     }
     Token firstToken = tokens.get(0);
     

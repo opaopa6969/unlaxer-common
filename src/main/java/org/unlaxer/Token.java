@@ -23,9 +23,9 @@ public class Token implements Serializable{
 	
 	private static final long serialVersionUID = -2232289508694932061L;
 
-	static final FactoryBoundCache<EndExclusiveCursor, Source> empties = 
-			new FactoryBoundCache<>(cursor->new StringSource("", SourceKind.detached, 
-			    new CodePointOffset(cursor.getPosition())));
+//	static final FactoryBoundCache<Tup EndExclusiveCursor, Source> empties = 
+//			new FactoryBoundCache<>(cursor->StringSource.createSubSource("", null,  
+//			    new CodePointOffset(cursor.getPosition())));
 	
 	static final FactoryBoundCache<Token, String> displayString = 
 			new FactoryBoundCache<>(
@@ -97,8 +97,14 @@ public class Token implements Serializable{
 	}
 
 	
-	public static Token empty(TokenKind tokenKind , EndExclusiveCursor position , Parser parser){
-		return new Token(tokenKind , empties.get(position),parser);
+	public static Token empty(TokenKind tokenKind , EndExclusiveCursor position , Parser parser , Source rootSource){
+	  if(false == rootSource.isRoot()) {
+	    throw new IllegalArgumentException();
+	  }
+	  StringSource empty = 
+	      StringSource.createSubSource("", rootSource, new CodePointOffset(position.getPosition()));
+	  
+		return new Token(tokenKind , empty ,parser);
 	}
 	
 	public Source getSource() {

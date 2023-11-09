@@ -54,12 +54,12 @@ public class StringSource implements Source {
     return new StringSource(source , SourceKind.detached , root , codePointOffset);
   }
   
-  public StringSource(String source , SourceKind sourceKind , CodePointOffset offsetFromParent) {
+  private StringSource(String source , SourceKind sourceKind , CodePointOffset offsetFromParent) {
     this(source , sourceKind , null , offsetFromParent);
   }
 
   
-  StringSource(String source , SourceKind sourceKind , Source root , CodePointOffset offsetFromParent) {
+  private StringSource(String source , SourceKind sourceKind , Source root , CodePointOffset offsetFromParent) {
     super();
     Objects.requireNonNull(source,"source require non null");
     this.root = root == null ? this : root;

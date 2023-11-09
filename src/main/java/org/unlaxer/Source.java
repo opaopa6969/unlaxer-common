@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.util.FactoryBoundCache;
 import org.unlaxer.util.function.TriFunction;
 
@@ -424,6 +425,6 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
   
   public static final FactoryBoundCache<Source, Source> SUB_EMPTY = 
       new FactoryBoundCache<>(
-          rootSource -> new StringSource("" , SourceKind.detached , rootSource ,CodePointOffset.ZERO)
+          rootSource -> StringSource.createSubSource("" , rootSource ,CodePointOffset.ZERO)
       );
 }

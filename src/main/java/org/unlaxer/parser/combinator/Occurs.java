@@ -13,7 +13,7 @@ import org.unlaxer.parser.Parser;
 public interface Occurs extends MetaFunctionParser , NonTerminallSymbol {
   
 //  InfiniteLoopDetector infiniteLoopDetector = new InfiniteLoopDetector();
-	
+  
 	@Override
 	public default Parsed parse(ParseContext parseContext,TokenKind tokenKind,boolean invertMatch) {
 	  
