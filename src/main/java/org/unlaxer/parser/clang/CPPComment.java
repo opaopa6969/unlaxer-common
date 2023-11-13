@@ -1,6 +1,9 @@
 package org.unlaxer.parser.clang;
 
 import org.unlaxer.Name;
+import org.unlaxer.Parsed;
+import org.unlaxer.TokenKind;
+import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.ChainParsers;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
@@ -18,6 +21,11 @@ public class CPPComment extends LazyChain{
 
   public CPPComment(Name name) {
     super(name);
+  }
+  
+  @Override
+  public Parsed parse(ParseContext parseContext , TokenKind tokenKind ,boolean invertMatch) {
+    return super.parse(parseContext, tokenKind, invertMatch);
   }
   
   @Override

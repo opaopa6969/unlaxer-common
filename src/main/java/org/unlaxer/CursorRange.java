@@ -28,13 +28,17 @@ public class CursorRange implements Comparable<CursorRange>{
 	
 	public static CursorRange of(
 	    CodePointIndex startIndexInclusive,
+	    CodePointIndexInLine startIndexInLineInclusive,
 	    LineNumber startLineNumber,
       CodePointIndex endIndexExclusive,
+      CodePointIndexInLine endIndexInLineExclusive,
       LineNumber endLineNumber
 	    ) {
 	  return new CursorRange(
-        new StartInclusiveCursorImpl().setLineNumber(startLineNumber).setPosition(startIndexInclusive),
-        new EndExclusiveCursorImpl().setLineNumber(endLineNumber).setPosition(endIndexExclusive)
+        new StartInclusiveCursorImpl().setLineNumber(startLineNumber)
+          .setPosition(startIndexInclusive).setPositionInLine(startIndexInLineInclusive),
+        new EndExclusiveCursorImpl().setLineNumber(endLineNumber)
+          .setPosition(endIndexExclusive).setPositionInLine(endIndexInLineExclusive)
 	  );
 	  
 	}

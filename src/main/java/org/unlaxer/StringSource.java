@@ -71,7 +71,7 @@ public class StringSource implements Source {
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     rootPositionResolver = root == null ? 
-        new RootPositionResolverImpl(codePoints) : 
+        new PositionResolverImpl(codePoints) : 
         root.rootPositionResolver(); 
     subPositionResolver = new SubPositionResolverImpl(codePoints,rootPositionResolver, offsetFromParent);
     stringIndexAccessor = new StringIndexAccessorImpl(source);

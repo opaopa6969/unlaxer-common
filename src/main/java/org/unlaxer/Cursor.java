@@ -31,9 +31,9 @@ public interface Cursor<T extends Cursor<T>> {
 
 	T addPosition(CodePointOffset adding);
 
-	CodePointOffset getPositionInLine();
+	CodePointIndexInLine getPositionInLine();
 
-	T setPositionInLine(CodePointOffset positionInLine);
+	T setPositionInLine(CodePointIndexInLine positionInLine);
 	
 	T resolveLineNumber(RootPositionResolver rootPositionResolver);
 	

@@ -4,7 +4,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.junit.Test;
+import org.unlaxer.Parsed;
 import org.unlaxer.ParserTestBase;
+import org.unlaxer.TokenKind;
+import org.unlaxer.context.ParseContext;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
@@ -91,6 +94,11 @@ public class Usage002_01_SimpleXmlTag extends ParserTestBase {
 
 
 		private static final long serialVersionUID = 791155244371219245L;
+		
+	  @Override
+	  public Parsed parse(ParseContext parseContext , TokenKind tokenKind ,boolean invertMatch) {
+	    return super.parse(parseContext, tokenKind, invertMatch);
+	  }
 
 		@Override
 		public Parsers getLazyParsers() {
@@ -111,6 +119,11 @@ public class Usage002_01_SimpleXmlTag extends ParserTestBase {
 	static class CloseTag extends LazyChain{
 
 		private static final long serialVersionUID = 6450422344705494726L;
+		
+	  @Override
+	  public Parsed parse(ParseContext parseContext , TokenKind tokenKind ,boolean invertMatch) {
+	    return super.parse(parseContext, tokenKind, invertMatch);
+	  }
 
 		@Override
 		public Parsers getLazyParsers() {
@@ -131,6 +144,11 @@ public class Usage002_01_SimpleXmlTag extends ParserTestBase {
 	static class TagIdentifier extends LazyOneOrMore{
 
 		private static final long serialVersionUID = -5994401376092924600L;
+		
+    @Override
+    public Parsed parse(ParseContext parseContext , TokenKind tokenKind ,boolean invertMatch) {
+      return super.parse(parseContext, tokenKind, invertMatch);
+    }
 
 		@Override
 		public Supplier<Parser> getLazyParser() {
@@ -152,6 +170,11 @@ public class Usage002_01_SimpleXmlTag extends ParserTestBase {
 	static class Contents extends LazyChain{
 
 		private static final long serialVersionUID = -7796147663108046605L;
+		
+    @Override
+    public Parsed parse(ParseContext parseContext , TokenKind tokenKind ,boolean invertMatch) {
+      return super.parse(parseContext, tokenKind, invertMatch);
+    }
 
 		@Override
 		public Parsers getLazyParsers() {

@@ -1,0 +1,191 @@
+package org.unlaxer;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+import java.util.stream.Stream;
+
+import org.unlaxer.Cursor.EndExclusiveCursor;
+import org.unlaxer.Cursor.StartInclusiveCursor;
+
+public class PositionResolverImpl implements RootPositionResolver , SubPositionResolver{
+  
+  final NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
+  final Map<? extends CodePointIndex,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
+  final Map<CodePointIndex,CodePointIndexInLine> codePointIndexInLineByCodePointIndex = new HashMap<>();
+  final Map<StringIndex,CodePointIndex> codePointIndexByStringIndex = new HashMap<>();
+  final List<CursorRange> cursorRanges = new ArrayList<>();
+  final CursorRange cursorRange;
+  final CodePointOffset offsetFromRoot;
+  final RootPositionResolver rootPositionResolver;
+  
+  public static RootPositionResolver createRootPositionReslver(int[] codePoints){
+    return new PositionResolverImpl(codePoints, null, new CodePointOffset(0));
+  }
+  
+  public static RootPositionResolver createSubPositionReslver(
+      int[] codePoints,
+      RootPositionResolver rootPositionResolver,
+      CodePointOffset offsetFromRoot){
+    return new PositionResolverImpl(codePoints, null, new CodePointOffset(0));
+  }
+
+  
+  PositionResolverImpl(
+      int[] codePoints,
+      RootPositionResolver rootPositionResolver,
+      CodePointOffset offsetFromRoot) {
+    
+    int codePointCount = codePoints.length;
+    this.rootPositionResolver = rootPositionResolver == null ? this : rootPositionResolver;
+    this.offsetFromRoot = offsetFromRoot;
+    
+    LineNumber lineNumber = new LineNumber(0);
+    CodePointIndex startIndex = new CodePointIndex(0);
+    CodePointIndex previousStartIndex;
+    lineNumberByIndex.put(startIndex, lineNumber);
+    
+    StringIndex stringIndex = new StringIndex(0);
+    CodePointIndex codePointIndex = new CodePointIndex(0);
+    CodePointIndexInLine codePointOffsetInline = new CodePointIndexInLine(0);
+    
+    for (int i = 0; i < codePointCount; i++) {
+      codePointIndex = new CodePointIndex(i);
+      stringIndexByCodePointIndex.put(codePointIndex, stringIndex);
+      codePointIndexByStringIndex.put(stringIndex,codePointIndex);
+      codePointIndexInLineByCodePointIndex.put(codePointIndex, codePointOffsetInline);
+    
+      int codePointAt = codePoints[i];
+      
+      int adding = Character.isBmpCodePoint(codePointAt) ? 1:2;
+      stringIndex = stringIndex.newWithAdd(adding);
+      
+      if(codePointAt == SymbolMap.lf.codes[0]) {
+        
+        previousStartIndex = startIndex;
+        startIndex = new CodePointIndex(i+1);
+        cursorRanges.add(CursorRange.of(
+            previousStartIndex, new CodePointIndexInLine(0) ,lineNumber,
+            startIndex, codePointOffsetInline,  lineNumber)
+        );
+        lineNumber = lineNumber.newWithIncrements();
+        lineNumberByIndex.put(startIndex, lineNumber);
+        codePointOffsetInline = new CodePointIndexInLine(0);
+        continue;
+        
+      }else if(codePointAt == SymbolMap.cr.codes[0]) {
+        
+        if(codePointCount-1!=i && codePoints[i+1] ==SymbolMap.lf.codes[0]) {
+          i++;
+          previousStartIndex = startIndex;
+          startIndex = new CodePointIndex(i+1);
+          cursorRanges.add(CursorRange.of(
+              previousStartIndex, new CodePointIndexInLine(0) ,lineNumber,
+              startIndex, codePointOffsetInline,  lineNumber)
+          );
+          lineNumber = lineNumber.newWithIncrements();
+          lineNumberByIndex.put(startIndex, lineNumber);
+          
+          stringIndex = stringIndex.newWithAdd(1);
+          stringIndexByCodePointIndex.put(codePointIndex.newWithAdd(1), stringIndex);
+          codePointIndexByStringIndex.put(stringIndex,codePointIndex.newWithAdd(1));
+        }else {
+          previousStartIndex = startIndex;
+          startIndex = new CodePointIndex(i+1);
+          cursorRanges.add(CursorRange.of(
+              previousStartIndex, new CodePointIndexInLine(0) ,lineNumber,
+              startIndex, codePointOffsetInline,  lineNumber)
+          );
+          lineNumber = lineNumber.newWithIncrements();
+          lineNumberByIndex.put(startIndex, lineNumber);
+        }
+        codePointOffsetInline = new CodePointIndexInLine(0);
+        continue;
+      }
+      codePointOffsetInline = codePointOffsetInline.newWithIncrements();
+    }
+
+    StartInclusiveCursor start = new StartInclusiveCursorImpl();//.addPosition(offsetFromRoot);
+    CodePointIndex position = new CodePointIndex(codePointCount);//.newWithAdd(offsetFromRoot);
+    EndExclusiveCursor end = new EndExclusiveCursorImpl().setPosition(position)
+        .setLineNumber(lineNumber).setPositionInLine(codePointOffsetInline);
+    cursorRange = new CursorRange(start, end);
+    if(cursorRanges.size()>0) {
+      CursorRange last = cursorRanges.get(cursorRanges.size()-1);
+      if(last.lessThan(codePointIndex) && startIndex.lessThan(position)) {
+        cursorRanges.add(CursorRange.of(startIndex, new CodePointIndexInLine(0), lineNumber,
+            position, codePointOffsetInline , lineNumber));
+      }
+    }
+  }
+  
+  @Override
+  public Size lineSize() {
+    return new Size(cursorRanges.size());
+  }
+  
+  @Override
+  public Stream<Source> lines(Source root){
+    return cursorRanges.stream()
+      .map(root::subSource);
+  }
+
+  @Override
+  public StringIndex stringIndexInRootFrom(CodePointIndex codePointIndexInSubSource) {
+    
+    if(rootPositionResolver == this) {
+      stringIndexByCodePointIndex.get(codePointIndexInSubSource)
+    }
+    return rootPositionResolver.stringIndexInRootFrom(codePointIndexInSubSource.newWithPlus(offsetFromRoot));
+  }
+
+  @Override
+  public LineNumber lineNumberFrom(CodePointIndex codePointIndex) {
+    return rootPositionResolver.lineNumberFrom(codePointIndex.newWithPlus(offsetFromRoot));
+  }
+
+//  @Override
+//  public CodePointIndex codePointIndexFrom(StringIndex stringIndex) {
+//    return rootPositionResolver.codePointIndexFrom(stringIndex);
+//  }
+
+  @Override
+  public CursorRange rootCursorRange() {
+    return rootPositionResolver.rootCursorRange();
+  }
+
+  @Override
+  public StringIndex subStringIndexFrom(CodePointIndex subCodePointIndex) {
+    return stringIndexByCodePointIndex.get(subCodePointIndex);
+  }
+
+  @Override
+  public LineNumber subLineNumberFrom(CodePointIndex subCodePointIndex) {
+    return lineNumberByIndex.floorEntry(subCodePointIndex).getValue();
+  }
+
+  @Override
+  public CodePointIndex subCodePointIndexFrom(StringIndex subStringIndex) {
+    return codePointIndexByStringIndex.get(subStringIndex);
+  }
+
+  @Override
+  public CodePointIndexInLine codePointIndexInLineFrom(CodePointIndex codePointIndex) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public CodePointIndex rootCodePointIndexFrom(StringIndex stringIndex) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public CursorRange subCursorRange() {
+    // TODO Auto-generated method stub
+    return null;
+  }}
