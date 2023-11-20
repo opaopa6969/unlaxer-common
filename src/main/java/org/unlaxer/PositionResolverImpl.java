@@ -154,6 +154,9 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
 
   @Override
   public CursorRange rootCursorRange() {
+    if(rootPositionResolver == null) {
+      return cursorRange;
+    }
     return rootPositionResolver.rootCursorRange();
   }
 
