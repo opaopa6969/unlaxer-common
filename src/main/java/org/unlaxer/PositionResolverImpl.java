@@ -174,18 +174,15 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
 
   @Override
   public CodePointIndexInLine codePointIndexInLineFrom(CodePointIndex codePointIndex) {
-    // TODO Auto-generated method stub
-    return null;
+    return rootPositionResolver.codePointIndexInLineFrom(codePointIndex);
   }
 
   @Override
   public CodePointIndex rootCodePointIndexFrom(StringIndex stringIndex) {
-    // TODO Auto-generated method stub
-    return null;
+    return rootPositionResolver.rootCodePointIndexFrom(stringIndex);
   }
 
   @Override
   public CursorRange subCursorRange() {
-    // TODO Auto-generated method stub
-    return null;
+    return cursorRange;
   }}
