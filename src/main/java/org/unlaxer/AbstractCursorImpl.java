@@ -11,14 +11,14 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
 	NameSpecifier nameSpace;
 	LineNumber lineNumber;
 	CodePointIndex position;
-	CodePointOffset positionInLine;
+	CodePointIndexInLine positionInLine;
 	CursorKind cursorKind;
 	
 	AbstractCursorImpl(CursorKind cursorKind) {
 		super();
 		lineNumber = new LineNumber(0);
 		position = new CodePointIndex(0);
-		positionInLine = new CodePointOffset(0);
+		positionInLine = new CodePointIndexInLine(0);
 		nameSpace = NameSpecifier.of("");
 		this.cursorKind = cursorKind;
 	}
@@ -62,11 +62,11 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
     return thisObject();
   }
   @Override
-  public CodePointOffset getPositionInLine() {
+  public CodePointIndexInLine getPositionInLine() {
     return positionInLine;
   }
   @Override
-  public T setPositionInLine(CodePointOffset positionInLine) {
+  public T setPositionInLine(CodePointIndexInLine positionInLine) {
     this.positionInLine = positionInLine;
     return thisObject();
   }
@@ -74,7 +74,7 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
   @Override
   public T incrementLineNumber() {
     lineNumber = lineNumber.newWithIncrements();
-    positionInLine = new CodePointOffset(0);
+    positionInLine = new CodePointIndexInLine(0);
     return thisObject();
   }
   @Override

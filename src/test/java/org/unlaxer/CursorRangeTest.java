@@ -15,11 +15,11 @@ public class CursorRangeTest {
     LineNumber lineNumber5 = new LineNumber(5);
     LineNumber lineNumber10 = new LineNumber(10);
     CursorRange cursorRange0 = CursorRange.of(
-        position0,position0.toCodePointOffset(), lineNumber0, 
-        position5, position5.toCodePointOffset(), lineNumber5);
+        position0,position0.toCodePointIndexInLine(), lineNumber0, 
+        position5, position5.toCodePointIndexInLine(), lineNumber5);
     CursorRange cursorRange1 = CursorRange.of(
-        position5,position5.toCodePointOffset(), lineNumber5, 
-        position10,position10.toCodePointOffset(), lineNumber10);
+        position5,position5.toCodePointIndexInLine(), lineNumber5, 
+        position10,position10.toCodePointIndexInLine(), lineNumber10);
     
     assertTrue(cursorRange0.lt(cursorRange1));
     assertTrue(cursorRange0.lessThan(cursorRange1));

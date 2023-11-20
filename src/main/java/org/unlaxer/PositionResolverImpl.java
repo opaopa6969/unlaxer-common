@@ -14,7 +14,7 @@ import org.unlaxer.Cursor.StartInclusiveCursor;
 public class PositionResolverImpl implements RootPositionResolver , SubPositionResolver{
   
   final NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
-  final Map<? extends CodePointIndex,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
+  final Map<CodePointIndex,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
   final Map<CodePointIndex,CodePointIndexInLine> codePointIndexInLineByCodePointIndex = new HashMap<>();
   final Map<StringIndex,CodePointIndex> codePointIndexByStringIndex = new HashMap<>();
   final List<CursorRange> cursorRanges = new ArrayList<>();
@@ -22,16 +22,16 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
   final CodePointOffset offsetFromRoot;
   final RootPositionResolver rootPositionResolver;
   
-  public static RootPositionResolver createRootPositionReslver(int[] codePoints){
-    return new PositionResolverImpl(codePoints, null, new CodePointOffset(0));
-  }
-  
-  public static RootPositionResolver createSubPositionReslver(
-      int[] codePoints,
-      RootPositionResolver rootPositionResolver,
-      CodePointOffset offsetFromRoot){
-    return new PositionResolverImpl(codePoints, null, new CodePointOffset(0));
-  }
+//  public static RootPositionResolver createRootPositionResolver(int[] codePoints){
+//    return new PositionResolverImpl(codePoints, null, new CodePointOffset(0));
+//  }
+//  
+//  public static SubPositionResolver createSubPositionReslover(
+//      int[] codePoints,
+//      RootPositionResolver rootPositionResolver,
+//      CodePointOffset offsetFromRoot){
+//    return new PositionResolverImpl(codePoints, null, new CodePointOffset(0));
+//  }
 
   
   PositionResolverImpl(
@@ -137,7 +137,7 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
   public StringIndex stringIndexInRootFrom(CodePointIndex codePointIndexInSubSource) {
     
     if(rootPositionResolver == this) {
-      stringIndexByCodePointIndex.get(codePointIndexInSubSource)
+      return stringIndexByCodePointIndex.get(codePointIndexInSubSource);
     }
     return rootPositionResolver.stringIndexInRootFrom(codePointIndexInSubSource.newWithPlus(offsetFromRoot));
   }

@@ -9,4 +9,11 @@ public interface SubPositionResolver extends
    * @return cursorRange for subSource. start position is 0
    */
   CursorRange subCursorRange();
+  
+  public static SubPositionResolver createSubPositionReslover(
+      int[] codePoints,
+      RootPositionResolver rootPositionResolver,
+      CodePointOffset offsetFromRoot){
+    return new PositionResolverImpl(codePoints, null, new CodePointOffset(0));
+  }
 }

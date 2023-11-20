@@ -1,6 +1,5 @@
 package org.unlaxer;
 
-import org.unlaxer.Source.SourceKind;
 import org.unlaxer.base.IntegerValue;
 
 public class CodePointIndex extends IntegerValue<CodePointIndex>{
@@ -47,6 +46,11 @@ public class CodePointIndex extends IntegerValue<CodePointIndex>{
   public CodePointOffset toCodePointOffset() {
     return new CodePointOffset(value());
   }
+  
+  public CodePointIndexInLine toCodePointIndexInLine() {
+    return new CodePointIndexInLine(value());
+  }
+
   
 //  public SourceKind sourceKind() {
 //    return sourceKind;

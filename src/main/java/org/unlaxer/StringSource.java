@@ -71,9 +71,9 @@ public class StringSource implements Source {
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     rootPositionResolver = root == null ? 
-        new PositionResolverImpl(codePoints) : 
+        RootPositionResolver.createRootPositionResolver(codePoints) : 
         root.rootPositionResolver(); 
-    subPositionResolver = new SubPositionResolverImpl(codePoints,rootPositionResolver, offsetFromParent);
+    subPositionResolver = SubPositionResolver.createSubPositionReslover(codePoints,rootPositionResolver, offsetFromParent);
     stringIndexAccessor = new StringIndexAccessorImpl(source);
   }
 
@@ -92,7 +92,7 @@ public class StringSource implements Source {
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     rootPositionResolver = root.rootPositionResolver();
-    subPositionResolver = new SubPositionResolverImpl(codePoints,rootPositionResolver, offsetFromParent);
+    subPositionResolver = SubPositionResolver.createSubPositionReslover(codePoints,rootPositionResolver, offsetFromParent);
     stringIndexAccessor = new StringIndexAccessorImpl(source.sourceAsString());
 
 //    Source _root = parent;
@@ -118,7 +118,8 @@ public class StringSource implements Source {
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     rootPositionResolver = root.rootPositionResolver();
-    subPositionResolver = new SubPositionResolverImpl(codePoints,rootPositionResolver, offsetFromParent);
+    subPositionResolver = SubPositionResolver
+        .createSubPositionReslover(codePoints,rootPositionResolver, offsetFromParent);
     stringIndexAccessor = new StringIndexAccessorImpl(source);
     
 //    Source _root = parent;
@@ -136,11 +137,11 @@ public class StringSource implements Source {
   }
 
   public StringIndex stringIndexFrom(CodePointIndex codePointIndex) {
-    return rootPositionResolver.stringIndexFrom(codePointIndex);
+    return rootPositionResolver.stringIndexInRootFrom(codePointIndex);
   }
 
   public CodePointIndex codePointIndexFrom(StringIndex stringIndex) {
-    return rootPositionResolver.codePointIndexFrom(stringIndex);
+    return rootPositionResolver.rootCodePointIndexFrom(stringIndex);
   }
 
   public CursorRange rootCursorRange() {
@@ -422,16 +423,16 @@ public class StringSource implements Source {
 
   @Override
   public StringIndex toStringIndex(CodePointIndex codePointIndex) {
-    StringIndex stringIndexFrom = rootPositionResolver.stringIndexFrom(codePointIndex);
+    StringIndex stringIndexFrom = rootPositionResolver.stringIndexInRootFrom(codePointIndex);
     if(stringIndexFrom == null) {
-      stringIndexFrom = rootPositionResolver.stringIndexFrom(codePointIndex.newWithMinus(1)).newWithAdd(1);
+      stringIndexFrom = rootPositionResolver.stringIndexInRootFrom(codePointIndex.newWithMinus(1)).newWithAdd(1);
     }
     return stringIndexFrom;
   }
 
   @Override
   public CodePointIndex toCodePointIndex(StringIndex stringIndex) {
-    return rootPositionResolver.codePointIndexFrom(stringIndex);
+    return rootPositionResolver.rootCodePointIndexFrom(stringIndex);
   }
 
   @Override
@@ -568,7 +569,7 @@ public class StringSource implements Source {
 
   @Override
   public CursorRange cursorRange() {
-    return subPositionResolver.cursorRange();
+    return subPositionResolver.subCursorRange();
   }
   
   ThreadLocal<Integer> count = new ThreadLocal<>() {
@@ -629,5 +630,25 @@ public class StringSource implements Source {
   }
   
   public static Source EMPTY = StringSource.createDetachedSource("");
+
+  @Override
+  public CursorRange subCursorRange() {
+    return subPositionResolver.subCursorRange();
+  }
+
+  @Override
+  public StringIndex stringIndexInRootFrom(CodePointIndex CodePointIndex) {
+    return rootPositionResolver.stringIndexInRootFrom(CodePointIndex);
+  }
+
+  @Override
+  public CodePointIndexInLine codePointIndexInLineFrom(CodePointIndex rootCodePointIndex) {
+    return rootPositionResolver.codePointIndexInLineFrom(rootCodePointIndex);
+  }
+
+  @Override
+  public CodePointIndex rootCodePointIndexFrom(StringIndex stringIndex) {
+    return rootPositionResolver.rootCodePointIndexFrom(stringIndex);
+  }
 
 }

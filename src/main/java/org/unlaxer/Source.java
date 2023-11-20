@@ -108,8 +108,8 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
     return parent().isPresent();
   }
   
-  default PositionResolverImpl createRootPositionResolver(int[] codePoints) {
-    return new PositionResolverImpl(codePoints);
+  default RootPositionResolver createRootPositionResolver(int[] codePoints) {
+    return RootPositionResolver.createRootPositionResolver(codePoints);
   }
   
 //  Function<String,Source> stringToSource();
