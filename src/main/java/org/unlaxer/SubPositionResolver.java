@@ -14,6 +14,6 @@ public interface SubPositionResolver extends
       int[] codePoints,
       RootPositionResolver rootPositionResolver,
       CodePointOffset offsetFromRoot){
-    return new PositionResolverImpl(codePoints, null, new CodePointOffset(0));
+   return new PositionResolverImpl(codePoints, rootPositionResolver, offsetFromRoot);
   }
 }
