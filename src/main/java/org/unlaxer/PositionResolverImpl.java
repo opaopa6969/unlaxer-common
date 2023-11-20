@@ -116,7 +116,9 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
     if(cursorRanges.size()>0) {
       CursorRange last = cursorRanges.get(cursorRanges.size()-1);
       if(last.lessThan(codePointIndex) && startIndex.lessThan(position)) {
-        cursorRanges.add(CursorRange.of(startIndex, new CodePointIndexInLine(0), lineNumber,
+        cursorRanges.add(
+            CursorRange.of(
+            startIndex, new CodePointIndexInLine(0), lineNumber,
             position, codePointOffsetInline , lineNumber));
       }
     }
@@ -154,7 +156,7 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
 
   @Override
   public CursorRange rootCursorRange() {
-    if(rootPositionResolver == null) {
+    if(rootPositionResolver == this) {
       return cursorRange;
     }
     return rootPositionResolver.rootCursorRange();
