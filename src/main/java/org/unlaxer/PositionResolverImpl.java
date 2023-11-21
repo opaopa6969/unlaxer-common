@@ -159,13 +159,13 @@ public class PositionResolverImpl implements PositionResolver {
   }
 
   @Override
-  public StringIndex stringIndexInRootFrom(CodePointIndex codePointIndexInSubSource) {
+  public StringIndex stringIndexInRootFrom(CodePointIndex codePointIndex) {
     
 //    if(rootPositionResolver == this) {
 //      return stringIndexByCodePointIndex.get(codePointIndexInSubSource);
 //    }
 //    return rootPositionResolver.stringIndexInRootFrom(codePointIndexInSubSource.newWithPlus(offsetFromRoot));
-    return stringIndexByCodePointIndex.get(codePointIndexInSubSource);
+    return stringIndexByCodePointIndex.get(codePointIndex);
   }
 
   @Override
