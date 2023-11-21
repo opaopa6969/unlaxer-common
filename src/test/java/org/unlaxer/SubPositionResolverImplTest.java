@@ -19,7 +19,8 @@ public class SubPositionResolverImplTest {
     StringSource rootSource = StringSource.createRootSource(line.toString());
     CursorRange cursorRange = rootSource.cursorRange();
     System.out.println(cursorRange);
-    assertEquals(11, cursorRange.endIndexExclusive.positionInLine().value());
+    assertEquals(0, cursorRange.endIndexExclusive.positionInLine().value());
+    assertEquals(22, cursorRange.endIndexExclusive.positionInRoot().value());
   }
 
 }
