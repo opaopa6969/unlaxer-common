@@ -80,7 +80,7 @@ public class StringSource implements Source {
         offsetFromParent.toCodePointIndex().newWithAdd(codePoints.length),
         offsetFromParent,
         sourceKind, 
-        root);
+        positionResolver);
   }
 
   
@@ -106,7 +106,7 @@ public class StringSource implements Source {
         offsetFromParent.toCodePointIndex().newWithAdd(codePoints.length),
         offsetFromParent,
         sourceKind, 
-        root);
+        positionResolver);
   }
   
   
@@ -130,7 +130,7 @@ public class StringSource implements Source {
         offsetFromParent.toCodePointIndex().newWithAdd(codePoints.length),
         codePointOffset,
         sourceKind, 
-        root);
+        positionResolver);
   }
   
   public LineNumber lineNumberFrom(CodePointIndex codePointIndex) {
