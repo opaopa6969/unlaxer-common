@@ -165,7 +165,7 @@ public class PositionResolverImpl implements PositionResolver {
 //      return stringIndexByCodePointIndex.get(codePointIndexInSubSource);
 //    }
 //    return rootPositionResolver.stringIndexInRootFrom(codePointIndexInSubSource.newWithPlus(offsetFromRoot));
-    return stringIndexInRootFrom(codePointIndexInSubSource);
+    return stringIndexByCodePointIndex.get(codePointIndexInSubSource);
   }
 
   @Override
