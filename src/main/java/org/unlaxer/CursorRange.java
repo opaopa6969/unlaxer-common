@@ -30,17 +30,14 @@ public class CursorRange implements Comparable<CursorRange>{
 	
 	public static CursorRange of(
 	    CodePointIndex startIndexInclusive,
-//	    CodePointIndexInLine startIndexInLineInclusive,
-//	    LineNumber startLineNumber,
       CodePointIndex endIndexExclusive,
-//      CodePointIndexInLine endIndexInLineExclusive,
-//      LineNumber endLineNumber,
+      CodePointOffset offsetFromRoot,
       SourceKind sourceKind,
       PositionResolver positionResolver
 	    ) {
 	  return new CursorRange(
-        new StartInclusiveCursorImpl(sourceKind,positionResolver).setPosition(startIndexInclusive),
-        new EndExclusiveCursorImpl(sourceKind,positionResolver).setPosition(endIndexExclusive)
+        new StartInclusiveCursorImpl(sourceKind,positionResolver,startIndexInclusive,offsetFromRoot),
+        new EndExclusiveCursorImpl(sourceKind,positionResolver,endIndexExclusive,offsetFromRoot)
 	  );
 	  
 	}

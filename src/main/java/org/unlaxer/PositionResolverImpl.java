@@ -69,6 +69,7 @@ public class PositionResolverImpl implements PositionResolver {
             CursorRange.of(
               previousStartIndex,
               startIndex,
+              CodePointOffset.ZERO,
               SourceKind.subSource,
               this
             )
@@ -88,6 +89,7 @@ public class PositionResolverImpl implements PositionResolver {
               CursorRange.of(
                 previousStartIndex,
                 startIndex,
+                CodePointOffset.ZERO,
                 SourceKind.subSource,
                 this
               )
@@ -105,6 +107,7 @@ public class PositionResolverImpl implements PositionResolver {
               CursorRange.of(
                 previousStartIndex,
                 startIndex,
+                CodePointOffset.ZERO,
                 SourceKind.subSource,
                 this
               )
@@ -125,6 +128,7 @@ public class PositionResolverImpl implements PositionResolver {
     EndExclusiveCursor end = new EndExclusiveCursorImpl(SourceKind.root,this)
         .setPosition(position);
     cursorRange = new CursorRange(start, end);
+    codePointIndexInLineByCodePointIndex.put(position, new CodePointIndexInLine(0));
     if(cursorRanges.size()>0) {
       CursorRange last = cursorRanges.get(cursorRanges.size()-1);
       if(last.lessThan(codePointIndex) && startIndex.lessThan(position)) {
@@ -133,6 +137,7 @@ public class PositionResolverImpl implements PositionResolver {
             CursorRange.of(
               startIndex,
               position,
+              CodePointOffset.ZERO,
               SourceKind.subSource,
               this
             )
@@ -165,7 +170,7 @@ public class PositionResolverImpl implements PositionResolver {
   @Override
   public LineNumber lineNumberFrom(CodePointIndex codePointIndex) {
 //    return rootPositionResolver.lineNumberFrom(codePointIndex.newWithPlus(offsetFromRoot));
-    return lineNumberFrom(codePointIndex);
+    return lineNumberByIndex.floorEntry(codePointIndex).getValue();
   }
 
 //  @Override

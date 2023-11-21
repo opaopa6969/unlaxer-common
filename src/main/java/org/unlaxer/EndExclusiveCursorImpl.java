@@ -5,17 +5,17 @@ import org.unlaxer.Source.SourceKind;
 
 public class EndExclusiveCursorImpl extends AbstractCursorImpl<EndExclusiveCursor> implements EndExclusiveCursor{
   
-  public EndExclusiveCursorImpl(CursorKind cursorKind, SourceKind sourceKind, PositionResolver positionResolver,
+  public EndExclusiveCursorImpl(SourceKind sourceKind, PositionResolver positionResolver,
       CodePointIndex position , CodePointOffset offsetFromRoot) {
-    super(cursorKind, sourceKind, positionResolver, position , offsetFromRoot);
+    super(CursorKind.endExclusive, sourceKind, positionResolver, position , offsetFromRoot);
   }
   
   public EndExclusiveCursorImpl(PositionResolver positionResolver) {
-    super(CursorKind.startInclusive,SourceKind.root,positionResolver);
+    super(CursorKind.endExclusive,SourceKind.root,positionResolver);
   }
   
   public EndExclusiveCursorImpl(SourceKind sourceKind , PositionResolver positionResolver) {
-    super(CursorKind.startInclusive,sourceKind,positionResolver);
+    super(CursorKind.endExclusive,sourceKind,positionResolver);
   }
   
   public EndExclusiveCursorImpl(EndExclusiveCursor cursor) {
@@ -33,7 +33,7 @@ public class EndExclusiveCursorImpl extends AbstractCursorImpl<EndExclusiveCurso
 
   @Override
   public EndExclusiveCursor copy() {
-    return new EndExclusiveCursorImpl(cursorKind,  sourceKind , positionResolver , position , offsetFromRoot);
+    return new EndExclusiveCursorImpl(sourceKind , positionResolver , position , offsetFromRoot);
   }
   
   @Override

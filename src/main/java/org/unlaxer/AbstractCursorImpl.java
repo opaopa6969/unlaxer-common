@@ -46,19 +46,19 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
   
   @Override
   public CodePointIndex position() {
-    return position;
+    return positionInSub();
   }
   
   @Override
   public CodePointIndex positionInSub() {
-    return position;
+    return sourceKind.isRoot() ?
+        position:
+        position.newWithMinus(offsetFromRoot());
   }
   
   @Override
   public CodePointIndex positionInRoot() {
-    return sourceKind.isRoot() ?
-        position:
-        position.newWithMinus(offsetFromRoot());
+    return position;
   }
 
   

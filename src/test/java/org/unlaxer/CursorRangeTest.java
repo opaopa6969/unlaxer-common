@@ -19,12 +19,14 @@ public class CursorRangeTest {
     CursorRange cursorRange0 = CursorRange.of(
         position0,
         position4,
+        CodePointOffset.ZERO,
         SourceKind.subSource,
         positionResolver);
         
     CursorRange cursorRange1 = CursorRange.of(
         position4,
         position7,
+        CodePointOffset.ZERO,
         SourceKind.subSource,
         positionResolver);
     

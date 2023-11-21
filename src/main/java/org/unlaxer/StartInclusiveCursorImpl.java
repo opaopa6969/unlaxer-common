@@ -5,9 +5,9 @@ import org.unlaxer.Source.SourceKind;
 
 public class StartInclusiveCursorImpl extends AbstractCursorImpl<StartInclusiveCursor> implements StartInclusiveCursor{
   
-  public StartInclusiveCursorImpl(CursorKind cursorKind, SourceKind sourceKind, PositionResolver positionResolver,
+  public StartInclusiveCursorImpl(SourceKind sourceKind, PositionResolver positionResolver,
       CodePointIndex position , CodePointOffset offsetFromRoot) {
-    super(cursorKind, sourceKind, positionResolver, position , offsetFromRoot);
+    super(CursorKind.startInclusive, sourceKind, positionResolver, position , offsetFromRoot);
   }
 
   public StartInclusiveCursorImpl(PositionResolver positionResolver) {
@@ -33,7 +33,7 @@ public class StartInclusiveCursorImpl extends AbstractCursorImpl<StartInclusiveC
 
   @Override
   public StartInclusiveCursor copy() {
-    return new StartInclusiveCursorImpl(cursorKind,  sourceKind , positionResolver , position , offsetFromRoot);
+    return new StartInclusiveCursorImpl(sourceKind , positionResolver , position , offsetFromRoot);
   }
   
   @Override
