@@ -129,6 +129,7 @@ public class PositionResolverImpl implements PositionResolver {
         .setPosition(position);
     cursorRange = new CursorRange(start, end);
     codePointIndexInLineByCodePointIndex.put(position, new CodePointIndexInLine(0));
+    lineNumberByIndex.put(position, lineNumber);
     if(cursorRanges.size()>0) {
       CursorRange last = cursorRanges.get(cursorRanges.size()-1);
       if(last.lessThan(codePointIndex) && startIndex.lessThan(position)) {

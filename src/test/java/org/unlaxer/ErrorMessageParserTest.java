@@ -49,8 +49,8 @@ public class ErrorMessageParserTest extends ParserTestBase{
 			
 			assertEquals(1, errorMessages.size());
 			assertEquals(message, errorMessages.get(0).getContent());
-			assertEquals(2, errorMessages.get(0).getRange().startIndexInclusive.position().value());
-			assertEquals(2, errorMessages.get(0).getRange().endIndexExclusive.position().value());
+			assertEquals(2, errorMessages.get(0).getRange().startIndexInclusive.positionInRoot().value());
+			assertEquals(2, errorMessages.get(0).getRange().endIndexExclusive.positionInRoot().value());
 		}
 		
 		TestResult result = testPartialMatch(parser, "1+s","1+");
