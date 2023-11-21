@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import org.junit.Test;
 import org.unlaxer.CodePointIndex;
 import org.unlaxer.ParserTestBase;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.StringSource;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.combinator.Chain;
@@ -61,21 +62,25 @@ public class Usage003_01_Palidrome extends ParserTestBase {
 			matchedTokenParser.sliceWithWord(word->{
 				boolean hasPivot = word.length() % 2 ==1;
 				int halfSize = (word.length() - (hasPivot ? 1:0))/2;
-				return word.cursorRange(new CodePointIndex(0), new CodePointIndex(halfSize));
+				return word.cursorRange(new CodePointIndex(0), new CodePointIndex(halfSize),
+				    SourceKind.subSource , word.positionResolver());
 			}),
 			//  c
 			matchedTokenParser.sliceWithWord(word->{
 				boolean hasPivot = word.length() % 2 ==1;
 				int halfSize = (word.length() - (hasPivot ? 1:0))/2;
 				return hasPivot ? 
-				    word.cursorRange(new CodePointIndex(halfSize), new CodePointIndex(halfSize+1)): 
-			      word.cursorRange(new CodePointIndex(0), new CodePointIndex(0));
+				    word.cursorRange(new CodePointIndex(halfSize), new CodePointIndex(halfSize+1),
+				        SourceKind.subSource , word.positionResolver()): 
+			      word.cursorRange(new CodePointIndex(0), new CodePointIndex(0),
+			          SourceKind.subSource , word.positionResolver());
 			}),
 			//ab->reverse
 			matchedTokenParser.slice(word->{
 				boolean hasPivot = word.length() % 2 ==1;
 				int halfSize = (word.length() - (hasPivot ? 1:0))/2;
-				return word.cursorRange(new CodePointIndex(0), new CodePointIndex(halfSize));
+				return word.cursorRange(new CodePointIndex(0), new CodePointIndex(halfSize),
+				    SourceKind.subSource , word.positionResolver());
 			},true)
 		);
 	}

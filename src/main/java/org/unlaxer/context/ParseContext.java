@@ -55,7 +55,7 @@ public class ParseContext implements
 	Map<Name, Object> globalScopeTreeMap = new HashMap<>();
 	
 	Collection<AdditionalCommitAction> actions;
-
+	
 	public ParseContext(Source source, ParseContextEffector... parseContextEffectors) {
 	  parseContextByThread.set(this);
 	  if(source.sourceKind() != SourceKind.root) {
@@ -63,7 +63,7 @@ public class ParseContext implements
 	  }
 		this.source = source;
 		actions = new ArrayList<>();
-		tokenStack.add(new TransactionElement(new ParserCursor()));
+		tokenStack.add(new TransactionElement(new ParserCursor(source.positionResolver())));
 
 		for (ParseContextEffector parseContextEffector : parseContextEffectors) {
 			parseContextEffector.effect(this);

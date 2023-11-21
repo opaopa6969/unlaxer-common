@@ -1,10 +1,8 @@
 package org.unlaxer.parser.elementary;
 
 import org.unlaxer.Parsed;
-import org.unlaxer.ParserCursor;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
-import org.unlaxer.TransactionElement;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
@@ -32,12 +30,12 @@ public class LineTerminatorParser extends LazyChoice{
 	@Override
 	public Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch) {
 		Parsed parse = super.parse(parseContext, tokenKind, invertMatch);
-		TransactionElement current = parseContext.getCurrent();
-		ParserCursor parserCursor = current.getParserCursor();
-		parserCursor.getCursor(TokenKind.consumed)
-		    .resolveLineNumber(parseContext.source.rootPositionResolver());
-    parserCursor.getCursor(TokenKind.matchOnly)
-      .resolveLineNumber(parseContext.source.rootPositionResolver());
+//		TransactionElement current = parseContext.getCurrent();
+//		ParserCursor parserCursor = current.getParserCursor();
+//		parserCursor.getCursor(TokenKind.consumed)
+//		    .resolveLineNumber(parseContext.source.rootPositionResolver());
+//    parserCursor.getCursor(TokenKind.matchOnly)
+//      .resolveLineNumber(parseContext.source.rootPositionResolver());
 		return parse;
 	}
 	

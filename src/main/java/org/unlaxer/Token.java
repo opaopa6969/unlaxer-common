@@ -99,7 +99,7 @@ public class Token implements Serializable{
 	
 	public static Token empty(TokenKind tokenKind , EndExclusiveCursor position , Parser parser){
 	  StringSource empty = 
-	      StringSource.createDetachedSource("", null ,  new CodePointOffset(position.getPosition()));
+	      StringSource.createDetachedSource("", null ,  new CodePointOffset(position.position()));
 	  
 		return new Token(tokenKind , empty ,parser);
 	}

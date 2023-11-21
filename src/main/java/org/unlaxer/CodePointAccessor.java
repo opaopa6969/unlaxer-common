@@ -2,6 +2,8 @@ package org.unlaxer;
 
 import java.util.Optional;
 
+import org.unlaxer.Source.SourceKind;
+
 public interface CodePointAccessor extends Comparable<CodePointAccessor>, StringBase {
   
   
@@ -159,7 +161,8 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   public LineNumber lineNumber(CodePointIndex Position);
   
-  default CursorRange cursorRange(CodePointIndex startIndexInclusive, CodePointLength length) {
+  default CursorRange cursorRange(CodePointIndex startIndexInclusive, CodePointLength length,
+      SourceKind sourceKind, PositionResolver positionResolver) {
 
     //こういう処理が入っていたけどとりあえず無視してみる。
 //  if(startIndexInclusive.value() + length.value() > codePoints.length){
@@ -173,17 +176,16 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
 
     
     CodePointIndex endIndexExclusive = new CodePointIndex(startIndexInclusive.newWithPlus(length));
-    return cursorRange(startIndexInclusive, endIndexExclusive);
+    return cursorRange(startIndexInclusive, endIndexExclusive, sourceKind , positionResolver);
   }
   
-  default CursorRange cursorRange(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+  default CursorRange cursorRange(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive , 
+      SourceKind sourceKind, PositionResolver positionResolver) {
       CursorRange cursorRange = new CursorRange(
-          new StartInclusiveCursorImpl()
-            .setPosition(startIndexInclusive)
-            .setLineNumber(lineNumber(startIndexInclusive)),
-          new EndExclusiveCursorImpl()
+          new StartInclusiveCursorImpl(sourceKind , positionResolver)
+            .setPosition(startIndexInclusive),
+          new EndExclusiveCursorImpl(sourceKind , positionResolver)
             .setPosition(endIndexExclusive)
-            .setLineNumber(lineNumber(endIndexExclusive))
       );
       return cursorRange;
   }

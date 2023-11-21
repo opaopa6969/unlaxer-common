@@ -203,30 +203,28 @@ public class TokenList implements List<Token>{
     return tokens.parallelStream();
   }
   
-  public CursorRange combinedCursorRange() {
+  public CursorRange combinedCursorRange(PositionResolver positionResolver) {
     
-    return combinedCursorRange(this);
+    return combinedCursorRange(this,positionResolver);
   }
   
-  public static CursorRange combinedCursorRange(TokenList tokens) {
+  public static CursorRange combinedCursorRange(TokenList tokens , PositionResolver positionResolver) {
     
     Optional<Token> firstPrintableToken = tokens.firstPrintableToken();
     if(tokens.isEmpty() || firstPrintableToken.isEmpty()) {
-      return new CursorRange(new StartInclusiveCursorImpl(), new EndExclusiveCursorImpl().incrementPosition());
+      return new CursorRange(
+          new StartInclusiveCursorImpl(positionResolver), 
+          new EndExclusiveCursorImpl(positionResolver).incrementPosition());
     }
     
     CursorRange first = firstPrintableToken.get().getSource().cursorRange();
     CursorRange last = tokens.lastPrintableToken().get().getSource().cursorRange();
     
     return new CursorRange(
-          new StartInclusiveCursorImpl()
-            .setLineNumber(first.startIndexInclusive.getLineNumber())
-            .setPositionInLine(first.startIndexInclusive.getPositionInLine())
-            .setPosition(first.startIndexInclusive.getPosition()),
-          new EndExclusiveCursorImpl()
-            .setLineNumber(last.endIndexExclusive.getLineNumber())
-            .setPositionInLine(last.endIndexExclusive.getPositionInLine())
-            .setPosition(last.endIndexExclusive.getPosition())
+          new StartInclusiveCursorImpl(positionResolver)
+            .setPosition(first.startIndexInclusive.position()),
+          new EndExclusiveCursorImpl(positionResolver)
+            .setPosition(last.endIndexExclusive.position())
      );
   }
   

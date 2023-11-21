@@ -4,6 +4,7 @@ import java.util.stream.IntStream;
 
 import org.unlaxer.Cursor.EndExclusiveCursor;
 import org.unlaxer.Cursor.StartInclusiveCursor;
+import org.unlaxer.Source.SourceKind;
 
 public class CursorRange implements Comparable<CursorRange>{
 	
@@ -20,25 +21,26 @@ public class CursorRange implements Comparable<CursorRange>{
 		this.startIndexInclusive = startIndexInclusive;
 		this.endIndexExclusive = new EndExclusiveCursorImpl(startIndexInclusive);
 	}
-	public CursorRange() {
+	
+	public CursorRange(SourceKind sourceKind, PositionResolver positionResolver) {
 		super();
-		this.startIndexInclusive = new StartInclusiveCursorImpl();
-		this.endIndexExclusive = new EndExclusiveCursorImpl();
+		this.startIndexInclusive = new StartInclusiveCursorImpl(sourceKind , positionResolver);
+		this.endIndexExclusive = new EndExclusiveCursorImpl(sourceKind , positionResolver);
 	}
 	
 	public static CursorRange of(
 	    CodePointIndex startIndexInclusive,
-	    CodePointIndexInLine startIndexInLineInclusive,
-	    LineNumber startLineNumber,
+//	    CodePointIndexInLine startIndexInLineInclusive,
+//	    LineNumber startLineNumber,
       CodePointIndex endIndexExclusive,
-      CodePointIndexInLine endIndexInLineExclusive,
-      LineNumber endLineNumber
+//      CodePointIndexInLine endIndexInLineExclusive,
+//      LineNumber endLineNumber,
+      SourceKind sourceKind,
+      PositionResolver positionResolver
 	    ) {
 	  return new CursorRange(
-        new StartInclusiveCursorImpl().setLineNumber(startLineNumber)
-          .setPosition(startIndexInclusive).setPositionInLine(startIndexInLineInclusive),
-        new EndExclusiveCursorImpl().setLineNumber(endLineNumber)
-          .setPosition(endIndexExclusive).setPositionInLine(endIndexInLineExclusive)
+        new StartInclusiveCursorImpl(sourceKind,positionResolver).setPosition(startIndexInclusive),
+        new EndExclusiveCursorImpl(sourceKind,positionResolver).setPosition(endIndexExclusive)
 	  );
 	  
 	}
@@ -52,67 +54,67 @@ public class CursorRange implements Comparable<CursorRange>{
 	}
 	
 	public boolean isSingle() {
-		return startIndexInclusive.getPosition() == endIndexExclusive.getPosition();
+		return startIndexInclusive.position() == endIndexExclusive.position();
 	}
 
 	public boolean match(CodePointIndex position){
-		return position.ge(startIndexInclusive.getPosition()) 
-		    && position.lt(endIndexExclusive.getPosition());
+		return position.ge(startIndexInclusive.position()) 
+		    && position.lt(endIndexExclusive.position());
 	}
 
 	
   public boolean lt(CodePointIndex position){
-	  return position.ge(endIndexExclusive.getPosition());
+	  return position.ge(endIndexExclusive.position());
 	}
 
 	public boolean lessThan(CodePointIndex position){
-		return position.ge(endIndexExclusive.getPosition());
+		return position.ge(endIndexExclusive.position());
 	}
 	
 	public boolean graterThan(CodePointIndex position){
-		return position.lt(startIndexInclusive.getPosition());
+		return position.lt(startIndexInclusive.position());
 	}
 	
   public boolean gt(CodePointIndex position){
-    return position.lt(startIndexInclusive.getPosition());
+    return position.lt(startIndexInclusive.position());
 	}
 	
 	public boolean lessThan(CursorRange other){
-		return other.startIndexInclusive.getPosition().ge(endIndexExclusive.getPosition());
+		return other.startIndexInclusive.position().ge(endIndexExclusive.position());
 	}
 	
   public boolean lt(CursorRange other){
-	  return other.startIndexInclusive.getPosition().ge(endIndexExclusive.getPosition());
+	  return other.startIndexInclusive.position().ge(endIndexExclusive.position());
 	}
 	
   public boolean gt(CursorRange other){
-    return other.endIndexExclusive.getPosition().le(startIndexInclusive.getPosition());
+    return other.endIndexExclusive.position().le(startIndexInclusive.position());
   }
   
 	public boolean graterThan(CursorRange other){
-		return other.endIndexExclusive.getPosition().le(startIndexInclusive.getPosition());
+		return other.endIndexExclusive.position().le(startIndexInclusive.position());
 	}
 	
 	public RangesRelation relation(CursorRange other){
-		CodePointIndex otherStart = other.startIndexInclusive.getPosition();
-		CodePointIndex otherEnd= other.endIndexExclusive.getPosition();
-		if(startIndexInclusive.getPosition().eq(otherStart) && 
-		    endIndexExclusive.getPosition().eq(otherEnd)){
+		CodePointIndex otherStart = other.startIndexInclusive.position();
+		CodePointIndex otherEnd= other.endIndexExclusive.position();
+		if(startIndexInclusive.position().eq(otherStart) && 
+		    endIndexExclusive.position().eq(otherEnd)){
 			
 			return RangesRelation.equal;
 			
-		}else if(startIndexInclusive.getPosition().ge(otherStart) && 
-		    endIndexExclusive.getPosition().le(otherEnd)){
+		}else if(startIndexInclusive.position().ge(otherStart) && 
+		    endIndexExclusive.position().le(otherEnd)){
 			
 			return RangesRelation.outer;
 			
-		}else if(startIndexInclusive.getPosition().le(otherStart) && 
-		    endIndexExclusive.getPosition().ge(otherEnd)){
+		}else if(startIndexInclusive.position().le(otherStart) && 
+		    endIndexExclusive.position().ge(otherEnd)){
 			
 			return RangesRelation.inner;
 			
-		}else if(startIndexInclusive.getPosition().ge(otherEnd) || 
-		    endIndexExclusive.getPosition().le(otherStart)){
+		}else if(startIndexInclusive.position().ge(otherEnd) || 
+		    endIndexExclusive.position().le(otherStart)){
 			
 			return RangesRelation.notCrossed;
 		}
@@ -120,16 +122,16 @@ public class CursorRange implements Comparable<CursorRange>{
 	}
 	
 	public IntStream asIntStream() {
-		return IntStream.range(startIndexInclusive.getPosition().value(), 
-		    endIndexExclusive.getPosition().value());
+		return IntStream.range(startIndexInclusive.position().value(), 
+		    endIndexExclusive.position().value());
 	}
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + endIndexExclusive.getPosition().value();
-		result = prime * result + startIndexInclusive.getPosition().value();
+		result = prime * result + endIndexExclusive.position().value();
+		result = prime * result + startIndexInclusive.position().value();
 		return result;
 	}
 	@Override
@@ -141,9 +143,9 @@ public class CursorRange implements Comparable<CursorRange>{
 		if (getClass() != obj.getClass())
 			return false;
 		CursorRange other = (CursorRange) obj;
-		if (endIndexExclusive.getPosition().value() != other.endIndexExclusive.getPosition().value())
+		if (endIndexExclusive.position().value() != other.endIndexExclusive.position().value())
 			return false;
-		if (startIndexInclusive.getPosition().value() != other.startIndexInclusive.getPosition().value())
+		if (startIndexInclusive.position().value() != other.startIndexInclusive.position().value())
 			return false;
 		return true;
 	}
@@ -151,9 +153,9 @@ public class CursorRange implements Comparable<CursorRange>{
 	
 	@Override
 	public int compareTo(CursorRange other) {
-		int value = startIndexInclusive.getPosition().value() - other.startIndexInclusive.getPosition().value();
+		int value = startIndexInclusive.position().value() - other.startIndexInclusive.position().value();
 		if(value == 0) {
-			return endIndexExclusive.getPosition().value() - other.endIndexExclusive.getPosition().value();
+			return endIndexExclusive.position().value() - other.endIndexExclusive.position().value();
 		}
 		return value;
 	}
@@ -164,19 +166,20 @@ public class CursorRange implements Comparable<CursorRange>{
 			"["+startIndexInclusive.toString()+","+endIndexExclusive.toString()+"]";
 				
 	}
-	public static CursorRange invalidRange() {
-		return invalidRange;
+	public static CursorRange invalidRange(SourceKind sourceKind,PositionResolver positionResolver) {
+	  return new CursorRange(sourceKind,positionResolver);
 	}
 	
-	static final CursorRange invalidRange = new CursorRange();
+//	static final CursorRange invalidRange = new CursorRange();
 	
 	public Range toRange() {
-	   return new Range(startIndexInclusive.getPosition() , endIndexExclusive.getPosition());
+	   return new Range(startIndexInclusive.position() , endIndexExclusive.position());
 	}
 	
-//	public CursorRange plus(CodePointOffset codePointOffset) {
-//	  lineNumerの更新も行う
-//	  position in lineはそもそもsubシーケンスでの扱いをどうするか？subシーケンスの中で全体的に新たなものになるか。
-//	  rootは良いとしてもparentの中での扱いはどうするか？
-//	}
+	public CursorRange newWithAdd(CodePointOffset codePointOffset) {
+	  return new CursorRange(
+  	  startIndexInclusive.newWithAddPosition(codePointOffset),
+  	  endIndexExclusive.newWithAddPosition(codePointOffset)
+ 	  );
+	}
 }

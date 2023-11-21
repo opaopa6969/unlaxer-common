@@ -71,8 +71,8 @@ public class Slicer implements Supplier<Source>{
 	
 	public Slicer range(Function<Source,CursorRange> rangeSpecifier){
 	  CursorRange range = rangeSpecifier.apply(word);
-		begin(range.startIndexInclusive.getPosition());
-		end(range.endIndexExclusive.getPosition());
+		begin(range.startIndexInclusive.position());
+		end(range.endIndexExclusive.position());
 		return this;
 	}
 	

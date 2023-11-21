@@ -2,55 +2,66 @@ package org.unlaxer;
 
 import java.io.Serializable;
 
-import org.unlaxer.util.NameSpecifier;
+import org.unlaxer.Source.SourceKind;
 
 public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Serializable,Cursor<T> {
 	
 	private static final long serialVersionUID = -4419856259856233251L;
 	
-	NameSpecifier nameSpace;
-	LineNumber lineNumber;
 	CodePointIndex position;
-	CodePointIndexInLine positionInLine;
-	CursorKind cursorKind;
+	final CursorKind cursorKind;
+	final SourceKind sourceKind;
+	final PositionResolver positionResolver;
+	final CodePointOffset offsetFromRoot;
 	
-	AbstractCursorImpl(CursorKind cursorKind) {
-		super();
-		lineNumber = new LineNumber(0);
-		position = new CodePointIndex(0);
-		positionInLine = new CodePointIndexInLine(0);
-		nameSpace = NameSpecifier.of("");
-		this.cursorKind = cursorKind;
+	AbstractCursorImpl(CursorKind cursorKind , SourceKind sourceKind , PositionResolver positionResolver) {
+		this(cursorKind,sourceKind,positionResolver,new CodePointIndex(0) , new CodePointOffset(0));
 	}
+	
+  AbstractCursorImpl(CursorKind cursorKind , SourceKind sourceKind , 
+	     PositionResolver positionResolver , CodePointIndex position , CodePointOffset offsetFromRoot) {
+	    super();
+	    this.cursorKind = cursorKind;
+	    this.sourceKind = sourceKind;
+	    this.positionResolver = positionResolver;
+	    this.position = position;
+	    this.offsetFromRoot = offsetFromRoot;
+  }
+	
 	public AbstractCursorImpl(Cursor<?> cursor) {
-		nameSpace = cursor.getNameSpace();
-		lineNumber = cursor.getLineNumber();
-		positionInLine = cursor.getPositionInLine();
-		position = cursor.getPosition();
+		position = cursor.position();
+		cursorKind = cursor.cursorKind();
+		sourceKind = cursor.sourceKind();
+		positionResolver = cursor.positionResolver();
+		offsetFromRoot = cursor.offsetFromRoot();
 	}
 	
   abstract T thisObject();
   
   @Override
-  public T setNameSpace(NameSpecifier nameSpace) {
-    this.nameSpace = nameSpace;
-    return thisObject();
-  }
-  @Override
-  public LineNumber getLineNumber() {
-    return lineNumber;
+  public LineNumber lineNumber() {
+    return positionResolver.lineNumberFrom(positionInRoot());
   }
   
-  @Override
-  public T setLineNumber(LineNumber lineNumber) {
-    this.lineNumber = lineNumber;
-    return thisObject();
-  }
   
   @Override
-  public CodePointIndex getPosition() {
+  public CodePointIndex position() {
     return position;
   }
+  
+  @Override
+  public CodePointIndex positionInSub() {
+    return position;
+  }
+  
+  @Override
+  public CodePointIndex positionInRoot() {
+    return sourceKind.isRoot() ?
+        position:
+        position.newWithMinus(offsetFromRoot());
+  }
+
+  
   @Override
   public T setPosition(CodePointIndex position) {
     this.position = position;
@@ -62,31 +73,14 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
     return thisObject();
   }
   @Override
-  public CodePointIndexInLine getPositionInLine() {
-    return positionInLine;
-  }
-  @Override
-  public T setPositionInLine(CodePointIndexInLine positionInLine) {
-    this.positionInLine = positionInLine;
-    return thisObject();
+  public CodePointIndexInLine positionInLine() {
+    return positionResolver.codePointIndexInLineFrom(positionInRoot());
   }
   
-  @Override
-  public T incrementLineNumber() {
-    lineNumber = lineNumber.newWithIncrements();
-    positionInLine = new CodePointIndexInLine(0);
-    return thisObject();
-  }
   @Override
   public T incrementPosition() {
     position = position.newWithIncrements();
-    positionInLine = positionInLine.newWithIncrements();
     return thisObject();
-  }
-  
-  @Override
-  public NameSpecifier getNameSpace() {
-    return nameSpace;
   }
   
   @Override
@@ -95,7 +89,24 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
   }
   
   @Override
+  public PositionResolver positionResolver() {
+    return positionResolver;
+  }
+
+  @Override
+  public SourceKind sourceKind() {
+    return sourceKind;
+  }
+  
+  
+  
+  @Override
+  public CodePointOffset offsetFromRoot() {
+    return offsetFromRoot;
+  }
+
+  @Override
   public String toString() {
-    return "[L:" + lineNumber + ",X:" + getPositionInLine()+",P:"+getPosition()+"]";
+    return "[L:" + lineNumber() + ",X:" + positionInLine()+",P:"+position()+"]";
   }
 }

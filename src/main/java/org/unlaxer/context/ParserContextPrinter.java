@@ -20,12 +20,12 @@ public class ParserContextPrinter {
 			Source peek = parseContext.peekLast(position, new CodePointLength(20));
 			
 			return String.format("CON(L:%d,P:%d) MO(L:%d,P:%d) Last20='%s' ", 
-					consumed.getLineNumber().value(),
+					consumed.lineNumber().value(),
 //					consumed.getPositionInLine(), // きちんと実装されてない
-					consumed.getPosition().value(),
-					matchOnly.getLineNumber().value(),
+					consumed.position().value(),
+					matchOnly.lineNumber().value(),
 //					matchOnly.getPositionInLine(),
-					matchOnly.getPosition().value(),
+					matchOnly.position().value(),
 					normalize(peek.toString()));
 		}
 		

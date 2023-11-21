@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 import org.unlaxer.util.FactoryBoundCache;
 import org.unlaxer.util.function.TriFunction;
 
-public interface Source extends CodePointAccessor , SubPositionResolver , RootPositionResolver {
+public interface Source extends CodePointAccessor , PositionResolver {
   
   public enum SourceKind{
     root,
@@ -33,7 +33,7 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
     }
   }
   
-  RootPositionResolver rootPositionResolver();
+  PositionResolver positionResolver();
   
   SourceKind sourceKind();
   
@@ -79,7 +79,7 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
 	}
 	
 	default Source subSource(CursorRange cursorRange) {
-	  return subSource(cursorRange.startIndexInclusive.getPosition(), cursorRange.endIndexExclusive.getPosition());
+	  return subSource(cursorRange.startIndexInclusive.position(), cursorRange.endIndexExclusive.position());
 	}
 	
   Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
@@ -108,8 +108,8 @@ public interface Source extends CodePointAccessor , SubPositionResolver , RootPo
     return parent().isPresent();
   }
   
-  default RootPositionResolver createRootPositionResolver(int[] codePoints) {
-    return RootPositionResolver.createRootPositionResolver(codePoints);
+  default PositionResolver createPositionResolver(int[] codePoints) {
+    return PositionResolver.createPositionResolver(codePoints);
   }
   
 //  Function<String,Source> stringToSource();

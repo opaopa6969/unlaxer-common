@@ -10,8 +10,9 @@ import java.util.stream.Stream;
 
 import org.unlaxer.Cursor.EndExclusiveCursor;
 import org.unlaxer.Cursor.StartInclusiveCursor;
+import org.unlaxer.Source.SourceKind;
 
-public class PositionResolverImpl implements RootPositionResolver , SubPositionResolver{
+public class PositionResolverImpl implements PositionResolver {
   
   final NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
   final Map<CodePointIndex,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
@@ -19,8 +20,7 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
   final Map<StringIndex,CodePointIndex> codePointIndexByStringIndex = new HashMap<>();
   final List<CursorRange> cursorRanges = new ArrayList<>();
   final CursorRange cursorRange;
-  final CodePointOffset offsetFromRoot;
-  final RootPositionResolver rootPositionResolver;
+//  final RootPositionResolver rootPositionResolver;
   
 //  public static RootPositionResolver createRootPositionResolver(int[] codePoints){
 //    return new PositionResolverImpl(codePoints, null, new CodePointOffset(0));
@@ -34,14 +34,12 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
 //  }
 
   
-  PositionResolverImpl(
-      int[] codePoints,
-      RootPositionResolver rootPositionResolver,
-      CodePointOffset offsetFromRoot) {
-    
+  PositionResolverImpl(int[] codePoints){
+//      RootPositionResolver rootPositionResolver,
+//      CodePointOffset offsetFromRoot) {
+//    boolean isRoot = rootPositionResolver == null ;
     int codePointCount = codePoints.length;
-    this.rootPositionResolver = rootPositionResolver == null ? this : rootPositionResolver;
-    this.offsetFromRoot = offsetFromRoot;
+//    this.rootPositionResolver = isRoot ? this : rootPositionResolver;
     
     LineNumber lineNumber = new LineNumber(0);
     CodePointIndex startIndex = new CodePointIndex(0);
@@ -67,9 +65,13 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
         
         previousStartIndex = startIndex;
         startIndex = new CodePointIndex(i+1);
-        cursorRanges.add(CursorRange.of(
-            previousStartIndex, new CodePointIndexInLine(0) ,lineNumber,
-            startIndex, codePointOffsetInline,  lineNumber)
+        cursorRanges.add(
+            CursorRange.of(
+              previousStartIndex,
+              startIndex,
+              SourceKind.subSource,
+              this
+            )
         );
         lineNumber = lineNumber.newWithIncrements();
         lineNumberByIndex.put(startIndex, lineNumber);
@@ -82,9 +84,13 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
           i++;
           previousStartIndex = startIndex;
           startIndex = new CodePointIndex(i+1);
-          cursorRanges.add(CursorRange.of(
-              previousStartIndex, new CodePointIndexInLine(0) ,lineNumber,
-              startIndex, codePointOffsetInline,  lineNumber)
+          cursorRanges.add(
+              CursorRange.of(
+                previousStartIndex,
+                startIndex,
+                SourceKind.subSource,
+                this
+              )
           );
           lineNumber = lineNumber.newWithIncrements();
           lineNumberByIndex.put(startIndex, lineNumber);
@@ -95,9 +101,13 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
         }else {
           previousStartIndex = startIndex;
           startIndex = new CodePointIndex(i+1);
-          cursorRanges.add(CursorRange.of(
-              previousStartIndex, new CodePointIndexInLine(0) ,lineNumber,
-              startIndex, codePointOffsetInline,  lineNumber)
+          cursorRanges.add(
+              CursorRange.of(
+                previousStartIndex,
+                startIndex,
+                SourceKind.subSource,
+                this
+              )
           );
           lineNumber = lineNumber.newWithIncrements();
           lineNumberByIndex.put(startIndex, lineNumber);
@@ -108,18 +118,25 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
       codePointOffsetInline = codePointOffsetInline.newWithIncrements();
     }
 
-    StartInclusiveCursor start = new StartInclusiveCursorImpl();//.addPosition(offsetFromRoot);
+    StartInclusiveCursor start = new StartInclusiveCursorImpl(SourceKind.root,this);//.addPosition(offsetFromRoot);
+    
     CodePointIndex position = new CodePointIndex(codePointCount);//.newWithAdd(offsetFromRoot);
-    EndExclusiveCursor end = new EndExclusiveCursorImpl().setPosition(position)
-        .setLineNumber(lineNumber).setPositionInLine(codePointOffsetInline);
+    
+    EndExclusiveCursor end = new EndExclusiveCursorImpl(SourceKind.root,this)
+        .setPosition(position);
     cursorRange = new CursorRange(start, end);
     if(cursorRanges.size()>0) {
       CursorRange last = cursorRanges.get(cursorRanges.size()-1);
       if(last.lessThan(codePointIndex) && startIndex.lessThan(position)) {
+        
         cursorRanges.add(
             CursorRange.of(
-            startIndex, new CodePointIndexInLine(0), lineNumber,
-            position, codePointOffsetInline , lineNumber));
+              startIndex,
+              position,
+              SourceKind.subSource,
+              this
+            )
+        );
       }
     }
   }
@@ -138,15 +155,17 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
   @Override
   public StringIndex stringIndexInRootFrom(CodePointIndex codePointIndexInSubSource) {
     
-    if(rootPositionResolver == this) {
-      return stringIndexByCodePointIndex.get(codePointIndexInSubSource);
-    }
-    return rootPositionResolver.stringIndexInRootFrom(codePointIndexInSubSource.newWithPlus(offsetFromRoot));
+//    if(rootPositionResolver == this) {
+//      return stringIndexByCodePointIndex.get(codePointIndexInSubSource);
+//    }
+//    return rootPositionResolver.stringIndexInRootFrom(codePointIndexInSubSource.newWithPlus(offsetFromRoot));
+    return stringIndexInRootFrom(codePointIndexInSubSource);
   }
 
   @Override
   public LineNumber lineNumberFrom(CodePointIndex codePointIndex) {
-    return rootPositionResolver.lineNumberFrom(codePointIndex.newWithPlus(offsetFromRoot));
+//    return rootPositionResolver.lineNumberFrom(codePointIndex.newWithPlus(offsetFromRoot));
+    return lineNumberFrom(codePointIndex);
   }
 
 //  @Override
@@ -156,20 +175,12 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
 
   @Override
   public CursorRange rootCursorRange() {
-    if(rootPositionResolver == this) {
-      return cursorRange;
-    }
-    return rootPositionResolver.rootCursorRange();
+    return cursorRange;
   }
 
   @Override
   public StringIndex subStringIndexFrom(CodePointIndex subCodePointIndex) {
     return stringIndexByCodePointIndex.get(subCodePointIndex);
-  }
-
-  @Override
-  public LineNumber subLineNumberFrom(CodePointIndex subCodePointIndex) {
-    return lineNumberByIndex.floorEntry(subCodePointIndex).getValue();
   }
 
   @Override
@@ -179,15 +190,12 @@ public class PositionResolverImpl implements RootPositionResolver , SubPositionR
 
   @Override
   public CodePointIndexInLine codePointIndexInLineFrom(CodePointIndex codePointIndex) {
-    return rootPositionResolver.codePointIndexInLineFrom(codePointIndex);
+    return codePointIndexInLineByCodePointIndex.get(codePointIndex);
   }
 
   @Override
   public CodePointIndex rootCodePointIndexFrom(StringIndex stringIndex) {
-    return rootPositionResolver.rootCodePointIndexFrom(stringIndex);
+    return codePointIndexByStringIndex.get(stringIndex);
   }
 
-  @Override
-  public CursorRange subCursorRange() {
-    return cursorRange;
-  }}
+}

@@ -60,14 +60,14 @@ public class StringSourceTest {
     {
       CursorRange cursorRange = subSource.cursorRange();
       System.out.println(cursorRange);
-      CodePointIndex position = cursorRange.startIndexInclusive.getPosition();
+      CodePointIndex position = cursorRange.startIndexInclusive.position();
       assertEquals(0, position.value());
     }
     
     {
       CursorRange cursorRange = subSource.rootCursorRange();
       System.out.println(cursorRange);
-      CodePointIndex position = cursorRange.startIndexInclusive.getPosition();
+      CodePointIndex position = cursorRange.startIndexInclusive.position();
       assertEquals(3, position.value());
     }
     

@@ -1,6 +1,7 @@
 package org.unlaxer;
 
 import org.unlaxer.Cursor.EndExclusiveCursor;
+import org.unlaxer.Source.SourceKind;
 
 public class ParserCursor{
 	
@@ -15,10 +16,10 @@ public class ParserCursor{
 		}
 	}
 	
-	public ParserCursor() {
+	public ParserCursor(PositionResolver positionResolver) {
 		super();
-		consumed = new EndExclusiveCursorImpl();
-		matched = new EndExclusiveCursorImpl();
+		consumed = new EndExclusiveCursorImpl(SourceKind.root,positionResolver);
+		matched = new EndExclusiveCursorImpl(SourceKind.root,positionResolver);
 	}
 	
 
@@ -35,7 +36,7 @@ public class ParserCursor{
 	 public void addPosition(CodePointOffset adding){
 	   consumed.addPosition(adding);
 //	    matched.addPosition(adding);
-	   matched.setPosition(consumed.getPosition());
+	   matched.setPosition(consumed.position());
 	  }
 
 	
@@ -52,12 +53,11 @@ public class ParserCursor{
 	}
 	
 	public CodePointIndex getPosition(TokenKind tokenKind){
-		return getCursor(tokenKind).getPosition(); 
+		return getCursor(tokenKind).position(); 
 	}
 	
 	void resetMatchedWithConsumed(EndExclusiveCursor consumed, EndExclusiveCursor matched){
-		matched.setPosition(consumed.getPosition());
-		matched.setLineNumber(consumed.getLineNumber());
+		matched.setPosition(consumed.position());
 	}
 	
 }

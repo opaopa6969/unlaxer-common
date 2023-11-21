@@ -3,23 +3,30 @@ package org.unlaxer;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.unlaxer.Source.SourceKind;
 
 public class CursorRangeTest {
 
   @Test
   public void test() {
+    
+    Source source = StringSource.createRootSource("abc\nabc");
+    PositionResolver positionResolver = source.positionResolver();
+    
     CodePointIndex position0 = new CodePointIndex(0);
-    CodePointIndex position5 = new CodePointIndex(5);
-    CodePointIndex position10 = new CodePointIndex(10);
-    LineNumber lineNumber0 = new LineNumber(0);
-    LineNumber lineNumber5 = new LineNumber(5);
-    LineNumber lineNumber10 = new LineNumber(10);
+    CodePointIndex position4 = new CodePointIndex(4);
+    CodePointIndex position7 = new CodePointIndex(7);
     CursorRange cursorRange0 = CursorRange.of(
-        position0,position0.toCodePointIndexInLine(), lineNumber0, 
-        position5, position5.toCodePointIndexInLine(), lineNumber5);
+        position0,
+        position4,
+        SourceKind.subSource,
+        positionResolver);
+        
     CursorRange cursorRange1 = CursorRange.of(
-        position5,position5.toCodePointIndexInLine(), lineNumber5, 
-        position10,position10.toCodePointIndexInLine(), lineNumber10);
+        position4,
+        position7,
+        SourceKind.subSource,
+        positionResolver);
     
     assertTrue(cursorRange0.lt(cursorRange1));
     assertTrue(cursorRange0.lessThan(cursorRange1));

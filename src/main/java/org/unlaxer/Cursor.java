@@ -1,6 +1,6 @@
 package org.unlaxer;
 
-import org.unlaxer.util.NameSpecifier;
+import org.unlaxer.Source.SourceKind;
 
 public interface Cursor<T extends Cursor<T>> {
   
@@ -9,19 +9,26 @@ public interface Cursor<T extends Cursor<T>> {
     endExclusive
   }
 
-	NameSpecifier getNameSpace();
+  PositionResolver positionResolver();
+  
+//	NameSpecifier nameSpace();
+//
+//	T setNameSpace(NameSpecifier nameSpace);
 
-	T setNameSpace(NameSpecifier nameSpace);
-
-	LineNumber getLineNumber();
+	LineNumber lineNumber();
 	
 //	SubLineNumber getLineNumberOnThisSequence();
 
-	T setLineNumber(LineNumber lineNumber);
+//	T setLineNumber(LineNumber lineNumber);
 	
-  T incrementLineNumber();
+//  T incrementLineNumber();
 
-	CodePointIndex getPosition();
+	CodePointIndex position();
+	
+	CodePointIndex positionInSub();
+	
+  CodePointIndex positionInRoot();
+
 	
 //	SubCodePointIndex getPositionOnThisSequence();
 
@@ -31,13 +38,21 @@ public interface Cursor<T extends Cursor<T>> {
 
 	T addPosition(CodePointOffset adding);
 
-	CodePointIndexInLine getPositionInLine();
+	CodePointIndexInLine positionInLine();
 
-	T setPositionInLine(CodePointIndexInLine positionInLine);
+//	T setPositionInLine(CodePointIndexInLine positionInLine);
 	
-	T resolveLineNumber(RootPositionResolver rootPositionResolver);
+//	T resolveLineNumber(RootPositionResolver rootPositionResolver);
+	
+	CodePointOffset offsetFromRoot();
+	
+	T newWithAddPosition(CodePointOffset adding);
+	
+	T copy();
 	
 	CursorKind cursorKind();
+	
+	SourceKind sourceKind();
 	
 	public interface EndExclusiveCursor extends Cursor<EndExclusiveCursor>{
 	  
