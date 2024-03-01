@@ -76,8 +76,8 @@ public class StringSource implements Source {
         root; 
     stringIndexAccessor = new StringIndexAccessorImpl(source);
     cursorRange = CursorRange.of(
-        offsetFromParent.toCodePointIndex(), 
-        offsetFromParent.toCodePointIndex().newWithAdd(codePoints.length),
+        new CodePointIndex(0, offsetFromParent), 
+        new CodePointIndex(0, offsetFromParent).newWithAdd(codePoints.length),
         offsetFromParent,
         sourceKind, 
         positionResolver);
@@ -102,8 +102,8 @@ public class StringSource implements Source {
     stringIndexAccessor = new StringIndexAccessorImpl(source.sourceAsString());
     
     cursorRange = CursorRange.of(
-        offsetFromParent.toCodePointIndex(), 
-        offsetFromParent.toCodePointIndex().newWithAdd(codePoints.length),
+        offsetFromParent.toCodePointIndexWithOffset(), 
+        offsetFromParent.toCodePointIndexWithOffset().newWithAdd(codePoints.length),
         offsetFromParent,
         sourceKind, 
         positionResolver);
@@ -126,8 +126,8 @@ public class StringSource implements Source {
     stringIndexAccessor = new StringIndexAccessorImpl(source);
     
     cursorRange = CursorRange.of(
-        offsetFromParent.toCodePointIndex(), 
-        offsetFromParent.toCodePointIndex().newWithAdd(codePoints.length),
+        offsetFromParent.toCodePointIndexWithOffset(), 
+        offsetFromParent.toCodePointIndexWithOffset().newWithAdd(codePoints.length),
         codePointOffset,
         sourceKind, 
         positionResolver);
@@ -463,17 +463,21 @@ public class StringSource implements Source {
   @Override
   public StringIndexWithNegativeValue toStringIndex(CodePointIndexWithNegativeValue codePointIndex) {
     if(codePointIndex.isNegative()) {
-      return new StringIndexWithNegativeValue(codePointIndex.value());
+      return new StringIndexWithNegativeValue(codePointIndex.valueWithOffsetFromRoot());
     }
-    return new StringIndexWithNegativeValue(toStringIndex(codePointIndex.toCodePointIndex()));
+    return new StringIndexWithNegativeValue(
+        toStringIndex(
+            new CodePointIndex(codePointIndex.valueInSubSource(),codePointIndex.offsetFromRoot())
+        )
+    );
   }
 
   @Override
   public CodePointIndexWithNegativeValue toCodePointIndexWithNegativeValue(StringIndexWithNegativeValue stringIndex) {
     if(stringIndex.isNegative()) {
-      return new CodePointIndexWithNegativeValue(stringIndex.value());
+      return new CodePointIndexWithNegativeValue(stringIndex.value() , offsetFromRoot());
     }
-    return new CodePointIndexWithNegativeValue(toCodePointIndex(stringIndex.toStringIndex()));
+    return new CodePointIndexWithNegativeValue(toCodePointIndex(stringIndex.toStringIndex()),offsetFromRoot());
   }
 
   @Override
@@ -490,7 +494,7 @@ public class StringSource implements Source {
   public Source peek(CodePointIndex startIndexInclusive, CodePointLength length) {
     
     CodePointOffset offset = new CodePointOffset(startIndexInclusive);
-    if(startIndexInclusive.value() + length.value() > codePoints.length){
+    if(startIndexInclusive.valueWithOffsetFromRoot() + length.value() > codePoints.length){
 //      CodePointIndex index = new CodePointIndex(startIndexInclusive.value());
 //      CursorRange cursorRange = new CursorRange(new CursorImpl()
 //          .setPosition(index)
@@ -523,15 +527,15 @@ public class StringSource implements Source {
  
   @Override
   public int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
-    return Arrays.copyOfRange(codePoints, startIndexInclusive.value() , endIndexExclusive.value());
+    return Arrays.copyOfRange(codePoints, startIndexInclusive.valueInSubSource() , endIndexExclusive.valueInSubSource());
   }
   
   public String subString(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
-    return new String(codePoints, startIndexInclusive.value() , endIndexExclusive.value() - startIndexInclusive.value());
+    return new String(codePoints, startIndexInclusive.valueInSubSource() , endIndexExclusive.valueInSubSource() - startIndexInclusive.valueInSubSource());
   }
   
   public String subString(CodePointIndex startIndexInclusive, CodePointLength length) {
-    return new String(codePoints, startIndexInclusive.value() , length.value());
+    return new String(codePoints, startIndexInclusive.valueInSubSource() , length.value());
   }
 
   @Override
@@ -609,13 +613,12 @@ public class StringSource implements Source {
     return positionResolver.lines(this);
   }
 
-  @Override
-  public boolean isRoot() {
-    return /*parent == null && *//*sourceKind == SourceKind.root &&*/
-        (parent == null || parent == root)
-        ;
-  }
-
+//  @Override
+//  public boolean isRoot() {
+//    return /*parent == null && *//*sourceKind == SourceKind.root &&*/
+//        (parent == null || parent == root)
+//        ;
+//  }
   
   public static Source EMPTY = StringSource.createDetachedSource("");
 

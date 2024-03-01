@@ -9,6 +9,7 @@ import org.unlaxer.Parsed;
 import org.unlaxer.StringSource;
 import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.context.ParseContext;
 import org.unlaxer.context.TransactionDebugSpecifier;
 import org.unlaxer.listener.DebugTransactionListener;
@@ -38,7 +39,7 @@ public class MatchOnlyTest {
 		assertTrue(parseContext.allMatched());
 		assertFalse(parseContext.allConsumed());
 		assertEquals(2, parseContext.getSource().codePointLength().value());
-		assertEquals(1, parseContext.getPosition(TokenKind.consumed).value());
+		assertEquals(1, parseContext.getPosition(TokenKind.consumed).value(SourceKind.root));
 	}
 	
 	@Test
@@ -83,7 +84,7 @@ public class MatchOnlyTest {
 			assertTrue(parseContext.allMatched());
 			assertFalse(parseContext.allConsumed());
 			assertEquals(3, parseContext.getSource().codePointLength().value());
-			assertEquals(1, parseContext.getConsumedPosition().value());
+			assertEquals(1, parseContext.getConsumedPosition().value(SourceKind.root));
 		}
 	}
 	

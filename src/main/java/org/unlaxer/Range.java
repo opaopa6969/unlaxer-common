@@ -2,6 +2,8 @@ package org.unlaxer;
 
 import java.util.stream.IntStream;
 
+import org.unlaxer.Source.SourceKind;
+
 public class Range implements Comparable<Range>{
 	
 	public final int startIndexInclusive;
@@ -10,8 +12,8 @@ public class Range implements Comparable<Range>{
 	 
   public Range(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
     super();
-    this.startIndexInclusive = startIndexInclusive.value();
-    this.endIndexExclusive = endIndexExclusive.value();
+    this.startIndexInclusive = startIndexInclusive.value(SourceKind.root);
+    this.endIndexExclusive = endIndexExclusive.value(SourceKind.root);
   }
 	
 	public Range(int startIndexInclusive, int endIndexExclusive) {
@@ -27,8 +29,8 @@ public class Range implements Comparable<Range>{
 	
 	public Range(CodePointIndex startIndexInclusive) {
     super();
-    this.startIndexInclusive = startIndexInclusive.value();
-    this.endIndexExclusive = startIndexInclusive.value();
+    this.startIndexInclusive = startIndexInclusive.value(SourceKind.root);
+    this.endIndexExclusive = startIndexInclusive.value(SourceKind.root);
   }
 	
 	public Range() {

@@ -31,6 +31,11 @@ implements Comparable<T> , Serializable , MinIntegerValue , MaxIntegerValue , Nu
   public int value() {
     return value;
   }
+  
+  public int rawValue() {
+    return value;
+  }
+
 
   @Override
   public int compareTo(T other) {

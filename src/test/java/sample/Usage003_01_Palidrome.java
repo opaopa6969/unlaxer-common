@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointOffset;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.Source.SourceKind;
 import org.unlaxer.StringSource;
@@ -54,46 +55,54 @@ public class Usage003_01_Palidrome extends ParserTestBase {
 	}
 	
 	private Chain sliceWithWord(MatchOnly wordLookahead, MatchedTokenParser matchedTokenParser) {
-		
+	  
 		return new Chain(
 			//abcba
 			wordLookahead,
 			//ab
 			matchedTokenParser.sliceWithWord(word->{
+			  
+			  CodePointOffset offsetFromRoot = word.offsetFromRoot();
+			  
 				boolean hasPivot = word.length() % 2 ==1;
 				int halfSize = (word.length() - (hasPivot ? 1:0))/2;
-				return word.cursorRange(new CodePointIndex(0), new CodePointIndex(halfSize),
+				return word.cursorRange(new CodePointIndex(0,offsetFromRoot), new CodePointIndex(halfSize,offsetFromRoot),
 				    SourceKind.subSource , word.positionResolver());
 			}),
 			//  c
 			matchedTokenParser.sliceWithWord(word->{
+			  CodePointOffset offsetFromRoot = word.offsetFromRoot();
 				boolean hasPivot = word.length() % 2 ==1;
 				int halfSize = (word.length() - (hasPivot ? 1:0))/2;
 				return hasPivot ? 
-				    word.cursorRange(new CodePointIndex(halfSize), new CodePointIndex(halfSize+1),
+				    word.cursorRange(new CodePointIndex(halfSize,offsetFromRoot), new CodePointIndex(halfSize+1,offsetFromRoot),
 				        SourceKind.subSource , word.positionResolver()): 
-			      word.cursorRange(new CodePointIndex(0), new CodePointIndex(0),
+			      word.cursorRange(new CodePointIndex(0,offsetFromRoot), new CodePointIndex(0,offsetFromRoot),
 			          SourceKind.subSource , word.positionResolver());
 			}),
 			//ab->reverse
 			matchedTokenParser.slice(word->{
+			  CodePointOffset offsetFromRoot = word.offsetFromRoot();
 				boolean hasPivot = word.length() % 2 ==1;
 				int halfSize = (word.length() - (hasPivot ? 1:0))/2;
-				return word.cursorRange(new CodePointIndex(0), new CodePointIndex(halfSize),
+				return word.cursorRange(new CodePointIndex(0,offsetFromRoot), new CodePointIndex(halfSize,offsetFromRoot),
 				    SourceKind.subSource , word.positionResolver());
 			},true)
 		);
 	}
 	
 	private Chain sliceWithSlicer(MatchOnly wordLookahead, MatchedTokenParser matchedTokenParser) {
+	  
+	  CodePointOffset codePointOffset = new CodePointOffset(0);
 
 		return new Chain(
 			//abcba
 			wordLookahead,
 			//ab
 			matchedTokenParser.slice(slicer->{
+			  
 				boolean hasPivot = slicer.length() % 2 ==1;
-				slicer.end(new CodePointIndex((slicer.length() - (hasPivot ? 1:0))/2));
+				slicer.end(new CodePointIndex((slicer.length() - (hasPivot ? 1:0))/2,codePointOffset));
 			}),
 			//  c
 			matchedTokenParser.slice(slicer->{
@@ -101,8 +110,8 @@ public class Usage003_01_Palidrome extends ParserTestBase {
 				int halfSize = (slicer.length() - (hasPivot ? 1:0))/2;
 				if(hasPivot){
 					slicer
-					  .begin(new CodePointIndex(halfSize))
-					  .end(new CodePointIndex(halfSize+1));
+					  .begin(new CodePointIndex(halfSize,codePointOffset))
+					  .end(new CodePointIndex(halfSize+1,codePointOffset));
 				}else{
 					slicer.invalidate();
 				}
@@ -112,7 +121,7 @@ public class Usage003_01_Palidrome extends ParserTestBase {
 				boolean hasPivot = slicer.length() % 2 ==1;
 				int halfSize = (slicer.length() - (hasPivot ? 1:0))/2;
 				slicer
-				  .end(new CodePointIndex(halfSize))
+				  .end(new CodePointIndex(halfSize,codePointOffset))
 				  .step(-1);//step=-1 <- for reverse
 			})
 		);

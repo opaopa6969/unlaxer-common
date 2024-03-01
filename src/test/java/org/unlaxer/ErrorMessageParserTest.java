@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 
 import org.junit.Test;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.listener.OutputLevel;
 import org.unlaxer.parser.ErrorMessageParser;
 import org.unlaxer.parser.ascii.PlusParser;
@@ -49,8 +50,8 @@ public class ErrorMessageParserTest extends ParserTestBase{
 			
 			assertEquals(1, errorMessages.size());
 			assertEquals(message, errorMessages.get(0).getContent());
-			assertEquals(2, errorMessages.get(0).getRange().startIndexInclusive.positionInRoot().value());
-			assertEquals(2, errorMessages.get(0).getRange().endIndexExclusive.positionInRoot().value());
+			assertEquals(2, errorMessages.get(0).getRange().startIndexInclusive.position().value(SourceKind.root));
+			assertEquals(2, errorMessages.get(0).getRange().endIndexExclusive.position().value(SourceKind.root));
 		}
 		
 		TestResult result = testPartialMatch(parser, "1+s","1+");

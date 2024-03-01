@@ -31,6 +31,10 @@ public interface Source extends CodePointAccessor , PositionResolver {
     public boolean isSubSource() {
       return this == subSource;
     }
+    
+    public boolean isNotSubSource() {
+      return this != subSource;
+    }
   }
   
   PositionResolver positionResolver();
@@ -74,7 +78,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
 	default Source peekLast(CodePointIndex endIndexInclusive, CodePointLength length) {
 	  
 	  CodePointIndex start = endIndexInclusive.newWithMinus(length)
-	      .createIfMatch(CodePointIndex::isNegative, ()->new CodePointIndex(0));
+	      .createIfMatch(CodePointIndex::isNegative, ()->new CodePointIndex(0,offsetFromParent()));
 		return peek(start , endIndexInclusive);
 	}
 	
@@ -94,7 +98,21 @@ public interface Source extends CodePointAccessor , PositionResolver {
   
   Depth depth();
   
-  boolean isRoot();
+  default boolean isRoot() {
+    return sourceKind().isRoot();
+  }
+  
+  default boolean isNotSubSource() {
+    return sourceKind().isNotSubSource();
+  }
+  
+  default boolean isSubSource() {
+    return sourceKind().isSubSource();
+  }
+  
+  default boolean isDetached() {
+    return sourceKind().isDetached();
+  }
   
   default boolean isPresent() {
     return stringLength().value() > 0;

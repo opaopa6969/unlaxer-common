@@ -73,7 +73,7 @@ public class MappedSingleCharacterParser extends SingleCharacterParser implement
 
 
 	static Supplier<RuntimeException> charMustBeLessThan128 = () -> new IllegalArgumentException(
-			"char must be less than 128");
+			"char must less than 128");
 
 	private static void set(boolean setFlag, boolean[] flags, char... matches) {
 		for (char c : matches) {

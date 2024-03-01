@@ -41,17 +41,19 @@ public class PositionResolverImpl implements PositionResolver {
     int codePointCount = codePoints.length;
 //    this.rootPositionResolver = isRoot ? this : rootPositionResolver;
     
+    CodePointOffset offsetFromRoot = new CodePointOffset(0);
+    
     LineNumber lineNumber = new LineNumber(0);
-    CodePointIndex startIndex = new CodePointIndex(0);
+    CodePointIndex startIndex = new CodePointIndex(0, offsetFromRoot);
     CodePointIndex previousStartIndex;
     lineNumberByIndex.put(startIndex, lineNumber);
     
     StringIndex stringIndex = new StringIndex(0);
-    CodePointIndex codePointIndex = new CodePointIndex(0);
+    CodePointIndex codePointIndex = new CodePointIndex(0, offsetFromRoot);
     CodePointIndexInLine codePointOffsetInline = new CodePointIndexInLine(0);
     
     for (int i = 0; i < codePointCount; i++) {
-      codePointIndex = new CodePointIndex(i);
+      codePointIndex = new CodePointIndex(i , offsetFromRoot);
       stringIndexByCodePointIndex.put(codePointIndex, stringIndex);
       codePointIndexByStringIndex.put(stringIndex,codePointIndex);
       codePointIndexInLineByCodePointIndex.put(codePointIndex, codePointOffsetInline);
@@ -64,7 +66,7 @@ public class PositionResolverImpl implements PositionResolver {
       if(codePointAt == SymbolMap.lf.codes[0]) {
         
         previousStartIndex = startIndex;
-        startIndex = new CodePointIndex(i+1);
+        startIndex = new CodePointIndex(i+1 , offsetFromRoot);
         cursorRanges.add(
             CursorRange.of(
               previousStartIndex,
@@ -84,7 +86,7 @@ public class PositionResolverImpl implements PositionResolver {
         if(codePointCount-1!=i && codePoints[i+1] ==SymbolMap.lf.codes[0]) {
           i++;
           previousStartIndex = startIndex;
-          startIndex = new CodePointIndex(i+1);
+          startIndex = new CodePointIndex(i+1 , offsetFromRoot);
           cursorRanges.add(
               CursorRange.of(
                 previousStartIndex,
@@ -102,7 +104,7 @@ public class PositionResolverImpl implements PositionResolver {
           codePointIndexByStringIndex.put(stringIndex,codePointIndex.newWithAdd(1));
         }else {
           previousStartIndex = startIndex;
-          startIndex = new CodePointIndex(i+1);
+          startIndex = new CodePointIndex(i+1 , offsetFromRoot);
           cursorRanges.add(
               CursorRange.of(
                 previousStartIndex,
@@ -123,7 +125,7 @@ public class PositionResolverImpl implements PositionResolver {
 
     StartInclusiveCursor start = new StartInclusiveCursorImpl(SourceKind.root,this);//.addPosition(offsetFromRoot);
     
-    CodePointIndex position = new CodePointIndex(codePointCount);//.newWithAdd(offsetFromRoot);
+    CodePointIndex position = new CodePointIndex(codePointCount , offsetFromRoot);//.newWithAdd(offsetFromRoot);
     
     EndExclusiveCursor end = new EndExclusiveCursorImpl(SourceKind.root,this)
         .setPosition(position);

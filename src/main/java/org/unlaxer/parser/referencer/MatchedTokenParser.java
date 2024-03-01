@@ -31,7 +31,7 @@ public class MatchedTokenParser extends AbstractParser{//extends ConstructedSing
 	WordEffector wordEffector;
 	boolean reverse;
 	Consumer<Slicer> slicerEffector;
-	// must be tokenPredicator evaluates when all parser constructed.
+	// must tokenPredicator evaluates when all parser constructed.
 	Supplier<Predicate<Token>> tokenPredicator;
 
 	public MatchedTokenParser(Parser targetParser) {

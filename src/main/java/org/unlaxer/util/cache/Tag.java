@@ -17,7 +17,7 @@ public class Tag extends Either<Enum<?>, String>{
 	
 	public static Tag rightOf(String right){
 		if(right == null){
-			throw new IllegalArgumentException("must be not null");
+			throw new IllegalArgumentException("must not null");
 		}
 		return new Tag(null, right);
 	}
@@ -29,7 +29,7 @@ public class Tag extends Either<Enum<?>, String>{
 	
 	public static Tag leftOf(Enum<?> left){
 		if(left == null){
-			throw new IllegalArgumentException("must be not null");
+			throw new IllegalArgumentException("must not null");
 		}
 		return new Tag(left,null);
 	}

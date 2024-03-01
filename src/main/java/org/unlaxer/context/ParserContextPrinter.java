@@ -5,6 +5,7 @@ import org.unlaxer.CodePointLength;
 import org.unlaxer.Cursor.EndExclusiveCursor;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.Source;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.TokenKind;
 import org.unlaxer.listener.OutputLevel;
 
@@ -22,18 +23,18 @@ public class ParserContextPrinter {
 			return String.format("CON(L:%d,P:%d) MO(L:%d,P:%d) Last20='%s' ", 
 					consumed.lineNumber().value(),
 //					consumed.getPositionInLine(), // きちんと実装されてない
-					consumed.position().value(),
+					consumed.position().value(SourceKind.root),
 					matchOnly.lineNumber().value(),
 //					matchOnly.getPositionInLine(),
-					matchOnly.position().value(),
+					matchOnly.position().value(SourceKind.root),
 					normalize(peek.toString()));
 		}
 		
 		CodePointIndex matchOnlyPosition = parseContext.getPosition(TokenKind.matchOnly);
 		Source peek = parseContext.peek(position,new CodePointLength(1));
 		return String.format("position:(c:%d m:%d) targetchar='%s' ", 
-				position.value(),
-				matchOnlyPosition.value(),
+				position.value(SourceKind.root),
+				matchOnlyPosition.value(SourceKind.root),
 				normalize(peek.toString()));
 	}
 	

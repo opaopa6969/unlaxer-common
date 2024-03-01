@@ -23,7 +23,7 @@ public class Either<L, R> {
 	
 	public static <L, R> Either<L, R> rightOf(R right){
 		if(right == null){
-			throw new IllegalArgumentException("must be not null");
+			throw new IllegalArgumentException("must not null");
 		}
 		return new Either<L, R>(null, right);
 	}
@@ -35,7 +35,7 @@ public class Either<L, R> {
 	
 	public static <L, R>  Either<L, R> leftOf(L left){
 		if(left == null){
-			throw new IllegalArgumentException("must be not null");
+			throw new IllegalArgumentException("must not null");
 		}
 		return new Either<L, R>(left,null);
 	}

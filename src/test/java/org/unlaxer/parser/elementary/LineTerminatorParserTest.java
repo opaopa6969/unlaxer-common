@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.unlaxer.Cursor.EndExclusiveCursor;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.ParserCursor;
 import org.unlaxer.ParserTestBase;
 import org.unlaxer.TestResult;
@@ -26,10 +27,10 @@ public class LineTerminatorParserTest extends ParserTestBase{
 			EndExclusiveCursor consumed = parserCursor.getCursor(TokenKind.consumed);
 			EndExclusiveCursor matchOnly= parserCursor.getCursor(TokenKind.matchOnly);
 			
-			assertEquals(4, consumed.position().value());
+			assertEquals(4, consumed.position().value(SourceKind.root));
       assertEquals(1, consumed.lineNumber().value());
       //commitが行われると、consumedとmatchOnlyは等しくなる
-      assertEquals(4, matchOnly.position().value());
+      assertEquals(4, matchOnly.position().value(SourceKind.root));
       assertEquals(1, matchOnly.lineNumber().value());
 		}
 		

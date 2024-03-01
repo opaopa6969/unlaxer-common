@@ -25,9 +25,9 @@ public interface Cursor<T extends Cursor<T>> {
 
 	CodePointIndex position();
 	
-	CodePointIndex positionInSub();
-	
-  CodePointIndex positionInRoot();
+//	CodePointIndex positionInSub();
+//	
+//  CodePointIndex positionInRoot();
 
 	
 //	SubCodePointIndex getPositionOnThisSequence();

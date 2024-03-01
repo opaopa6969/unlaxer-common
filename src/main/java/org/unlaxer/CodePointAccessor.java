@@ -98,7 +98,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default boolean startsWith(CodePointAccessor prefix, CodePointIndex toffset) {
-    return stringIndexAccessor().startsWith(prefix.sourceAsString(), toffset.value());
+    return stringIndexAccessor().startsWith(prefix.sourceAsString(), toffset.value(source()));
   }
   
   default boolean startsWith(CodePointAccessor prefix) {
@@ -156,7 +156,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   
   public default CodePointIndex endIndexExclusive() {
-    return new CodePointIndex(codePointLength());
+    return new CodePointIndex(codePointLength() ,source());
   }
   
   public LineNumber lineNumber(CodePointIndex Position);
@@ -277,7 +277,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default Optional<CodePointIndex> codePointIndexOf(CodePoint ch, CodePointIndex fromIndex) {
-    return codePointIndexOf(ch.value(), fromIndex.value());
+    return codePointIndexOf(ch.value(), fromIndex.value(source()));
   }
 
   
@@ -359,7 +359,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default Optional<CodePointIndex> codePointLastIndexOf(CodePoint ch, CodePointIndex fromIndex) {
-    return codePointLastIndexOf(ch.value(), fromIndex.value());
+    return codePointLastIndexOf(ch.value(), fromIndex.value(source()));
   }
 
   
@@ -442,11 +442,11 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default Optional<CodePointIndex> codePointLastIndexOf(String str, CodePointIndex fromIndex) {
-    return codePointLastIndexOf(str,fromIndex.value());
+    return codePointLastIndexOf(str,fromIndex.value(source()));
   }
   
   default Optional<CodePointIndex> codePointLastIndexOf(Source str, CodePointIndex fromIndex) {
-    return codePointLastIndexOf(str.sourceAsString(),fromIndex.value());
+    return codePointLastIndexOf(str.sourceAsString(),fromIndex.value(source()));
   }
 
   
@@ -476,11 +476,11 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   }
   
   default Optional<CodePointIndex> codePointIndexOf(String str, CodePointIndex fromIndex) {
-    return codePointIndexOf(str,fromIndex.value());
+    return codePointIndexOf(str,fromIndex.value(source()));
   }
   
   default Optional<CodePointIndex> codePointIndexOf(Source str, CodePointIndex fromIndex) {
-    return codePointIndexOf(str.sourceAsString(),fromIndex.value());
+    return codePointIndexOf(str.sourceAsString(),fromIndex.value(source()));
   }
 
 }

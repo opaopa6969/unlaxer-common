@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.util.SimpleBuilder;
 
 public class StringSourceTest {
@@ -13,9 +14,11 @@ public class StringSourceTest {
   @Test
   public void test() {
     
-    StringSource stringSource = StringSource.createRootSource("ABC");
+    Source stringSource = StringSource.createRootSource("ABC");
     
-    Source peek = stringSource.peek(new CodePointIndex(1), new CodePointLength(0));
+    CodePointOffset offsetFromRoot = stringSource.offsetFromRoot();
+    
+    Source peek = stringSource.peek(new CodePointIndex(1,offsetFromRoot), new CodePointLength(0));
     
     CursorRange range = peek.cursorRange();
     
@@ -54,7 +57,10 @@ public class StringSourceTest {
       .append("ABC123")
       .toSource();
     
-    Source subSource = source.subSource(new CodePointIndex(3), new CodePointIndex(6));
+    CodePointOffset offsetFromRoot = source.offsetFromRoot();
+    
+    
+    Source subSource = source.subSource(new CodePointIndex(3,offsetFromRoot), new CodePointIndex(6,offsetFromRoot));
     
     assertEquals("123", subSource.sourceAsString());
     {
@@ -62,17 +68,22 @@ public class StringSourceTest {
       System.out.println(cursorRange);
       CodePointIndex startPosition = cursorRange.startIndexInclusive().position();
       CodePointIndex endPosition = cursorRange.endIndexExclusive().position();
-      assertEquals(0, startPosition.value());
-      assertEquals(3, endPosition.value());
+      assertEquals(0, startPosition.value(subSource));
+      assertEquals(3, endPosition.value(subSource));
+      
+      // for index from root
+      assertEquals(3, startPosition.value(source));
+      assertEquals(6, endPosition.value(source));
+
     }
     
     {
       CursorRange cursorRange = subSource.cursorRange();
       System.out.println(cursorRange);
-      CodePointIndex startPosition = cursorRange.startIndexInclusive().positionInRoot();
-      CodePointIndex endPosition = cursorRange.endIndexExclusive().positionInRoot();
-      assertEquals(3, startPosition.value());
-      assertEquals(6, endPosition.value());
+      CodePointIndex startPosition = cursorRange.startIndexInclusive().position();
+      CodePointIndex endPosition = cursorRange.endIndexExclusive().position();
+      assertEquals(3, startPosition.value(SourceKind.root));
+      assertEquals(6, endPosition.value(SourceKind.root));
     }
     
   }

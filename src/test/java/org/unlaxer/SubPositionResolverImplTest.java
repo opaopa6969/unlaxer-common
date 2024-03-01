@@ -3,6 +3,7 @@ package org.unlaxer;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.util.SimpleBuilder;
 
 public class SubPositionResolverImplTest {
@@ -20,7 +21,7 @@ public class SubPositionResolverImplTest {
     CursorRange cursorRange = rootSource.cursorRange();
     System.out.println(cursorRange);
     assertEquals(0, cursorRange.endIndexExclusive.positionInLine().value());
-    assertEquals(22, cursorRange.endIndexExclusive.positionInRoot().value());
+    assertEquals(22, cursorRange.endIndexExclusive.position().value(SourceKind.root));
   }
 
 }

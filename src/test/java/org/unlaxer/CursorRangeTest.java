@@ -11,11 +11,12 @@ public class CursorRangeTest {
   public void test() {
     
     Source source = StringSource.createRootSource("abc\nabc");
+    CodePointOffset offset = new CodePointOffset(0);
     PositionResolver positionResolver = source.positionResolver();
     
-    CodePointIndex position0 = new CodePointIndex(0);
-    CodePointIndex position4 = new CodePointIndex(4);
-    CodePointIndex position7 = new CodePointIndex(7);
+    CodePointIndex position0 = new CodePointIndex(0,offset);
+    CodePointIndex position4 = new CodePointIndex(4,offset);
+    CodePointIndex position7 = new CodePointIndex(7,offset);
     CursorRange cursorRange0 = CursorRange.of(
         position0,
         position4,

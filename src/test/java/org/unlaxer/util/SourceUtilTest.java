@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.unlaxer.CodePointIndex;
+import org.unlaxer.CodePointOffset;
 import org.unlaxer.Range;
 import org.unlaxer.Source;
 import org.unlaxer.StringSource;
@@ -13,7 +14,8 @@ public class SourceUtilTest {
 
 	@Test
 	public void testDelete() {
-		CodePointIndex position = new CodePointIndex(-1);
+	  CodePointOffset codePointOffset = new CodePointOffset(0);
+		CodePointIndex position = new CodePointIndex(-1,codePointOffset);
 		Source word = StringSource.createRootSource("A0123");
 		String[]  expecteds = new String[]{"A0123",  "0123",  "A123",  "A023",  "A013",  "A012",  "A0123",  "A0123"}; 
 		for(String expected :expecteds ){
@@ -45,18 +47,22 @@ public class SourceUtilTest {
     Source word = StringSource.createRootSource("01234");
     Source insertion =StringSource.createRootSource("_A_");
     
-    assertEquals("_A_01234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(0)).sourceAsString());
-    assertEquals("0_A_1234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(1)).sourceAsString());
-    assertEquals("01_A_234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(2)).sourceAsString());
-    assertEquals("012_A_34", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(3)).sourceAsString());
-    assertEquals("0123_A_4", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(4)).sourceAsString());
-    assertEquals("01234_A_", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(5)).sourceAsString());
+    CodePointOffset offsetFromRoot = word.offsetFromRoot();
+    
+    assertEquals("_A_01234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(0,offsetFromRoot)).sourceAsString());
+    assertEquals("0_A_1234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(1,offsetFromRoot)).sourceAsString());
+    assertEquals("01_A_234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(2,offsetFromRoot)).sourceAsString());
+    assertEquals("012_A_34", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(3,offsetFromRoot)).sourceAsString());
+    assertEquals("0123_A_4", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(4,offsetFromRoot)).sourceAsString());
+    assertEquals("01234_A_", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(5,offsetFromRoot)).sourceAsString());
   }
   
   @Test
   public void testnewWithDeleteAndInsert() {
     Source word = StringSource.createRootSource("01234");
     Source insertion =StringSource.createRootSource("_A_");
+    
+    CodePointOffset offsetFromRoot = word.offsetFromRoot();
     
     assertEquals("_A_01234", SourceUtil.newWithDeleteAndInsert(word, new Range(0,0), insertion).sourceAsString());
     assertEquals("_A_1234", SourceUtil.newWithDeleteAndInsert(word, new Range(0,1), insertion).sourceAsString());
@@ -67,7 +73,7 @@ public class SourceUtilTest {
     assertEquals("_A_", SourceUtil.newWithDeleteAndInsert(word, new Range(0,5), insertion).sourceAsString());
     assertEquals("_A_", SourceUtil.newWithDeleteAndInsert(word, new Range(-1,6), insertion).sourceAsString());
     
-    assertEquals("012_A_4", SourceUtil.newWithDeleteAndInsert(word, new CodePointIndex(3), insertion).sourceAsString());
+    assertEquals("012_A_4", SourceUtil.newWithDeleteAndInsert(word, new CodePointIndex(3,offsetFromRoot), insertion).sourceAsString());
 
   }
 }

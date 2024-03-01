@@ -36,8 +36,8 @@ public class CursorRange implements Comparable<CursorRange>{
       PositionResolver positionResolver
 	    ) {
 	  return new CursorRange(
-        new StartInclusiveCursorImpl(sourceKind,positionResolver,startIndexInclusive,offsetFromRoot),
-        new EndExclusiveCursorImpl(sourceKind,positionResolver,endIndexExclusive,offsetFromRoot)
+        new StartInclusiveCursorImpl(sourceKind,positionResolver,startIndexInclusive),
+        new EndExclusiveCursorImpl(sourceKind,positionResolver,endIndexExclusive)
 	  );
 	  
 	}
@@ -51,7 +51,7 @@ public class CursorRange implements Comparable<CursorRange>{
 	}
 	
 	public boolean isSingle() {
-		return startIndexInclusive.position() == endIndexExclusive.position();
+		return startIndexInclusive.position().value(SourceKind.subSource) == endIndexExclusive.position().value(SourceKind.subSource);
 	}
 
 	public boolean match(CodePointIndex position){
@@ -118,17 +118,17 @@ public class CursorRange implements Comparable<CursorRange>{
 		return RangesRelation.crossed;
 	}
 	
-	public IntStream asIntStream() {
-		return IntStream.range(startIndexInclusive.position().value(), 
-		    endIndexExclusive.position().value());
+	public IntStream asIntStream(SourceKind sourceKind) {
+		return IntStream.range(startIndexInclusive.position().value(sourceKind), 
+		    endIndexExclusive.position().value(sourceKind));
 	}
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + endIndexExclusive.position().value();
-		result = prime * result + startIndexInclusive.position().value();
+		result = prime * result + endIndexExclusive.position().value(SourceKind.root);
+		result = prime * result + startIndexInclusive.position().value(SourceKind.root);
 		return result;
 	}
 	@Override
@@ -140,9 +140,9 @@ public class CursorRange implements Comparable<CursorRange>{
 		if (getClass() != obj.getClass())
 			return false;
 		CursorRange other = (CursorRange) obj;
-		if (endIndexExclusive.position().value() != other.endIndexExclusive.position().value())
+		if (endIndexExclusive.position().value(SourceKind.root) != other.endIndexExclusive.position().value(SourceKind.root))
 			return false;
-		if (startIndexInclusive.position().value() != other.startIndexInclusive.position().value())
+		if (startIndexInclusive.position().value(SourceKind.root) != other.startIndexInclusive.position().value(SourceKind.root))
 			return false;
 		return true;
 	}
@@ -150,9 +150,9 @@ public class CursorRange implements Comparable<CursorRange>{
 	
 	@Override
 	public int compareTo(CursorRange other) {
-		int value = startIndexInclusive.position().value() - other.startIndexInclusive.position().value();
+		int value = startIndexInclusive.position().value(SourceKind.root) - other.startIndexInclusive.position().value(SourceKind.root);
 		if(value == 0) {
-			return endIndexExclusive.position().value() - other.endIndexExclusive.position().value();
+			return endIndexExclusive.position().value(SourceKind.root) - other.endIndexExclusive.position().value(SourceKind.root);
 		}
 		return value;
 	}

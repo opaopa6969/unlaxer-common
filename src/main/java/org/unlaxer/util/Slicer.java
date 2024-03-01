@@ -29,7 +29,7 @@ public class Slicer implements Supplier<Source>{
 		super();
 		rootSource = word.root();
 		this.word = word;
-		beginIndexInclusive = new CodePointIndex(0);
+		beginIndexInclusive = new CodePointIndex(0,word.offsetFromRoot());
 		endIndexExclusive = this.word.endIndexExclusive();
 		step=1;
 	}
@@ -82,8 +82,8 @@ public class Slicer implements Supplier<Source>{
 	}
 	
 	public Slicer invalidate(){
-		begin(new CodePointIndex(0));
-		end(new CodePointIndex(0));
+		begin(new CodePointIndex(0,rootSource.offsetFromRoot()));
+		end(new CodePointIndex(0,rootSource.offsetFromRoot()));
 		return this;
 	}
 
@@ -98,18 +98,18 @@ public class Slicer implements Supplier<Source>{
 			
 			return Source.SUB_EMPTY.get(rootSource);
 		}
-		int start = step < 0 ? endIndexExclusive.value() -1 : beginIndexInclusive.value();
-		int end = step < 0 ? beginIndexInclusive.value() : endIndexExclusive.value() ;
+		int start = step < 0 ? endIndexExclusive.value(rootSource) -1 : beginIndexInclusive.value(rootSource);
+		int end = step < 0 ? beginIndexInclusive.value(rootSource) : endIndexExclusive.value(rootSource) ;
 		SimpleBuilder builder = new SimpleBuilder();
 		if(step < 0){
 			
 			for(int i = start ; i >= end ; i = i + step){
-				builder.append(word.subSource(new CodePointIndex(i) ,new CodePointIndex(i+1)));
+				builder.append(word.subSource(new CodePointIndex(i,rootSource.offsetFromRoot()) ,new CodePointIndex(i+1,rootSource.offsetFromRoot())));
 			}
 		}else{
 			
 			for(int i = start ; i < end ; i = i + step){
-				builder.append(word.subSource(new CodePointIndex(i) ,new CodePointIndex(i+1)));
+				builder.append(word.subSource(new CodePointIndex(i,rootSource.offsetFromRoot()) ,new CodePointIndex(i+1,rootSource.offsetFromRoot())));
 			}
 		}
 		return builder.toSource();
@@ -137,10 +137,10 @@ public class Slicer implements Supplier<Source>{
 			step(Integer.parseInt(splits[2]));
 		}
 		if(splits.length>1 && false ==splits[1].isEmpty()){
-			end(new CodePointIndex(Integer.parseInt(splits[1])));
+			end(new CodePointIndex(Integer.parseInt(splits[1]),rootSource.offsetFromRoot()));
 		}
 		if(false ==splits[0].isEmpty()){
-			begin(new CodePointIndex(Integer.parseInt(splits[0])));
+			begin(new CodePointIndex(Integer.parseInt(splits[0]),rootSource.offsetFromRoot()));
 		}
 		return this;
 	}

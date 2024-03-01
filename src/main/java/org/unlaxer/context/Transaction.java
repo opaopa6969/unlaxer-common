@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import org.unlaxer.CodePointIndex;
 import org.unlaxer.CodePointLength;
+import org.unlaxer.CodePointOffset;
 import org.unlaxer.Committed;
 import org.unlaxer.Cursor.EndExclusiveCursor;
 import org.unlaxer.ParserCursor;
@@ -146,7 +147,9 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
 
 	public default Source getConsumed(TokenKind tokenKind) {
 		CodePointIndex position = getPosition(tokenKind);
-		return getSource().peek(new CodePointIndex(0), position);
+		Source source = getSource();
+		CodePointOffset offsetFromRoot = source.offsetFromRoot();
+    return source.peek(new CodePointIndex(0,offsetFromRoot), position);
 	}
 
 	public default boolean allMatched() {

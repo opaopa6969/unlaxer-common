@@ -15,6 +15,8 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.unlaxer.Source.SourceKind;
+
 /**
  * CP　means CodePoint
  */
@@ -90,6 +92,7 @@ public interface CodePointString {
    * the {@code char} value at the given index is returned.
    *
    * @param      index the index to the {@code char} values
+   * @param      source kind of index
    * @return     the code point value of the character at the
    *             {@code index}
    * @exception  IndexOutOfBoundsException  if the {@code index}
@@ -99,9 +102,10 @@ public interface CodePointString {
    */
   int  codePointAt(int index);
 
-  default CodePoint codePointAt(CodePointIndex index) {
-    return new CodePoint(codePointAt(index.value()));
+  default CodePoint codePointAt(CodePointIndex index,SourceKind sourceKind) {
+    return new CodePoint(codePointAt(index.value(sourceKind)));
   }
+  
   /**
    * Returns the character (Unicode code point) before the specified
    * index. The index refers to {@code char} values
@@ -118,6 +122,7 @@ public interface CodePointString {
    * surrogate value is returned.
    *
    * @param     index the index following the code point that should be returned
+   * @param      source kind of index
    * @return    the Unicode code point value before the given index.
    * @exception IndexOutOfBoundsException if the {@code index}
    *            argument is less than 1 or greater than the length
@@ -126,8 +131,8 @@ public interface CodePointString {
    */
   int codePointBefore(int index);
   
-  default CodePoint codePointBefore(CodePointIndex index) {
-    return new CodePoint(codePointBefore(index.value()));
+  default CodePoint codePointBefore(CodePointIndex index , SourceKind sourceKind) {
+    return new CodePoint(codePointBefore(index.value(sourceKind)));
   }
 
   /**

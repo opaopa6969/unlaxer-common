@@ -47,8 +47,8 @@ public class TokenPrinter{
 			
 			out.format("%s (%d - %d): %s%s%s", 
 				tokenString.isPresent() ? quote(tokenString):EMPTY ,//
-				tokenRange.startIndexInclusive.position().value(),//
-				tokenRange.endIndexExclusive.position().value(), //
+				tokenRange.startIndexInclusive.position().value(SourceKind.root),//
+				tokenRange.endIndexExclusive.position().value(SourceKind.root), //
 				parser.getName(),
 				getInverted(token),//
 				outputChildren ? "\n":"");
@@ -57,8 +57,8 @@ public class TokenPrinter{
 			
 			out.format("%s (%d - %d): %s%s%s%S", 
 			    tokenString.isPresent() ? quote(tokenString):EMPTY ,//
-			    tokenRange.startIndexInclusive.position().value(),//
-					tokenRange.endIndexExclusive.position().value(), //
+			    tokenRange.startIndexInclusive.position().value(SourceKind.root),//
+					tokenRange.endIndexExclusive.position().value(SourceKind.root), //
 					parser.getName(),
 					getInverted(token),//
 					getTag(token),

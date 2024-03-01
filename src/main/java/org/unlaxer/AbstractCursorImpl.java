@@ -12,20 +12,19 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
 	final CursorKind cursorKind;
 	final SourceKind sourceKind;
 	final PositionResolver positionResolver;
-	final CodePointOffset offsetFromRoot;
+//	final CodePointOffset offsetFromRoot;
 	
 	AbstractCursorImpl(CursorKind cursorKind , SourceKind sourceKind , PositionResolver positionResolver) {
-		this(cursorKind,sourceKind,positionResolver,new CodePointIndex(0) , new CodePointOffset(0));
+		this(cursorKind,sourceKind,positionResolver,new CodePointIndex(0 , new CodePointOffset(0)) );
 	}
 	
   AbstractCursorImpl(CursorKind cursorKind , SourceKind sourceKind , 
-	     PositionResolver positionResolver , CodePointIndex position , CodePointOffset offsetFromRoot) {
+	     PositionResolver positionResolver , CodePointIndex position) {
 	    super();
 	    this.cursorKind = cursorKind;
 	    this.sourceKind = sourceKind;
 	    this.positionResolver = positionResolver;
 	    this.position = position;
-	    this.offsetFromRoot = offsetFromRoot;
   }
 	
 	public AbstractCursorImpl(Cursor<?> cursor) {
@@ -33,33 +32,32 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
 		cursorKind = cursor.cursorKind();
 		sourceKind = cursor.sourceKind();
 		positionResolver = cursor.positionResolver();
-		offsetFromRoot = cursor.offsetFromRoot();
 	}
 	
   abstract T thisObject();
   
   @Override
   public LineNumber lineNumber() {
-    return positionResolver.lineNumberFrom(positionInRoot());
+    return positionResolver.lineNumberFrom(position);
   }
   
   
   @Override
   public CodePointIndex position() {
-    return positionInSub();
-  }
-  
-  @Override
-  public CodePointIndex positionInSub() {
-    return sourceKind.isRoot() ?
-        position:
-        position.newWithMinus(offsetFromRoot());
-  }
-  
-  @Override
-  public CodePointIndex positionInRoot() {
     return position;
   }
+  
+//  @Override
+//  public CodePointIndex positionInSub() {
+//    return sourceKind.isRoot() ?
+//        position:
+//        position.newWithMinus(offsetFromRoot());
+//  }
+//  
+//  @Override
+//  public CodePointIndex positionInRoot() {
+//    return position;
+//  }
 
   
   @Override
@@ -74,7 +72,7 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
   }
   @Override
   public CodePointIndexInLine positionInLine() {
-    return positionResolver.codePointIndexInLineFrom(positionInRoot());
+    return positionResolver.codePointIndexInLineFrom(position);
   }
   
   @Override
@@ -102,11 +100,11 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
   
   @Override
   public CodePointOffset offsetFromRoot() {
-    return offsetFromRoot;
+    return position.offsetFromRoot();
   }
 
   @Override
   public String toString() {
-    return "[L:" + lineNumber() + ",X:" + positionInLine()+",P:"+position()+"]";
+    return "[L:" + lineNumber() + ",X:" + positionInLine()+",PS:"+position.valueInSubSource()+",PR:"+position.valueWithOffsetFromRoot()+",O:"+offsetFromRoot().value()+"]";
   }
 }
