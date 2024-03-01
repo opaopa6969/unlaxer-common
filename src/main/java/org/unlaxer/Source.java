@@ -60,7 +60,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
     Source current = thisSource();
     while(true) {
 //      infiniteLoopDetector.incrementsAndThrow(20);
-      if(current.isRoot()) {
+      if(current.isNotSubSource()) {
 //        infiniteLoopDetector.reset();
         return codePointOffset;
       }
