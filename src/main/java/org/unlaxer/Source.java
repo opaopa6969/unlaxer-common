@@ -61,7 +61,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
         return codePointOffset;
       }
       current = current.parent().get();
-      codePointOffset.newWithPlus(current.offsetFromParent());
+      codePointOffset = codePointOffset.newWithPlus(current.offsetFromParent());
     }
   }
   
