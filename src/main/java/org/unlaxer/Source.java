@@ -136,10 +136,12 @@ public interface Source extends CodePointAccessor , PositionResolver {
 
   
   default Source subSource(CodePointIndex beginIndex) {
+    Source thisSource = thisSource();
+    CodePointOffset offsetFromRoot = thisSource.offsetFromRoot();
     return parentSourceAndStringToSource().apply(
-        thisSource(),
+        thisSource,
         stringIndexAccessor().substring(toStringIndex(beginIndex).value()),
-        new CodePointOffset(beginIndex)
+        new CodePointOffset(beginIndex).newWithAdd(offsetFromRoot)
     );
   }
   

@@ -77,4 +77,12 @@ public class CodePointIndexWithNegativeValue extends IntegerValue<CodePointIndex
         valueInSubSource():
         valueWithOffsetFromRoot();
   }
+  
+  public boolean isNegative(SourceKind sourceKind) {
+    return value(sourceKind)<0;
+  }
+  
+  public CodePointIndex toCodePointIndex() {
+    return new CodePointIndex(rawValue(),offsetFromRoot);
+  }
 }

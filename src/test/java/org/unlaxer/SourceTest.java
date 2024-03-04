@@ -104,6 +104,67 @@ public class SourceTest {
     }
   }
   
+  @Test
+  public void testSubSubSource() {
+    // root                                                   
+    Source source = StringSource.createRootSource("肉肉肉麺肉肉麺肉肉肉麺肉肉麺");
+    //0肉1肉2肉3麺4肉5肉6麺7肉8肉9肉10麺11肉12肉13麺14
+    int 肉codePoint = "肉".codePointAt(0);
+    int 麺codePoint = "麺".codePointAt(0);
+    
+    
+    CodePointIndex indexOf肉 = source.indexOf(new CodePoint(肉codePoint), new CodePointIndex(0,new CodePointOffset(0)))
+        .toCodePointIndex();
+    
+    assertEquals(0, indexOf肉.rawValue());
+    
+    
+    CodePointIndex indexOf麺 = source.indexOf(new CodePoint(麺codePoint), new CodePointIndex(0,new CodePointOffset(0)))
+        .toCodePointIndex();
+    
+    assertEquals(3, indexOf麺.rawValue());
+    
+    // subSource
+    Source subSource = source.subSource(new CodePointIndex(7,source));
+    assertEquals("肉肉肉麺肉肉麺", subSource.toString());
+    {
+      CursorRange cursorRange = subSource.cursorRange();
+      
+      StartInclusiveCursor startIndexInclusive = cursorRange.startIndexInclusive();
+      CodePointIndex position = startIndexInclusive.position();
+      
+      assertEquals(7, position.value(SourceKind.root));
+      assertEquals(0, position.value(SourceKind.subSource));
+      
+      EndExclusiveCursor endExclusiveCursor = cursorRange.endIndexExclusive();
+      
+      CodePointIndex position2 = endExclusiveCursor.position();
+      assertEquals(7, position2.value(SourceKind.subSource));
+      assertEquals(14, position2.value(SourceKind.root));
+    }
+    
+    
+    
+    // subSubSource
+    Source subSubSource = subSource.subSource(new CodePointIndex(3,subSource));
+    assertEquals("麺肉肉麺", subSubSource.toString());
+    {
+      CursorRange cursorRange = subSubSource.cursorRange();
+      
+      StartInclusiveCursor startIndexInclusive = cursorRange.startIndexInclusive();
+      CodePointIndex position = startIndexInclusive.position();
+      
+      assertEquals(7+3, position.value(SourceKind.root));
+      assertEquals(0, position.value(SourceKind.subSource));
+      
+      EndExclusiveCursor endExclusiveCursor = cursorRange.endIndexExclusive();
+      
+      CodePointIndex position2 = endExclusiveCursor.position();
+      assertEquals(7, position2.value(SourceKind.subSource));
+      assertEquals(14, position2.value(SourceKind.root));
+    }
+  }
+  
   public static void main(String[] args) {
     
     CodePointOffset codePointOffset = new CodePointOffset(0);

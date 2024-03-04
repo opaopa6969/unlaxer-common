@@ -32,6 +32,12 @@ public class CodePointIndex extends IntegerValue<CodePointIndex>{
     this.offsetFromRoot = offsetFromRoot;
   }
   
+  public CodePointIndex(int value , Source source) {
+    super(value);
+    this.offsetFromRoot = source.offsetFromRoot();
+  }
+
+  
   public CodePointIndex(IntegerValue<?> value , Source source) {
     super(value);
     this.offsetFromRoot = source.offsetFromRoot();
