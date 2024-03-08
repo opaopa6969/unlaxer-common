@@ -200,7 +200,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
       if(indexOf ==-1) {
         throw new IllegalArgumentException();
       }
-      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf));
+      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf,IndexKind.thisSource));
       
       result[i++] = parentSourceAndStringToSource().apply(
           thisSource() , string , new CodePointOffset(codePointIndex));
@@ -223,7 +223,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
       if(indexOf ==-1) {
         throw new IllegalArgumentException();
       }
-      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf));
+      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf,IndexKind.thisSource));
       
       result[i++] = parentSourceAndStringToSource().apply(
           thisSource() , string , new CodePointOffset(codePointIndex));

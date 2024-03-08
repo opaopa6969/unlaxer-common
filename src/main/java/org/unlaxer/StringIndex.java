@@ -6,39 +6,37 @@ import org.unlaxer.base.MinIntegerValue._MinIntegerValue;
 @_MinIntegerValue(0)
 public class StringIndex extends IntegerValue<StringIndex>{
   
-  public final IndexKind indexKind;
-
+  public final Source targetSource;
   
-  public StringIndex create(int i , IndexKind indexKind) {
-    return new StringIndex(i , indexKind);
+  public StringIndex create(int i , Source targetSource) {
+    return new StringIndex(i , targetSource);
   }
 
-  public StringIndex create(IntegerValue<?> i , IndexKind indexKind) {
-    return new StringIndex(i , indexKind);
+  public StringIndex create(IntegerValue<?> i , Source targetSource) {
+    return new StringIndex(i , targetSource);
   }
 
-  public StringIndex(IntegerValue<?> value, IndexKind indexKind) {
+  public StringIndex(IntegerValue<?> value, Source targetSource) {
     super(value);
-    this.indexKind = indexKind;
+    this.targetSource =targetSource;
   }
   
-  public StringIndex(int value, IndexKind indexKind) {
+  public StringIndex(int value, Source targetSource) {
     super(value);
-    this.indexKind = indexKind;
+    this.targetSource = targetSource;
   }
-
-  public IndexKind getIndexKind() {
-    return indexKind;
+  public Source getTargetSource() {
+    return targetSource;
   }
 
   @Override
   public StringIndex create(int i) {
-    throw new UnsupportedOperationException("must specify index kind");
+    throw new UnsupportedOperationException("must specify target source");
   }
 
   @Override
   public StringIndex create(IntegerValue<?> i) {
-    throw new UnsupportedOperationException("must specify index kind");
+    throw new UnsupportedOperationException("must specify tsource");
   }
 
 }
