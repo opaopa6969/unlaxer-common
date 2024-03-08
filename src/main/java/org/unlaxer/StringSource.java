@@ -10,6 +10,8 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.ParagraphAction;
+
 import org.unlaxer.util.function.TriFunction;
 
 public class StringSource implements Source {
@@ -655,8 +657,6 @@ public class StringSource implements Source {
 
   @Override
   public LineNumber lineNumberFrom(CodePointIndexFromRoot rootCodePointIndex) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'lineNumberFrom'");
   }
 
   @Override
@@ -681,6 +681,30 @@ public class StringSource implements Source {
   public Source subSource(AttachedCodePointIndex startIndexInclusive, CodePointLength codePointLength) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'subSource'");
+  }
+
+  @Override
+  public boolean relatedWithRoot() {
+    
+    Source top = top();
+    return top.sourceKind().isRoot();
+  }
+
+  @Override
+  public Source top() {
+    int depth = 0 ;
+    
+    Source current = parent;
+    
+    while(true) {
+      if(current == null) {
+        return this;
+      }
+      current = parent;
+      if(++depth > 100) {
+        throw new IllegalArgumentException("depth too deep");
+      }
+    }
   }
 
 }

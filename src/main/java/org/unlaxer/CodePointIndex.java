@@ -56,8 +56,23 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
     return value();
   }
 
-//  public SourceKind sourceKind() {
-//    return sourceKind;
-//  }
+  @Override
+  public IndexKind indexKind() {
+    
+    return IndexKind.thisSource;
+  }
 
+  @Override
+  public boolean isPresent(IndexKind indexKind) {
+    return indexKind.isThisSource();
+  }
+
+  @Override
+  public int value(IndexKind indexKind) {
+    if(indexKind.isThisSource()) {
+      
+      return value();
+    }
+    throw new IllegalArgumentException();
+  }
 }

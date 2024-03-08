@@ -33,6 +33,8 @@ public interface Source extends CodePointAccessor , PositionResolver {
     }
   }
   
+  Source top();
+  
   PositionResolver positionResolver();
   
   SourceKind sourceKind();
@@ -89,7 +91,8 @@ public interface Source extends CodePointAccessor , PositionResolver {
   Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
   
   Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
-
+  
+  public boolean relatedWithRoot();
   
   Optional<Source> parent();
   

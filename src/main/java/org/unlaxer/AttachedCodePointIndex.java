@@ -1,8 +1,9 @@
 package org.unlaxer;
 
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.base.IntegerValue;
 
-public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex> implements CodePointIndexFromRoot , CodePointIndexFromParent{
+public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex> implements CodePointIndexFromRoot , CodePointIndexFromParent , CodePointIndexInterface{
   
   Source attachedSource;
 
@@ -39,14 +40,42 @@ public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex>
     return attachedSource.offsetFromRoot().newWithAdd(value()).value();
   }
   
-//  public CodePointOffset codePointOffsetFromRoot() {
-//    
-//    CodePointOffset newWithAdd = attachedSource.offsetFromRoot().newWithAdd(value());
-//  }
-
   @Override
   public AttachedCodePointIndex create(int i) {
-    throw new UnsupportedOperationException("Unimplemented method 'create'");
+    throw new UnsupportedOperationException("must specify source");
   }
 
+  @Override
+  public int rawValue() {
+    return value();
+  }
+
+  @Override
+  public IndexKind indexKind() {
+    SourceKind sourceKind = attachedSource.sourceKind();
+    if(sourceKind == SourceKind.root) {
+      return IndexKind.fromRoot;
+    }
+    return IndexKind.fromParent;
+  }
+
+  @Override
+  public boolean isPresent(IndexKind indexKind) {
+    return true;
+  }
+
+  @Override
+  public int value(IndexKind indexKind) {
+    
+    switch (indexKind) {
+      case fromParent:
+        return indexFromParent();
+      case fromRoot:
+        return indexFromRoot();
+      case thisSource:
+        return value();
+      default:
+        throw new IllegalArgumentException();
+    }
+  }
 }
