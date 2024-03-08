@@ -1,56 +1,35 @@
 package org.unlaxer;
 
-import org.unlaxer.Source.SourceKind;
 import org.unlaxer.base.IntegerValue;
 
-public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex>{
+public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex> implements CodePointIndexFromRoot , CodePointIndexFromParent{
   
   Source attachedSource;
 
-//  SourceKind sourceKind;
-//  
-//  public CodePointIndex(int value , SourceKind sourceKind) {
-//    super(value);
-//    this.sourceKind = sourceKind;
-//  }
-//  
-//  public CodePointIndex(IntegerValue<?> value , SourceKind sourceKind) {
-//    super(value);
-//    this.sourceKind = sourceKind;
-//  }
+  public AttachedCodePointIndex(int value , Source source) {
+    super(value);
+    this.attachedSource = source;
+  }
+  
+  public AttachedCodePointIndex(IntegerValue<?> value  , Source source) {
+    super(value);
+    this.attachedSource = source;
+  }
+  
+  public AttachedCodePointIndex create(int i , Source source) {
+    return new AttachedCodePointIndex(i,source);
+  }
 
-  public AttachedCodePointIndex(int value) {
-    super(value);
-  }
-  
-  public AttachedCodePointIndex(IntegerValue<?> value) {
-    super(value);
-  }
-  
-//  @Override
-//  public CodePointIndex create(int i) {
-//    return new CodePointIndex(i ,sourceKind);
-//  }
-//
-//  @Override
-//  public CodePointIndex create(IntegerValue<?> i) {
-//    return new CodePointIndex(i ,sourceKind);
-//  }
-  
-  public AttachedCodePointIndex create(int i) {
-    return new AttachedCodePointIndex(i);
+  public AttachedCodePointIndex create(IntegerValue<?> i  , Source source) {
+    return new AttachedCodePointIndex(i,source);
   }
 
   @Override
   public AttachedCodePointIndex create(IntegerValue<?> i) {
-    return new AttachedCodePointIndex(i);
+    throw new UnsupportedOperationException("Unimplemented method 'create(i)'");
   }
 
-//  public SourceKind sourceKind() {
-//    return sourceKind;
-//  }
-  
-  public int indexFromParentvalue() {
+  public int indexFromParent() {
     
     return attachedSource.offsetFromParent().newWithAdd(value()).value();
   }
@@ -60,9 +39,14 @@ public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex>
     return attachedSource.offsetFromRoot().newWithAdd(value()).value();
   }
   
-  public CodePointOffset codePointOffsetFromRoot() {
-    
-    CodePointOffset newWithAdd = attachedSource.offsetFromRoot().newWithAdd(value());
+//  public CodePointOffset codePointOffsetFromRoot() {
+//    
+//    CodePointOffset newWithAdd = attachedSource.offsetFromRoot().newWithAdd(value());
+//  }
+
+  @Override
+  public AttachedCodePointIndex create(int i) {
+    throw new UnsupportedOperationException("Unimplemented method 'create'");
   }
-  
+
 }

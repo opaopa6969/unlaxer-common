@@ -6,7 +6,7 @@ import org.unlaxer.Source.SourceKind;
 public class StartInclusiveCursorImpl extends AbstractCursorImpl<StartInclusiveCursor> implements StartInclusiveCursor{
   
   public StartInclusiveCursorImpl(SourceKind sourceKind, PositionResolver positionResolver,
-      CodePointIndex position , CodePointOffset offsetFromRoot) {
+      AttachedCodePointIndex position , CodePointOffset offsetFromRoot) {
     super(CursorKind.startInclusive, sourceKind, positionResolver, position , offsetFromRoot);
   }
 

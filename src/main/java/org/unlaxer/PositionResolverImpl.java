@@ -14,12 +14,15 @@ import org.unlaxer.Source.SourceKind;
 
 public class PositionResolverImpl implements PositionResolver {
   
-  final NavigableMap<CodePointIndex, LineNumber> lineNumberByIndex = new TreeMap<>();
-  final Map<CodePointIndex,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
-  final Map<CodePointIndex,CodePointIndexInLine> codePointIndexInLineByCodePointIndex = new HashMap<>();
-  final Map<StringIndex,CodePointIndex> codePointIndexByStringIndex = new HashMap<>();
+  final NavigableMap<CodePointIndexFromRoot, LineNumber> lineNumberByIndex = new TreeMap<>();
+  final Map<CodePointIndexFromRoot,StringIndex> stringIndexByCodePointIndex = new HashMap<>();
+  final Map<CodePointIndexFromRoot,CodePointIndexInLine> codePointIndexInLineByCodePointIndex = new HashMap<>();
+  final Map<StringIndex,AttachedCodePointIndex> codePointIndexByStringIndex = new HashMap<>();
   final List<CursorRange> cursorRanges = new ArrayList<>();
   final CursorRange cursorRange;
+  final Source rootSource;
+  
+  
 //  final RootPositionResolver rootPositionResolver;
   
 //  public static RootPositionResolver createRootPositionResolver(int[] codePoints){
@@ -34,7 +37,8 @@ public class PositionResolverImpl implements PositionResolver {
 //  }
 
   
-  PositionResolverImpl(int[] codePoints){
+  PositionResolverImpl(Source rootSource , int[] codePoints){
+    this.rootSource = rootSource ;
 //      RootPositionResolver rootPositionResolver,
 //      CodePointOffset offsetFromRoot) {
 //    boolean isRoot = rootPositionResolver == null ;
@@ -42,16 +46,16 @@ public class PositionResolverImpl implements PositionResolver {
 //    this.rootPositionResolver = isRoot ? this : rootPositionResolver;
     
     LineNumber lineNumber = new LineNumber(0);
-    CodePointIndex startIndex = new CodePointIndex(0);
-    CodePointIndex previousStartIndex;
+    AttachedCodePointIndex startIndex = new AttachedCodePointIndex(0,rootSource);
+    AttachedCodePointIndex previousStartIndex;
     lineNumberByIndex.put(startIndex, lineNumber);
     
     StringIndex stringIndex = new StringIndex(0);
-    CodePointIndex codePointIndex = new CodePointIndex(0);
+    AttachedCodePointIndex codePointIndex = new AttachedCodePointIndex(0,rootSource);
     CodePointIndexInLine codePointOffsetInline = new CodePointIndexInLine(0);
     
     for (int i = 0; i < codePointCount; i++) {
-      codePointIndex = new CodePointIndex(i);
+      codePointIndex = new AttachedCodePointIndex(i,rootSource);
       stringIndexByCodePointIndex.put(codePointIndex, stringIndex);
       codePointIndexByStringIndex.put(stringIndex,codePointIndex);
       codePointIndexInLineByCodePointIndex.put(codePointIndex, codePointOffsetInline);
@@ -64,7 +68,7 @@ public class PositionResolverImpl implements PositionResolver {
       if(codePointAt == SymbolMap.lf.codes[0]) {
         
         previousStartIndex = startIndex;
-        startIndex = new CodePointIndex(i+1);
+        startIndex = new AttachedCodePointIndex(i+1,rootSource);
         cursorRanges.add(
             CursorRange.of(
               previousStartIndex,
@@ -84,7 +88,7 @@ public class PositionResolverImpl implements PositionResolver {
         if(codePointCount-1!=i && codePoints[i+1] ==SymbolMap.lf.codes[0]) {
           i++;
           previousStartIndex = startIndex;
-          startIndex = new CodePointIndex(i+1);
+          startIndex = new AttachedCodePointIndex(i+1 , rootSource);
           cursorRanges.add(
               CursorRange.of(
                 previousStartIndex,
@@ -102,7 +106,7 @@ public class PositionResolverImpl implements PositionResolver {
           codePointIndexByStringIndex.put(stringIndex,codePointIndex.newWithAdd(1));
         }else {
           previousStartIndex = startIndex;
-          startIndex = new CodePointIndex(i+1);
+          startIndex = new AttachedCodePointIndex(i+1,rootSource);
           cursorRanges.add(
               CursorRange.of(
                 previousStartIndex,
@@ -123,7 +127,7 @@ public class PositionResolverImpl implements PositionResolver {
 
     StartInclusiveCursor start = new StartInclusiveCursorImpl(SourceKind.root,this);//.addPosition(offsetFromRoot);
     
-    CodePointIndex position = new CodePointIndex(codePointCount);//.newWithAdd(offsetFromRoot);
+    AttachedCodePointIndex position = new AttachedCodePointIndex(codePointCount,rootSource);//.newWithAdd(offsetFromRoot);
     
     EndExclusiveCursor end = new EndExclusiveCursorImpl(SourceKind.root,this)
         .setPosition(position);
@@ -159,7 +163,7 @@ public class PositionResolverImpl implements PositionResolver {
   }
 
   @Override
-  public StringIndex stringIndexInRootFrom(CodePointIndex codePointIndex) {
+  public StringIndex stringIndexInRootFrom(CodePointIndexFromRoot codePointIndex) {
     
 //    if(rootPositionResolver == this) {
 //      return stringIndexByCodePointIndex.get(codePointIndexInSubSource);
@@ -169,7 +173,7 @@ public class PositionResolverImpl implements PositionResolver {
   }
 
   @Override
-  public LineNumber lineNumberFrom(CodePointIndex codePointIndex) {
+  public LineNumber lineNumberFrom(CodePointIndexFromRoot codePointIndex) {
 //    return rootPositionResolver.lineNumberFrom(codePointIndex.newWithPlus(offsetFromRoot));
     return lineNumberByIndex.floorEntry(codePointIndex).getValue();
   }
@@ -185,23 +189,23 @@ public class PositionResolverImpl implements PositionResolver {
   }
 
   @Override
-  public StringIndex subStringIndexFrom(CodePointIndex subCodePointIndex) {
+  public StringIndex subStringIndexFrom(CodePointIndexFromRoot subCodePointIndex) {
     return stringIndexByCodePointIndex.get(subCodePointIndex);
   }
 
   @Override
-  public CodePointIndex subCodePointIndexFrom(StringIndex subStringIndex) {
-    return codePointIndexByStringIndex.get(subStringIndex);
-  }
-
-  @Override
-  public CodePointIndexInLine codePointIndexInLineFrom(CodePointIndex codePointIndex) {
+  public CodePointIndexInLine codePointIndexInLineFrom(CodePointIndexFromRoot codePointIndex) {
     return codePointIndexInLineByCodePointIndex.get(codePointIndex);
   }
 
   @Override
-  public CodePointIndex rootCodePointIndexFrom(StringIndex stringIndex) {
+  public AttachedCodePointIndex rootCodePointIndexFrom(StringIndex stringIndex) {
     return codePointIndexByStringIndex.get(stringIndex);
   }
 
+  @Override
+  public Source rootSource() {
+    return rootSource;
+  }
+  
 }

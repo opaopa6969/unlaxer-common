@@ -27,4 +27,9 @@ public class CodePointOffset extends IntegerValue<CodePointOffset>{
   public CodePointIndex toCodePointIndex() {
     return new CodePointIndex(value());
   }
+  
+  public AttachedCodePointIndex toAttachedCodePointIndex(Source source) {
+    return new AttachedCodePointIndex(value(),source);
+  }
+
 }

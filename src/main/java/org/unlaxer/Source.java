@@ -82,9 +82,14 @@ public interface Source extends CodePointAccessor , PositionResolver {
 	  return subSource(cursorRange.startIndexInclusive.position(), cursorRange.endIndexExclusive.position());
 	}
 	
+  Source subSource(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive);
+  
+  Source subSource(AttachedCodePointIndex startIndexInclusive, CodePointLength codePointLength);
+  
   Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
   
   Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
+
   
   Optional<Source> parent();
   
@@ -109,7 +114,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
   }
   
   default PositionResolver createPositionResolver(int[] codePoints) {
-    return PositionResolver.createPositionResolver(codePoints);
+    return PositionResolver.createPositionResolver(this,codePoints);
   }
   
 //  Function<String,Source> stringToSource();

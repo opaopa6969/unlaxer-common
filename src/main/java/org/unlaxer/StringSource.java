@@ -72,12 +72,12 @@ public class StringSource implements Source {
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     positionResolver = root == null ? 
-        PositionResolver.createPositionResolver(codePoints) : 
+        PositionResolver.createPositionResolver(this,codePoints) :
         root; 
     stringIndexAccessor = new StringIndexAccessorImpl(source);
     cursorRange = CursorRange.of(
-        offsetFromParent.toCodePointIndex(), 
-        offsetFromParent.toCodePointIndex().newWithAdd(codePoints.length),
+        offsetFromParent.toAttachedCodePointIndex(this), 
+        offsetFromParent.toAttachedCodePointIndex(this).newWithAdd(codePoints.length),
         offsetFromParent,
         sourceKind, 
         positionResolver);
@@ -97,13 +97,13 @@ public class StringSource implements Source {
     sourceKind = SourceKind.subSource;
     codePoints = source.codePoints().toArray();
     positionResolver = root == null ? 
-        PositionResolver.createPositionResolver(codePoints) : 
+        PositionResolver.createPositionResolver(this,codePoints) : 
         root; 
     stringIndexAccessor = new StringIndexAccessorImpl(source.sourceAsString());
     
     cursorRange = CursorRange.of(
-        offsetFromParent.toCodePointIndex(), 
-        offsetFromParent.toCodePointIndex().newWithAdd(codePoints.length),
+        offsetFromParent.toAttachedCodePointIndex(this), 
+        offsetFromParent.toAttachedCodePointIndex(this).newWithAdd(codePoints.length),
         offsetFromParent,
         sourceKind, 
         positionResolver);
@@ -121,27 +121,27 @@ public class StringSource implements Source {
     offsetFromParent = codePointOffset;
     codePoints = source.codePoints().toArray();
     positionResolver = root == null ? 
-        PositionResolver.createPositionResolver(codePoints) : 
+        PositionResolver.createPositionResolver(this,codePoints) : 
         root; 
     stringIndexAccessor = new StringIndexAccessorImpl(source);
     
     cursorRange = CursorRange.of(
-        offsetFromParent.toCodePointIndex(), 
-        offsetFromParent.toCodePointIndex().newWithAdd(codePoints.length),
+        offsetFromParent.toAttachedCodePointIndex(this), 
+        offsetFromParent.toAttachedCodePointIndex(this).newWithAdd(codePoints.length),
         codePointOffset,
         sourceKind, 
         positionResolver);
   }
   
-  public LineNumber lineNumberFrom(CodePointIndex codePointIndex) {
+  public LineNumber lineNumberFrom(AttachedCodePointIndex codePointIndex) {
     return positionResolver.lineNumberFrom(codePointIndex);
   }
 
-  public StringIndex stringIndexFrom(CodePointIndex codePointIndex) {
+  public StringIndex stringIndexFrom(AttachedCodePointIndex codePointIndex) {
     return positionResolver.stringIndexInRootFrom(codePointIndex);
   }
 
-  public CodePointIndex codePointIndexFrom(StringIndex stringIndex) {
+  public AttachedCodePointIndex codePointIndexFrom(StringIndex stringIndex) {
     return positionResolver.rootCodePointIndexFrom(stringIndex);
   }
 
@@ -157,13 +157,13 @@ public class StringSource implements Source {
     return positionResolver.lineSize();
   }
 
-  public StringIndex subStringIndexFrom(CodePointIndex subCodePointIndex) {
+  public StringIndex subStringIndexFrom(AttachedCodePointIndex subCodePointIndex) {
     return positionResolver.subStringIndexFrom(subCodePointIndex);
   }
 
-  public CodePointIndex subCodePointIndexFrom(StringIndex subStringIndex) {
-    return positionResolver.subCodePointIndexFrom(subStringIndex);
-  }
+//  public AttachedCodePointIndex subCodePointIndexFrom(StringIndex subStringIndex) {
+//    return positionResolver.subCodePointIndexFrom(subStringIndex);
+//  }
 
   static Function<String, Source> stringToStringInterface = string-> StringSource.createRootSource(string);
   static TriFunction<Source , String, CodePointOffset , Source> parentSourceAndStringToSource = 
@@ -642,6 +642,45 @@ public class StringSource implements Source {
   @Override
   public CursorRange cursorRange() {
     return cursorRange;
+  }
+
+  @Override
+  public StringIndex stringIndexInRootFrom(CodePointIndexFromRoot CodePointIndex) {
+  }
+
+  @Override
+  public CodePointIndexInLine codePointIndexInLineFrom(CodePointIndexFromRoot rootCodePointIndex) {
+    
+  }
+
+  @Override
+  public LineNumber lineNumberFrom(CodePointIndexFromRoot rootCodePointIndex) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'lineNumberFrom'");
+  }
+
+  @Override
+  public StringIndex subStringIndexFrom(CodePointIndexFromRoot subCodePointIndex) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'subStringIndexFrom'");
+  }
+
+  @Override
+  public Source rootSource() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'rootSource'");
+  }
+
+  @Override
+  public Source subSource(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'subSource'");
+  }
+
+  @Override
+  public Source subSource(AttachedCodePointIndex startIndexInclusive, CodePointLength codePointLength) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'subSource'");
   }
 
 }

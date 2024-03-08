@@ -23,16 +23,16 @@ public interface Cursor<T extends Cursor<T>> {
 	
 //  T incrementLineNumber();
 
-	CodePointIndex position();
+	AttachedCodePointIndex position();
 	
-	CodePointIndex positionInSub();
-	
-  CodePointIndex positionInRoot();
+//	CodePointIndex positionInSub();
+//	
+//  CodePointIndex positionInRoot();
 
 	
 //	SubCodePointIndex getPositionOnThisSequence();
 
-	T setPosition(CodePointIndex position);
+	T setPosition(AttachedCodePointIndex position);
 	
   T incrementPosition(); 
 

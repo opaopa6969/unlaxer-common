@@ -2,7 +2,7 @@ package org.unlaxer;
 
 import org.unlaxer.base.IntegerValue;
 
-public class CodePointIndex extends IntegerValue<CodePointIndex>{
+public class CodePointIndex extends IntegerValue<CodePointIndex> implements CodePointIndexInterface{
 
 //  SourceKind sourceKind;
 //  
@@ -15,7 +15,7 @@ public class CodePointIndex extends IntegerValue<CodePointIndex>{
 //    super(value);
 //    this.sourceKind = sourceKind;
 //  }
-
+  
   public CodePointIndex(int value) {
     super(value);
   }
@@ -51,8 +51,13 @@ public class CodePointIndex extends IntegerValue<CodePointIndex>{
     return new CodePointIndexInLine(value());
   }
 
-  
+  @Override
+  public int rawValue() {
+    return value();
+  }
+
 //  public SourceKind sourceKind() {
 //    return sourceKind;
 //  }
+
 }

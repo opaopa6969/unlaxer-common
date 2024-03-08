@@ -8,18 +8,19 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
 	
 	private static final long serialVersionUID = -4419856259856233251L;
 	
-	CodePointIndex position;
+	AttachedCodePointIndex position;
 	final CursorKind cursorKind;
 	final SourceKind sourceKind;
 	final PositionResolver positionResolver;
 	final CodePointOffset offsetFromRoot;
 	
 	AbstractCursorImpl(CursorKind cursorKind , SourceKind sourceKind , PositionResolver positionResolver) {
-		this(cursorKind,sourceKind,positionResolver,new CodePointIndex(0) , new CodePointOffset(0));
+		this(cursorKind,sourceKind,positionResolver,
+		    new AttachedCodePointIndex(0,positionResolver.rootSource()) , new CodePointOffset(0));
 	}
 	
   AbstractCursorImpl(CursorKind cursorKind , SourceKind sourceKind , 
-	     PositionResolver positionResolver , CodePointIndex position , CodePointOffset offsetFromRoot) {
+	     PositionResolver positionResolver , AttachedCodePointIndex position , CodePointOffset offsetFromRoot) {
 	    super();
 	    this.cursorKind = cursorKind;
 	    this.sourceKind = sourceKind;
@@ -45,25 +46,25 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
   
   
   @Override
-  public CodePointIndex position() {
-    return positionInSub();
-  }
-  
-  @Override
-  public CodePointIndex positionInSub() {
-    return sourceKind.isRoot() ?
-        position:
-        position.newWithMinus(offsetFromRoot());
-  }
-  
-  @Override
-  public CodePointIndex positionInRoot() {
+  public AttachedCodePointIndex position() {
     return position;
   }
+  
+//  @Override
+//  public CodePointIndex positionInSub() {
+//    return sourceKind.isRoot() ?
+//        position:
+//        position.newWithMinus(offsetFromRoot());
+//  }
+//  
+//  @Override
+//  public CodePointIndex positionInRoot() {
+//    return position;
+//  }
 
   
   @Override
-  public T setPosition(CodePointIndex position) {
+  public T setPosition(AttachedCodePointIndex position) {
     this.position = position;
     return thisObject();
   }

@@ -29,8 +29,8 @@ public class CursorRange implements Comparable<CursorRange>{
 	}
 	
 	public static CursorRange of(
-	    CodePointIndex startIndexInclusive,
-      CodePointIndex endIndexExclusive,
+	    AttachedCodePointIndex startIndexInclusive,
+	    AttachedCodePointIndex endIndexExclusive,
       CodePointOffset offsetFromRoot,
       SourceKind sourceKind,
       PositionResolver positionResolver
@@ -54,25 +54,25 @@ public class CursorRange implements Comparable<CursorRange>{
 		return startIndexInclusive.position() == endIndexExclusive.position();
 	}
 
-	public boolean match(CodePointIndex position){
+	public boolean match(AttachedCodePointIndex position){
 		return position.ge(startIndexInclusive.position()) 
 		    && position.lt(endIndexExclusive.position());
 	}
 
 	
-  public boolean lt(CodePointIndex position){
+  public boolean lt(AttachedCodePointIndex position){
 	  return position.ge(endIndexExclusive.position());
 	}
 
-	public boolean lessThan(CodePointIndex position){
+	public boolean lessThan(AttachedCodePointIndex position){
 		return position.ge(endIndexExclusive.position());
 	}
 	
-	public boolean graterThan(CodePointIndex position){
+	public boolean graterThan(AttachedCodePointIndex position){
 		return position.lt(startIndexInclusive.position());
 	}
 	
-  public boolean gt(CodePointIndex position){
+  public boolean gt(AttachedCodePointIndex position){
     return position.lt(startIndexInclusive.position());
 	}
 	
@@ -93,8 +93,8 @@ public class CursorRange implements Comparable<CursorRange>{
 	}
 	
 	public RangesRelation relation(CursorRange other){
-		CodePointIndex otherStart = other.startIndexInclusive.position();
-		CodePointIndex otherEnd= other.endIndexExclusive.position();
+	  AttachedCodePointIndex otherStart = other.startIndexInclusive.position();
+	  AttachedCodePointIndex otherEnd= other.endIndexExclusive.position();
 		if(startIndexInclusive.position().eq(otherStart) && 
 		    endIndexExclusive.position().eq(otherEnd)){
 			
