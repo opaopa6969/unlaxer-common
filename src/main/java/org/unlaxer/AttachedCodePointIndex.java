@@ -54,9 +54,9 @@ public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex>
   public IndexKind indexKind() {
     SourceKind sourceKind = attachedSource.sourceKind();
     if(sourceKind == SourceKind.root) {
-      return IndexKind.fromRoot;
+      return IndexKind.root;
     }
-    return IndexKind.fromParent;
+    return IndexKind.parent;
   }
 
   @Override
@@ -68,9 +68,9 @@ public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex>
   public int value(IndexKind indexKind) {
     
     switch (indexKind) {
-      case fromParent:
+      case parent:
         return indexFromParent();
-      case fromRoot:
+      case root:
         return indexFromRoot();
       case thisSource:
         return value();
