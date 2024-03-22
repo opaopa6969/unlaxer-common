@@ -3,7 +3,7 @@ package org.unlaxer;
 import org.unlaxer.Source.SourceKind;
 import org.unlaxer.base.IntegerValue;
 
-public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex> implements CodePointIndexFromRoot , CodePointIndexFromParent , CodePointIndexInterface{
+public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex> implements CodePointIndexFromRoot<AttachedCodePointIndex> , CodePointIndexFromParent<AttachedCodePointIndex>{
   
   Source attachedSource;
 
@@ -36,8 +36,8 @@ public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex>
   }
   
   public int indexFromRoot() {
-    
-    return attachedSource.offsetFromRoot().newWithAdd(value()).value();
+    CodePointOffset newWithAdd = attachedSource.offsetFromRoot().newWithAdd(value());
+    return newWithAdd.value();
   }
   
   @Override

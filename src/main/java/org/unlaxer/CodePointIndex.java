@@ -2,7 +2,7 @@ package org.unlaxer;
 
 import org.unlaxer.base.IntegerValue;
 
-public class CodePointIndex extends IntegerValue<CodePointIndex> implements CodePointIndexInterface{
+public class CodePointIndex extends IntegerValue<CodePointIndex> implements CodePointIndexInterface<CodePointIndex>{
 
 //  SourceKind sourceKind;
 //  

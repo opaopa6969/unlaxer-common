@@ -41,7 +41,7 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
   
   @Override
   public LineNumber lineNumber() {
-    return positionResolver.lineNumberFrom(positionInRoot());
+    return positionResolver.lineNumberFrom(position.indexFromRoot());
   }
   
   

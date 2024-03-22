@@ -53,14 +53,15 @@ public interface Source extends CodePointAccessor , PositionResolver {
   
 //  static InfiniteLoopDetector infiniteLoopDetector = new InfiniteLoopDetector();
   
-  default CodePointOffset offsetFromRoot() {
+  default CodePointIndexFromRoot<AttachedCodePointIndex> offsetFromRoot() {
     CodePointOffset codePointOffset = new CodePointOffset(0);
     Source current = thisSource();
     while(true) {
 //      infiniteLoopDetector.incrementsAndThrow(20);
       if(current.isRoot()) {
 //        infiniteLoopDetector.reset();
-        return codePointOffset;
+        
+        return new AttachedCodePointIndex(codePointOffset, current);
       }
       current = current.parent().get();
       codePointOffset = codePointOffset.newWithPlus(current.offsetFromParent());

@@ -1,5 +1,5 @@
 package org.unlaxer;
 
-public interface CodePointIndexFromParent {//extends IntegerValueInterface<CodePointIndexFromParent>{
+public interface CodePointIndexFromParent<T extends CodePointIndexFromParent<T>> extends CodePointIndexInterface<T>{//extends IntegerValueInterface<CodePointIndexFromParent>{
   int indexFromParent();
 }

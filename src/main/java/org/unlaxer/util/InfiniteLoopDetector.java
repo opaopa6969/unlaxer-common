@@ -1,6 +1,8 @@
 package org.unlaxer.util;
 
-public class InfiniteLoopDetector {
+import java.io.Closeable;
+
+public class InfiniteLoopDetector implements Closeable{
   
   ThreadLocal<Integer> counter = new ThreadLocal<>() {
 
@@ -36,5 +38,10 @@ public class InfiniteLoopDetector {
   
   public String toString() {
     return String.valueOf(counter.get());
+  }
+
+  @Override
+  public void close() {
+    reset();
   }
 }

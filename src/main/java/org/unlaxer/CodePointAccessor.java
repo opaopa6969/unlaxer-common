@@ -124,7 +124,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value()))));
+        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value()),source())));
   }
   
   default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint, CodePointIndex fromIndex) {
@@ -135,7 +135,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   default CodePointIndexWithNegativeValue indexOf(CodePointAccessor str) {
     return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(indexOf(str.source()))));
+        toCodePointIndex(new StringIndex(indexOf(str.source()),source())));
   }
     
   default CodePointIndex indexOf(CodePointAccessor str, CodePointIndex fromIndex) {

@@ -1,6 +1,8 @@
 package org.unlaxer;
 
-public interface CodePointIndexInterface {//extends CodePointIndexFromParent , CodePointIndexFromRoot{
+import org.unlaxer.base.IntegerValueInterface;
+
+public interface CodePointIndexInterface<E extends CodePointIndexInterface<E>> extends IntegerValueInterface<E>{//extends CodePointIndexFromParent , CodePointIndexFromRoot{
   
   public int rawValue();
   
