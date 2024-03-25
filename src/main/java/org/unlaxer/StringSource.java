@@ -76,8 +76,8 @@ public class StringSource implements Source {
         root; 
     stringIndexAccessor = new StringIndexAccessorImpl(source);
     cursorRange = CursorRange.of(
-        offsetFromParent.toAttachedCodePointIndex(this), 
-        offsetFromParent.toAttachedCodePointIndex(this).newWithAdd(codePoints.length),
+        offsetFromParent.toCodePointIndex(this), 
+        offsetFromParent.toCodePointIndex(this).newWithAdd(codePoints.length),
         offsetFromParent,
         sourceKind, 
         positionResolver);
@@ -102,8 +102,8 @@ public class StringSource implements Source {
     stringIndexAccessor = new StringIndexAccessorImpl(source.sourceAsString());
     
     cursorRange = CursorRange.of(
-        offsetFromParent.toAttachedCodePointIndex(this), 
-        offsetFromParent.toAttachedCodePointIndex(this).newWithAdd(codePoints.length),
+        offsetFromParent.toCodePointIndex(this), 
+        offsetFromParent.toCodePointIndex(this).newWithAdd(codePoints.length),
         offsetFromParent,
         sourceKind, 
         positionResolver);
@@ -126,22 +126,22 @@ public class StringSource implements Source {
     stringIndexAccessor = new StringIndexAccessorImpl(source);
     
     cursorRange = CursorRange.of(
-        offsetFromParent.toAttachedCodePointIndex(this), 
-        offsetFromParent.toAttachedCodePointIndex(this).newWithAdd(codePoints.length),
+        offsetFromParent.toCodePointIndex(this), 
+        offsetFromParent.toCodePointIndex(this).newWithAdd(codePoints.length),
         codePointOffset,
         sourceKind, 
         positionResolver);
   }
   
-  public LineNumber lineNumberFrom(AttachedCodePointIndex codePointIndex) {
+  public LineNumber lineNumberFrom(CodePointIndex codePointIndex) {
     return positionResolver.lineNumberFrom(codePointIndex);
   }
 
-  public StringIndex stringIndexFrom(AttachedCodePointIndex codePointIndex) {
+  public StringIndex stringIndexFrom(CodePointIndex codePointIndex) {
     return positionResolver.stringIndexInRootFrom(codePointIndex);
   }
 
-  public AttachedCodePointIndex codePointIndexFrom(StringIndex stringIndex) {
+  public CodePointIndex codePointIndexFrom(StringIndex stringIndex) {
     return positionResolver.rootCodePointIndexFrom(stringIndex);
   }
 
@@ -157,11 +157,11 @@ public class StringSource implements Source {
     return positionResolver.lineSize();
   }
 
-  public StringIndex subStringIndexFrom(AttachedCodePointIndex subCodePointIndex) {
+  public StringIndex subStringIndexFrom(CodePointIndex subCodePointIndex) {
     return positionResolver.subStringIndexFrom(subCodePointIndex);
   }
 
-//  public AttachedCodePointIndex subCodePointIndexFrom(StringIndex subStringIndex) {
+//  public CodePointIndex subCodePointIndexFrom(StringIndex subStringIndex) {
 //    return positionResolver.subCodePointIndexFrom(subStringIndex);
 //  }
 
@@ -461,19 +461,19 @@ public class StringSource implements Source {
   }
 
   @Override
-  public StringIndexWithNegativeValue toStringIndex(CodePointIndexWithNegativeValue codePointIndex) {
+  public StringIndex toStringIndex(CodePointIndex codePointIndex) {
     if(codePointIndex.isNegative()) {
-      return new StringIndexWithNegativeValue(codePointIndex.value());
+      return new StringIndex(codePointIndex.value());
     }
-    return new StringIndexWithNegativeValue(toStringIndex(codePointIndex.toCodePointIndex()));
+    return new StringIndex(toStringIndex(codePointIndex));
   }
 
   @Override
-  public CodePointIndexWithNegativeValue toCodePointIndexWithNegativeValue(StringIndexWithNegativeValue stringIndex) {
+  public CodePointIndex toCodePointIndexWithNegativeValue(StringIndex stringIndex) {
     if(stringIndex.isNegative()) {
-      return new CodePointIndexWithNegativeValue(stringIndex.value());
+      return new CodePointIndex(stringIndex.value());
     }
-    return new CodePointIndexWithNegativeValue(toCodePointIndex(stringIndex.toStringIndex()));
+    return new CodePointIndex(toCodePointIndex(stringIndex));
   }
 
   @Override
@@ -518,11 +518,11 @@ public class StringSource implements Source {
 //    return new String(codePoints, startIndexInclusive.value() , length.value());
 //  }
   
-  public String subString(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive) {
+  public String subString(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
     return new String(codePoints, startIndexInclusive.indexFromRoot() , endIndexExclusive.indexFromRoot() - startIndexInclusive.indexFromRoot());
   }
   
-  public String subString(AttachedCodePointIndex startIndexInclusive, CodePointLength length) {
+  public String subString(CodePointIndex startIndexInclusive, CodePointLength length) {
     return new String(codePoints, startIndexInclusive.indexFromRoot() , length.value());
   }
 
@@ -663,7 +663,7 @@ public class StringSource implements Source {
   }
 
   @Override
-  public Source subSource(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive) {
+  public Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
     return new StringSource(this,
         subString(startIndexInclusive,endIndexExclusive),
         new CodePointOffset(startIndexInclusive)
@@ -671,7 +671,7 @@ public class StringSource implements Source {
   }
 
   @Override
-  public Source subSource(AttachedCodePointIndex startIndexInclusive, CodePointLength codePointLength) {
+  public Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength) {
     return new StringSource(this,
         subString(startIndexInclusive,codePointLength),
         new CodePointOffset(startIndexInclusive)

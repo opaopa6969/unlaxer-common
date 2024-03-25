@@ -98,7 +98,7 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
   @Override
   public int indexFromRoot() {
     
-    AttachedCodePointIndex newWithAdd2 = attachedSource.offsetFromRoot().newWithAdd(value());
+    CodePointIndex newWithAdd2 = attachedSource.offsetFromRoot().newWithAdd(value());
     return newWithAdd2.value();
 
   }

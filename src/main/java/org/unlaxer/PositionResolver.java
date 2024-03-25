@@ -10,7 +10,7 @@ public interface PositionResolver {
   StringIndex stringIndexInRootFrom(CodePointIndexFromRoot<?> CodePointIndex);
   CodePointIndexInLine codePointIndexInLineFrom(CodePointIndexFromRoot<?> rootCodePointIndex);
   LineNumber lineNumberFrom(CodePointIndexFromRoot<?> rootCodePointIndex);
-  AttachedCodePointIndex rootCodePointIndexFrom(StringIndex stringIndex);
+  CodePointIndex rootCodePointIndexFrom(StringIndex stringIndex);
   
   
   StringIndex subStringIndexFrom(CodePointIndexFromRoot<?> subCodePointIndex);

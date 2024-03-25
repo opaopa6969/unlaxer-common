@@ -6,7 +6,7 @@ import org.unlaxer.Source.SourceKind;
 public class EndExclusiveCursorImpl extends AbstractCursorImpl<EndExclusiveCursor> implements EndExclusiveCursor{
   
   public EndExclusiveCursorImpl(SourceKind sourceKind, PositionResolver positionResolver,
-      AttachedCodePointIndex position , CodePointOffset offsetFromRoot) {
+      CodePointIndex position , CodePointOffset offsetFromRoot) {
     super(CursorKind.endExclusive, sourceKind, positionResolver, position , offsetFromRoot);
   }
   

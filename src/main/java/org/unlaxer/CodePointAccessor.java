@@ -9,7 +9,6 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   StringIndex toStringIndex(CodePointIndex codePointIndex);
   CodePointIndex toCodePointIndex(StringIndex stringIndex);
-  CodePointIndex toCodePointIndexWithNegativeValue(StringIndex stringIndex);
   
   /**
    * Returns the length of this string.
@@ -116,47 +115,40 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
 //            indexOf(codePoint.value()))));
 //  }
   
-  default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint, CodePointIndex fromIndex) {
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(stringIndexAccessor().indexOf(codePoint,toStringIndex(fromIndex)).toStringIndex()));
+  default CodePointIndex indexOf(CodePoint codePoint, CodePointIndex fromIndex) {
+    return toCodePointIndex(stringIndexAccessor().indexOf(codePoint,toStringIndex(fromIndex)));
   }
 
   
-  default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint) {
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value()),source())));
+  default CodePointIndex lastIndexOf(CodePoint codePoint) {
+    return toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value())));
   }
   
-  default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint, CodePointIndex fromIndex) {
+  default CodePointIndex lastIndexOf(CodePoint codePoint, CodePointIndex fromIndex) {
     
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(stringIndexAccessor().lastIndexOf(codePoint , toStringIndex(fromIndex)).toStringIndex()));
+    return toCodePointIndex(stringIndexAccessor().lastIndexOf(codePoint , toStringIndex(fromIndex)));
   }
   
-  default CodePointIndexWithNegativeValue indexOf(CodePointAccessor str) {
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(indexOf(str.source()),source())));
+  default CodePointIndex indexOf(CodePointAccessor str) {
+    return toCodePointIndex(new StringIndex(indexOf(str.source())));
   }
     
   default CodePointIndex indexOf(CodePointAccessor str, CodePointIndex fromIndex) {
-    return new CodePointIndex(
-        toCodePointIndexWithNegativeValue(stringIndexAccessor().indexOf(str,toStringIndex(fromIndex))));
+    return toCodePointIndex(stringIndexAccessor().indexOf(str,toStringIndex(fromIndex)));
   }
 
   default CodePointIndex lastIndexOf(CodePointAccessor str) {
-    return new CodePointIndex(
-        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(lastIndexOf(str.source()))));
+    return toCodePointIndex(new StringIndex(lastIndexOf(str.source())));
   }
 
   default CodePointIndex lastIndexOf(CodePointAccessor str, CodePointIndex fromIndex) {
-    return new CodePointIndex(
-        toCodePointIndexWithNegativeValue(new StringIndexWithNegativeValue(stringIndexAccessor().lastIndexOf(str.sourceAsString() , 
-            toStringIndex(fromIndex).value()))));
+    return toCodePointIndex(new StringIndex(stringIndexAccessor().lastIndexOf(str.sourceAsString() , 
+            toStringIndex(fromIndex).value())));
   }
   
   
   public default CodePointIndex endIndexExclusive() {
-    return new CodePointIndex(codePointLength());
+    return new CodePointIndex(codePointLength(),source());
   }
   
   public LineNumber lineNumber(CodePointIndex Position);
@@ -175,7 +167,7 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
 //}
 
     
-    CodePointIndex endIndexExclusive = new CodePointIndex(startIndexInclusive.newWithPlus(length));
+    CodePointIndex endIndexExclusive = new CodePointIndex(startIndexInclusive.newWithPlus(length),source());
     return cursorRange(startIndexInclusive, endIndexExclusive, sourceKind , positionResolver);
   }
   
