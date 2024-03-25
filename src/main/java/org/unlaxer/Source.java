@@ -68,16 +68,16 @@ public interface Source extends CodePointAccessor , PositionResolver {
     }
   }
   
-  Source peek(CodePointIndex startIndexInclusive, CodePointLength length);
+  Source peek(AttachedCodePointIndex startIndexInclusive, CodePointLength length);
 	
-  default Source peek(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+  default Source peek(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive) {
     return peek(startIndexInclusive , new CodePointLength(endIndexExclusive.newWithMinus(startIndexInclusive)));
   }
 	
-	default Source peekLast(CodePointIndex endIndexInclusive, CodePointLength length) {
+	default Source peekLast(AttachedCodePointIndex endIndexInclusive, CodePointLength length) {
 	  
-	  CodePointIndex start = endIndexInclusive.newWithMinus(length)
-	      .createIfMatch(CodePointIndex::isNegative, ()->new CodePointIndex(0));
+	  AttachedCodePointIndex start = endIndexInclusive.newWithMinus(length)
+	      .createIfMatch(AttachedCodePointIndex::isNegative, ()->new AttachedCodePointIndex(0,endIndexInclusive.attachedSource));
 		return peek(start , endIndexInclusive);
 	}
 	
@@ -89,9 +89,9 @@ public interface Source extends CodePointAccessor , PositionResolver {
   
   Source subSource(AttachedCodePointIndex startIndexInclusive, CodePointLength codePointLength);
   
-  Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
-  
-  Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
+//  Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
+//  
+//  Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
   
   public boolean relatedWithRoot();
   
@@ -201,7 +201,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
       if(indexOf ==-1) {
         throw new IllegalArgumentException();
       }
-      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf,IndexKind.thisSource));
+      AttachedCodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf,IndexKind.thisSource));
       
       result[i++] = parentSourceAndStringToSource().apply(
           thisSource() , string , new CodePointOffset(codePointIndex));

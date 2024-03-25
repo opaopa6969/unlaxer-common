@@ -2,7 +2,10 @@ package org.unlaxer;
 
 import org.unlaxer.base.IntegerValue;
 
-public class CodePointIndex extends IntegerValue<CodePointIndex> implements CodePointIndexInterface<CodePointIndex>{
+public class CodePointIndex extends IntegerValue<CodePointIndex> implements CodePointIndexFromRoot<CodePointIndex> , CodePointIndexFromParent<CodePointIndex>{
+
+  
+  Source attachedSource;
 
 //  SourceKind sourceKind;
 //  
@@ -16,12 +19,14 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
 //    this.sourceKind = sourceKind;
 //  }
   
-  public CodePointIndex(int value) {
+  public CodePointIndex(int value , Source source) {
     super(value);
+    this.attachedSource = source;
   }
   
-  public CodePointIndex(IntegerValue<?> value) {
+  public CodePointIndex(IntegerValue<?> value , Source source) {
     super(value);
+    this.attachedSource = source;
   }
   
 //  @Override
@@ -34,14 +39,14 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
 //    return new CodePointIndex(i ,sourceKind);
 //  }
   
-  public CodePointIndex create(int i) {
-    return new CodePointIndex(i);
-  }
-
-  @Override
-  public CodePointIndex create(IntegerValue<?> i) {
-    return new CodePointIndex(i);
-  }
+//  public CodePointIndex create(int i) {
+//    return new CodePointIndex(i);
+//  }
+//
+//  @Override
+//  public CodePointIndex create(IntegerValue<?> i) {
+//    return new CodePointIndex(i);
+//  }
 
   public CodePointOffset toCodePointOffset() {
     return new CodePointOffset(value());
@@ -74,5 +79,28 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
       return value();
     }
     throw new IllegalArgumentException();
+  }
+
+  @Override
+  public int indexFromParent() {
+    return attachedSource.offsetFromParent().newWithAdd(value()).value();
+  }
+
+  @Override
+  public int indexFromRoot() {
+    
+    AttachedCodePointIndex newWithAdd2 = attachedSource.offsetFromRoot().newWithAdd(value());
+    return newWithAdd2.value();
+
+  }
+
+  @Override
+  public CodePointIndex create(int i) {
+    throw new UnsupportedOperationException("Unimplemented method 'create(i)'");
+  }
+
+  @Override
+  public CodePointIndex create(IntegerValue<?> i) {
+    throw new UnsupportedOperationException("Unimplemented method 'create(i)'");
   }
 }

@@ -10,8 +10,6 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.ParagraphAction;
-
 import org.unlaxer.util.function.TriFunction;
 
 public class StringSource implements Source {
@@ -508,33 +506,26 @@ public class StringSource implements Source {
   }
   
   @Override
-  public Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
-    return new StringSource(this,
-        subString(startIndexInclusive,endIndexExclusive),
-        new CodePointOffset(startIndexInclusive)
-    );
-  }
-  
-  @Override
-  public Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength) {
-    return new StringSource(this,
-        subString(startIndexInclusive,codePointLength),
-        new CodePointOffset(startIndexInclusive)
-    );
-  }
- 
-  @Override
   public int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
     return Arrays.copyOfRange(codePoints, startIndexInclusive.value() , endIndexExclusive.value());
   }
   
-  public String subString(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
-    return new String(codePoints, startIndexInclusive.value() , endIndexExclusive.value() - startIndexInclusive.value());
+//  public String subString(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+//    return new String(codePoints, startIndexInclusive.value() , endIndexExclusive.value() - startIndexInclusive.value());
+//  }
+//  
+//  public String subString(CodePointIndex startIndexInclusive, CodePointLength length) {
+//    return new String(codePoints, startIndexInclusive.value() , length.value());
+//  }
+  
+  public String subString(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive) {
+    return new String(codePoints, startIndexInclusive.indexFromRoot() , endIndexExclusive.indexFromRoot() - startIndexInclusive.indexFromRoot());
   }
   
-  public String subString(CodePointIndex startIndexInclusive, CodePointLength length) {
-    return new String(codePoints, startIndexInclusive.value() , length.value());
+  public String subString(AttachedCodePointIndex startIndexInclusive, CodePointLength length) {
+    return new String(codePoints, startIndexInclusive.indexFromRoot() , length.value());
   }
+
 
   @Override
   public LineNumber lineNumber(CodePointIndex Position) {
@@ -673,14 +664,18 @@ public class StringSource implements Source {
 
   @Override
   public Source subSource(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'subSource'");
+    return new StringSource(this,
+        subString(startIndexInclusive,endIndexExclusive),
+        new CodePointOffset(startIndexInclusive)
+    );
   }
 
   @Override
   public Source subSource(AttachedCodePointIndex startIndexInclusive, CodePointLength codePointLength) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'subSource'");
+    return new StringSource(this,
+        subString(startIndexInclusive,codePointLength),
+        new CodePointOffset(startIndexInclusive)
+    );
   }
 
   @Override

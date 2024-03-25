@@ -2,7 +2,8 @@ package org.unlaxer;
 
 import org.unlaxer.base.IntegerValue;
 
-public class CodePointIndexWithNegativeValue extends IntegerValue<CodePointIndexWithNegativeValue>{
+public class CodePointIndexWithNegativeValue extends IntegerValue<CodePointIndexWithNegativeValue> implements 
+CodePointIndexFromRoot<AttachedCodePointIndex> , CodePointIndexFromParent<AttachedCodePointIndex>{
 
   public CodePointIndexWithNegativeValue(int value) {
     super(value);

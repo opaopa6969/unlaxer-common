@@ -9,8 +9,8 @@ public interface CodePointAccessor extends Comparable<CodePointAccessor>, String
   
   StringIndex toStringIndex(CodePointIndex codePointIndex);
   StringIndexWithNegativeValue toStringIndex(CodePointIndexWithNegativeValue codePointIndex);
-  CodePointIndex toCodePointIndex(StringIndex stringIndex);
-  CodePointIndexWithNegativeValue toCodePointIndexWithNegativeValue(StringIndexWithNegativeValue stringIndex);
+  AttachedCodePointIndex toCodePointIndex(StringIndex stringIndex);
+  AttachedCodePointIndexWithNegativeValue toCodePointIndexWithNegativeValue(StringIndexWithNegativeValue stringIndex);
   /**
    * Returns the length of this string.
    * The length is equal to the number of <a href="Character.html#unicode">Unicode
