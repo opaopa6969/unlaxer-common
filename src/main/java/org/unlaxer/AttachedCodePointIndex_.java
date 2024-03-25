@@ -3,30 +3,30 @@ package org.unlaxer;
 import org.unlaxer.Source.SourceKind;
 import org.unlaxer.base.IntegerValue;
 
-public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex> implements CodePointIndexFromRoot<AttachedCodePointIndex> , CodePointIndexFromParent<AttachedCodePointIndex>{
+public class AttachedCodePointIndex_ extends IntegerValue<AttachedCodePointIndex_> implements CodePointIndexFromRoot<AttachedCodePointIndex_> , CodePointIndexFromParent<AttachedCodePointIndex_>{
   
   Source attachedSource;
 
-  public AttachedCodePointIndex(int value , Source source) {
+  public AttachedCodePointIndex_(int value , Source source) {
     super(value);
     this.attachedSource = source;
   }
   
-  public AttachedCodePointIndex(IntegerValue<?> value  , Source source) {
+  public AttachedCodePointIndex_(IntegerValue<?> value  , Source source) {
     super(value);
     this.attachedSource = source;
   }
   
-  public AttachedCodePointIndex create(int i , Source source) {
-    return new AttachedCodePointIndex(i,source);
+  public AttachedCodePointIndex_ create(int i , Source source) {
+    return new AttachedCodePointIndex_(i,source);
   }
 
-  public AttachedCodePointIndex create(IntegerValue<?> i  , Source source) {
-    return new AttachedCodePointIndex(i,source);
+  public AttachedCodePointIndex_ create(IntegerValue<?> i  , Source source) {
+    return new AttachedCodePointIndex_(i,source);
   }
 
   @Override
-  public AttachedCodePointIndex create(IntegerValue<?> i) {
+  public AttachedCodePointIndex_ create(IntegerValue<?> i) {
     throw new UnsupportedOperationException("Unimplemented method 'create(i)'");
   }
 
@@ -41,7 +41,7 @@ public class AttachedCodePointIndex extends IntegerValue<AttachedCodePointIndex>
   }
   
   @Override
-  public AttachedCodePointIndex create(int i) {
+  public AttachedCodePointIndex_ create(int i) {
     throw new UnsupportedOperationException("must specify source");
   }
 

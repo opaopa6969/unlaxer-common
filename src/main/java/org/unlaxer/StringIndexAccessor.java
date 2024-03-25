@@ -384,8 +384,8 @@ public interface StringIndexAccessor {
    */
   int indexOf(int ch, int fromIndex);
   
-  default StringIndexWithNegativeValue indexOf(CodePoint codePoint, StringIndex fromIndex) {
-    return new StringIndexWithNegativeValue(indexOf(codePoint.value(),fromIndex.value()));
+  default StringIndex indexOf(CodePoint codePoint, StringIndex fromIndex) {
+    return new StringIndex(indexOf(codePoint.value(),fromIndex.value()));
   }
 
   /**
@@ -424,8 +424,8 @@ public interface StringIndexAccessor {
    */
   int lastIndexOf(int ch, int fromIndex);
   
-  default StringIndexWithNegativeValue lastIndexOf(CodePoint codePoint, StringIndex fromIndex) {
-    return new StringIndexWithNegativeValue(lastIndexOf(codePoint.value(), fromIndex.value()));
+  default StringIndex lastIndexOf(CodePoint codePoint, StringIndex fromIndex) {
+    return new StringIndex(lastIndexOf(codePoint.value(), fromIndex.value()));
   }
   
   /**
@@ -447,8 +447,8 @@ public interface StringIndexAccessor {
    */
   int indexOf(String str, int fromIndex);
   
-  default StringIndexWithNegativeValue indexOf(CodePointAccessor str, StringIndex fromIndex) {
-    return new StringIndexWithNegativeValue(indexOf(str.sourceAsString(),fromIndex.value()));
+  default StringIndex indexOf(CodePointAccessor str, StringIndex fromIndex) {
+    return new StringIndex(indexOf(str.sourceAsString(),fromIndex.value()));
   }
 
   /**

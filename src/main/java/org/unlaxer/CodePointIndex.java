@@ -1,5 +1,6 @@
 package org.unlaxer;
 
+import org.unlaxer.Source.SourceKind;
 import org.unlaxer.base.IntegerValue;
 
 public class CodePointIndex extends IntegerValue<CodePointIndex> implements CodePointIndexFromRoot<CodePointIndex> , CodePointIndexFromParent<CodePointIndex>{
@@ -61,15 +62,18 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
     return value();
   }
 
-  @Override
   public IndexKind indexKind() {
-    
-    return IndexKind.thisSource;
+    SourceKind sourceKind = attachedSource.sourceKind();
+    if(sourceKind == SourceKind.root) {
+      return IndexKind.root;
+    }
+    return IndexKind.parent;
   }
+
 
   @Override
   public boolean isPresent(IndexKind indexKind) {
-    return indexKind.isThisSource();
+    return true;
   }
 
   @Override

@@ -53,7 +53,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
   
 //  static InfiniteLoopDetector infiniteLoopDetector = new InfiniteLoopDetector();
   
-  default CodePointIndexFromRoot<AttachedCodePointIndex> offsetFromRoot() {
+  default CodePointIndexFromRoot<CodePointIndex> offsetFromRoot() {
     CodePointOffset codePointOffset = new CodePointOffset(0);
     Source current = thisSource();
     while(true) {
@@ -61,23 +61,23 @@ public interface Source extends CodePointAccessor , PositionResolver {
       if(current.isRoot()) {
 //        infiniteLoopDetector.reset();
         
-        return new AttachedCodePointIndex(codePointOffset, current);
+        return new CodePointIndex(codePointOffset, current);
       }
       current = current.parent().get();
       codePointOffset = codePointOffset.newWithPlus(current.offsetFromParent());
     }
   }
   
-  Source peek(AttachedCodePointIndex startIndexInclusive, CodePointLength length);
+  Source peek(CodePointIndex startIndexInclusive, CodePointLength length);
 	
-  default Source peek(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive) {
+  default Source peek(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
     return peek(startIndexInclusive , new CodePointLength(endIndexExclusive.newWithMinus(startIndexInclusive)));
   }
 	
-	default Source peekLast(AttachedCodePointIndex endIndexInclusive, CodePointLength length) {
+	default Source peekLast(CodePointIndex endIndexInclusive, CodePointLength length) {
 	  
-	  AttachedCodePointIndex start = endIndexInclusive.newWithMinus(length)
-	      .createIfMatch(AttachedCodePointIndex::isNegative, ()->new AttachedCodePointIndex(0,endIndexInclusive.attachedSource));
+	  CodePointIndex start = endIndexInclusive.newWithMinus(length)
+	      .createIfMatch(CodePointIndex::isNegative, ()->new CodePointIndex(0,endIndexInclusive.attachedSource));
 		return peek(start , endIndexInclusive);
 	}
 	
@@ -85,9 +85,9 @@ public interface Source extends CodePointAccessor , PositionResolver {
 	  return subSource(cursorRange.startIndexInclusive.position(), cursorRange.endIndexExclusive.position());
 	}
 	
-  Source subSource(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive);
+  Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
   
-  Source subSource(AttachedCodePointIndex startIndexInclusive, CodePointLength codePointLength);
+  Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
   
 //  Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
 //  
@@ -201,7 +201,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
       if(indexOf ==-1) {
         throw new IllegalArgumentException();
       }
-      AttachedCodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf,IndexKind.thisSource));
+      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf));
       
       result[i++] = parentSourceAndStringToSource().apply(
           thisSource() , string , new CodePointOffset(codePointIndex));
@@ -224,7 +224,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
       if(indexOf ==-1) {
         throw new IllegalArgumentException();
       }
-      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf,IndexKind.thisSource));
+      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf));
       
       result[i++] = parentSourceAndStringToSource().apply(
           thisSource() , string , new CodePointOffset(codePointIndex));
