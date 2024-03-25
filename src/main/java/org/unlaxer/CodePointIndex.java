@@ -74,11 +74,16 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
 
   @Override
   public int value(IndexKind indexKind) {
-    if(indexKind.isThisSource()) {
-      
-      return value();
+    switch (indexKind) {
+      case parent:
+        return indexFromParent();
+      case root:
+        return indexFromRoot();
+      case thisSource:
+        return value();
+      default:
+        throw new IllegalArgumentException();
     }
-    throw new IllegalArgumentException();
   }
 
   @Override
