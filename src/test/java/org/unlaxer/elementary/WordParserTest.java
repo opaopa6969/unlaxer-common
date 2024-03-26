@@ -3,6 +3,7 @@ package org.unlaxer.elementary;
 import org.junit.Test;
 import org.unlaxer.CodePointIndex;
 import org.unlaxer.ParserTestBase;
+import org.unlaxer.Source;
 import org.unlaxer.parser.elementary.WordParser;
 
 public class WordParserTest extends ParserTestBase{
@@ -29,9 +30,12 @@ public class WordParserTest extends ParserTestBase{
 		testPartialMatch(wordParser, source, source);
 		testUnMatch(wordParser, source.toLowerCase());
 		
-		WordParser slice = wordParser.slice(slicer->{slicer
-		    .begin(new CodePointIndex(0))
-		    .end(word->new CodePointIndex(word.indexOf(" ")));
+		WordParser slice = wordParser.slice(slicer->{
+		  Source source2 = slicer.get();
+		  
+		  slicer
+		    .begin(new CodePointIndex(0,source2))
+		    .end(word->new CodePointIndex(word.indexOf(" "),source2));
 		});
 		testAllMatch(slice, "This");
 

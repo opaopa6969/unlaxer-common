@@ -13,9 +13,9 @@ public class StringSourceTest {
   @Test
   public void test() {
     
-    StringSource stringSource = StringSource.createRootSource("ABC");
+    Source source = StringSource.createRootSource("ABC");
     
-    Source peek = stringSource.peek(new CodePointIndex(1), new CodePointLength(0));
+    Source peek = source.peek(new CodePointIndex(1,source), new CodePointLength(0));
     
     CursorRange range = peek.cursorRange();
     
@@ -54,7 +54,7 @@ public class StringSourceTest {
       .append("ABC123")
       .toSource();
     
-    Source subSource = source.subSource(new CodePointIndex(3), new CodePointIndex(6));
+    Source subSource = source.subSource(source.createCodePointIndex(3), source.createCodePointIndex(6));
     
     assertEquals("123", subSource.sourceAsString());
     {
@@ -69,10 +69,10 @@ public class StringSourceTest {
     {
       CursorRange cursorRange = subSource.cursorRange();
       System.out.println(cursorRange);
-      CodePointIndex startPosition = cursorRange.startIndexInclusive().positionInRoot();
-      CodePointIndex endPosition = cursorRange.endIndexExclusive().positionInRoot();
-      assertEquals(3, startPosition.value());
-      assertEquals(6, endPosition.value());
+      CodePointIndex startPosition = cursorRange.startIndexInclusive().position();
+      CodePointIndex endPosition = cursorRange.endIndexExclusive().position();
+      assertEquals(3, startPosition.value(IndexKind.root));
+      assertEquals(6, endPosition.value(IndexKind.root));
     }
     
   }
@@ -93,7 +93,7 @@ public class StringSourceTest {
         surrogatePare
         ;
     
-    StringSource createRootSource = StringSource.createRootSource(lines);
+    Source createRootSource = StringSource.createRootSource(lines);
     
     List<Source> sources = createRootSource.linesAsSource().collect(Collectors.toList());
     

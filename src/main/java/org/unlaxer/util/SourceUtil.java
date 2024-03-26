@@ -12,17 +12,17 @@ public class SourceUtil {
 		if(position.isNegative() || position.newWithAdd(1).gt(length)){
 			return word;
 		}
-		return word.subSource(new CodePointIndex(0),position).concat(word.subSource(position.newWithPlus(1)));
+		return word.subSource(new CodePointIndex(0,word),position).concat(word.subSource(position.newWithPlus(1)));
 	}
 	
 	public static Source newWithDelete(Source word, Range range){
 		CodePointLength length = word.codePointLength();
-		CodePointIndex startIndexInclusive = new CodePointIndex(range.startIndexInclusive);
-		CodePointIndex endIndexExclusive = new CodePointIndex(range.endIndexExclusive);
+		CodePointIndex startIndexInclusive = new CodePointIndex(range.startIndexInclusive,word);
+		CodePointIndex endIndexExclusive = new CodePointIndex(range.endIndexExclusive,word);
 		SimpleBuilder builder = new SimpleBuilder();
 		
 		if(startIndexInclusive.isGreaterThanZero()){
-			builder.append(word.subSource(new CodePointIndex(0),startIndexInclusive));
+			builder.append(word.subSource(new CodePointIndex(0,word),startIndexInclusive));
 		}
 		if(endIndexExclusive.le(length)){
 			builder.append(word.subSource(endIndexExclusive));
@@ -38,12 +38,12 @@ public class SourceUtil {
 	
 	public static Source newWithDeleteAndInsert(Source word, Range range ,Source insertion){
     CodePointLength length = word.codePointLength();
-    CodePointIndex startIndexInclusive = new CodePointIndex(range.startIndexInclusive);
-    CodePointIndex endIndexExclusive = new CodePointIndex(range.endIndexExclusive);
+    CodePointIndex startIndexInclusive = new CodePointIndex(range.startIndexInclusive,word);
+    CodePointIndex endIndexExclusive = new CodePointIndex(range.endIndexExclusive,word);
 		SimpleBuilder builder = new SimpleBuilder();
 		
 		if(startIndexInclusive.isGreaterThanZero()){
-			builder.append(word.subSource(new CodePointIndex(0),startIndexInclusive));
+			builder.append(word.subSource(new CodePointIndex(0,word),startIndexInclusive));
 		}
 		
 		builder.append(insertion);
@@ -63,7 +63,7 @@ public class SourceUtil {
 		
 		SimpleBuilder builder = new SimpleBuilder();
 		if(position.isGreaterThanZero()){
-			builder.append(base.subSource(new CodePointIndex(0),position));
+			builder.append(base.subSource(new CodePointIndex(0,base),position));
 		}
 		builder.append(insertion);
 		

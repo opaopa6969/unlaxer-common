@@ -13,9 +13,9 @@ public class CursorRangeTest {
     Source source = StringSource.createRootSource("abc\nabc");
     PositionResolver positionResolver = source.positionResolver();
     
-    CodePointIndex position0 = new CodePointIndex(0);
-    CodePointIndex position4 = new CodePointIndex(4);
-    CodePointIndex position7 = new CodePointIndex(7);
+    CodePointIndex position0 = new CodePointIndex(0,source);
+    CodePointIndex position4 = new CodePointIndex(4,source);
+    CodePointIndex position7 = new CodePointIndex(7,source);
     CursorRange cursorRange0 = CursorRange.of(
         position0,
         position4,

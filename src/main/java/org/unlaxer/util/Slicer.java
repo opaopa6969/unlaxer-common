@@ -29,7 +29,7 @@ public class Slicer implements Supplier<Source>{
 		super();
 		rootSource = word.root();
 		this.word = word;
-		beginIndexInclusive = new CodePointIndex(0);
+		beginIndexInclusive = new CodePointIndex(0,word);
 		endIndexExclusive = this.word.endIndexExclusive();
 		step=1;
 	}
@@ -82,8 +82,8 @@ public class Slicer implements Supplier<Source>{
 	}
 	
 	public Slicer invalidate(){
-		begin(new CodePointIndex(0));
-		end(new CodePointIndex(0));
+		begin(new CodePointIndex(0,word));
+		end(new CodePointIndex(0,word));
 		return this;
 	}
 
@@ -104,12 +104,12 @@ public class Slicer implements Supplier<Source>{
 		if(step < 0){
 			
 			for(int i = start ; i >= end ; i = i + step){
-				builder.append(word.subSource(new CodePointIndex(i) ,new CodePointIndex(i+1)));
+				builder.append(word.subSource(new CodePointIndex(i,word) ,new CodePointIndex(i+1,word)));
 			}
 		}else{
 			
 			for(int i = start ; i < end ; i = i + step){
-				builder.append(word.subSource(new CodePointIndex(i) ,new CodePointIndex(i+1)));
+				builder.append(word.subSource(new CodePointIndex(i,word) ,new CodePointIndex(i+1,word)));
 			}
 		}
 		return builder.toSource();
@@ -137,10 +137,10 @@ public class Slicer implements Supplier<Source>{
 			step(Integer.parseInt(splits[2]));
 		}
 		if(splits.length>1 && false ==splits[1].isEmpty()){
-			end(new CodePointIndex(Integer.parseInt(splits[1])));
+			end(new CodePointIndex(Integer.parseInt(splits[1]),word));
 		}
 		if(false ==splits[0].isEmpty()){
-			begin(new CodePointIndex(Integer.parseInt(splits[0])));
+			begin(new CodePointIndex(Integer.parseInt(splits[0]),word));
 		}
 		return this;
 	}

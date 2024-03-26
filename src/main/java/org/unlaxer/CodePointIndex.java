@@ -80,9 +80,9 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
   public int value(IndexKind indexKind) {
     switch (indexKind) {
       case parent:
-        return indexFromParent();
+        return indexFromParentAsNumber();
       case root:
-        return indexFromRoot();
+        return indexFromRootAsNumber();
       case thisSource:
         return value();
       default:
@@ -91,16 +91,15 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
   }
 
   @Override
-  public int indexFromParent() {
-    return attachedSource.offsetFromParent().newWithAdd(value()).value();
+  public CodePointIndex indexFromParent() {
+    return  attachedSource.parent()
+        .map(source->source.createCodePointIndex(indexFromParentAsNumber()))
+        .orElseGet(()->attachedSource.createCodePointIndex(indexFromParentAsNumber()));
   }
 
   @Override
-  public int indexFromRoot() {
-    
-    CodePointIndex newWithAdd2 = attachedSource.offsetFromRoot().newWithAdd(value());
-    return newWithAdd2.value();
-
+  public CodePointIndex indexFromRoot() {
+    return attachedSource.offsetFromRoot().newWithAdd(value());
   }
 
   @Override
@@ -111,5 +110,16 @@ public class CodePointIndex extends IntegerValue<CodePointIndex> implements Code
   @Override
   public CodePointIndex create(IntegerValue<?> i) {
     throw new UnsupportedOperationException("Unimplemented method 'create(i)'");
+  }
+
+  @Override
+  public int indexFromParentAsNumber() {
+    return attachedSource.offsetFromParent().newWithAdd(value()).value();
+  }
+
+  @Override
+  public int indexFromRootAsNumber() {
+    CodePointIndex newWithAdd2 = attachedSource.offsetFromRoot().newWithAdd(value());
+    return newWithAdd2.value();
   }
 }

@@ -13,8 +13,8 @@ public class SourceUtilTest {
 
 	@Test
 	public void testDelete() {
-		CodePointIndex position = new CodePointIndex(-1);
 		Source word = StringSource.createRootSource("A0123");
+		CodePointIndex position = new CodePointIndex(-1,word);
 		String[]  expecteds = new String[]{"A0123",  "0123",  "A123",  "A023",  "A013",  "A012",  "A0123",  "A0123"}; 
 		for(String expected :expecteds ){
 		  
@@ -45,12 +45,12 @@ public class SourceUtilTest {
     Source word = StringSource.createRootSource("01234");
     Source insertion =StringSource.createRootSource("_A_");
     
-    assertEquals("_A_01234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(0)).sourceAsString());
-    assertEquals("0_A_1234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(1)).sourceAsString());
-    assertEquals("01_A_234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(2)).sourceAsString());
-    assertEquals("012_A_34", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(3)).sourceAsString());
-    assertEquals("0123_A_4", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(4)).sourceAsString());
-    assertEquals("01234_A_", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(5)).sourceAsString());
+    assertEquals("_A_01234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(0,word)).sourceAsString());
+    assertEquals("0_A_1234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(1,word)).sourceAsString());
+    assertEquals("01_A_234", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(2,word)).sourceAsString());
+    assertEquals("012_A_34", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(3,word)).sourceAsString());
+    assertEquals("0123_A_4", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(4,word)).sourceAsString());
+    assertEquals("01234_A_", SourceUtil.newWithInsert(word, insertion , new CodePointIndex(5,word)).sourceAsString());
   }
   
   @Test
@@ -67,7 +67,7 @@ public class SourceUtilTest {
     assertEquals("_A_", SourceUtil.newWithDeleteAndInsert(word, new Range(0,5), insertion).sourceAsString());
     assertEquals("_A_", SourceUtil.newWithDeleteAndInsert(word, new Range(-1,6), insertion).sourceAsString());
     
-    assertEquals("012_A_4", SourceUtil.newWithDeleteAndInsert(word, new CodePointIndex(3), insertion).sourceAsString());
+    assertEquals("012_A_4", SourceUtil.newWithDeleteAndInsert(word, new CodePointIndex(3,word), insertion).sourceAsString());
 
   }
 }

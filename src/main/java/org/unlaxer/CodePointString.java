@@ -15,6 +15,8 @@ import java.util.regex.PatternSyntaxException;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.unlaxer.base.IntegerValue;
+
 /**
  * CP　means CodePoint
  */
@@ -38,7 +40,9 @@ public interface CodePointString {
   
   CodePointLength codePointLength();
   
-  String getSource();
+  String getStringSource();
+  
+  Source getSource();
 
   /**
    * Returns {@code true} if, and only if, {@link #length()} is {@code 0}.
@@ -180,7 +184,8 @@ public interface CodePointString {
   int offsetByCodePoints(int index, int codePointOffset);
   
   default StringIndex offsetByCodePoints(StringIndex index, CodePointOffset codePointOffset) {
-    return new StringIndex(offsetByCodePoints(index.value(), codePointOffset.value()));
+    CodePointIndex relatedCodePointIndex = index.relatedCodePointIndex();
+    return new StringIndex(offsetByCodePoints(index.value(), codePointOffset.value()),relatedCodePointIndex);
   }
 
   /**
@@ -538,7 +543,7 @@ public interface CodePointString {
   
   default boolean regionMatches(CodePointIndex toffset, CodePointString other, CodePointIndex ooffset, Length len) {
     return regionMatches(toStringIndex(toffset).value() 
-, other.getSource(), toStringIndex(ooffset).value(), len.value());
+        , other.getStringSource(), toStringIndex(ooffset).value(), len.value());
   }
   
   /**
@@ -598,7 +603,7 @@ public interface CodePointString {
   }
   
   default boolean regionMatches(boolean ignoreCase, CodePointIndex toffset, CodePointString other, CodePointIndex ooffset, Length len) {
-    return regionMatches(ignoreCase, toStringIndex(toffset).value(), other.getSource(), toStringIndex(ooffset).value(), len.value());
+    return regionMatches(ignoreCase, toStringIndex(toffset).value(), other.getStringSource(), toStringIndex(ooffset).value(), len.value());
   }
 
   /**
@@ -625,7 +630,7 @@ public interface CodePointString {
   }
   
   default boolean startsWith(CodePointString prefix, CodePointIndex toffset) {
-    return startsWith(prefix.getSource(), toStringIndex(toffset).value());
+    return startsWith(prefix.getStringSource(), toStringIndex(toffset).value());
   }
 
   /**
@@ -644,7 +649,7 @@ public interface CodePointString {
   boolean startsWith(String prefix);
   
   default boolean startsWith(CodePointString prefix) {
-    return startsWith(prefix.getSource());
+    return startsWith(prefix.getStringSource());
   }
 
   /**
@@ -661,7 +666,7 @@ public interface CodePointString {
   boolean endsWith(String suffix);
   
   default boolean endsWith(CodePointString suffix) {
-    return endsWith(suffix.getSource());
+    return endsWith(suffix.getStringSource());
   }
 
   /**
@@ -705,9 +710,10 @@ public interface CodePointString {
    */
   int indexOf(int ch);
   
-  default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint) {
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(indexOf(codePoint.value()))));
+  default CodePointIndex indexOf(CodePoint codePoint) {
+    CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf(codePoint.value()),getSource()));
+    return new CodePointIndex(
+        codePointIndex,getSource());
   }
 
   /**
@@ -751,9 +757,10 @@ public interface CodePointString {
    */
   int indexOf(int ch, int fromIndex);
   
-  default CodePointIndexWithNegativeValue indexOf(CodePoint codePoint, CodePointIndex fromIndex) {
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(indexOf(codePoint.value(),toStringIndex(fromIndex).value()))));
+  default CodePointIndex indexOf(CodePoint codePoint, CodePointIndex fromIndex) {
+    int indexOf = indexOf(codePoint.value(),toStringIndex(fromIndex).value());
+    return new CodePointIndex(
+        toCodePointIndex(new StringIndex(indexOf)));
   }
 
   /**
@@ -781,9 +788,10 @@ public interface CodePointString {
    */
   int lastIndexOf(int ch);
   
-  default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint) {
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value()))));
+  default CodePointIndex lastIndexOf(CodePoint codePoint) {
+    int lastIndexOf = lastIndexOf(codePoint.value());
+    return new CodePointIndex(
+        toCodePointIndex(new StringIndex(lastIndexOf)));
   }
 
   /**
@@ -822,9 +830,10 @@ public interface CodePointString {
    */
   int lastIndexOf(int ch, int fromIndex);
   
-  default CodePointIndexWithNegativeValue lastIndexOf(CodePoint codePoint, CodePointIndex fromIndex) {
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(lastIndexOf(codePoint.value(), toStringIndex(fromIndex).value()))));
+  default CodePointIndex lastIndexOf(CodePoint codePoint, CodePointIndex fromIndex) {
+    int lastIndexOf = lastIndexOf(codePoint.value(), toStringIndex(fromIndex).value());
+    return new CodePointIndex(
+        toCodePointIndex(new StringIndex(lastIndexOf)));
   }
 
   /**
@@ -843,9 +852,10 @@ public interface CodePointString {
    */
   int indexOf(String str);
   
-  default CodePointIndexWithNegativeValue indexOf(CodePointString str) {
-    return new CodePointIndexWithNegativeValue(
-        toCodePointIndex(new StringIndex(indexOf(str.getSource()))));
+  default CodePointIndex indexOf(CodePointString str) {
+    IntegerValue<?> indexOf = indexOf(str.getSource());
+    return new CodePointIndex(
+        toCodePointIndex(new StringIndex(indexOf)));
   }
 
   /**

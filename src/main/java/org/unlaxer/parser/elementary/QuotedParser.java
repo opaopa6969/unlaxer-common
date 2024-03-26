@@ -116,7 +116,7 @@ public class QuotedParser extends LazyChain {
         .orElseGet(
         ()->{
           Source source = thisParsersToken.getSource();
-          return source.subSource(new CodePointIndex(1), source.codePointLength().newWithMinus(1));
+          return source.subSource(new CodePointIndex(1,source), source.codePointLength().newWithMinus(1));
         });
 				
 //				//FIXME! this is work around for BUG...

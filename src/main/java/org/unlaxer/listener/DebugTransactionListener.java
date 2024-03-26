@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.unlaxer.CodePointIndex;
 import org.unlaxer.CodePointLength;
+import org.unlaxer.Source;
 import org.unlaxer.TokenKind;
 import org.unlaxer.TokenList;
 import org.unlaxer.TokenPrinter;
@@ -96,8 +97,9 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 		if(level.isNone()){
 			return ;
 		}
-		print.format("OPEN    : '%s'\n", 
-				parseContext.source.peek(new CodePointIndex(0), parseContext.source.codePointLength()).toString());
+		Source source = parseContext.source;
+    print.format("OPEN    : '%s'\n", 
+				source.peek(new CodePointIndex(0,source), source.codePointLength()).toString());
 		onOutput(++count);
 		if(doTrigger()){
 			//set Break point here or this method declares!
@@ -111,8 +113,9 @@ public class DebugTransactionListener implements TransactionListener , LogOutput
 		if(level.isNone()){
 			return ;
 		}
-		print.format("CLOSE   : '%s' consumed:%s \n\n", 
-			parseContext.source.peek(new CodePointIndex(0), parseContext.source.codePointLength()).toString(),
+		Source source = parseContext.source;
+    print.format("CLOSE   : '%s' consumed:%s \n\n", 
+			source.peek(new CodePointIndex(0,source), source.codePointLength()).toString(),
 			getConsumed(parseContext)
 		);
 		onOutput(++count);

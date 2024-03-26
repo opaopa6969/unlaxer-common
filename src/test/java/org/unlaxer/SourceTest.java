@@ -20,30 +20,30 @@ public class SourceTest {
       assertEquals("abcdef" , collects);
     }
     {
-      List<StringSource> list = List.of(StringSource.createDetachedSource("abc") , StringSource.createDetachedSource("def"));
+      List<Source> list = List.of(StringSource.createDetachedSource("abc") , StringSource.createDetachedSource("def"));
       Source collect = list.stream().collect(Source.joining(","));
       System.out.println(collect);
       assertEquals("abc,def" , collect.toString());
     }
     
     {
-      List<StringSource> list = List.of(StringSource.createDetachedSource("abc") , StringSource.createDetachedSource("def"));
+      List<Source> list = List.of(StringSource.createDetachedSource("abc") , StringSource.createDetachedSource("def"));
       Source collect = list.stream().collect(Source.joining());
       System.out.println(collect);
       assertEquals("abcdef" , collect.toString());
     }
     
     {
-      StringSource source = StringSource.createRootSource("1");
-      Source subSource = source.subSource(new CodePointIndex(0), new CodePointIndex(0));
+      Source source = StringSource.createRootSource("1");
+      Source subSource = source.subSource(new CodePointIndex(0,source), new CodePointIndex(0,source));
       System.out.println("subSource:" + subSource.sourceAsString());
     }
     
     
     {
       try {
-        StringSource source = StringSource.createRootSource("");
-        Source subSource = source.subSource(new CodePointIndex(0), new CodePointIndex(-1));
+        Source source = StringSource.createRootSource("");
+        Source subSource = source.subSource(new CodePointIndex(0,source), new CodePointIndex(-1,source));
         System.out.println("subSource:" + subSource.sourceAsString());
         fail();
         
@@ -55,10 +55,10 @@ public class SourceTest {
     assertTrue(StringSource.createRootSource("").isEmpty());
     
     {
-      StringSource createRootSource = StringSource.createRootSource("ABC");
+      Source createRootSource = StringSource.createRootSource("ABC");
       
-      Source subSource = createRootSource.subSource(new CodePointIndex(1) , new CodePointIndex(3));
-      Source substring = createRootSource.subSource(new CodePointIndex(1));
+      Source subSource = createRootSource.subSource(new CodePointIndex(1,createRootSource) , new CodePointIndex(3,createRootSource));
+      Source substring = createRootSource.subSource(new CodePointIndex(1,createRootSource));
       
       System.out.println(subSource);
       System.out.println(substring);

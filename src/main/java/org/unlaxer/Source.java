@@ -43,6 +43,11 @@ public interface Source extends CodePointAccessor , PositionResolver {
   
   Stream<Source> linesAsSource();
   
+  default CodePointIndex createCodePointIndex(int index) {
+    return new CodePointIndex(index, this);
+  }
+  
+  
 //  default CursorRange cursorRangeOnParent() {
 //    
 //  }

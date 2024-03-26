@@ -7,13 +7,11 @@ import java.util.stream.Stream;
  */
 public interface PositionResolver {
   
-  StringIndex stringIndexInRootFrom(CodePointIndexFromRoot<?> CodePointIndex);
-  CodePointIndexInLine codePointIndexInLineFrom(CodePointIndexFromRoot<?> rootCodePointIndex);
-  LineNumber lineNumberFrom(CodePointIndexFromRoot<?> rootCodePointIndex);
-  CodePointIndex rootCodePointIndexFrom(StringIndex stringIndex);
-  
-  
-  StringIndex subStringIndexFrom(CodePointIndexFromRoot<?> subCodePointIndex);
+  StringIndex stringIndexFrom(CodePointIndex codePointIndex);
+  CodePointIndexInLine codePointIndexInLineFrom(CodePointIndex codePointIndex);
+  LineNumber lineNumberFrom(CodePointIndex codePointIndex);
+  CodePointIndex codePointIndexFrom(StringIndex stringIndex);
+//  StringIndex subStringIndexFrom(CodePointIndex codePointIndex);
 //  CodePointIndex subCodePointIndexFrom(StringIndex subStringIndex);
   
 //  CodePointOffset offsetFromRoot();
@@ -38,6 +36,4 @@ public interface PositionResolver {
     return new PositionResolverImpl(source , codePoints);
   }
   
-  public Source rootSource();
-
 }

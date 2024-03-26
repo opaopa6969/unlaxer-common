@@ -146,7 +146,8 @@ public interface Transaction extends TransactionListenerContainer , ParseContext
 
 	public default Source getConsumed(TokenKind tokenKind) {
 		CodePointIndex position = getPosition(tokenKind);
-		return getSource().peek(new CodePointIndex(0), position);
+		Source source = getSource();
+    return source.peek(new CodePointIndex(0,source), position);
 	}
 
 	public default boolean allMatched() {
