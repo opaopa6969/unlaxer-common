@@ -1,12 +1,12 @@
 package org.unlaxer.parser.combinator;
 
 import org.unlaxer.Name;
-import org.unlaxer.parser.AbstractParser;
+import org.unlaxer.parser.TransactionalAbstractParser;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 
-public abstract class NoneChildParser extends AbstractParser {
+public abstract class NoneChildParser extends TransactionalAbstractParser {
 
 	private static final long serialVersionUID = 6972225718514512056L;
 

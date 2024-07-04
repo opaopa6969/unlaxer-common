@@ -12,7 +12,7 @@ import org.unlaxer.Token;
 import org.unlaxer.TokenKind;
 import org.unlaxer.TokenPredicators;
 import org.unlaxer.context.ParseContext;
-import org.unlaxer.parser.AbstractParser;
+import org.unlaxer.parser.TransactionalAbstractParser;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
@@ -21,7 +21,7 @@ import org.unlaxer.parser.elementary.WordParser.RangeSpecifier;
 import org.unlaxer.parser.elementary.WordParser.WordEffector;
 import org.unlaxer.util.Slicer;
 
-public class MatchedTokenParser extends AbstractParser{//extends ConstructedSingleChildParserA
+public class MatchedTokenParser extends TransactionalAbstractParser{//extends ConstructedSingleChildParserA
 
 	private static final long serialVersionUID = 9212874360894516134L;
 	

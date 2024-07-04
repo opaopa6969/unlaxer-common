@@ -17,7 +17,7 @@ import org.unlaxer.TokenKind;
 import org.unlaxer.ast.ASTNodeKind;
 import org.unlaxer.context.ParseContext;
 
-public abstract class AbstractParser implements Parser {
+public abstract class TransactionalAbstractParser implements Parser {
 	
 	private static final long serialVersionUID = -7497886240652402031L;
 	
@@ -43,19 +43,19 @@ public abstract class AbstractParser implements Parser {
 	
 	ASTNodeKind astNodeKind;
 	
-	public AbstractParser() {
+	public TransactionalAbstractParser() {
 		this(null, new Parsers());
 	}
 	
-	public AbstractParser(Name name) {
+	public TransactionalAbstractParser(Name name) {
 		this(name,new Parsers());
 	}
 	
-	public AbstractParser(Parsers children) {
+	public TransactionalAbstractParser(Parsers children) {
 		this(null,children);
 	}
 	
-	public AbstractParser(Name name , Parsers children) {
+	public TransactionalAbstractParser(Name name , Parsers children) {
 		super();
 		this.specifiedName = name == null ? Name.of(getClass()) : name; 
 		this.name = name == null ? Name.of(getClass()) : Name.of(getClass(),name);

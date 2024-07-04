@@ -7,12 +7,12 @@ import org.unlaxer.Parsed.Status;
 import org.unlaxer.Source;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
-import org.unlaxer.parser.AbstractParser;
+import org.unlaxer.parser.TransactionalAbstractParser;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 
-public class StartOfLineParser extends AbstractParser{
+public class StartOfLineParser extends TransactionalAbstractParser{
 	
 	private static final long serialVersionUID = -2867989603696996683L;
 	

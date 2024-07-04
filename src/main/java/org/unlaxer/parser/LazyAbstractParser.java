@@ -2,7 +2,7 @@ package org.unlaxer.parser;
 
 import org.unlaxer.Name;
 
-public abstract class LazyAbstractParser extends AbstractParser{
+public abstract class LazyAbstractParser extends TransactionalAbstractParser{
 
 	private static final long serialVersionUID = 8299776236082228019L;
 

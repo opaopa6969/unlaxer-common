@@ -7,7 +7,7 @@ import org.unlaxer.Parsed;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
 
-public class PseudoRootParser extends AbstractParser{
+public class PseudoRootParser extends TransactionalAbstractParser{
 
 	private static final long serialVersionUID = 8993640266252280628L;
 

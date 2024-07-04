@@ -5,12 +5,12 @@ import org.unlaxer.Parsed;
 import org.unlaxer.Parsed.Status;
 import org.unlaxer.TokenKind;
 import org.unlaxer.context.ParseContext;
-import org.unlaxer.parser.AbstractParser;
+import org.unlaxer.parser.TransactionalAbstractParser;
 import org.unlaxer.parser.ChildOccurs;
 import org.unlaxer.parser.Parser;
 import org.unlaxer.parser.Parsers;
 
-public class StartOfSourceParser extends AbstractParser{
+public class StartOfSourceParser extends TransactionalAbstractParser{
 
 	private static final long serialVersionUID = 4101094340196856988L;
 
