@@ -14,6 +14,7 @@ public class DoubleQuotedParserTest extends ParserTestBase{
 		
 		testAllMatch(doubleQuotedParser, outputToStdout.apply("\"\""));
 		testAllMatch(doubleQuotedParser, outputToStdout.apply("\"abc,123\""));
+    testAllMatch(doubleQuotedParser, outputToStdout.apply("\"abc,\n\n123\""));
 		testAllMatch(doubleQuotedParser, outputToStdout.apply("\"123\\\"abc\""));
 		testAllMatch(doubleQuotedParser, outputToStdout.apply("\"\\\"\""));
 		testAllMatch(doubleQuotedParser, outputToStdout.apply("\"\\\"\""));

@@ -31,6 +31,18 @@ public class StartOfLineParserTest extends ParserTestBase{
 			Chain chain = new Chain(lineTerminatorParser,startOfLineParser , wordParser,endOfSourceParser);
 			testAllMatch(chain, "\nabc");
 		}
+		
+		testAllMatch(startOfLineParser, "");
+		
+		{
+      Chain chain = new Chain( wordParser,lineTerminatorParser,startOfLineParser);
+      testAllMatch(chain, "abc\n");
+    }
+		
+		{
+      Chain chain = new Chain(startOfLineParser,wordParser,lineTerminatorParser,startOfLineParser);
+      testAllMatch(chain, "abc\n");
+    }
 
 	}
 
