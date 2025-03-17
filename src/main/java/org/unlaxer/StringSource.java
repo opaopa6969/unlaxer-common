@@ -10,6 +10,8 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.ParagraphAction;
+
 import org.unlaxer.util.function.TriFunction;
 
 public class StringSource implements Source {
@@ -72,12 +74,17 @@ public class StringSource implements Source {
 //    codePoints = source.codePoints().mapToObj(CodePoint::new).toArray(CodePoint[]::new);
     codePoints = source.codePoints().toArray();
     positionResolver = root == null ? 
-        PositionResolver.createPositionResolver(codePoints) : 
+        PositionResolver.createPositionResolver(this,codePoints) :
         root; 
     stringIndexAccessor = new StringIndexAccessorImpl(source);
     cursorRange = CursorRange.of(
+<<<<<<< HEAD
         new CodePointIndex(0, offsetFromParent), 
         new CodePointIndex(0, offsetFromParent).newWithAdd(codePoints.length),
+=======
+        offsetFromParent.toAttachedCodePointIndex(this), 
+        offsetFromParent.toAttachedCodePointIndex(this).newWithAdd(codePoints.length),
+>>>>>>> 6614c86145cd00541269b18010372831b907fbda
         offsetFromParent,
         sourceKind, 
         positionResolver);
@@ -97,13 +104,18 @@ public class StringSource implements Source {
     sourceKind = SourceKind.subSource;
     codePoints = source.codePoints().toArray();
     positionResolver = root == null ? 
-        PositionResolver.createPositionResolver(codePoints) : 
+        PositionResolver.createPositionResolver(this,codePoints) : 
         root; 
     stringIndexAccessor = new StringIndexAccessorImpl(source.sourceAsString());
     
     cursorRange = CursorRange.of(
+<<<<<<< HEAD
         offsetFromParent.toCodePointIndexWithOffset(), 
         offsetFromParent.toCodePointIndexWithOffset().newWithAdd(codePoints.length),
+=======
+        offsetFromParent.toAttachedCodePointIndex(this), 
+        offsetFromParent.toAttachedCodePointIndex(this).newWithAdd(codePoints.length),
+>>>>>>> 6614c86145cd00541269b18010372831b907fbda
         offsetFromParent,
         sourceKind, 
         positionResolver);
@@ -121,27 +133,32 @@ public class StringSource implements Source {
     offsetFromParent = codePointOffset;
     codePoints = source.codePoints().toArray();
     positionResolver = root == null ? 
-        PositionResolver.createPositionResolver(codePoints) : 
+        PositionResolver.createPositionResolver(this,codePoints) : 
         root; 
     stringIndexAccessor = new StringIndexAccessorImpl(source);
     
     cursorRange = CursorRange.of(
+<<<<<<< HEAD
         offsetFromParent.toCodePointIndexWithOffset(), 
         offsetFromParent.toCodePointIndexWithOffset().newWithAdd(codePoints.length),
+=======
+        offsetFromParent.toAttachedCodePointIndex(this), 
+        offsetFromParent.toAttachedCodePointIndex(this).newWithAdd(codePoints.length),
+>>>>>>> 6614c86145cd00541269b18010372831b907fbda
         codePointOffset,
         sourceKind, 
         positionResolver);
   }
   
-  public LineNumber lineNumberFrom(CodePointIndex codePointIndex) {
+  public LineNumber lineNumberFrom(AttachedCodePointIndex codePointIndex) {
     return positionResolver.lineNumberFrom(codePointIndex);
   }
 
-  public StringIndex stringIndexFrom(CodePointIndex codePointIndex) {
+  public StringIndex stringIndexFrom(AttachedCodePointIndex codePointIndex) {
     return positionResolver.stringIndexInRootFrom(codePointIndex);
   }
 
-  public CodePointIndex codePointIndexFrom(StringIndex stringIndex) {
+  public AttachedCodePointIndex codePointIndexFrom(StringIndex stringIndex) {
     return positionResolver.rootCodePointIndexFrom(stringIndex);
   }
 
@@ -157,13 +174,13 @@ public class StringSource implements Source {
     return positionResolver.lineSize();
   }
 
-  public StringIndex subStringIndexFrom(CodePointIndex subCodePointIndex) {
+  public StringIndex subStringIndexFrom(AttachedCodePointIndex subCodePointIndex) {
     return positionResolver.subStringIndexFrom(subCodePointIndex);
   }
 
-  public CodePointIndex subCodePointIndexFrom(StringIndex subStringIndex) {
-    return positionResolver.subCodePointIndexFrom(subStringIndex);
-  }
+//  public AttachedCodePointIndex subCodePointIndexFrom(StringIndex subStringIndex) {
+//    return positionResolver.subCodePointIndexFrom(subStringIndex);
+//  }
 
   static Function<String, Source> stringToStringInterface = string-> StringSource.createRootSource(string);
   static TriFunction<Source , String, CodePointOffset , Source> parentSourceAndStringToSource = 
@@ -645,6 +662,67 @@ public class StringSource implements Source {
   @Override
   public CursorRange cursorRange() {
     return cursorRange;
+  }
+
+  @Override
+  public StringIndex stringIndexInRootFrom(CodePointIndexFromRoot CodePointIndex) {
+  }
+
+  @Override
+  public CodePointIndexInLine codePointIndexInLineFrom(CodePointIndexFromRoot rootCodePointIndex) {
+    
+  }
+
+  @Override
+  public LineNumber lineNumberFrom(CodePointIndexFromRoot rootCodePointIndex) {
+  }
+
+  @Override
+  public StringIndex subStringIndexFrom(CodePointIndexFromRoot subCodePointIndex) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'subStringIndexFrom'");
+  }
+
+  @Override
+  public Source rootSource() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'rootSource'");
+  }
+
+  @Override
+  public Source subSource(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'subSource'");
+  }
+
+  @Override
+  public Source subSource(AttachedCodePointIndex startIndexInclusive, CodePointLength codePointLength) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'subSource'");
+  }
+
+  @Override
+  public boolean relatedWithRoot() {
+    
+    Source top = top();
+    return top.sourceKind().isRoot();
+  }
+
+  @Override
+  public Source top() {
+    int depth = 0 ;
+    
+    Source current = parent;
+    
+    while(true) {
+      if(current == null) {
+        return this;
+      }
+      current = parent;
+      if(++depth > 100) {
+        throw new IllegalArgumentException("depth too deep");
+      }
+    }
   }
 
 }

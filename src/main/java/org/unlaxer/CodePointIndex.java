@@ -6,9 +6,13 @@ import java.util.function.Supplier;
 import org.unlaxer.Source.SourceKind;
 import org.unlaxer.base.IntegerValue;
 
+<<<<<<< HEAD
 public class CodePointIndex extends IntegerValue<CodePointIndex>{
   
   final CodePointOffset offsetFromRoot;
+=======
+public class CodePointIndex extends IntegerValue<CodePointIndex> implements CodePointIndexInterface{
+>>>>>>> 6614c86145cd00541269b18010372831b907fbda
 
 //  SourceKind sourceKind;
 //  
@@ -21,8 +25,13 @@ public class CodePointIndex extends IntegerValue<CodePointIndex>{
 //    super(value);
 //    this.sourceKind = sourceKind;
 //  }
+<<<<<<< HEAD
 
   public CodePointIndex(int value , CodePointOffset offsetFromRoot) {
+=======
+  
+  public CodePointIndex(int value) {
+>>>>>>> 6614c86145cd00541269b18010372831b907fbda
     super(value);
     this.offsetFromRoot = offsetFromRoot;
   }
@@ -82,6 +91,7 @@ public class CodePointIndex extends IntegerValue<CodePointIndex>{
     return new CodePointOffset(super.value());
   }
 
+<<<<<<< HEAD
   
   public CodePointIndexInLine toCodePointIndexInLineWithOffsetFromRoot() {
     return new CodePointIndexInLine(super.value()+offsetFromRoot.value());
@@ -313,4 +323,30 @@ public class CodePointIndex extends IntegerValue<CodePointIndex>{
   }
 
 
+=======
+  @Override
+  public int rawValue() {
+    return value();
+  }
+
+  @Override
+  public IndexKind indexKind() {
+    
+    return IndexKind.thisSource;
+  }
+
+  @Override
+  public boolean isPresent(IndexKind indexKind) {
+    return indexKind.isThisSource();
+  }
+
+  @Override
+  public int value(IndexKind indexKind) {
+    if(indexKind.isThisSource()) {
+      
+      return value();
+    }
+    throw new IllegalArgumentException();
+  }
+>>>>>>> 6614c86145cd00541269b18010372831b907fbda
 }

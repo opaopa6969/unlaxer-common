@@ -2,16 +2,19 @@ package org.unlaxer;
 
 import java.util.stream.Stream;
 
+/**
+ * position resolver use position related root source
+ */
 public interface PositionResolver {
   
-  StringIndex stringIndexInRootFrom(CodePointIndex CodePointIndex);
-  CodePointIndexInLine codePointIndexInLineFrom(CodePointIndex rootCodePointIndex);
-  LineNumber lineNumberFrom(CodePointIndex rootCodePointIndex);
-  CodePointIndex rootCodePointIndexFrom(StringIndex stringIndex);
+  StringIndex stringIndexInRootFrom(CodePointIndexFromRoot CodePointIndex);
+  CodePointIndexInLine codePointIndexInLineFrom(CodePointIndexFromRoot rootCodePointIndex);
+  LineNumber lineNumberFrom(CodePointIndexFromRoot rootCodePointIndex);
+  AttachedCodePointIndex rootCodePointIndexFrom(StringIndex stringIndex);
   
   
-  StringIndex subStringIndexFrom(CodePointIndex subCodePointIndex);
-  CodePointIndex subCodePointIndexFrom(StringIndex subStringIndex);
+  StringIndex subStringIndexFrom(CodePointIndexFromRoot subCodePointIndex);
+//  CodePointIndex subCodePointIndexFrom(StringIndex subStringIndex);
   
 //  CodePointOffset offsetFromRoot();
   
@@ -31,8 +34,10 @@ public interface PositionResolver {
 
   Size lineSize();
   
-  public static PositionResolver createPositionResolver(int[] codePoints){
-    return new PositionResolverImpl(codePoints);
+  public static PositionResolver createPositionResolver(Source source , int[] codePoints){
+    return new PositionResolverImpl(source , codePoints);
   }
+  
+  public Source rootSource();
 
 }

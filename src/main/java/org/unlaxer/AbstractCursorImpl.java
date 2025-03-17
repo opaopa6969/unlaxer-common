@@ -8,18 +8,27 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
 	
 	private static final long serialVersionUID = -4419856259856233251L;
 	
-	CodePointIndex position;
+	AttachedCodePointIndex position;
 	final CursorKind cursorKind;
 	final SourceKind sourceKind;
 	final PositionResolver positionResolver;
 //	final CodePointOffset offsetFromRoot;
 	
 	AbstractCursorImpl(CursorKind cursorKind , SourceKind sourceKind , PositionResolver positionResolver) {
+<<<<<<< HEAD
 		this(cursorKind,sourceKind,positionResolver,new CodePointIndex(0 , new CodePointOffset(0)) );
 	}
 	
   AbstractCursorImpl(CursorKind cursorKind , SourceKind sourceKind , 
 	     PositionResolver positionResolver , CodePointIndex position) {
+=======
+		this(cursorKind,sourceKind,positionResolver,
+		    new AttachedCodePointIndex(0,positionResolver.rootSource()) , new CodePointOffset(0));
+	}
+	
+  AbstractCursorImpl(CursorKind cursorKind , SourceKind sourceKind , 
+	     PositionResolver positionResolver , AttachedCodePointIndex position , CodePointOffset offsetFromRoot) {
+>>>>>>> 6614c86145cd00541269b18010372831b907fbda
 	    super();
 	    this.cursorKind = cursorKind;
 	    this.sourceKind = sourceKind;
@@ -43,7 +52,11 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
   
   
   @Override
+<<<<<<< HEAD
   public CodePointIndex position() {
+=======
+  public AttachedCodePointIndex position() {
+>>>>>>> 6614c86145cd00541269b18010372831b907fbda
     return position;
   }
   
@@ -61,7 +74,7 @@ public abstract class AbstractCursorImpl<T extends Cursor<T>> implements Seriali
 
   
   @Override
-  public T setPosition(CodePointIndex position) {
+  public T setPosition(AttachedCodePointIndex position) {
     this.position = position;
     return thisObject();
   }

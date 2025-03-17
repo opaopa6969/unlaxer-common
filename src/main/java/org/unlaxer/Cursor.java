@@ -23,7 +23,7 @@ public interface Cursor<T extends Cursor<T>> {
 	
 //  T incrementLineNumber();
 
-	CodePointIndex position();
+	AttachedCodePointIndex position();
 	
 //	CodePointIndex positionInSub();
 //	
@@ -32,7 +32,7 @@ public interface Cursor<T extends Cursor<T>> {
 	
 //	SubCodePointIndex getPositionOnThisSequence();
 
-	T setPosition(CodePointIndex position);
+	T setPosition(AttachedCodePointIndex position);
 	
   T incrementPosition(); 
 

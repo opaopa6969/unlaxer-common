@@ -37,6 +37,8 @@ public interface Source extends CodePointAccessor , PositionResolver {
     }
   }
   
+  Source top();
+  
   PositionResolver positionResolver();
   
   SourceKind sourceKind();
@@ -65,7 +67,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
         return codePointOffset;
       }
       current = current.parent().get();
-      codePointOffset.newWithPlus(current.offsetFromParent());
+      codePointOffset = codePointOffset.newWithPlus(current.offsetFromParent());
     }
   }
   
@@ -86,9 +88,15 @@ public interface Source extends CodePointAccessor , PositionResolver {
 	  return subSource(cursorRange.startIndexInclusive.position(), cursorRange.endIndexExclusive.position());
 	}
 	
+  Source subSource(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive);
+  
+  Source subSource(AttachedCodePointIndex startIndexInclusive, CodePointLength codePointLength);
+  
   Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive);
   
   Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength);
+  
+  public boolean relatedWithRoot();
   
   Optional<Source> parent();
   
@@ -127,7 +135,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
   }
   
   default PositionResolver createPositionResolver(int[] codePoints) {
-    return PositionResolver.createPositionResolver(codePoints);
+    return PositionResolver.createPositionResolver(this,codePoints);
   }
   
 //  Function<String,Source> stringToSource();
@@ -212,7 +220,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
       if(indexOf ==-1) {
         throw new IllegalArgumentException();
       }
-      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf));
+      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf,IndexKind.thisSource));
       
       result[i++] = parentSourceAndStringToSource().apply(
           thisSource() , string , new CodePointOffset(codePointIndex));
@@ -235,7 +243,7 @@ public interface Source extends CodePointAccessor , PositionResolver {
       if(indexOf ==-1) {
         throw new IllegalArgumentException();
       }
-      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf));
+      CodePointIndex codePointIndex = toCodePointIndex(new StringIndex(indexOf,IndexKind.thisSource));
       
       result[i++] = parentSourceAndStringToSource().apply(
           thisSource() , string , new CodePointOffset(codePointIndex));

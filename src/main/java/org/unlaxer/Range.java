@@ -10,7 +10,7 @@ public class Range implements Comparable<Range>{
 	public final int endIndexExclusive;
 	
 	 
-  public Range(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+  public Range(AttachedCodePointIndex startIndexInclusive, AttachedCodePointIndex endIndexExclusive) {
     super();
     this.startIndexInclusive = startIndexInclusive.value(SourceKind.root);
     this.endIndexExclusive = endIndexExclusive.value(SourceKind.root);
@@ -27,7 +27,7 @@ public class Range implements Comparable<Range>{
 		this.endIndexExclusive = startIndexInclusive;
 	}
 	
-	public Range(CodePointIndex startIndexInclusive) {
+	public Range(AttachedCodePointIndex startIndexInclusive) {
     super();
     this.startIndexInclusive = startIndexInclusive.value(SourceKind.root);
     this.endIndexExclusive = startIndexInclusive.value(SourceKind.root);
