@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 
 import org.unlaxer.util.function.TriFunction;
 
-public class StringSource implements Source {
-  
+public class StringSource2 implements Source {
+
   private final Source root;
-  private final Source parent;
+  private final Source parent; // subSource の時だけ非null
   private final String sourceString;
   private final int[] codePoints;
   private final PositionResolver positionResolver;
@@ -24,159 +24,142 @@ public class StringSource implements Source {
   private final CodePointOffset offsetFromParent;
   private final StringIndexAccessor stringIndexAccessor;
   private final CursorRange cursorRange;
-  
-  
-  public static StringSource create(String source , SourceKind sourceKind) {
-    if(sourceKind == SourceKind.subSource) {
+
+  public static StringSource2 create(String source, SourceKind sourceKind) {
+    if (sourceKind == SourceKind.subSource) {
       throw new IllegalArgumentException();
     }
-    return new StringSource(source , sourceKind , new CodePointOffset(0));
-  }
-  
-  public static StringSource createRootSource(String source) {
-    return new StringSource(source , SourceKind.root , null ,  new CodePointOffset(0));
-  }
-  
-  public static StringSource createSubSource(String source , Source rootSource , CodePointOffset codePointOffset) {
-    // rootSource が null のケースが実在する（TokenList.toSource など）
-    // → origin mapping はできないので detached にフォールバック
-    if (rootSource == null) {
-      return StringSource.createDetachedSource(source); // offset は意味を持てないので 0 扱い
-    }
-    return new StringSource(rootSource, source, codePointOffset);
-  }
-  
-  public static StringSource createDetachedSource(String source , Source root) {
-    return new StringSource(source , SourceKind.detached , root , new CodePointOffset(0));
-  }
-  
-  public static StringSource createDetachedSource(String source) {
-    return new StringSource(source , SourceKind.detached , null , new CodePointOffset(0));
+    return new StringSource2(source, sourceKind, null, new CodePointOffset(0));
   }
 
-  
-  public static StringSource createDetachedSource(String source , Source root , CodePointOffset codePointOffset) {
-    return new StringSource(source , SourceKind.detached , root , codePointOffset);
-  }
-  
-  private StringSource(String source , SourceKind sourceKind , CodePointOffset offsetFromParent) {
-    this(source , sourceKind , null , offsetFromParent);
+  public static StringSource2 createRootSource(String source) {
+    return new StringSource2(source, SourceKind.root, null, new CodePointOffset(0));
   }
 
-  
-  private StringSource(String source , SourceKind sourceKind , Source root , CodePointOffset offsetFromParent) {
+  public static StringSource2 createSubSource(String source, Source rootSource, CodePointOffset codePointOffset) {
+    return new StringSource2(source, SourceKind.subSource, rootSource, codePointOffset);
+  }
+
+  public static StringSource2 createDetachedSource(String source, Source root) {
+    return new StringSource2(source, SourceKind.detached, root, new CodePointOffset(0));
+  }
+
+  public static StringSource2 createDetachedSource(String source) {
+    return new StringSource2(source, SourceKind.detached, null, new CodePointOffset(0));
+  }
+
+  public static StringSource2 createDetachedSource(String source, Source root, CodePointOffset codePointOffset) {
+    return new StringSource2(source, SourceKind.detached, root, codePointOffset);
+  }
+
+  private StringSource2(String source, SourceKind sourceKind, CodePointOffset offsetFromParent) {
+    this(source, sourceKind, null, offsetFromParent);
+  }
+
+  /**
+   * root / detached / attached 用のコンストラクタ
+   *
+   * - parent は持たない（tree に入れない）
+   * - subSource ではないので resolver は常に自前（0起点）
+   */
+  private StringSource2(String source, SourceKind sourceKind, Source root, CodePointOffset offsetFromParent) {
     super();
-    Objects.requireNonNull(source,"source require non null");
-    this.root = root == null ? this : root;
-    parent = this.root;
-    depth = new Depth(0);
-    this.sourceKind = sourceKind;
+    Objects.requireNonNull(source, "source require non null");
+
     this.sourceString = source;
-    this.offsetFromParent = offsetFromParent;
-    codePoints = source.codePoints().toArray();
-    positionResolver = root == null ? 
-        PositionResolver.createPositionResolver(codePoints) : 
-        root; 
-    stringIndexAccessor = new StringIndexAccessorImpl(source);
+    this.sourceKind = sourceKind;
 
-    // CursorRange positions are expressed in *root* coordinates, and positionInSub is derived
-    // by subtracting offsetFromRoot inside Cursor implementations.
-    // - For root source: offsetFromRoot = 0, start/end are [0, len)
-    // - For detached-with-root or others: anchor by offsetFromParent as offsetFromRoot
-    if (sourceKind == SourceKind.root && root == null) {
-      cursorRange = CursorRange.of(
-          new CodePointIndex(0),
-          new CodePointIndex(codePoints.length),
-          CodePointOffset.ZERO,
-          sourceKind,
-          positionResolver
-      );
-    } else {
-      cursorRange = CursorRange.ofSubSource(
-          offsetFromParent,
-          new CodePointLength(codePoints.length),
-          sourceKind,
-          positionResolver
-      );
-    }
+    // root参照（detachedでも「元rootを参照したい」はあり得る）
+    this.root = (root == null ? this : root);
+
+    // ✅ root/detached/attached は parent を持たない（subSourceだけが parent を持つ）
+    this.parent = null;
+    this.depth = new Depth(0);
+
+    this.offsetFromParent = offsetFromParent;
+    this.codePoints = source.codePoints().toArray();
+
+    // ✅ subSource 以外は独立 resolver（=positionInRoot は 0起点）
+    this.positionResolver = PositionResolver.createPositionResolver(codePoints);
+
+    this.stringIndexAccessor = new StringIndexAccessorImpl(source);
+
+    // root/detached/attached の cursorRange は自分座標（0起点）でOK
+    this.cursorRange = CursorRange.fromRootOffset(
+        new CodePointOffset(0),
+        new CodePointLength(codePoints.length),
+        sourceKind,
+        positionResolver
+    );
   }
 
-  
-  private StringSource(Source parent , Source source , CodePointOffset offsetFromParent) {
+  /**
+   * subSource 用コンストラクタ（Source を渡す版）
+   * parent を保持し、offsetFromRoot を合成して cursorRange を root 座標で作る
+   */
+  private StringSource2(Source parent, Source source, CodePointOffset offsetFromParent) {
     super();
+
     this.sourceString = source.toString();
     this.root = parent.root();
-    if(false == this.root.isRoot()) {
+    if (!this.root.isRoot()) {
       throw new IllegalArgumentException();
     }
+
     this.parent = parent;
     this.offsetFromParent = offsetFromParent;
-    depth = parent.depth().newWithIncrements();
-    sourceKind = SourceKind.subSource;
-    codePoints = source.codePoints().toArray();
-    positionResolver = root == null ? 
-        PositionResolver.createPositionResolver(codePoints) : 
-        root; 
-    stringIndexAccessor = new StringIndexAccessorImpl(source.sourceAsString());
-    
-    cursorRange = CursorRange.ofSubSource(
-        parent,
-        offsetFromParent,
+    this.depth = parent.depth().newWithIncrements();
+    this.sourceKind = SourceKind.subSource;
+
+    this.codePoints = source.codePoints().toArray();
+
+    // ✅ subSource は root resolver を使う（root座標共有）
+    this.positionResolver = this.root;
+
+    this.stringIndexAccessor = new StringIndexAccessorImpl(source.sourceAsString());
+
+    // ✅ root座標系の offset を合成して cursorRange を作る
+    CodePointOffset offsetFromRoot = parent.offsetFromRoot().newWithPlus(offsetFromParent);
+    this.cursorRange = CursorRange.fromRootOffset(
+        offsetFromRoot,
         new CodePointLength(codePoints.length),
         sourceKind,
         positionResolver
     );
   }
-  
-  
-  public StringSource(Source parent , String source , CodePointOffset codePointOffset) {
+
+  /**
+   * subSource 用コンストラクタ（String を渡す版）
+   */
+  public StringSource2(Source parent, String source, CodePointOffset codePointOffset) {
     super();
-    Objects.requireNonNull(source,"source require non null");
+    Objects.requireNonNull(source, "source require non null");
 
-    if (parent == null) {
-      // ここに来るのは想定外だけど、落とすより detached を作った方がマシ
-      // (createSubSource 側で防ぐ想定だが、保険で入れる)
-      this.sourceString = source;
-      this.parent = null;
-      this.root = this; // 自分を root にする
-      this.depth = new Depth(0);
-      this.sourceKind = SourceKind.detached;
-      this.offsetFromParent = CodePointOffset.ZERO;
-      this.codePoints = source.codePoints().toArray();
-      this.positionResolver = PositionResolver.createPositionResolver(codePoints);
-      this.stringIndexAccessor = new StringIndexAccessorImpl(source);
-      this.cursorRange = CursorRange.of(
-          new CodePointIndex(0),
-          new CodePointIndex(codePoints.length),
-          CodePointOffset.ZERO,
-          this.sourceKind,
-          this.positionResolver
-      );
-      return;
-    }
-
-    Objects.requireNonNull(codePointOffset, "codePointOffset require non null");
     this.sourceString = source;
     this.parent = parent;
     this.root = parent.root();
-    depth = parent.depth().newWithIncrements();
-    sourceKind = SourceKind.subSource;
-    offsetFromParent = codePointOffset;
-    codePoints = source.codePoints().toArray();
-    positionResolver = root == null ? 
-        PositionResolver.createPositionResolver(codePoints) : 
-        root; 
-    stringIndexAccessor = new StringIndexAccessorImpl(source);
 
-    cursorRange = CursorRange.ofSubSource(
-        parent,
-        codePointOffset,
+    this.depth = parent.depth().newWithIncrements();
+    this.sourceKind = SourceKind.subSource;
+
+    this.offsetFromParent = codePointOffset;
+    this.codePoints = source.codePoints().toArray();
+
+    // ✅ subSource は root resolver を使う（root座標共有）
+    this.positionResolver = this.root;
+
+    this.stringIndexAccessor = new StringIndexAccessorImpl(source);
+
+    // ✅ root座標系の offset を合成して cursorRange を作る
+    CodePointOffset offsetFromRoot = parent.offsetFromRoot().newWithPlus(offsetFromParent);
+    this.cursorRange = CursorRange.fromRootOffset(
+        offsetFromRoot,
         new CodePointLength(codePoints.length),
         sourceKind,
         positionResolver
     );
   }
-  
+
   public LineNumber lineNumberFrom(CodePointIndex codePointIndex) {
     return positionResolver.lineNumberFrom(codePointIndex);
   }
@@ -209,16 +192,21 @@ public class StringSource implements Source {
     return positionResolver.subCodePointIndexFrom(subStringIndex);
   }
 
-  static Function<String, Source> stringToStringInterface = string-> StringSource.createRootSource(string);
-  static TriFunction<Source , String, CodePointOffset , Source> parentSourceAndStringToSource = 
-      (parent,sourceAsString , codePointOffset)-> 
-        new StringSource(parent, 
-            StringSource.createDetachedSource(sourceAsString,parent.root()),
-            codePointOffset);
-  static Function<Source, String> stringInterfaceToStgring = StringSource::toString;
-  
+  static Function<String, Source> stringToStringInterface = string -> StringSource2.createRootSource(string);
+
+  static TriFunction<Source, String, CodePointOffset, Source> parentSourceAndStringToSource =
+      (parent, sourceAsString, codePointOffset) ->
+          // replace系は detached を返す（座標共有しない）
+          new StringSource2(
+              parent,
+              StringSource2.createDetachedSource(sourceAsString),
+              codePointOffset
+          );
+
+  static Function<Source, String> stringInterfaceToStgring = StringSource2::toString;
+
   @Override
-  public TriFunction<Source , String, CodePointOffset , Source> parentSourceAndStringToSource() {
+  public TriFunction<Source, String, CodePointOffset, Source> parentSourceAndStringToSource() {
     return parentSourceAndStringToSource;
   }
 
@@ -231,7 +219,7 @@ public class StringSource implements Source {
   public StringLength stringLength() {
     return new StringLength(sourceString.length());
   }
-  
+
   @Override
   public CodePointLength codePointLength() {
     return new CodePointLength(codePoints.length);
@@ -316,10 +304,10 @@ public class StringSource implements Source {
   public int lastIndexOf(String str) {
     return sourceString.lastIndexOf(str);
   }
-  
+
   @Override
   public int indexOf(int ch, int fromIndex) {
-    return sourceString.indexOf(ch,fromIndex);
+    return sourceString.indexOf(ch, fromIndex);
   }
 
   @Override
@@ -334,7 +322,7 @@ public class StringSource implements Source {
 
   @Override
   public int indexOf(String str, int fromIndex) {
-    return sourceString.indexOf(str,fromIndex);
+    return sourceString.indexOf(str, fromIndex);
   }
 
   @Override
@@ -379,7 +367,7 @@ public class StringSource implements Source {
 
   @Override
   public String[] split(String regex, int limit) {
-    return sourceString.split(regex,limit);
+    return sourceString.split(regex, limit);
   }
 
   @Override
@@ -465,7 +453,7 @@ public class StringSource implements Source {
   @Override
   public StringIndex toStringIndex(CodePointIndex codePointIndex) {
     StringIndex stringIndexFrom = positionResolver.stringIndexInRootFrom(codePointIndex);
-    if(stringIndexFrom == null) {
+    if (stringIndexFrom == null) {
       stringIndexFrom = positionResolver.stringIndexInRootFrom(codePointIndex.newWithMinus(1)).newWithAdd(1);
     }
     return stringIndexFrom;
@@ -483,8 +471,8 @@ public class StringSource implements Source {
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof Source) {
-      return sourceString.equals(((Source)obj).sourceAsString());
+    if (obj instanceof Source) {
+      return sourceString.equals(((Source) obj).sourceAsString());
     }
     return sourceString.equals(obj);
   }
@@ -506,7 +494,7 @@ public class StringSource implements Source {
 
   @Override
   public StringIndexWithNegativeValue toStringIndex(CodePointIndexWithNegativeValue codePointIndex) {
-    if(codePointIndex.isNegative()) {
+    if (codePointIndex.isNegative()) {
       return new StringIndexWithNegativeValue(codePointIndex.value());
     }
     return new StringIndexWithNegativeValue(toStringIndex(codePointIndex.toCodePointIndex()));
@@ -514,7 +502,7 @@ public class StringSource implements Source {
 
   @Override
   public CodePointIndexWithNegativeValue toCodePointIndexWithNegativeValue(StringIndexWithNegativeValue stringIndex) {
-    if(stringIndex.isNegative()) {
+    if (stringIndex.isNegative()) {
       return new CodePointIndexWithNegativeValue(stringIndex.value());
     }
     return new CodePointIndexWithNegativeValue(toCodePointIndex(stringIndex.toStringIndex()));
@@ -524,56 +512,54 @@ public class StringSource implements Source {
   public StringIndexAccessor stringIndexAccessor() {
     return stringIndexAccessor;
   }
-  
+
   public static String toString(CodePointAccessor codePointAccessor) {
     return codePointAccessor.toString();
   }
 
   @Override
   public Source peek(CodePointIndex startIndexInclusive, CodePointLength length) {
-    
     CodePointOffset offset = new CodePointOffset(startIndexInclusive);
-    if(startIndexInclusive.value() + length.value() > codePoints.length){
-      return new StringSource(this , 
+
+    if (startIndexInclusive.value() + length.value() > codePoints.length) {
+      return new StringSource2(this,
           subSource(startIndexInclusive, new CodePointLength(0)),
           offset);
     }
-    
-    return new StringSource(this , subSource(startIndexInclusive, length),offset);
-  }
-  
-  @Override
-  public Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
-    return new StringSource(this,
-        subString(startIndexInclusive,endIndexExclusive),
-        new CodePointOffset(startIndexInclusive)
-    );
-  }
-  
-  @Override
-  public Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength) {
-    return new StringSource(this,
-        subString(startIndexInclusive,codePointLength),
-        new CodePointOffset(startIndexInclusive)
-    );
-  }
- 
-  @Override
-  public int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
-    return Arrays.copyOfRange(codePoints, startIndexInclusive.value() , endIndexExclusive.value());
-  }
-  
-  public String subString(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
-    return new String(codePoints, startIndexInclusive.value() , endIndexExclusive.value() - startIndexInclusive.value());
-  }
-  
-  public String subString(CodePointIndex startIndexInclusive, CodePointLength length) {
-    return new String(codePoints, startIndexInclusive.value() , length.value());
+    return new StringSource2(this, subSource(startIndexInclusive, length), offset);
   }
 
   @Override
-  public LineNumber lineNumber(CodePointIndex Position) {
-    return positionResolver.lineNumberFrom(Position);
+  public Source subSource(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+    return new StringSource2(this,
+        subString(startIndexInclusive, endIndexExclusive),
+        new CodePointOffset(startIndexInclusive));
+  }
+
+  @Override
+  public Source subSource(CodePointIndex startIndexInclusive, CodePointLength codePointLength) {
+    return new StringSource2(this,
+        subString(startIndexInclusive, codePointLength),
+        new CodePointOffset(startIndexInclusive));
+  }
+
+  @Override
+  public int[] subCodePoints(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+    return Arrays.copyOfRange(codePoints, startIndexInclusive.value(), endIndexExclusive.value());
+  }
+
+  public String subString(CodePointIndex startIndexInclusive, CodePointIndex endIndexExclusive) {
+    return new String(codePoints, startIndexInclusive.value(),
+        endIndexExclusive.value() - startIndexInclusive.value());
+  }
+
+  public String subString(CodePointIndex startIndexInclusive, CodePointLength length) {
+    return new String(codePoints, startIndexInclusive.value(), length.value());
+  }
+
+  @Override
+  public LineNumber lineNumber(CodePointIndex position) {
+    return positionResolver.lineNumberFrom(position);
   }
 
   @Override
@@ -603,6 +589,11 @@ public class StringSource implements Source {
 
   @Override
   public CodePointOffset offsetFromParent() {
+    // subSource のときは offsetFromParent が意味を持つ
+    // root/detached/attached の場合は 0 が自然（親を持たない）
+    if (parent == null) {
+      return new CodePointOffset(0);
+    }
     return offsetFromParent;
   }
 
@@ -618,17 +609,14 @@ public class StringSource implements Source {
 
   @Override
   public boolean isRoot() {
-    // Root-ness should be decided by the kind, not by parent==root.
-    // For subSource, parent is often the root source (parent==root) but it is not a root.
-    // Detached sources are treated as roots of their own coordinate system.
-    return sourceKind == SourceKind.root || sourceKind == SourceKind.detached;
+    return sourceKind == SourceKind.root;
   }
-  
-  public static Source EMPTY = StringSource.createDetachedSource("");
+
+  public static Source EMPTY = StringSource2.createDetachedSource("");
 
   @Override
-  public StringIndex stringIndexInRootFrom(CodePointIndex CodePointIndex) {
-    return positionResolver.stringIndexInRootFrom(CodePointIndex);
+  public StringIndex stringIndexInRootFrom(CodePointIndex codePointIndex) {
+    return positionResolver.stringIndexInRootFrom(codePointIndex);
   }
 
   @Override
@@ -650,5 +638,4 @@ public class StringSource implements Source {
   public CursorRange cursorRange() {
     return cursorRange;
   }
-
 }

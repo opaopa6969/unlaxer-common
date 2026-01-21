@@ -97,11 +97,24 @@ public class Token implements Serializable{
 	}
 
 	
+//	public static Token empty(TokenKind tokenKind , EndExclusiveCursor position , Parser parser){
+//	  StringSource empty = 
+//	      StringSource.createDetachedSource("", null ,  new CodePointOffset(position.position()));
+//	  
+//		return new Token(tokenKind , empty ,parser);
+//	}
 	public static Token empty(TokenKind tokenKind , EndExclusiveCursor position , Parser parser){
-	  StringSource empty = 
-	      StringSource.createDetachedSource("", null ,  new CodePointOffset(position.position()));
-	  
-		return new Token(tokenKind , empty ,parser);
+	  // An empty token should still be anchored to the original/root coordinate system
+	  // so that diagnostics (cursorRange, error ranges, etc.) can point to the correct location.
+	  Source root = (position.positionResolver() instanceof Source)
+	      ? (Source) position.positionResolver()
+	      : StringSource.createRootSource("");
+	  StringSource empty = StringSource.createSubSource(
+	      "",
+	      root,
+	      new CodePointOffset(position.positionInRoot())
+	  );
+	  return new Token(tokenKind, empty, parser);
 	}
 	
 	public Source getSource() {
