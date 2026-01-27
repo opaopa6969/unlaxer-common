@@ -79,6 +79,7 @@ public class CursorRange implements Comparable<CursorRange> {
         positionResolver
     );
   }
+
   
   /**
    * 親 Source と subSource の offset を合成して CursorRange を作るユーティリティ。
