@@ -207,22 +207,160 @@ MappedSingleCharacterParser withoutParens = p.newWithout("()");
 
 #### Recursive Grammars with Lazy Evaluation
 
-For recursive structures, use lazy evaluation to avoid infinite loops during parser construction:
+For recursive structures, use lazy evaluation to avoid infinite loops during parser construction. Unlaxer provides `LazyChain`, `LazyChoice`, `LazyOneOrMore`, `LazyZeroOrMore`, and other lazy combinators specifically for this purpose.
+
+**Why Lazy Evaluation?**
+
+When you have a recursive grammar like:
+```
+expr = term | '(' expr ')'
+```
+
+You can't write:
+```java
+// WRONG - causes infinite loop during construction!
+Parser expr = new Choice(
+    term,
+    new Chain(lparen, expr, rparen)  // expr doesn't exist yet!
+);
+```
+
+**Solution 1: Using LazyChain and LazyChoice**
+
+The recommended approach is to extend the lazy parser classes:
+
+```java
+// Define recursive expression parser
+public class ExprParser extends LazyChoice {
+    @Override
+    public Parsers getLazyParsers() {
+        // This method is called lazily, avoiding infinite recursion
+        return new Parsers(
+            Parser.get(NumberParser.class),
+            new Chain(
+                Parser.get(LParenParser.class),
+                Parser.get(ExprParser.class),  // Recursive reference!
+                Parser.get(RParenParser.class)
+            )
+        );
+    }
+    
+    @Override
+    public Optional<RecursiveMode> getNotAstNodeSpecifier() {
+        return Optional.empty();  // Include in AST
+    }
+}
+
+// Usage
+Parser expr = Parser.get(ExprParser.class);
+```
+
+**Solution 2: Using Supplier (legacy approach)**
 
 ```java
 // Expression grammar with parentheses
-Parser expr = Parser.get(() -> {
+Supplier<Parser> exprSupplier = () -> {
     Parser term = /* ... */;
     return new Choice(
         term,
         new Chain(
             new CharParser('('),
-            expr,  // Recursive reference
+            Parser.get(exprSupplier),  // Recursive reference via supplier
             new CharParser(')')
         )
     );
-});
+};
+
+Parser expr = Parser.get(exprSupplier);
 ```
+
+**Complete Recursive Example**
+
+```java
+// Grammar:
+// expr   = term (('+'|'-') term)*
+// term   = factor (('*'|'/') factor)*  
+// factor = number | '(' expr ')'
+
+public class FactorParser extends LazyChoice {
+    @Override
+    public Parsers getLazyParsers() {
+        return new Parsers(
+            Parser.get(NumberParser.class),
+            new Chain(
+                Parser.get(LParenParser.class),
+                Parser.get(ExprParser.class),  // Recursive!
+                Parser.get(RParenParser.class)
+            )
+        );
+    }
+    
+    @Override
+    public Optional<RecursiveMode> getNotAstNodeSpecifier() {
+        return Optional.empty();
+    }
+}
+
+public class TermParser extends LazyChain {
+    @Override
+    public Parsers getLazyParsers() {
+        return new Parsers(
+            Parser.get(FactorParser.class),
+            new ZeroOrMore(
+                new Chain(
+                    new Choice(
+                        Parser.get(MultipleParser.class),
+                        Parser.get(DivisionParser.class)
+                    ),
+                    Parser.get(FactorParser.class)
+                )
+            )
+        );
+    }
+    
+    @Override
+    public Optional<RecursiveMode> getNotAstNodeSpecifier() {
+        return Optional.empty();
+    }
+}
+
+public class ExprParser extends LazyChain {
+    @Override
+    public Parsers getLazyParsers() {
+        return new Parsers(
+            Parser.get(TermParser.class),
+            new ZeroOrMore(
+                new Chain(
+                    new Choice(
+                        Parser.get(PlusParser.class),
+                        Parser.get(MinusParser.class)
+                    ),
+                    Parser.get(TermParser.class)
+                )
+            )
+        );
+    }
+    
+    @Override
+    public Optional<RecursiveMode> getNotAstNodeSpecifier() {
+        return Optional.empty();
+    }
+}
+
+// Usage
+ParseContext context = new ParseContext(
+    StringSource.createRootSource("3 + 4 * (2 - 1)")
+);
+Parser expr = Parser.get(ExprParser.class);
+Parsed result = expr.parse(context);
+```
+
+**Key Points about Lazy Parsers**:
+- Extend `LazyChain`, `LazyChoice`, `LazyOneOrMore`, `LazyZeroOrMore`, etc.
+- Implement `getLazyParsers()` method to return child parsers
+- Children are constructed only when first needed
+- Enables mutual recursion and self-recursion
+- Use `Parser.get(YourLazyParser.class)` for singleton instances
 
 #### Named Parsers
 
@@ -870,7 +1008,771 @@ context.getParserListenerByName().put(
 );
 ```
 
-## Comparison with Other Parser Combinators
+## Converting Parse Tree to AST
+
+Unlaxer provides a powerful AST (Abstract Syntax Tree) transformation system through the `org.unlaxer.ast` package. This allows you to convert the parse tree into a more semantic tree structure suitable for interpretation or compilation.
+
+### Understanding the Problem
+
+A parse tree directly reflects the grammar structure, which can be verbose:
+
+```
+Parse Tree for "1 + 2 + 3":
+Chain
+ ├─ OneOrMore (Number)
+ │   └─ '1'
+ ├─ ZeroOrMore
+ │   ├─ Chain
+ │   │   ├─ Choice (Operator)
+ │   │   │   └─ '+'
+ │   │   └─ OneOrMore (Number)
+ │   │       └─ '2'
+ │   └─ Chain
+ │       ├─ Choice (Operator)
+ │       │   └─ '+'
+ │       └─ OneOrMore (Number)
+ │           └─ '3'
+```
+
+An AST simplifies this to semantic structure:
+
+```
+AST for "1 + 2 + 3":
+'+'
+ ├─ '+'
+ │   ├─ '1'
+ │   └─ '2'
+ └─ '3'
+```
+
+### ASTMapper Interface
+
+The core interface for AST transformation:
+
+```java
+public interface ASTMapper {
+    /**
+     * Transform a parse tree token into an AST token
+     */
+    Token toAST(ASTMapperContext context, Token parsedToken);
+    
+    /**
+     * Check if this mapper can handle the token
+     */
+    default boolean canASTMapping(Token parsedToken) {
+        return parsedToken.parser.getClass() == getClass();
+    }
+}
+```
+
+### AST Node Kinds
+
+Define the semantic role of each node:
+
+```java
+public enum ASTNodeKind {
+    Operator,                  // Binary/unary operators
+    Operand,                   // Values, variables, literals
+    ChoicedOperatorRoot,       // Root of operator choice
+    ChoicedOperator,           // Individual operator in choice
+    ChoicedOperandRoot,        // Root of operand choice
+    ChoicedOperand,            // Individual operand in choice
+    Space,                     // Whitespace (usually filtered)
+    Comment,                   // Comments (usually filtered)
+    Annotation,                // Annotations/decorators
+    Other,                     // Other node types
+    NotSpecified              // Not yet classified
+}
+```
+
+### Built-in AST Patterns
+
+#### 1. RecursiveZeroOrMoreBinaryOperator
+
+For grammars like: `number (operator number)*`
+
+**Parse Tree**:
+```
+'1+2+3'
+ ├─ '1' (number)
+ ├─ '+' (operator)
+ ├─ '2' (number)
+ ├─ '+' (operator)
+ └─ '3' (number)
+```
+
+**AST** (left-associative tree):
+```
+'+'
+ ├─ '+'
+ │   ├─ '1'
+ │   └─ '2'
+ └─ '3'
+```
+
+**Implementation**:
+
+```java
+public class AdditionParser extends Chain 
+    implements RecursiveZeroOrMoreBinaryOperator {
+    
+    public AdditionParser() {
+        super(
+            Parser.get(NumberParser.class),
+            new ZeroOrMore(
+                new Chain(
+                    Parser.get(PlusParser.class),
+                    Parser.get(NumberParser.class)
+                )
+            )
+        );
+    }
+}
+
+// The toAST method is automatically provided by the interface
+```
+
+#### 2. RecursiveZeroOrMoreOperator
+
+For postfix/prefix operators like: `operand operator*`
+
+**Parse Tree**:
+```
+'array[0][1]'
+ ├─ 'array' (operand)
+ ├─ '[0]' (operator)
+ └─ '[1]' (operator)
+```
+
+**AST**:
+```
+'[1]'
+ └─ '[0]'
+     └─ 'array'
+```
+
+**Implementation**:
+
+```java
+public class SubscriptParser extends Chain 
+    implements RecursiveZeroOrMoreOperator {
+    
+    public SubscriptParser() {
+        super(
+            Parser.get(IdentifierParser.class),
+            new ZeroOrMore(
+                Parser.get(IndexOperatorParser.class)
+            )
+        );
+    }
+}
+```
+
+### Complete AST Example
+
+```java
+import org.unlaxer.*;
+import org.unlaxer.parser.*;
+import org.unlaxer.parser.combinator.*;
+import org.unlaxer.parser.posix.*;
+import org.unlaxer.ast.*;
+import org.unlaxer.context.*;
+
+// Step 1: Tag parsers with AST node kinds
+public class NumberParser extends OneOrMore implements StaticParser {
+    public NumberParser() {
+        super(DigitParser.class);
+        // Mark as operand
+        addTag(ASTNodeKind.Operand.tag());
+    }
+}
+
+public class PlusParser extends CharParser implements StaticParser {
+    public PlusParser() {
+        super('+');
+        // Mark as operator
+        addTag(ASTNodeKind.Operator.tag());
+    }
+}
+
+public class MinusParser extends CharParser implements StaticParser {
+    public MinusParser() {
+        super('-');
+        addTag(ASTNodeKind.Operator.tag());
+    }
+}
+
+// Step 2: Create parser with AST mapper
+public class ExpressionParser extends Chain 
+    implements RecursiveZeroOrMoreBinaryOperator {
+    
+    public ExpressionParser() {
+        super(
+            Parser.get(NumberParser.class),
+            new ZeroOrMore(
+                new Chain(
+                    new Choice(
+                        Parser.get(PlusParser.class),
+                        Parser.get(MinusParser.class)
+                    ),
+                    Parser.get(NumberParser.class)
+                )
+            )
+        );
+    }
+}
+
+// Step 3: Parse and convert to AST
+public class ASTExample {
+    public static void main(String[] args) {
+        // Parse
+        Parser parser = Parser.get(ExpressionParser.class);
+        ParseContext context = new ParseContext(
+            StringSource.createRootSource("1 + 2 - 3")
+        );
+        Parsed result = parser.parse(context);
+        Token parseTree = result.getRootToken();
+        
+        // Create AST mapper context
+        ASTMapperContext astContext = ASTMapperContext.create(
+            new ExpressionParser()
+            // Add more mappers as needed
+        );
+        
+        // Convert to AST
+        Token ast = astContext.toAST(parseTree);
+        
+        // Print both trees
+        System.out.println("Parse Tree:");
+        System.out.println(TokenPrinter.get(parseTree));
+        
+        System.out.println("\nAST:");
+        System.out.println(TokenPrinter.get(ast));
+        
+        context.close();
+    }
+}
+```
+
+**Output**:
+
+```
+Parse Tree:
+'1 + 2 - 3' : ExpressionParser
+ '1' : NumberParser
+  '1' : DigitParser
+ ' + 2 - 3' : ZeroOrMore
+  ' + 2' : Chain
+   '+' : Choice
+    '+' : PlusParser
+   '2' : NumberParser
+    '2' : DigitParser
+  ' - 3' : Chain
+   '-' : Choice
+    '-' : MinusParser
+   '3' : NumberParser
+    '3' : DigitParser
+
+AST:
+'-' : MinusParser
+ '+' : PlusParser
+  '1' : NumberParser
+   '1' : DigitParser
+  '2' : NumberParser
+   '2' : DigitParser
+ '3' : NumberParser
+  '3' : DigitParser
+```
+
+### Custom AST Mappers
+
+For custom AST transformations, implement `ASTMapper`:
+
+```java
+public class CustomFunctionCallParser extends Chain implements ASTMapper {
+    
+    public CustomFunctionCallParser() {
+        super(
+            Parser.get(IdentifierParser.class),  // function name
+            Parser.get(LParenParser.class),
+            Parser.get(ArgumentListParser.class),
+            Parser.get(RParenParser.class)
+        );
+    }
+    
+    @Override
+    public Token toAST(ASTMapperContext context, Token parsedToken) {
+        TokenList children = parsedToken.getAstNodeChildren();
+        
+        // Extract semantic parts
+        Token functionName = children.get(0);  // identifier
+        Token args = children.get(2);          // argument list
+        
+        // Create new AST node with only semantic children
+        return functionName.newCreatesOf(
+            context.toAST(functionName),
+            context.toAST(args)
+        );
+    }
+}
+```
+
+### AST Best Practices
+
+1. **Tag Terminal Parsers**: Mark all terminal parsers with appropriate `ASTNodeKind`
+```java
+addTag(ASTNodeKind.Operator.tag());
+addTag(ASTNodeKind.Operand.tag());
+```
+
+2. **Use Built-in Patterns**: Leverage `RecursiveZeroOrMoreBinaryOperator` and `RecursiveZeroOrMoreOperator` for common patterns
+
+3. **Recursive Transformation**: Always use `context.toAST()` when processing child tokens
+
+4. **Filter Noise**: Remove whitespace, comments, and syntactic markers in AST
+
+5. **Semantic Structure**: AST should reflect program meaning, not grammar structure
+
+### Operator Precedence in AST
+
+For proper operator precedence, structure your grammar hierarchically:
+
+```java
+// expr   = term (('+' | '-') term)*
+// term   = factor (('*' | '/') factor)*
+// factor = number | '(' expr ')'
+
+public class ExprParser extends LazyChain 
+    implements RecursiveZeroOrMoreBinaryOperator {
+    @Override
+    public Parsers getLazyParsers() {
+        return new Parsers(
+            Parser.get(TermParser.class),
+            new ZeroOrMore(
+                new Chain(
+                    new Choice(PlusParser.class, MinusParser.class),
+                    Parser.get(TermParser.class)
+                )
+            )
+        );
+    }
+}
+
+public class TermParser extends Chain 
+    implements RecursiveZeroOrMoreBinaryOperator {
+    public TermParser() {
+        super(
+            Parser.get(FactorParser.class),
+            new ZeroOrMore(
+                new Chain(
+                    new Choice(MultipleParser.class, DivisionParser.class),
+                    Parser.get(FactorParser.class)
+                )
+            )
+        );
+    }
+}
+```
+
+This ensures multiplication binds tighter than addition in the resulting AST.
+
+## IDE Integration and Language Server Protocol (LSP)
+
+Unlaxer's architecture makes it ideal for building Language Server Protocol (LSP) implementations for custom languages and DSLs.
+
+### Why Unlaxer for LSP?
+
+1. **Incremental Parsing**: Parse tree structure enables efficient re-parsing
+2. **Position Tracking**: Built-in line/column tracking for all tokens
+3. **Error Recovery**: Graceful handling of incomplete/invalid input
+4. **Rich Metadata**: Tokens carry parser information useful for semantic analysis
+
+### Basic LSP Implementation
+
+Here's a foundation for an LSP server using Unlaxer:
+
+```java
+import org.unlaxer.*;
+import org.unlaxer.parser.*;
+import org.unlaxer.context.*;
+import org.eclipse.lsp4j.*;
+import org.eclipse.lsp4j.services.*;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+
+public class UnlaxerLanguageServer implements LanguageServer, 
+                                               LanguageClientAware {
+    
+    private LanguageClient client;
+    private final TextDocumentService textDocumentService;
+    private final WorkspaceService workspaceService;
+    
+    // Document cache
+    private final Map<String, DocumentState> documents = new HashMap<>();
+    
+    public UnlaxerLanguageServer() {
+        this.textDocumentService = new UnlaxerTextDocumentService(this);
+        this.workspaceService = new UnlaxerWorkspaceService(this);
+    }
+    
+    @Override
+    public CompletableFuture<InitializeResult> initialize(
+            InitializeParams params) {
+        
+        ServerCapabilities capabilities = new ServerCapabilities();
+        capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
+        capabilities.setCompletionProvider(new CompletionOptions());
+        capabilities.setHoverProvider(true);
+        capabilities.setDefinitionProvider(true);
+        capabilities.setDocumentSymbolProvider(true);
+        capabilities.setDiagnosticProvider(new DiagnosticRegistrationOptions());
+        
+        return CompletableFuture.completedFuture(
+            new InitializeResult(capabilities)
+        );
+    }
+    
+    @Override
+    public TextDocumentService getTextDocumentService() {
+        return textDocumentService;
+    }
+    
+    @Override
+    public WorkspaceService getWorkspaceService() {
+        return workspaceService;
+    }
+    
+    @Override
+    public void connect(LanguageClient client) {
+        this.client = client;
+    }
+    
+    // Document state management
+    static class DocumentState {
+        String uri;
+        String content;
+        Parsed parsed;
+        List<Diagnostic> diagnostics;
+        long version;
+        
+        DocumentState(String uri, String content, long version) {
+            this.uri = uri;
+            this.content = content;
+            this.version = version;
+        }
+    }
+    
+    // Parse document and cache results
+    void parseDocument(String uri, String content, long version) {
+        try {
+            Parser parser = createYourLanguageParser();
+            ParseContext context = new ParseContext(
+                StringSource.createRootSource(content)
+            );
+            Parsed result = parser.parse(context);
+            
+            List<Diagnostic> diagnostics = new ArrayList<>();
+            
+            if (result.isFailed()) {
+                // Convert parse errors to LSP diagnostics
+                Diagnostic diagnostic = new Diagnostic();
+                diagnostic.setSeverity(DiagnosticSeverity.Error);
+                diagnostic.setMessage("Parse error");
+                // Set range based on cursor position
+                diagnostic.setRange(createRange(context));
+                diagnostics.add(diagnostic);
+            }
+            
+            DocumentState state = new DocumentState(uri, content, version);
+            state.parsed = result;
+            state.diagnostics = diagnostics;
+            documents.put(uri, state);
+            
+            // Send diagnostics to client
+            client.publishDiagnostics(
+                new PublishDiagnosticsParams(uri, diagnostics)
+            );
+            
+            context.close();
+        } catch (Exception e) {
+            // Handle parsing exceptions
+        }
+    }
+    
+    private Parser createYourLanguageParser() {
+        // Return your language's root parser
+        return Parser.get(YourLanguageParser.class);
+    }
+    
+    private Range createRange(ParseContext context) {
+        // Convert Unlaxer position to LSP Range
+        ParserCursor cursor = context.getTokenStack().peek().getCursor();
+        LineNumber line = cursor.lineNumber();
+        CodePointIndexInLine column = cursor.positionInLine();
+        
+        Position pos = new Position(
+            line.value - 1,  // LSP is 0-based
+            column.value
+        );
+        return new Range(pos, pos);
+    }
+}
+
+// Text Document Service
+class UnlaxerTextDocumentService implements TextDocumentService {
+    
+    private final UnlaxerLanguageServer server;
+    
+    UnlaxerTextDocumentService(UnlaxerLanguageServer server) {
+        this.server = server;
+    }
+    
+    @Override
+    public void didOpen(DidOpenTextDocumentParams params) {
+        TextDocumentItem doc = params.getTextDocument();
+        server.parseDocument(doc.getUri(), doc.getText(), doc.getVersion());
+    }
+    
+    @Override
+    public void didChange(DidChangeTextDocumentParams params) {
+        String uri = params.getTextDocument().getUri();
+        String content = params.getContentChanges().get(0).getText();
+        long version = params.getTextDocument().getVersion();
+        server.parseDocument(uri, content, version);
+    }
+    
+    @Override
+    public CompletableFuture<List<CompletionItem>> completion(
+            CompletionParams params) {
+        
+        String uri = params.getTextDocument().getUri();
+        DocumentState doc = server.documents.get(uri);
+        
+        if (doc == null || doc.parsed == null) {
+            return CompletableFuture.completedFuture(Collections.emptyList());
+        }
+        
+        // Find token at cursor position
+        Position pos = params.getPosition();
+        Token tokenAtCursor = findTokenAtPosition(
+            doc.parsed.getRootToken(), 
+            pos.getLine() + 1,  // Convert to 1-based
+            pos.getCharacter()
+        );
+        
+        // Generate completions based on context
+        List<CompletionItem> items = generateCompletions(tokenAtCursor);
+        
+        return CompletableFuture.completedFuture(items);
+    }
+    
+    @Override
+    public CompletableFuture<Hover> hover(HoverParams params) {
+        String uri = params.getTextDocument().getUri();
+        DocumentState doc = server.documents.get(uri);
+        
+        if (doc == null) {
+            return CompletableFuture.completedFuture(null);
+        }
+        
+        Position pos = params.getPosition();
+        Token token = findTokenAtPosition(
+            doc.parsed.getRootToken(),
+            pos.getLine() + 1,
+            pos.getCharacter()
+        );
+        
+        if (token != null) {
+            // Create hover information
+            String content = String.format(
+                "Token: %s\nType: %s\nText: %s",
+                token.getParser().getClass().getSimpleName(),
+                token.getParser().getClass().getName(),
+                token.getConsumedString()
+            );
+            
+            Hover hover = new Hover();
+            hover.setContents(new MarkupContent("markdown", content));
+            return CompletableFuture.completedFuture(hover);
+        }
+        
+        return CompletableFuture.completedFuture(null);
+    }
+    
+    @Override
+    public CompletableFuture<List<? extends DocumentSymbol>> documentSymbol(
+            DocumentSymbolParams params) {
+        
+        String uri = params.getTextDocument().getUri();
+        DocumentState doc = server.documents.get(uri);
+        
+        if (doc == null || doc.parsed == null) {
+            return CompletableFuture.completedFuture(Collections.emptyList());
+        }
+        
+        // Convert token tree to document symbols
+        List<DocumentSymbol> symbols = extractSymbols(
+            doc.parsed.getRootToken()
+        );
+        
+        return CompletableFuture.completedFuture(symbols);
+    }
+    
+    private Token findTokenAtPosition(Token root, int line, int character) {
+        // Traverse token tree to find token at position
+        if (root == null) return null;
+        
+        // Check if position is within this token's range
+        // (Implementation depends on your position tracking)
+        
+        // Recursively search children
+        for (Token child : root.getChildren()) {
+            Token found = findTokenAtPosition(child, line, character);
+            if (found != null) return found;
+        }
+        
+        return null;
+    }
+    
+    private List<CompletionItem> generateCompletions(Token context) {
+        List<CompletionItem> items = new ArrayList<>();
+        
+        // Example: suggest keywords
+        CompletionItem item = new CompletionItem("if");
+        item.setKind(CompletionItemKind.Keyword);
+        item.setDetail("if statement");
+        items.add(item);
+        
+        // Add more completion logic based on context
+        
+        return items;
+    }
+    
+    private List<DocumentSymbol> extractSymbols(Token token) {
+        List<DocumentSymbol> symbols = new ArrayList<>();
+        
+        // Example: Extract function definitions
+        if (token.getParser() instanceof FunctionDefParser) {
+            DocumentSymbol symbol = new DocumentSymbol();
+            symbol.setName(extractFunctionName(token));
+            symbol.setKind(SymbolKind.Function);
+            symbol.setRange(tokenToRange(token));
+            symbol.setSelectionRange(tokenToRange(token));
+            symbols.add(symbol);
+        }
+        
+        // Recursively process children
+        for (Token child : token.getChildren()) {
+            symbols.addAll(extractSymbols(child));
+        }
+        
+        return symbols;
+    }
+    
+    private Range tokenToRange(Token token) {
+        // Convert Unlaxer token range to LSP Range
+        // This is a simplified version
+        Position start = new Position(0, token.getRange().start.value);
+        Position end = new Position(0, token.getRange().end.value);
+        return new Range(start, end);
+    }
+    
+    private String extractFunctionName(Token token) {
+        // Extract function name from token children
+        return token.getConsumedString();
+    }
+}
+
+// Workspace Service
+class UnlaxerWorkspaceService implements WorkspaceService {
+    private final UnlaxerLanguageServer server;
+    
+    UnlaxerWorkspaceService(UnlaxerLanguageServer server) {
+        this.server = server;
+    }
+}
+```
+
+### LSP Features with Unlaxer
+
+#### 1. Syntax Highlighting
+
+Use token types for semantic highlighting:
+
+```java
+public SemanticTokens getSemanticTokens(String uri) {
+    DocumentState doc = documents.get(uri);
+    List<SemanticToken> tokens = new ArrayList<>();
+    
+    traverseTokens(doc.parsed.getRootToken(), (token) -> {
+        SemanticTokenType type = mapParserToTokenType(
+            token.getParser()
+        );
+        tokens.add(new SemanticToken(
+            token.getRange().start.value,
+            token.getRange().end.value - token.getRange().start.value,
+            type
+        ));
+    });
+    
+    return new SemanticTokens(tokens);
+}
+```
+
+#### 2. Go to Definition
+
+Track symbol definitions during parsing:
+
+```java
+private Map<String, Token> symbolTable = new HashMap<>();
+
+public CompletableFuture<Location> definition(DefinitionParams params) {
+    Token token = findTokenAtPosition(...);
+    
+    if (token.getParser() instanceof IdentifierParser) {
+        String name = token.getConsumedString();
+        Token definition = symbolTable.get(name);
+        
+        if (definition != null) {
+            return CompletableFuture.completedFuture(
+                tokenToLocation(definition)
+            );
+        }
+    }
+    
+    return CompletableFuture.completedFuture(null);
+}
+```
+
+#### 3. Code Folding
+
+Use parser hierarchy for folding regions:
+
+```java
+public List<FoldingRange> getFoldingRanges(String uri) {
+    DocumentState doc = documents.get(uri);
+    List<FoldingRange> ranges = new ArrayList<>();
+    
+    traverseTokens(doc.parsed.getRootToken(), (token) -> {
+        // Fold blocks, functions, classes, etc.
+        if (isFoldableParser(token.getParser())) {
+            ranges.add(tokenToFoldingRange(token));
+        }
+    });
+    
+    return ranges;
+}
+```
+
+### LSP Best Practices
+
+1. **Incremental Updates**: Cache parse results and only re-parse changed regions
+2. **Error Recovery**: Use `Optional` and `ZeroOrMore` for robust parsing
+3. **Position Mapping**: Leverage Unlaxer's built-in position tracking
+4. **Symbol Table**: Build during parsing for efficient lookups
+5. **Async Processing**: Run parsing in background threads
+
+
 
 ### vs. Parser Combinators in Other Languages
 
@@ -1022,7 +1924,7 @@ public void testExpression() {
 ## Building
 
 ```bash
-./mvnw compile
+./mvnw clean install
 ```
 
 ## Testing
