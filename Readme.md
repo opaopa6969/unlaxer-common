@@ -531,24 +531,498 @@ Understanding the internal architecture is essential for creating custom parser 
 
 ### Core Concepts
 
-#### 1. Source
+#### 1. Source and Source Hierarchy
 
-`Source` represents the input string with position tracking:
+`Source` is the foundation of Unlaxer's position tracking system. It represents input text with precise Unicode handling and supports hierarchical relationships.
+
+**Source Types**
 
 ```java
-public interface Source {
-    CodePointString getCodePointString();
-    PositionResolver positionResolver();
-    // ... methods for substring, position conversion
+public enum SourceKind {
+    root,       // Original input source
+    subSource,  // View into parent source (maintains connection)
+    detached,   // Independent source (no parent connection)
+    attached    // Special case (rarely used)
 }
 ```
 
-Key points:
-- Uses code points (not char indices) for proper Unicode support
-- Tracks line numbers and column positions
-- Immutable - operations return new Source instances
+**Creating Sources**
 
-#### 2. ParseContext
+```java
+// Root source - the original input
+Source root = StringSource.createRootSource("Hello World");
+
+// SubSource - a view into the parent (maintains position tracking)
+Source sub = root.subSource(
+    new CodePointIndex(0),    // Start position (inclusive)
+    new CodePointIndex(5)     // End position (exclusive)
+);
+// sub.sourceAsString() = "Hello"
+// sub.offsetFromRoot() = 0
+// sub.parent() = Optional.of(root)
+
+// Nested subSource - offsets are composed
+Source nested = sub.subSource(
+    new CodePointIndex(1),    // Position 1 in sub
+    new CodePointIndex(4)     // Position 4 in sub
+);
+// nested.sourceAsString() = "ell"
+// nested.offsetFromParent() = 1 (relative to sub)
+// nested.offsetFromRoot() = 1 (relative to root)
+// nested.parent() = Optional.of(sub)
+```
+
+**SubSource vs Detached**
+
+SubSource maintains connection to parent:
+```java
+Source root = StringSource.createRootSource("ABCDEFGH");
+
+// SubSource - keeps parent reference and offset
+Source sub = root.subSource(new CodePointIndex(2), new CodePointIndex(6));
+// sub = "CDEF"
+// sub.parent().isPresent() = true
+// sub.offsetFromRoot() = 2
+// Position tracking works back to root
+
+// Detached - becomes independent root
+Source detached = sub.reRoot();
+// detached = "CDEF"  
+// detached.parent().isEmpty() = true
+// detached.offsetFromRoot() = 0
+// Loses connection to original root
+// Useful when you need new coordinate system
+```
+
+**Why SubSource Matters**
+
+SubSource is critical for:
+
+1. **Position Tracking**: Error messages can reference original input
+```java
+Source root = StringSource.createRootSource("var x = 10;");
+Source statement = root.subSource(new CodePointIndex(0), new CodePointIndex(11));
+
+// Parse the statement
+Parsed result = parser.parse(new ParseContext(statement));
+
+if (result.isFailed()) {
+    // Position in statement
+    int localPos = cursor.positionInSub().value();
+    
+    // Position in original file
+    int globalPos = cursor.positionInRoot().value();
+    
+    System.out.printf(
+        "Error at position %d (global: %d) in: %s%n",
+        localPos, globalPos, root.sourceAsString()
+    );
+}
+```
+
+2. **Incremental Parsing**: Parse portions without losing context
+```java
+Source file = StringSource.createRootSource(entireFileContent);
+
+// Parse each function separately but maintain file positions
+List<FunctionToken> functions = new ArrayList<>();
+for (FunctionLocation loc : functionLocations) {
+    Source funcSource = file.subSource(loc.start, loc.end);
+    
+    Parsed result = functionParser.parse(new ParseContext(funcSource));
+    
+    // Token positions reference original file
+    functions.add(result.getRootToken());
+}
+```
+
+3. **Multi-pass Parsing**: Parse recursively while tracking positions
+```java
+// First pass: identify string literals
+Source root = StringSource.createRootSource(code);
+List<Source> stringLiterals = extractStringLiterals(root);
+
+// Second pass: parse each literal with different rules
+for (Source literal : stringLiterals) {
+    // literal maintains position in root
+    Parsed result = stringContentParser.parse(new ParseContext(literal));
+    
+    // Report errors with original file positions
+    if (result.isFailed()) {
+        int line = literal.cursorRange()
+            .startIndexInclusive.lineNumber().value;
+        System.err.printf("Error at line %d in original file%n", line);
+    }
+}
+```
+
+**Source Operations**
+
+```java
+Source source = StringSource.createRootSource("Hello World");
+
+// Create views
+Source peek = source.peek(
+    new CodePointIndex(0),
+    new CodePointLength(5)
+);  // "Hello" (temporary view)
+
+Source sub = source.subSource(
+    new CodePointIndex(6),
+    new CodePointIndex(11)
+);  // "World" (maintains parent)
+
+// Transform (creates new detached source)
+Source upper = source.toUpperCaseAsStringInterface();  // "HELLO WORLD"
+// upper.parent().isEmpty() = true (transformation breaks parent link)
+
+// Re-root with transformation
+Source newRoot = source.reRoot(s -> s.replace("World", "Universe"));
+// newRoot = "Hello Universe"
+// newRoot.isRoot() = true
+// newRoot.offsetFromRoot() = 0
+```
+
+**Source Hierarchy Example**
+
+```java
+// Root: "The quick brown fox jumps"
+Source root = StringSource.createRootSource("The quick brown fox jumps");
+
+// Level 1: "quick brown fox"
+Source level1 = root.subSource(new CodePointIndex(4), new CodePointIndex(19));
+
+// Level 2: "brown"
+Source level2 = level1.subSource(new CodePointIndex(6), new CodePointIndex(11));
+
+// Accessing positions
+System.out.println("Text: " + level2.sourceAsString());               // "brown"
+System.out.println("Parent: " + level2.parent().get().sourceAsString()); // "quick brown fox"
+System.out.println("Offset from parent: " + level2.offsetFromParent());  // 6
+System.out.println("Offset from root: " + level2.offsetFromRoot());      // 10
+
+// Walking up the hierarchy
+Source current = level2;
+while (current.hasParent()) {
+    System.out.println("  " + current.sourceAsString());
+    current = current.parent().get();
+}
+System.out.println("Root: " + current.sourceAsString());
+```
+
+#### 2. CodePointIndex - Unicode-Aware Position Tracking
+
+`CodePointIndex` represents a position in the source as a **Unicode code point offset**, not a character or byte offset. This is crucial for correct handling of:
+- Emoji (😀 = 1 code point, 2 Java chars)
+- Surrogate pairs
+- Multi-byte UTF-8 sequences
+- Combining characters
+
+**Why Code Points Matter**
+
+```java
+String text = "A😀B";  // A, emoji (surrogate pair), B
+
+// Wrong: Using character indices
+text.charAt(0);  // 'A'
+text.charAt(1);  // '\uD83D' (high surrogate - wrong!)
+text.charAt(2);  // '\uDE00' (low surrogate - wrong!)
+text.charAt(3);  // 'B'
+
+// Correct: Using code point indices
+Source source = StringSource.createRootSource(text);
+source.getCodePointAt(new CodePointIndex(0));  // 'A' (65)
+source.getCodePointAt(new CodePointIndex(1));  // '😀' (128512)
+source.getCodePointAt(new CodePointIndex(2));  // 'B' (66)
+
+// SubSource with emoji
+Source emoji = source.subSource(
+    new CodePointIndex(1),
+    new CodePointIndex(2)
+);
+assertEquals("😀", emoji.sourceAsString());
+```
+
+**CodePointIndex Operations**
+
+```java
+CodePointIndex index = new CodePointIndex(10);
+
+// Arithmetic
+CodePointIndex next = index.newWithIncrements();           // 11
+CodePointIndex prev = index.newWithDecrements();           // 9
+CodePointIndex plus5 = index.newWithAdd(5);                // 15
+CodePointIndex minus3 = index.newWithMinus(3);             // 7
+
+// Comparison
+index.eq(new CodePointIndex(10));    // true
+index.lt(new CodePointIndex(15));    // true
+index.ge(new CodePointIndex(5));     // true
+
+// Conversion
+CodePointOffset offset = index.toCodePointOffset();
+CodePointLength length = new CodePointLength(index);
+
+// Value access
+int value = index.value();  // 10
+```
+
+**Related Position Types**
+
+```java
+// CodePointIndex - position in code points (main type)
+CodePointIndex codePointPos = new CodePointIndex(5);
+
+// CodePointOffset - relative offset
+CodePointOffset offset = new CodePointOffset(3);
+CodePointIndex newPos = codePointPos.newWithAdd(offset);
+
+// CodePointLength - length in code points
+CodePointLength length = new CodePointLength(10);
+Source sub = source.peek(codePointPos, length);
+
+// StringIndex - position in Java String (char units)
+// Used internally for String operations
+StringIndex stringPos = source.toStringIndex(codePointPos);
+
+// LineNumber - line number (1-based)
+LineNumber line = source.positionResolver()
+    .lineNumberFrom(codePointPos);
+
+// CodePointIndexInLine - column within line
+CodePointIndexInLine column = source.positionResolver()
+    .codePointIndexInLineFrom(codePointPos);
+```
+
+**Position Tracking Example**
+
+```java
+Source source = StringSource.createRootSource(
+    "line 1\nline 2 with 😀\nline 3"
+);
+
+// Find emoji position
+CodePointIndex emojiPos = new CodePointIndex(18);  // Position of 😀
+
+// Get line and column
+PositionResolver resolver = source.positionResolver();
+LineNumber line = resolver.lineNumberFrom(emojiPos);
+CodePointIndexInLine column = resolver.codePointIndexInLineFrom(emojiPos);
+
+System.out.printf(
+    "Emoji at line %d, column %d%n",
+    line.value,      // 2
+    column.value     // 11
+);
+
+// Convert between coordinate systems
+StringIndex stringIdx = source.toStringIndex(emojiPos);
+CodePointIndex backToCodePoint = source.toCodePointIndex(stringIdx);
+
+// stringIdx may differ from emojiPos value due to surrogates
+// but backToCodePoint == emojiPos
+```
+
+#### 3. CursorRange - Representing Text Spans
+
+`CursorRange` represents a span of text with start (inclusive) and end (exclusive) positions. It's used throughout Unlaxer for:
+- Token ranges
+- Error locations
+- Selection ranges
+- Source boundaries
+
+**Basic CursorRange**
+
+```java
+Source source = StringSource.createRootSource("Hello World");
+
+// Create range for "World"
+CursorRange range = CursorRange.of(
+    new CodePointIndex(6),     // Start (inclusive)
+    new CodePointIndex(11),    // End (exclusive)
+    new CodePointOffset(0),    // Offset from root
+    SourceKind.root,
+    source.positionResolver()
+);
+
+// Access boundaries
+StartInclusiveCursor start = range.startIndexInclusive;
+EndExclusiveCursor end = range.endIndexExclusive;
+
+// Positions
+CodePointIndex startPos = start.position();        // 6
+CodePointIndex endPos = end.position();            // 11
+
+// Line and column information
+LineNumber startLine = start.lineNumber();
+CodePointIndexInLine startCol = start.positionInLine();
+```
+
+**CursorRange for SubSource**
+
+When working with subSources, CursorRange handles both local and global positions:
+
+```java
+Source root = StringSource.createRootSource("0123456789");
+
+// Create subSource "3456"
+Source sub = root.subSource(
+    new CodePointIndex(3),
+    new CodePointIndex(7)
+);
+
+CursorRange subRange = sub.cursorRange();
+
+// Position in root coordinate system
+CodePointIndex posInRoot = subRange.startIndexInclusive.positionInRoot();
+// = 3
+
+// Position in subSource coordinate system  
+CodePointIndex posInSub = subRange.startIndexInclusive.positionInSub();
+// = 0 (subSource starts at its own 0)
+
+// This is how tokens track positions in both systems
+```
+
+**CursorRange Operations**
+
+```java
+Source source = StringSource.createRootSource("ABCDEFGH");
+PositionResolver resolver = source.positionResolver();
+
+CursorRange range1 = CursorRange.of(
+    new CodePointIndex(2),
+    new CodePointIndex(5),
+    CodePointOffset.ZERO,
+    SourceKind.root,
+    resolver
+);  // "CDE"
+
+CursorRange range2 = CursorRange.of(
+    new CodePointIndex(4),
+    new CodePointIndex(7),
+    CodePointOffset.ZERO,
+    SourceKind.root,
+    resolver
+);  // "EFG"
+
+// Position testing
+boolean contains = range1.match(new CodePointIndex(3));  // true
+boolean before = range1.lt(new CodePointIndex(6));       // true
+boolean after = range1.gt(new CodePointIndex(1));        // true
+
+// Range relationships
+RangesRelation rel = range1.relation(range2);
+// Returns: crossed (ranges overlap)
+
+// Equal ranges
+CursorRange range3 = CursorRange.of(
+    new CodePointIndex(2),
+    new CodePointIndex(5),
+    CodePointOffset.ZERO,
+    SourceKind.root,
+    resolver
+);
+range1.relation(range3);  // Returns: equal
+
+// Nested ranges
+CursorRange outer = CursorRange.of(
+    new CodePointIndex(1),
+    new CodePointIndex(7),
+    CodePointOffset.ZERO,
+    SourceKind.root,
+    resolver
+);
+range1.relation(outer);  // Returns: outer (range1 is inside outer)
+```
+
+**Complete Position Tracking Example**
+
+```java
+public class PositionTrackingExample {
+    
+    public static void main(String[] args) {
+        // Original file content
+        String fileContent = """
+            function hello() {
+                print("Hello 😀");
+            }
+            """;
+        
+        Source root = StringSource.createRootSource(fileContent);
+        
+        // Extract function body
+        int bodyStart = fileContent.indexOf("{") + 1;
+        int bodyEnd = fileContent.indexOf("}");
+        
+        Source functionBody = root.subSource(
+            new CodePointIndex(bodyStart),
+            new CodePointIndex(bodyEnd)
+        );
+        
+        System.out.println("Function body: " + functionBody.sourceAsString());
+        System.out.println("Offset from root: " + functionBody.offsetFromRoot());
+        
+        // Parse the body
+        Parser parser = /* ... */;
+        ParseContext context = new ParseContext(functionBody);
+        Parsed result = parser.parse(context);
+        
+        if (result.isSucceeded()) {
+            Token token = result.getRootToken();
+            CursorRange tokenRange = token.getRange();
+            
+            // Positions in function body
+            int localStart = tokenRange.startIndexInclusive.positionInSub().value();
+            
+            // Positions in original file
+            int globalStart = tokenRange.startIndexInclusive.positionInRoot().value();
+            
+            // Line and column in original file
+            LineNumber line = tokenRange.startIndexInclusive.lineNumber();
+            CodePointIndexInLine column = tokenRange.startIndexInclusive.positionInLine();
+            
+            System.out.printf(
+                "Token at local pos %d, global pos %d (line %d, col %d)%n",
+                localStart, globalStart, line.value, column.value
+            );
+            
+            // Extract the token text
+            Source tokenSource = root.subSource(tokenRange);
+            System.out.println("Token text: " + tokenSource.sourceAsString());
+        }
+        
+        context.close();
+    }
+}
+```
+
+**Key Insights**
+
+1. **Source Hierarchy**: SubSources maintain parent relationships, enabling position tracking back to original input
+
+2. **Code Point Indexing**: All positions use Unicode code points, not character or byte indices, ensuring correct handling of emojis and multi-byte characters
+
+3. **Dual Coordinate Systems**: CursorRange supports both:
+   - `positionInSub()`: Position within current source (0-based)
+   - `positionInRoot()`: Position in root source (original coordinates)
+
+4. **Position Composition**: Nested subSources compose offsets:
+   ```
+   root -> sub1 (offset 10) -> sub2 (offset 5)
+   sub2.offsetFromRoot() = 10 + 5 = 15
+   ```
+
+5. **Detached Sources**: When you transform a source (uppercase, replace, etc.), the result is detached from parent, starting a new coordinate system
+
+This architecture enables Unlaxer to:
+- Report errors with precise file positions
+- Parse incrementally while maintaining context
+- Handle Unicode correctly
+- Support nested parsing with position tracking
+- Build IDE features like go-to-definition
+
+#### 4. ParseContext
 
 `ParseContext` is the state object passed through all parsing operations:
 
