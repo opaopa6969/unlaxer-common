@@ -1,589 +1,1069 @@
-# Unlaxer - simple parser combinator that inspired by [RELAX NG](http://relaxng.org/)
---------------
+# Unlaxer
 
+A simple and powerful parser combinator library for Java, inspired by [RELAX NG](http://relaxng.org/).
 
-Unlaxer is a parser combinator written in Java.
-
-* easy to read
-* easy to write and debug with IDE
-* code first. not notation first
-* we love word more than symbol ( 'ZeroOrMore' better than '*' )
-* support Optional,Choice,Interleave,Zero(One)OrMore,Group,Ref and more from [RELAX NG](http://relaxng.org/) vocabulary
-* support inifinite lookahead
-* support backtracking
-* support backwords reference
-* support java base functional parser/token referencer
-* support parsing context into scope tree
-
-## Version
 [![Maven Central](https://img.shields.io/maven-central/v/org.unlaxer/unlaxer-common.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.unlaxer%22%20AND%20a:%22unlaxer-common%22)
 
-## Depenedencies
+## Features
 
-see build.gradle
+- **Easy to Read & Write**: Code-first approach with descriptive names (e.g., `ZeroOrMore` instead of `*`)
+- **IDE-Friendly**: Full Java support with excellent debugging capabilities
+- **Powerful Combinators**: Support for Optional, Choice, Interleave, ZeroOrMore, OneOrMore, Chain, and more from RELAX NG vocabulary
+- **Advanced Parsing**: Infinite lookahead, backtracking, and backward reference support
+- **Flexible Architecture**: Functional parser/token reference with context scope tree
+- **Zero Dependencies**: No third-party libraries required
+- **Rich Debugging**: Comprehensive logging with parse, token, and transaction logs
 
-no third pary library required
+## Quick Start
 
-## Required
+### Installation
 
-* [JavaSDK] - version 8 later for build & execute
-
-## Installation
-
-```sh
-git clone git@bitbucket.org:opaopa6969/unlaxer.git unlaxer
-cd unlaxer
-./gradlew install
-```
-
-## Unit test
-
-```sh
-./gradlew test
-```
-
-
-## Setup for development with Eclipse 
-
-```sh
-./gradlew eclipse
-```
-
-
-this command make eclipse .project file.
-
-after you launched the Eclipse , goto menu
-Menu > File > Import > Existing Projects into workspace > select root folder that contains this project
-and check 'Search for nested projects' and click 'Finish'
-
-## Setup for development with Idea 
-
-```sh
-./gradlew idea
-```
-
-## Brief the sample program
-
-You can run sample program to undestand how to use unlaxer.
-
-Sample programa are stored in src/test/java folder for each project.
-
-example org.unlaxer.elementary.MappedSingleCharacterParserTest.java stored in src/test/java/org.unlaxer.elementary.MappedSingleCharacterParserTest.java
-
-```java
-public class MappedSingleCharacterParserTest extends ParserTestBase {
-
-  @Test
-  public void testExcludes() {
-
-    MappedSingleCharacterParser punctuationParserWithoutParenthesis = 
-      new PunctuationParser().newWithout("()");
-
-    OneOrMore parser = new OneOrMore(punctuationParserWithoutParenthesis);
-
-    testAllMatch(parser, "$%&");
-    testPartialMatch(parser, "$%(&", "$%");
-    testUnMatch(parser, "()");
-  }
-}
-```
-
-this test means
-
-* The parser defined to matched with one or more Punctuation without charactor '(' and ')'
-
-* First test method **testAllMatch(oneOrMore, "$%&");** means parser accepts "$%&" 3 charactors exact match
-
-* Second test method **testPartialMatch(oneOrMore, "$%(&", "$%");** means parser accepts partial of test string. parser dose not match '(' and ')'. cause, parser matched only "$%"
-
-* Third test method **testUnMatch(oneOrMore, "()");** means parser does not match all test string.
-
-After runnning the test. ParserTestBase creates parser log into build/parserTest/org.unlaxer.elementary.MappedSingleCharacterParserTest
-
-```sh
-testExcludes_testAllMatch_(1,L16).combined.log
-testExcludes_testAllMatch_(1,L16).parse.log
-testExcludes_testAllMatch_(1,L16).token.log
-testExcludes_testAllMatch_(1,L16).transaction.log
-testExcludes_testPartialMatch_(2,L17).combined.log
-testExcludes_testPartialMatch_(2,L17).parse.log
-testExcludes_testPartialMatch_(2,L17).token.log
-testExcludes_testPartialMatch_(2,L17).transaction.log
-testExcludes_testUnMatch_(3,L18).combined.log
-testExcludes_testUnMatch_(3,L18).parse.log
-testExcludes_testUnMatch_(3,L18).token.log
-testExcludes_testUnMatch_(3,L18).transaction.log
-```
-try reading and running test program in unlaxer-common/src/test/java
-
-## Usage 
-
-### Setup your project with gradle
-
-* this product already uploaded to maven central
-
-* add dependency to build.gradle
+Add to your `build.gradle`:
 
 ```groovy
-
-project(':application') {
-    dependencies {
-        compile ':unlaxer-common:'
-    }
-}
-
-```
-
-### create Parser
-
-[Usage001_createParserAndParse.java](https://bitbucket.org/opaopa6969/unlaxer/src/HEAD/unlaxer-common/src/test/java/sample/Usage001_createParserAndParse.java?at=master)
-
-Sample parser build as following EBNF grammar.
-
-```
-<Clause> ::= [0-9]+([-+*/][0-9]+)*
-```
-
-```java
-static Parser createDigitsAndOperatorsParser() {
-	//<Clause> ::= [0-9]+([-+*/][0-9]+)*
-	Chain clauseParser = new Chain(
-		new OneOrMore(new DigitParser()),
-		new ZeroOrMore(
-			new Chain(
-				new Choice(
-					new PlusParser(),
-					new MinusParser(),
-					new MultipleParser(),
-					new DivisionParser()
-				),
-				new OneOrMore(new DigitParser())
-			)
-		)
-	);
-	return clauseParser;
-}
-```
-* Chain parser needs all children parsers successfully parsed with ordered.
-* ZeroOrMore parser needs child parser successfully parsed zero or more times.
-* OneOrMore parser needs child parser successfully parsed one or more times.
-* Choice parser needs one child of specified children parsers parse successfully parsed.
-
-### Create ParserContext
-
-```java
-
-ParseContext parseContext = new ParseContext(new StringSource("1+2+3"));
-
-```
-
-* parseContext creates with parse target source.
-* parseContext accepts additional argument as ParseContextEffector that change context value.(describe later)
-* parseContext has execution stack to parsing with backtracking.
-
-### Parse source
-
-```java
-Parsed parsed = parser.parse(parseContext);
-
-```
-* parser parse with source in parseContext
-* parser#parse method return Parsed Object
-
-### How to get parsing result
-
-#### get parsing status
-* status is choice of succeeded, failed, and stopped
-
-```java
-//get parsing status
-System.out.format("parsed status: %s \n" , parsed.status);
-```
-
-got
-
-```sh
-parsed status: succeeded
-```
-
-#### get root token
-* token has matched parser and consumed source string and position.
-* token is sytax tree's node.
-* so, token has children.
-
-```java
-//get rootToken
-System.out.format("parsed Token: %s \n" , parsed.getRootToken());
-```
-
-got
-
-```sh
-parsed Token: '1+2+3' (0 - 5): org.unlaxer.PseudoRootParser
-```
-
-* '1+2+3' means the consumed source string
-* (0 - 5) means the consumed source string position range. 5 is end exclusive index.
-* org.unlaxer.PseudoRootParser means the consumed by parser.
-    * you expected org.unlaxer.PseudoRootParser ? in this case, parse context created with [CreateMetaTokenSprcifier](https://bitbucket.org/opaopa6969/unlaxer/src/HEAD/unlaxer-common/src/main/java/org/unlaxer/CreateMetaTokenSprcifier.java?at=master&fileviewer=file-view-default).createMetaOff
-    * if parse context createMeta mode is off , not create token with [MetaFunctionParser](https://bitbucket.org/opaopa6969/unlaxer/src/HEAD/unlaxer-common/src/main/java/org/unlaxer/MetaFunctionParser.java?at=master)'s subclass.
-    * Chain, OneOrMore, ZeroOrMode, Choice, Optional, is MetaFunctionParser.
-
-### Get syntax tree representation
-
-* for debugging or recognize syntax tree with target source.
-* TokenPrinter is Utility to representation of Token.
-
-```java
-//get tokenTree representation
-System.out.format("parsed TokenTree: %s \n" , TokenPrinter.get(parsed.getRootToken()));
-```
-
-got
-
-```sh
-parsed TokenTree: 
-'1+2+3' : org.unlaxer.PseudoRootParser
- '1' : org.unlaxer.posix.DigitParser
- '+' : org.unlaxer.ascii.PlusParser
- '2' : org.unlaxer.posix.DigitParser
- '+' : org.unlaxer.ascii.PlusParser
- '3' : org.unlaxer.posix.DigitParser
-```
-
-* you are disappointed ? this results seems flat structure. if you expected tree strucre result, show you way to two solutions lator.
-
-### Create Parser with Named Concrete class (solution 1)
-
-* SimpleExpression parser -> Chain(Number,ZeroOrMore(OperatorAndOperand))
-* each parser create with extended [AbstractCollectingParser.java](https://bitbucket.org/opaopa6969/unlaxer/src/HEAD/unlaxer-common/src/main/java/org/unlaxer/combinator/AbstractCollectingParser.java?at=master&fileviewer=file-view-default)
-    * CollectingParser implements Token collect(List<Token> tokens, int position , TokenKind tokenKind)
-    * each Named Concrete consume and create multi token. collecting parser make one token from multiple tokens
-    * see implementation [CollectingParser.java](https://bitbucket.org/opaopa6969/unlaxer/src/HEAD/unlaxer-common/src/main/java/org/unlaxer/CollectingParser.java?at=master&fileviewer=file-view-default)
-    * eg. ParserA := OneOrMore(Digit) , 
-        * ParserA parse '123' -> token('1'),token('2'),token('3')
-        * CollectingParser#collect( token('1'),token('2'),token('3')) -> token('123')
-
-[Usage001_createParserAndParseWithNamedConcrete.java](https://bitbucket.org/opaopa6969/unlaxer/src/HEAD/unlaxer-common/src/test/java/sample/Usage001_createParserAndParseWithNamedConcrete.java?at=master)
-
-```java
-static class SimpleExpression extends LazyChain{
-
-	@Override
-	public List<Parser> getLazyParsers() {
-
-		return new Parsers(
-			new NumberParser(),
-			new ZeroOrMore(
-				new OperatorAndOperandParser()
-			)
-		);
-	}
-}
-
-static class NumberParser extends LazyOneOrMore{
-
-	@Override
-	public Parser getLazyParser() {
-		return new DigitParser();
-	}
-
-	@Override
-	public Optional<Parser> getLazyTerminatorParser() {
-		return Optional.empty();
-	}
-}
-
-static class OperatorParser extends LazyChoice{
-
-	@Override
-	public List<Parser> getLazyParsers() {
-		return new Parsers(
-			new PlusParser(),
-			new MinusParser(),
-			new MultipleParser(),
-			new DivisionParser()
-		);
-	}
-}
-
-static class OperatorAndOperandParser extends LazyChain{
-
-	@Override
-	public List<Parser> getLazyParsers() {
-		return new Parsers(
-			new OperatorParser(),
-			new NumberParser()
-		);
-	}
+dependencies {
+    implementation 'org.unlaxer:unlaxer-common:VERSION'
 }
 ```
 
-parse and then got Tree
+Or `pom.xml`:
 
-```sh
-
-parsed TokenTree:
-'1+2+3' : sample.Usage001_createParserAndParseWithNamedConcrete$SimpleExpression
- '1' : sample.Usage001_createParserAndParseWithNamedConcrete$NumberParser
-  '1' : org.unlaxer.posix.DigitParser
- '+2' : sample.Usage001_createParserAndParseWithNamedConcrete$OperatorAndOperandParser
-  '+' : sample.Usage001_createParserAndParseWithNamedConcrete$OperatorParser
-   '+' : org.unlaxer.ascii.PlusParser
-  '2' : sample.Usage001_createParserAndParseWithNamedConcrete$NumberParser
-   '2' : org.unlaxer.posix.DigitParser
- '+3' : sample.Usage001_createParserAndParseWithNamedConcrete$OperatorAndOperandParser
-  '+' : sample.Usage001_createParserAndParseWithNamedConcrete$OperatorParser
-   '+' : org.unlaxer.ascii.PlusParser
-  '3' : sample.Usage001_createParserAndParseWithNamedConcrete$NumberParser
-   '3' : org.unlaxer.posix.DigitParser
+```xml
+<dependency>
+    <groupId>org.unlaxer</groupId>
+    <artifactId>unlaxer-common</artifactId>
+    <version>VERSION</version>
+</dependency>
 ```
 
-
-### Create ParserContext with create meta specifier (solution 2)
-
-* specify [CreateMetaTokenSprcifier](https://bitbucket.org/opaopa6969/unlaxer/src/HEAD/unlaxer-common/src/main/java/org/unlaxer/CreateMetaTokenSprcifier.java?at=master&fileviewer=file-view-default).createMetaOn when ParseContext instantiate.
+### Basic Example
 
 ```java
+import org.unlaxer.*;
+import org.unlaxer.parser.*;
+import org.unlaxer.parser.combinator.*;
+import org.unlaxer.parser.posix.*;
+import org.unlaxer.context.*;
 
-//create parseContext with createMeta specifier
-ParseContext parseContext = 
-	new ParseContext(
-		new StringSource("1+2+3"),
-		CreateMetaTokenSprcifier.createMetaOn // <- specify createMetaOn
-	);
-
-```
-
-got token tree
-
-```sh
-'1+2+3' : org.unlaxer.combinator.Chain
- '1' : org.unlaxer.combinator.OneOrMore
-  '1' : org.unlaxer.posix.DigitParser
- '+2+3' : org.unlaxer.combinator.ZeroOrMore
-  '+2' : org.unlaxer.combinator.Chain
-   '+' : org.unlaxer.combinator.Choice
-    '+' : org.unlaxer.ascii.PlusParser
-   '2' : org.unlaxer.combinator.OneOrMore
-    '2' : org.unlaxer.posix.DigitParser
-  '+3' : org.unlaxer.combinator.Chain
-   '+' : org.unlaxer.combinator.Choice
-    '+' : org.unlaxer.ascii.PlusParser
-   '3' : org.unlaxer.combinator.OneOrMore
-    '3' : org.unlaxer.posix.DigitPars
-```
-
-### Walking tree
-### Debug
-### Test
-
-## Implementation of fundamentally element
-### Token
-### ParseContext
-### Parser
-### TransactionElement
-### Referencer
-### ScopeTree
-
-## Use Case
-### Chain
-### Choice
-### Optional/OneOrMore/ZeroOrMore/Occurs
-### Non Oredered
-### Named Parser
-### Error Message
-### Suggest
-### Calculator
-### CQL
-### Backward Reference
-### Palindrome
-
-## Sequence Diagram
-
-[parse sammary](https://bitbucket.org/opaopa6969/unlaxer/raw/HEAD/unlaxer-common/doc/parse-sequence.pdf)
-
-## Parsers
-
-### Terminal Symbol Parsers
-
-### PosixParser
-### CombinatorParser
-
-Combinator parser accepts one or more child parser.
-This parser returns parsed result from that aggregates each children's parsed result.
-
-* Choice (org.unlaxer.combinator.Choice)
-    * in RelaxNG, <choice>
-
-Choice is select parser in children at match first.
-
-sample code:
-```java
-Choice digitOrSign = new Choice(
-    Singletons.get(DigitParser.class),
-    Singletons.get(SignParser.class)
+// Define grammar: [0-9]+([-+*/][0-9]+)*
+Parser parser = new Chain(
+    new OneOrMore(DigitParser.class),
+    new ZeroOrMore(
+        new Chain(
+            new Choice(
+                PlusParser.class,
+                MinusParser.class,
+                MultipleParser.class,
+                DivisionParser.class
+            ),
+            new OneOrMore(DigitParser.class)
+        )
+    )
 );
 
-String[] tests={"1","a","-"};
+// Parse input
+ParseContext context = new ParseContext(
+    StringSource.createRootSource("1+2+3")
+);
+Parsed result = parser.parse(context);
 
-StringSource source = new StringSource(sourceString);
+// Check result
+System.out.println("Status: " + result.status); // succeeded
+System.out.println("Token: " + result.getRootToken());
+```
 
-for(String test: tests){
-    try(ParseContext parseContext = new ParseContext(source)){
-    	Parsed parsed = parser.parse(parseContext);
-        System.out.format("%s : match = %s\n" , test , parsed.success);
+## User Guide
+
+### Understanding Parser Combinators
+
+Parser combinators are small parsing functions that can be combined to build complex parsers. Each combinator is a "parser builder" that:
+
+1. Takes simple parsers as input
+2. Combines them according to specific rules
+3. Returns a new, more complex parser
+
+This composability is the key strength of parser combinators.
+
+### Core Combinators
+
+#### Chain - Sequential Matching
+
+`Chain` matches all child parsers in order (similar to concatenation in regex).
+
+```java
+// Matches: "if", whitespace, identifier
+Parser ifStatement = new Chain(
+    IfKeywordParser.class,
+    WhiteSpaceParser.class,
+    IdentifierParser.class
+);
+```
+
+**Grammar notation**: `A B C` or `A , B , C`
+
+#### Choice - Alternative Matching
+
+`Choice` tries each child parser until one succeeds (similar to `|` in regex).
+
+```java
+// Matches: number OR string OR boolean
+Parser literal = new Choice(
+    NumberParser.class,
+    StringParser.class,
+    BooleanParser.class
+);
+```
+
+**Grammar notation**: `A | B | C`
+
+#### ZeroOrMore - Repetition (0+)
+
+`ZeroOrMore` matches the child parser zero or more times (similar to `*` in regex).
+
+```java
+// Matches: "", "a", "aa", "aaa", ...
+Parser manyAs = new ZeroOrMore(CharParser.of('a'));
+```
+
+**Grammar notation**: `A*`
+
+#### OneOrMore - Repetition (1+)
+
+`OneOrMore` matches the child parser one or more times (similar to `+` in regex).
+
+```java
+// Matches: "1", "12", "123", ...
+Parser digits = new OneOrMore(DigitParser.class);
+```
+
+**Grammar notation**: `A+`
+
+#### Optional - Zero or One
+
+`Optional` matches the child parser zero or one time (similar to `?` in regex).
+
+```java
+// Matches: "42" or "-42"
+Parser signedNumber = new Chain(
+    new Optional(MinusParser.class),
+    new OneOrMore(DigitParser.class)
+);
+```
+
+**Grammar notation**: `A?`
+
+#### NonOrdered - Interleaved Matching
+
+`NonOrdered` matches all child parsers but in any order (similar to RELAX NG's `<interleave>`).
+
+```java
+// Matches: "abc", "acb", "bac", "bca", "cab", "cba"
+Parser anyOrder = new NonOrdered(
+    CharParser.of('a'),
+    CharParser.of('b'),
+    CharParser.of('c')
+);
+```
+
+### Terminal Parsers
+
+Terminal parsers match actual characters from the input:
+
+#### Character Class Parsers
+
+```java
+// POSIX character classes
+new DigitParser()        // [0-9]
+new AlphaParser()        // [a-zA-Z]
+new AlnumParser()        // [a-zA-Z0-9]
+new SpaceParser()        // whitespace
+new WordParser()         // [a-zA-Z0-9_]
+
+// ASCII punctuation
+new PlusParser()         // +
+new MinusParser()        // -
+new AsteriskParser()     // *
+new SlashParser()        // /
+```
+
+#### Custom Character Parsers
+
+```java
+// Single character
+new CharParser('x')
+
+// Character range
+new CharParser('a', 'z')
+
+// Multiple characters
+new CharParser("abc")
+
+// Punctuation excluding parentheses
+PunctuationParser p = new PunctuationParser();
+MappedSingleCharacterParser withoutParens = p.newWithout("()");
+```
+
+### Advanced Features
+
+#### Recursive Grammars with Lazy Evaluation
+
+For recursive structures, use lazy evaluation to avoid infinite loops during parser construction:
+
+```java
+// Expression grammar with parentheses
+Parser expr = Parser.get(() -> {
+    Parser term = /* ... */;
+    return new Choice(
+        term,
+        new Chain(
+            new CharParser('('),
+            expr,  // Recursive reference
+            new CharParser(')')
+        )
+    );
+});
+```
+
+#### Named Parsers
+
+Named parsers help identify and reference specific parts of your grammar:
+
+```java
+Parser number = new OneOrMore(DigitParser.class);
+number.setName(new Name("Number"));
+
+// Use in token tree for easier debugging
+```
+
+#### Parse Context Options
+
+```java
+// Enable meta token creation (includes combinator nodes in token tree)
+ParseContext context = new ParseContext(
+    source,
+    CreateMetaTokenSpecifier.createMetaOn
+);
+
+// Disable meta token creation (only terminal parsers in token tree)
+ParseContext context = new ParseContext(
+    source,
+    CreateMetaTokenSpecifier.createMetaOff
+);
+```
+
+### Working with Parse Results
+
+#### Parse Status
+
+```java
+Parsed result = parser.parse(context);
+
+// Check status
+if (result.status == Parsed.Status.succeeded) {
+    // Success!
+}
+else if (result.status == Parsed.Status.failed) {
+    // Parse failed
+}
+else if (result.status == Parsed.Status.stopped) {
+    // Parse stopped (e.g., error message parser matched)
+}
+```
+
+#### Token Tree
+
+The result contains a syntax tree represented as tokens:
+
+```java
+Token root = result.getRootToken();
+
+// Token properties
+String text = root.getConsumedString();  // Matched text
+int start = root.getRange().start;       // Start position
+int end = root.getRange().end;           // End position (exclusive)
+Parser parser = root.getParser();        // Parser that created this token
+
+// Children
+List<Token> children = root.getChildren();
+```
+
+#### Pretty Printing
+
+```java
+// Print token tree
+System.out.println(TokenPrinter.get(result.getRootToken()));
+
+// Example output:
+// '1+2+3' : org.unlaxer.combinator.Chain
+//  '1' : org.unlaxer.combinator.OneOrMore
+//   '1' : org.unlaxer.posix.DigitParser
+//  '+2+3' : org.unlaxer.combinator.ZeroOrMore
+//   '+2' : org.unlaxer.combinator.Chain
+//    '+' : org.unlaxer.ascii.PlusParser
+//    '2' : org.unlaxer.combinator.OneOrMore
+//     '2' : org.unlaxer.posix.DigitParser
+```
+
+### Complete Example: Arithmetic Expression Parser
+
+```java
+import org.unlaxer.*;
+import org.unlaxer.parser.*;
+import org.unlaxer.parser.combinator.*;
+import org.unlaxer.parser.posix.*;
+import org.unlaxer.parser.ascii.*;
+import org.unlaxer.context.*;
+import java.util.function.Supplier;
+
+public class Calculator {
+    
+    // Grammar:
+    // expr   = term (('+' | '-') term)*
+    // term   = factor (('*' | '/') factor)*
+    // factor = number | '(' expr ')'
+    
+    public static Parser createParser() {
+        Supplier<Parser> exprSupplier = () -> {
+            Parser factor = new Choice(
+                new OneOrMore(DigitParser.class),
+                new Chain(
+                    CharParser.of('('),
+                    Parser.get(exprSupplier),
+                    CharParser.of(')')
+                )
+            );
+            
+            Parser term = new Chain(
+                factor,
+                new ZeroOrMore(
+                    new Chain(
+                        new Choice(
+                            MultipleParser.class,
+                            DivisionParser.class
+                        ),
+                        factor
+                    )
+                )
+            );
+            
+            Parser expr = new Chain(
+                term,
+                new ZeroOrMore(
+                    new Chain(
+                        new Choice(
+                            PlusParser.class,
+                            MinusParser.class
+                        ),
+                        term
+                    )
+                )
+            );
+            
+            return expr;
+        };
+        
+        return Parser.get(exprSupplier);
+    }
+    
+    public static void main(String[] args) {
+        Parser parser = createParser();
+        
+        String input = "1+2*(3-4)";
+        ParseContext context = new ParseContext(
+            StringSource.createRootSource(input)
+        );
+        
+        Parsed result = parser.parse(context);
+        
+        if (result.isSucceeded()) {
+            System.out.println("Parse succeeded!");
+            System.out.println(TokenPrinter.get(result.getRootToken()));
+        } else {
+            System.out.println("Parse failed: " + result.getMessage());
+        }
+        
+        context.close();
     }
 }
 ```
-results:
-```terminal
-1 : match = true
-a : match = true
-- : match = false
+
+## Internal Architecture
+
+Understanding the internal architecture is essential for creating custom parser combinators or extending the library.
+
+### Core Concepts
+
+#### 1. Source
+
+`Source` represents the input string with position tracking:
+
+```java
+public interface Source {
+    CodePointString getCodePointString();
+    PositionResolver positionResolver();
+    // ... methods for substring, position conversion
+}
 ```
 
-* Chain (org.unlaxer.combinator.Chain)
-    * in RelaxNG, <group>
+Key points:
+- Uses code points (not char indices) for proper Unicode support
+- Tracks line numbers and column positions
+- Immutable - operations return new Source instances
 
-* NonOrderd (org.unlaxer.combinator.NOnOrdered)
-    * in RelaxNG, <interleave>
+#### 2. ParseContext
 
+`ParseContext` is the state object passed through all parsing operations:
 
+```java
+public class ParseContext {
+    public final Source source;
+    final Deque<TransactionElement> tokenStack;
+    Map<ChoiceInterface, Parser> chosenParserByChoice;
+    // ... other state
+}
+```
 
+**Key responsibilities**:
+- **Source management**: Holds the input string
+- **Position tracking**: Current parsing position via cursor
+- **Backtracking support**: Transaction stack for rollback
+- **Scope management**: Parser-specific and global scope trees
+- **Choice tracking**: Remembers which alternative was chosen
 
+#### 3. Parser Interface
 
-## Samples
+The core interface all parsers must implement:
 
-# Tasks
+```java
+public interface Parser {
+    Parsed parse(ParseContext parseContext, TokenKind tokenKind, boolean invertMatch);
+    
+    default Parsed parse(ParseContext parseContext) {
+        return parse(parseContext, getTokenKind(), false);
+    }
+}
+```
 
-## TODO
-* remove invertMach in Parsed parse(ParseContext parseContext , TokenKind tokenKind ,boolean invertMatch); method
-* NotASTNode recursive mode
-* parser generator with CodeModel
-* Parser interface implementation as trait
-* add terminator information with committed and rollbacked when using printer
-* implement ParserListener log outputter
-* EBN-> parser generator
-    * thinking about left recursion problem.
-* Name test
-* group + group reference
-    * Reference Specifier
-        * NameBase (css's ID)
-        * TagBase (css's class)
-        * PathBase (css selector or like xpath)
-        * addressing specifier + predicator ?
-* NOP parser (for align depth in parser tree)
-* Lexer & Parser Mode (now parser only mode)
-    * CamelCase Tokenizer
-    * CharactorClass change point detecting tokenizer
-* multi line mode (multi paser instance mode. excution in parallel)
-* AnnotatedAbstractCollectingparser 
-    * eg. parser = parser("(") + ValueParser + parser("("), <- how to reference valueParser ? <-with scopeTree ?
-* PEG-> parser generator
-* parser -> graphical diagram
-* make new grammar notation language.
-* representate about matchOnly with TokenPrinter
-* thinking about position. consumed and matched
-* add ParenthesisParser test case
-    * ((a),(b)) <- nested parenthesis
-    * (PuncuationParser) <- Punctuation contains '('and')'
-        * how to excludes '(' and ')' with PuncuationParser when exclosure is ParenthesisParser
-* add ErrorMessage to Parsed
-* add stop flag to Parsed
-    * when ErrorMessage added and source until all consumed, parser try consume remain source. it's unexpected.
-* draw diagram about createMetaToken and commit
-* the Source at part of Parser interface , change to TransactionaSource extends Transaction , Source
-* thinking about CollectiongParser and SingleChildParser. SingleChildParser has not collect(). to generaize collect child
-* thinking about occurs specifier needed at case grammar interleave(optional(parser),optional(parser)) or chain(optional(parser),optional(parser)), no inner parser matched.
-* thinking about RELAXNG's grammar combine.
-* test case to show difference regular expression and unlaxer. -> https://bitbucket.org/opaopa6969/calcsample/src/802d2ec3ad4e79b53b74d0e801ef7beedd90da6e/src/test/java/com/daredayo/app/Test.java?at=master&fileviewer=file-view-default
-* support token printer following mode (https://github.com/nikomatsakis/lalrpop/blob/master/doc/tutorial.md)
-(  (  1  2  3  )  )
-|  |  |     |  |  |
-|  |  +-Num-+  |  |
-|  |     |     |  |
-|  |   Term    |  |
-|  |     |     |  |
-|  +---Term----+  |
-|        |        |
-+------Term-------+
+**Key points**:
+- Single method: `parse(ParseContext, TokenKind, boolean)`
+- Returns `Parsed` object with status and token
+- Stateless: all state is in `ParseContext`
+- Can be reused across multiple parse operations
 
-## Bug
+#### 4. Parsed Result
 
-* trim unnecessary double '/' when printing parser path
+```java
+public class Parsed {
+    public enum Status { succeeded, stopped, failed }
+    
+    public Status status;
+    private Token token;
+    private TokenList originalTokens;
+}
+```
 
-## Implemented
-* prune syntax tree to get ast
-* ScopeTree
-    * create scopeTree gernerate after syntaxTree generated ?
-* group + group reference
-    * MatchedTokenParser(Reference) -> match with immediate value as token that matched Parser
-        * '<'Parser1=alphabet*'>''<'ImmediateMatcher(Parser1)'>'
-        * <abc><abc> -> match
-        * <abc><az> ->  not match
-* javadoc language set to english
-* Syntax tree reducer(eg . cut filter MetaFunctionParser)
-* SuggestableParser
-    * base implementation is same about ErrorMessageParser. SuggestableParser make Suggests from ParentParser implemented Suggestable
-    * Suggestable has following method-> List<Suggest> suggestWith(characte)
-    * thinking about runtime suggest.(far successor phase) eg. int a = math.<suggest methods>
-* thinking about parent parser for TerminatorParser in Occurs.
-* ChainTest activate ignored test 
-* slice
-    * slice(MatchedTokenParser,specifier(start:end)) or slice(MultiChildrenParse,specifier(start:end))
-        * ABCD[0:-1] =ABC
-        * ABCD[1:] =BCD
-        * ABCD[:-2] =AB
-        *
-* Token stores consumed and matched each or Token stores TokenKind(matchOnly or consumed)
-* ReverseParser
-* FlattenParser
-    * A(B,C,D) : Flatten(A) -> (B,C,D)
+**Fields**:
+- `status`: Parse outcome (succeeded/stopped/failed)
+- `token`: Root token of matched subtree (if successful)
+- `originalTokens`: All tokens created during parsing
 
-* group + group reference
-    * Reference(Predicete<Parser>) -> search ParserTree in statically
-        * '<'Parser1=alphabet+'>''<'Reference(Parser1)'>'
-        * <abc><abc> -> match
-        * <abc><de> -> match
-        * <abc><12> -> not match
-        * <1><1> ->  not match
-        * <1><az> ->  not match
-    * ReferenceMatched(Predicete<Parser>) -> search TokenTree in dynamically.(macthed parser only) <- 
-        * '<'Parser1=alphabet+'>''<'ReferenceMatched(Parser1)'>'
-        * <abc><abc> -> match
-        * <abc><de> -> match
-        * <1><1> ->  not match
-        * <1><az> ->  not match
-        *
-        * namedChoice<Parser1=alphabet+,Parser2=numeric+,Praser3=puncture+>'-'Reference(namedChoice)
-        * abc-kgz -> match
-        * 123-653 -> match
-        * $#"-)%& -> match
-        * abc-458 -> not match
-        * 456-kgz -> not match
-        * $$$-&1z -> not match
-            * draw sequence diagram how to retrieve matched choosable
-        *
-        * namedNonOrder<Parser1=alphabet+,Parser2=numeric+,Praser3=puncture+>'-'Reference(namedNonOrder)
-        * 1#a-3%b ->match
-        * az12&#a-b%b ->match
-        * 12#-35% ->not match
+#### 5. Token (Syntax Tree Node)
 
-## Rejected
-* Indicate rootParser when parser.pase(parseContext).
-    * indicate when construct parser manually
+```java
+public class Token {
+    private final Parser parser;
+    private final Range range;
+    private final List<Token> children;
+}
+```
 
-## thought about
-* Parse successfully is valid ? when ErrorMessageParser Matched
-    * if parsed.success == false then might to rollback. -> parsed.sucess = true is valid.
+**Key aspects**:
+- Represents a matched portion of input
+- Forms tree structure via children
+- Links to parser that created it
+- Contains position range in source
 
-----
+#### 6. Transaction Stack
 
-License
-----
+The transaction stack enables backtracking:
 
-MIT
+```java
+Deque<TransactionElement> tokenStack;
 
-  [JavaSDK]: http://java.com/ja/
-  [gradle]: http://www.gradle.org/
+// Begin transaction
+TransactionElement element = new TransactionElement(cursor);
+tokenStack.push(element);
+
+// On success - commit
+tokenStack.pop();
+// Tokens are kept, cursor advances
+
+// On failure - rollback
+tokenStack.pop();
+// Tokens discarded, cursor restored
+```
+
+### How Parsing Works
+
+#### Flow Diagram
+
+```
+User Code
+    ↓
+parser.parse(parseContext)
+    ↓
+Parser.parse() method
+    ↓
+Check cursor position
+    ↓
+┌─────────────────────────┐
+│  Begin Transaction      │
+│  (push to stack)        │
+└─────────────────────────┘
+    ↓
+Try to match input
+    ↓
+    ├─── Success ─────────┐
+    │                     ↓
+    │              Create Token
+    │                     ↓
+    │              Advance Cursor
+    │                     ↓
+    │              ┌──────────────────┐
+    │              │ Commit           │
+    │              │ (pop stack)      │
+    │              └──────────────────┘
+    │                     ↓
+    │              Return Parsed{succeeded, token}
+    │
+    └─── Failure ─────────┐
+                          ↓
+                   ┌──────────────────┐
+                   │ Rollback         │
+                   │ (pop stack,      │
+                   │  restore cursor) │
+                   └──────────────────┘
+                          ↓
+                   Return Parsed{failed}
+```
+
+### Implementing Custom Combinators
+
+#### Pattern 1: Terminal Parser (Leaf Node)
+
+Terminal parsers match actual characters from input:
+
+```java
+public class MyCharParser implements Parser {
+    private final char expected;
+    
+    public MyCharParser(char expected) {
+        this.expected = expected;
+    }
+    
+    @Override
+    public Parsed parse(ParseContext context, TokenKind tokenKind, boolean invertMatch) {
+        // Get current cursor
+        TransactionElement transaction = context.getTokenStack().peek();
+        ParserCursor cursor = transaction.getCursor();
+        
+        // Check if at end
+        if (cursor.isEndOfSource()) {
+            return Parsed.FAILED;
+        }
+        
+        // Get current character
+        CodePointString str = context.source.getCodePointString();
+        int codePoint = str.getCodePointAt(cursor.getCodePointIndex());
+        
+        // Check match
+        if (codePoint == expected) {
+            // Create token for matched character
+            Range range = new Range(
+                cursor.getCodePointIndex(),
+                cursor.getCodePointIndex().plus(1)
+            );
+            Token token = new Token(this, range, context.source);
+            
+            // Advance cursor
+            transaction.setCursor(cursor.advance(1));
+            
+            return new Parsed(token, Parsed.Status.succeeded);
+        } else {
+            return Parsed.FAILED;
+        }
+    }
+}
+```
+
+**Key steps**:
+1. Get cursor from transaction stack
+2. Check if we're at end of input
+3. Get current character/substring
+4. Compare with expected value
+5. On match: create token, advance cursor, return success
+6. On mismatch: return failure (cursor unchanged)
+
+#### Pattern 2: Sequence Combinator
+
+Matches child parsers sequentially:
+
+```java
+public class MyChain implements Parser {
+    private final List<Parser> children;
+    
+    public MyChain(Parser... children) {
+        this.children = Arrays.asList(children);
+    }
+    
+    @Override
+    public Parsed parse(ParseContext context, TokenKind tokenKind, boolean invertMatch) {
+        TransactionElement transaction = context.getTokenStack().peek();
+        ParserCursor startCursor = transaction.getCursor();
+        
+        List<Token> childTokens = new ArrayList<>();
+        
+        // Try to match each child in order
+        for (Parser child : children) {
+            Parsed childParsed = child.parse(context);
+            
+            if (childParsed.isFailed()) {
+                // Restore cursor and fail
+                transaction.setCursor(startCursor);
+                return Parsed.FAILED;
+            }
+            
+            childTokens.add(childParsed.getRootToken());
+        }
+        
+        // All children matched - create parent token
+        ParserCursor endCursor = transaction.getCursor();
+        Range range = new Range(
+            startCursor.getCodePointIndex(),
+            endCursor.getCodePointIndex()
+        );
+        Token token = new Token(this, range, context.source, childTokens);
+        
+        return new Parsed(token, Parsed.Status.succeeded);
+    }
+}
+```
+
+**Key steps**:
+1. Remember starting cursor
+2. Try to match each child parser in order
+3. On any failure: restore cursor and return failure
+4. On all success: create parent token with all child tokens
+5. Return success with parent token
+
+**Important**: Cursor is automatically advanced by child parsers, so we don't need to manually advance it.
+
+#### Pattern 3: Choice Combinator
+
+Tries alternatives until one succeeds:
+
+```java
+public class MyChoice implements Parser {
+    private final List<Parser> alternatives;
+    
+    public MyChoice(Parser... alternatives) {
+        this.alternatives = Arrays.asList(alternatives);
+    }
+    
+    @Override
+    public Parsed parse(ParseContext context, TokenKind tokenKind, boolean invertMatch) {
+        TransactionElement transaction = context.getTokenStack().peek();
+        ParserCursor startCursor = transaction.getCursor();
+        
+        // Try each alternative
+        for (Parser alternative : alternatives) {
+            Parsed parsed = alternative.parse(context);
+            
+            if (parsed.isSucceeded()) {
+                // First success wins
+                return parsed;
+            }
+            
+            // Restore cursor for next attempt
+            transaction.setCursor(startCursor);
+        }
+        
+        // All alternatives failed
+        return Parsed.FAILED;
+    }
+}
+```
+
+**Key steps**:
+1. Save starting cursor
+2. Try each alternative parser
+3. On first success: return that result immediately
+4. On failure: restore cursor and try next alternative
+5. If all fail: return failure
+
+**Critical**: Always restore cursor between attempts! This enables backtracking.
+
+#### Pattern 4: Repetition Combinator
+
+Matches a parser multiple times:
+
+```java
+public class MyZeroOrMore implements Parser {
+    private final Parser child;
+    
+    public MyZeroOrMore(Parser child) {
+        this.child = child;
+    }
+    
+    @Override
+    public Parsed parse(ParseContext context, TokenKind tokenKind, boolean invertMatch) {
+        TransactionElement transaction = context.getTokenStack().peek();
+        ParserCursor startCursor = transaction.getCursor();
+        
+        List<Token> matchedTokens = new ArrayList<>();
+        
+        // Keep matching until failure
+        while (true) {
+            ParserCursor beforeAttempt = transaction.getCursor();
+            Parsed parsed = child.parse(context);
+            
+            if (parsed.isFailed()) {
+                // Restore cursor after failed attempt
+                transaction.setCursor(beforeAttempt);
+                break;
+            }
+            
+            matchedTokens.add(parsed.getRootToken());
+            
+            // Infinite loop detection
+            ParserCursor afterAttempt = transaction.getCursor();
+            if (afterAttempt.equals(beforeAttempt)) {
+                // Child matched empty string - stop to avoid infinite loop
+                break;
+            }
+        }
+        
+        // Create token even if zero matches
+        Range range = new Range(
+            startCursor.getCodePointIndex(),
+            transaction.getCursor().getCodePointIndex()
+        );
+        Token token = new Token(this, range, context.source, matchedTokens);
+        
+        return new Parsed(token, Parsed.Status.succeeded);
+    }
+}
+```
+
+**Key steps**:
+1. Loop trying to match child parser
+2. On each success: collect token and continue
+3. On failure: restore cursor and break loop
+4. Always return success (even with zero matches)
+5. Infinite loop detection: break if cursor doesn't advance
+
+### Meta Tokens vs Terminal Tokens
+
+Unlaxer supports two modes controlled by `CreateMetaTokenSpecifier`:
+
+#### createMetaOff (Compact Tree)
+
+Only terminal parsers create tokens:
+
+```
+Input: "1+2"
+
+Token Tree:
+'1+2'
+ '1' : DigitParser
+ '+' : PlusParser
+ '2' : DigitParser
+```
+
+**Use case**: When you only care about terminals (lexical tokens)
+
+#### createMetaOn (Full Tree)
+
+All parsers create tokens including combinators:
+
+```
+Input: "1+2"
+
+Token Tree:
+'1+2' : Chain
+ '1' : OneOrMore
+  '1' : DigitParser
+ '+' : Choice
+  '+' : PlusParser
+ '2' : OneOrMore
+  '2' : DigitParser
+```
+
+**Use case**: When you need full structural information for AST building
+
+### Advanced: Transaction Management
+
+The transaction stack is key to backtracking:
+
+```java
+// Unlaxer manages transactions automatically, but understanding helps:
+
+// 1. Parser starts
+Deque<TransactionElement> stack = context.getTokenStack();
+TransactionElement current = stack.peek();
+ParserCursor savedCursor = current.getCursor();
+
+// 2. Try parsing
+Parsed result = childParser.parse(context);
+
+// 3a. On success - cursor is already advanced by child
+// Just use the result
+
+// 3b. On failure - restore cursor
+if (result.isFailed()) {
+    current.setCursor(savedCursor);
+}
+```
+
+**Transaction guarantees**:
+- Failed parsers never advance cursor
+- Successful parsers always advance cursor
+- Parent parsers can rely on cursor position after child parse
+
+### Debugging Techniques
+
+#### Enable Parse Logging
+
+```java
+ParseContext context = new ParseContext(
+    source,
+    ParserDebugSpecifier.debug,
+    TransactionDebugSpecifier.debug
+);
+
+// Generates detailed logs:
+// - parse.log: Parser invocations and results
+// - transaction.log: Transaction push/pop operations
+// - token.log: Token creation
+// - combined.log: All above combined
+```
+
+#### Custom Parser Listeners
+
+```java
+public class MyListener implements ParserListener {
+    @Override
+    public void onBefore(Parser parser, ParseContext context) {
+        System.out.println("Trying: " + parser.getClass().getSimpleName());
+    }
+    
+    @Override
+    public void onAfter(Parser parser, ParseContext context, Parsed result) {
+        System.out.println("Result: " + result.status);
+    }
+}
+
+// Register listener
+context.getParserListenerByName().put(
+    new Name("MyListener"),
+    new MyListener()
+);
+```
+
+## Comparison with Other Parser Combinators
+
+### vs. Parser Combinators in Other Languages
+
+#### Haskell Parsec / Megaparsec
+
+**Similarities**:
+- Monad-based composition (via method chaining in Java)
+- Backtracking support
+- Error reporting
+
+**Differences**:
+- Unlaxer: Object-oriented, class-based parsers
+- Parsec: Functional, higher-order functions
+- Unlaxer: Explicit transaction stack
+- Parsec: Implicit via State monad
+
+#### Scala Parser Combinators
+
+**Similarities**:
+- Operator-based composition (`~`, `|`)
+- Rich combinator library
+
+**Differences**:
+- Unlaxer: Named methods (`Chain`, `Choice`)
+- Scala: Symbolic operators (`~`, `|`, `~>`)
+- Unlaxer: Full parse tree by default
+- Scala: Can discard intermediate results
+
+#### JavaScript/TypeScript Parsimmon / Arcsecond
+
+**Similarities**:
+- Fluent API for chaining
+- `.map()` for transformation
+
+**Differences**:
+- Unlaxer: Stateful ParseContext
+- JS libs: Stateless parsers
+- Unlaxer: Java's static typing
+- JS libs: Dynamic typing (or TypeScript)
+
+### vs. Parser Generators (ANTLR, Bison, etc.)
+
+**Parser Combinator Advantages** (Unlaxer):
+- No separate grammar file needed
+- Grammar is executable Java code
+- Full IDE support (autocomplete, refactoring, debugging)
+- Can use Java logic in grammar
+- Easy to extend with custom parsers
+
+**Parser Generator Advantages**:
+- Better error messages out-of-box
+- More efficient (typically LR/LALR)
+- Grammar as documentation
+- Better for large, complex grammars
+
+**When to use Unlaxer**:
+- Embedded DSLs
+- Small to medium grammars
+- Prototyping
+- When you need tight integration with Java code
+- When IDE support for grammar is important
+
+**When to use parser generators**:
+- Large, complex grammars
+- Need maximum performance
+- Standard languages (SQL, JavaScript, etc.)
+- When separate grammar documentation is desired
+
+### Unlaxer's Unique Features
+
+1. **RELAX NG-inspired vocabulary**: Familiar to XML developers
+2. **Transaction-based backtracking**: Explicit and traceable
+3. **Scope tree**: Parser-specific context for complex grammars
+4. **Backward reference**: Support for context-dependent parsing
+5. **Meta token control**: Choose between compact and full trees
+6. **Comprehensive logging**: Detailed trace of parsing process
+
+## Best Practices
+
+### 1. Use Singleton Parsers for Terminals
+
+```java
+// Good - reuses instances
+Parser digit = Parser.get(DigitParser.class);
+
+// Less efficient - creates new instance each time
+Parser digit = new DigitParser();
+```
+
+### 2. Named Parsers for Complex Grammars
+
+```java
+Parser ifStmt = new Chain(/* ... */);
+ifStmt.setName(new Name("IfStatement"));
+
+// Easier to identify in token tree and error messages
+```
+
+### 3. Lazy Evaluation for Recursion
+
+```java
+// Always use lazy evaluation for recursive grammars
+Supplier<Parser> exprSupplier = () -> {
+    return new Choice(
+        term,
+        new Chain(lparen, Parser.get(exprSupplier), rparen)
+    );
+};
+Parser expr = Parser.get(exprSupplier);
+```
+
+### 4. Choose Appropriate createMeta Mode
+
+```java
+// For lexing/tokenization - use createMetaOff
+ParseContext lexContext = new ParseContext(
+    source,
+    CreateMetaTokenSpecifier.createMetaOff
+);
+
+// For AST building - use createMetaOn
+ParseContext astContext = new ParseContext(
+    source,
+    CreateMetaTokenSpecifier.createMetaOn
+);
+```
+
+### 5. Test Incrementally
+
+```java
+// Test each level of grammar separately
+@Test
+public void testTerm() {
+    Parser term = createTermParser();
+    // Test term in isolation
+}
+
+@Test
+public void testExpression() {
+    Parser expr = createExpressionParser();
+    // Test full expression
+}
+```
+
+## Requirements
+
+- Java 17 or later
+
+## Building
+
+```bash
+./mvnw compile
+```
+
+## Testing
+
+```bash
+./mvnw test
+```
+
+## License
+
+MIT License
+
+Copyright (c) 2025
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Resources
+
+- [Maven Central Repository](https://search.maven.org/search?q=g:org.unlaxer)
+- [RELAX NG Specification](http://relaxng.org/)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+## Author
+
+Created with inspiration from RELAX NG's elegant schema language.
