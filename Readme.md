@@ -1376,7 +1376,745 @@ public class TermParser extends Chain
 
 This ensures multiplication binds tighter than addition in the resulting AST.
 
-## IDE Integration and Language Server Protocol (LSP)
+## Scope Tree: Context-Dependent Parsing
+
+The Scope Tree feature allows parsers to store and retrieve contextual information during parsing. This is essential for context-dependent languages and advanced parsing scenarios.
+
+### Understanding Scope Trees
+
+Unlaxer provides two types of scopes:
+
+1. **Parser-Scoped Storage**: Data associated with specific parser instances
+2. **Global Scope**: Data shared across all parsers in a parse session
+
+Both are accessible through the `ParseContext`.
+
+### Basic Scope Tree Operations
+
+```java
+// During parsing, you can store and retrieve data
+ParseContext context = new ParseContext(source);
+
+// Store data associated with a parser
+Parser myParser = /* ... */;
+context.put(myParser, "some data");
+
+// Retrieve data
+Optional<String> data = context.get(myParser, String.class);
+
+// Store with named keys
+Name variableName = Name.of("myVariable");
+context.put(myParser, variableName, "value");
+Optional<String> value = context.get(myParser, variableName, String.class);
+
+// Global scope (not tied to a specific parser)
+context.put(Name.of("globalVar"), "global value");
+Optional<String> globalValue = context.get(Name.of("globalVar"), String.class);
+```
+
+### Use Case 1: Variable Declaration and Reference
+
+Track variable declarations and validate references:
+
+```java
+public class VariableDeclarationParser extends Chain {
+    
+    public static final Name DECLARED_VARIABLES = Name.of("declaredVars");
+    
+    public VariableDeclarationParser() {
+        super(
+            Parser.get(TypeParser.class),
+            Parser.get(IdentifierParser.class),
+            Parser.get(SemicolonParser.class)
+        );
+    }
+    
+    @Override
+    public Parsed parse(ParseContext context, TokenKind tokenKind, boolean invertMatch) {
+        Parsed result = super.parse(context, tokenKind, invertMatch);
+        
+        if (result.isSucceeded()) {
+            Token root = result.getRootToken();
+            Token identifier = root.getChildren().get(1);
+            String varName = identifier.getConsumedString();
+            
+            // Store in global scope
+            Set<String> declaredVars = context.get(DECLARED_VARIABLES, Set.class)
+                .orElse(new HashSet<>());
+            declaredVars.add(varName);
+            context.put(DECLARED_VARIABLES, declaredVars);
+        }
+        
+        return result;
+    }
+}
+
+public class VariableReferenceParser extends IdentifierParser {
+    
+    @Override
+    public Parsed parse(ParseContext context, TokenKind tokenKind, boolean invertMatch) {
+        Parsed result = super.parse(context, tokenKind, invertMatch);
+        
+        if (result.isSucceeded()) {
+            String varName = result.getRootToken().getConsumedString();
+            
+            // Check if variable was declared
+            Set<String> declaredVars = context.get(
+                VariableDeclarationParser.DECLARED_VARIABLES, 
+                Set.class
+            ).orElse(Collections.emptySet());
+            
+            if (!declaredVars.contains(varName)) {
+                // Variable not declared - could return error or warning
+                System.err.println("Undeclared variable: " + varName);
+            }
+        }
+        
+        return result;
+    }
+}
+```
+
+### Use Case 2: Nested Scope Management
+
+Track scope levels for languages with block scope:
+
+```java
+public class BlockParser extends LazyChain {
+    
+    public static final Name SCOPE_LEVEL = Name.of("scopeLevel");
+    public static final Name SCOPE_VARIABLES = Name.of("scopeVariables");
+    
+    @Override
+    public Parsers getLazyParsers() {
+        return new Parsers(
+            Parser.get(LBraceParser.class),
+            Parser.get(StatementsParser.class),
+            Parser.get(RBraceParser.class)
+        );
+    }
+    
+    @Override
+    public Parsed parse(ParseContext context, TokenKind tokenKind, boolean invertMatch) {
+        // Enter new scope
+        int currentLevel = context.get(SCOPE_LEVEL, Integer.class).orElse(0);
+        context.put(SCOPE_LEVEL, currentLevel + 1);
+        
+        // Create new variable map for this scope
+        Map<String, Token> scopeVars = new HashMap<>();
+        context.put(this, SCOPE_VARIABLES, scopeVars);
+        
+        Parsed result = super.parse(context, tokenKind, invertMatch);
+        
+        // Exit scope
+        context.put(SCOPE_LEVEL, currentLevel);
+        
+        return result;
+    }
+}
+```
+
+### Use Case 3: Symbol Table Construction
+
+Build a complete symbol table during parsing:
+
+```java
+public class SymbolTableBuilder {
+    
+    public static class Symbol {
+        String name;
+        String type;
+        int scopeLevel;
+        Token declarationToken;
+        
+        public Symbol(String name, String type, int scopeLevel, Token token) {
+            this.name = name;
+            this.type = type;
+            this.scopeLevel = scopeLevel;
+            this.declarationToken = token;
+        }
+    }
+    
+    public static final Name SYMBOL_TABLE = Name.of("symbolTable");
+    
+    public static void addSymbol(ParseContext context, Symbol symbol) {
+        Map<String, Symbol> table = context.get(SYMBOL_TABLE, Map.class)
+            .orElse(new HashMap<>());
+        table.put(symbol.name, symbol);
+        context.put(SYMBOL_TABLE, table);
+    }
+    
+    public static Optional<Symbol> lookupSymbol(ParseContext context, String name) {
+        Map<String, Symbol> table = context.get(SYMBOL_TABLE, Map.class)
+            .orElse(Collections.emptyMap());
+        return Optional.ofNullable(table.get(name));
+    }
+}
+
+public class FunctionDeclarationParser extends Chain {
+    @Override
+    public Parsed parse(ParseContext context, TokenKind tokenKind, boolean invertMatch) {
+        Parsed result = super.parse(context, tokenKind, invertMatch);
+        
+        if (result.isSucceeded()) {
+            Token root = result.getRootToken();
+            String functionName = extractFunctionName(root);
+            String returnType = extractReturnType(root);
+            int scopeLevel = context.get(BlockParser.SCOPE_LEVEL, Integer.class)
+                .orElse(0);
+            
+            Symbol symbol = new Symbol(functionName, returnType, scopeLevel, root);
+            SymbolTableBuilder.addSymbol(context, symbol);
+        }
+        
+        return result;
+    }
+}
+```
+
+### Scope Tree Best Practices
+
+1. **Use Named Keys**: Always use `Name.of()` for better type safety and clarity
+2. **Clean Up**: Remove scope data when exiting scopes to prevent memory leaks
+3. **Type Safety**: Use generic methods with class parameters for type-safe retrieval
+4. **Document Scope Keys**: Use static constants for scope keys
+5. **Hierarchical Scopes**: Use parser-specific scopes for hierarchical data
+
+## Backward Reference: Matching Previous Tokens
+
+Backward reference allows you to match against tokens that were parsed earlier in the document. This is crucial for languages with paired constructs like XML tags or pattern matching.
+
+### MatchedTokenParser
+
+The `MatchedTokenParser` searches for previously matched tokens and validates against them:
+
+```java
+public class MatchedTokenParser extends AbstractParser {
+    
+    // Constructor: reference tokens parsed by specific parser
+    public MatchedTokenParser(Parser targetParser)
+    
+    // Constructor: reference tokens matching predicate
+    public MatchedTokenParser(Predicate<Token> tokenPredicator)
+    
+    // With slicing: extract part of matched token
+    public MatchedTokenParser(Parser targetParser, RangeSpecifier rangeSpecifier, boolean reverse)
+}
+```
+
+### Use Case 1: XML-Style Paired Tags
+
+Match opening and closing tags:
+
+```java
+// Grammar: <tagname>content</tagname>
+// Opening tag must match closing tag
+
+public class XmlElementParser extends Chain {
+    
+    public XmlElementParser() {
+        super(
+            Parser.get(OpeningTagParser.class),   // <tagname>
+            Parser.get(ContentParser.class),       // content
+            Parser.get(ClosingTagParser.class)     // </tagname>
+        );
+    }
+}
+
+public class OpeningTagParser extends Chain {
+    public OpeningTagParser() {
+        super(
+            new CharParser('<'),
+            Parser.get(IdentifierParser.class),  // Tag name
+            new CharParser('>')
+        );
+    }
+}
+
+public class ClosingTagParser extends Chain {
+    
+    public ClosingTagParser() {
+        super(
+            new Chain(
+                new CharParser('<'),
+                new CharParser('/')
+            ),
+            // Match the identifier from OpeningTagParser
+            new MatchedTokenParser(
+                Parser.get(IdentifierParser.class)
+            ),
+            new CharParser('>')
+        );
+    }
+}
+
+// Usage
+ParseContext context = new ParseContext(
+    StringSource.createRootSource("<div>Hello</div>")
+);
+Parser parser = Parser.get(XmlElementParser.class);
+Parsed result = parser.parse(context);
+
+// Succeeds: <div>Hello</div>
+// Fails:    <div>Hello</span>  (mismatched closing tag)
+```
+
+### Use Case 2: Here Documents
+
+Match delimiter in heredoc-style syntax:
+
+```java
+// Grammar: <<DELIMITER\ncontent\nDELIMITER
+
+public class HereDocParser extends LazyChain {
+    
+    @Override
+    public Parsers getLazyParsers() {
+        return new Parsers(
+            // Opening
+            new Chain(
+                new CharParser('<'),
+                new CharParser('<'),
+                Parser.get(IdentifierParser.class)  // Delimiter
+            ),
+            new LineBreakParser(),
+            
+            // Content (anything until closing delimiter)
+            new ZeroOrMore(
+                new Chain(
+                    new Not(
+                        new MatchedTokenParser(
+                            Parser.get(IdentifierParser.class)
+                        )
+                    ),
+                    new AnyCharParser()
+                )
+            ),
+            
+            // Closing delimiter (must match opening)
+            new MatchedTokenParser(
+                Parser.get(IdentifierParser.class)
+            )
+        );
+    }
+}
+
+// Example input:
+// <<END
+// This is the content
+// Multiple lines
+// END
+```
+
+### Use Case 3: Quoted String with Custom Delimiter
+
+Match balanced quotes with any delimiter:
+
+```java
+// Allow: q{content}, q[content], q(content), etc.
+
+public class CustomQuotedStringParser extends Chain {
+    
+    static final Map<Character, Character> PAIRS = Map.of(
+        '{', '}',
+        '[', ']',
+        '(', ')',
+        '<', '>'
+    );
+    
+    public CustomQuotedStringParser() {
+        super(
+            new CharParser('q'),
+            Parser.get(DelimiterParser.class),  // Opening delimiter
+            
+            // Content
+            new ZeroOrMore(
+                new Chain(
+                    new Not(
+                        new MatchedTokenParser(
+                            Parser.get(DelimiterParser.class)
+                        ).effect(this::getClosingDelimiter)
+                    ),
+                    new AnyCharParser()
+                )
+            ),
+            
+            // Closing delimiter (matched against opening)
+            new MatchedTokenParser(
+                Parser.get(DelimiterParser.class)
+            ).effect(this::getClosingDelimiter)
+        );
+    }
+    
+    private String getClosingDelimiter(String opening) {
+        char openChar = opening.charAt(0);
+        char closeChar = PAIRS.getOrDefault(openChar, openChar);
+        return String.valueOf(closeChar);
+    }
+}
+
+// Matches: q{hello}, q[world], q(foo), q<bar>
+```
+
+### Use Case 4: Pattern Matching Variables
+
+Reference captured groups in pattern matching:
+
+```java
+// Grammar: pattern = value
+// where pattern defines variables that must match in value
+
+public class PatternMatchParser extends Chain {
+    
+    public PatternMatchParser() {
+        super(
+            Parser.get(PatternParser.class),    // Defines variables
+            new CharParser('='),
+            Parser.get(ValueParser.class)       // Must match pattern
+        );
+    }
+}
+
+public class ValueParser extends LazyChoice {
+    
+    @Override
+    public Parsers getLazyParsers() {
+        return new Parsers(
+            // Match variable from pattern
+            new MatchedTokenParser(
+                token -> token.getParser() instanceof VariableParser
+            ),
+            // Or literal value
+            Parser.get(LiteralParser.class)
+        );
+    }
+}
+
+// Example:
+// point(x, y) = point(10, 20)  // Succeeds, binds x=10, y=20
+// point(x, y) = line(10, 20)   // Fails, structure mismatch
+```
+
+### Advanced: Slicing Matched Tokens
+
+Extract parts of matched tokens:
+
+```java
+// Extract just the tag name without brackets
+MatchedTokenParser tagMatcher = new MatchedTokenParser(
+    Parser.get(TagParser.class)
+).slice(
+    new RangeSpecifier(1, -1),  // Skip first and last character
+    false
+);
+
+// Example: if TagParser matched "<div>", this matches "div"
+```
+
+### Backward Reference Best Practices
+
+1. **Use Predicates**: For flexible matching across multiple parser types
+2. **Cache Matches**: `MatchedTokenParser` caches results in scope tree for efficiency
+3. **Clear Documentation**: Document which tokens are being referenced
+4. **Error Handling**: Provide clear errors when matches fail
+5. **Order Matters**: Ensure referenced parsers execute before matchers
+
+## Error Reporting with ErrorMessageParser
+
+`ErrorMessageParser` allows you to embed error messages directly in your grammar, providing context-aware error reporting.
+
+### Basic Error Messages
+
+```java
+Parser parser = new Chain(
+    Parser.get(DigitParser.class),
+    Parser.get(PlusParser.class),
+    new Choice(
+        Parser.get(DigitParser.class),
+        new ErrorMessageParser("Expected digit after '+' operator")
+    )
+);
+
+ParseContext context = new ParseContext(
+    StringSource.createRootSource("1+")
+);
+Parsed result = parser.parse(context);
+
+// Parse succeeds, but carries error message
+if (result.isSucceeded()) {
+    List<ErrorMessage> errors = TokenPrinter.getErrorMessages(
+        result.getRootToken()
+    );
+    
+    for (ErrorMessage error : errors) {
+        System.err.printf(
+            "Error at position %d: %s%n",
+            error.getRange().startIndexInclusive.positionInRoot().value(),
+            error.getContent()
+        );
+    }
+}
+// Output: Error at position 2: Expected digit after '+' operator
+```
+
+### Use Case 1: Syntax Error Recovery
+
+Continue parsing after errors to find multiple issues:
+
+```java
+public class StatementParser extends Choice {
+    
+    public StatementParser() {
+        super(
+            Parser.get(IfStatementParser.class),
+            Parser.get(WhileStatementParser.class),
+            Parser.get(ReturnStatementParser.class),
+            // Fallback: report error but continue
+            new Chain(
+                new ErrorMessageParser("Invalid statement"),
+                new ZeroOrMore(
+                    new Chain(
+                        new Not(Parser.get(SemicolonParser.class)),
+                        new AnyCharParser()
+                    )
+                ),
+                new Optional(Parser.get(SemicolonParser.class))
+            )
+        );
+    }
+}
+
+// Input: "if (x) { } invalid stuff; while (y) { }"
+// Reports error at "invalid stuff" but continues parsing
+```
+
+### Use Case 2: Missing Required Elements
+
+```java
+public class FunctionCallParser extends Chain {
+    
+    public FunctionCallParser() {
+        super(
+            Parser.get(IdentifierParser.class),
+            new Choice(
+                Parser.get(LParenParser.class),
+                new ErrorMessageParser("Missing '(' after function name")
+            ),
+            new Optional(Parser.get(ArgumentListParser.class)),
+            new Choice(
+                Parser.get(RParenParser.class),
+                new ErrorMessageParser("Missing ')' in function call")
+            )
+        );
+    }
+}
+
+// Input: "foo bar"
+// Reports: Missing '(' after function name
+```
+
+### Use Case 3: Context-Specific Error Messages
+
+Provide different errors based on context:
+
+```java
+public class TypeAnnotationParser extends Chain {
+    
+    public TypeAnnotationParser() {
+        super(
+            Parser.get(ColonParser.class),
+            new Choice(
+                Parser.get(TypeNameParser.class),
+                new ErrorMessageParser("Expected type name after ':'")
+            )
+        );
+    }
+}
+
+public class VariableDeclarationParser extends Chain {
+    
+    public VariableDeclarationParser() {
+        super(
+            new Choice(
+                new Chain(
+                    Parser.get(VarKeywordParser.class),
+                    Parser.get(IdentifierParser.class)
+                ),
+                new ErrorMessageParser("Variable declaration must start with 'var'")
+            ),
+            new Optional(Parser.get(TypeAnnotationParser.class)),
+            new Choice(
+                new Chain(
+                    Parser.get(EqualsParser.class),
+                    Parser.get(ExpressionParser.class)
+                ),
+                new ErrorMessageParser("Expected '=' and initializer")
+            ),
+            new Choice(
+                Parser.get(SemicolonParser.class),
+                new ErrorMessageParser("Missing ';' at end of declaration")
+            )
+        );
+    }
+}
+
+// Each error message provides specific context about what went wrong
+```
+
+### Use Case 4: Deprecated Syntax Warnings
+
+Use error messages for warnings about deprecated features:
+
+```java
+public class OldStyleLoopParser extends Chain {
+    
+    public OldStyleLoopParser() {
+        super(
+            new ErrorMessageParser(
+                "WARNING: Old-style loop syntax is deprecated. " +
+                "Use 'for item in collection' instead."
+            ),
+            Parser.get(RepeatKeywordParser.class),
+            Parser.get(NumberParser.class),
+            Parser.get(TimesKeywordParser.class),
+            Parser.get(BlockParser.class)
+        );
+    }
+}
+
+// Input: "repeat 5 times { ... }"
+// Warning: Old-style loop syntax is deprecated...
+// But parse succeeds for backward compatibility
+```
+
+### Extracting Error Messages
+
+```java
+// Method 1: Using TokenPrinter
+List<ErrorMessage> errors = TokenPrinter.getErrorMessages(rootToken);
+
+for (ErrorMessage error : errors) {
+    System.err.printf(
+        "Line %d, Column %d: %s%n",
+        error.getRange().startIndexInclusive.lineNumber().value,
+        error.getRange().startIndexInclusive.positionInLine().value,
+        error.getContent()
+    );
+}
+
+// Method 2: Using ErrorMessageParser directly
+List<RangedContent<String>> errors = 
+    ErrorMessageParser.getRangedContents(rootToken, ErrorMessageParser.class);
+
+for (RangedContent<String> error : errors) {
+    // Process error with full range information
+    CursorRange range = error.getRange();
+    String message = error.getContent();
+    // ...
+}
+
+// Method 3: Custom traversal
+void findErrors(Token token, List<ErrorMessage> errors) {
+    if (token.getParser() instanceof ErrorMessageParser) {
+        ErrorMessageParser emp = (ErrorMessageParser) token.getParser();
+        errors.add(new ErrorMessage(
+            token.getSource().cursorRange(),
+            emp.get()
+        ));
+    }
+    
+    for (Token child : token.getChildren()) {
+        findErrors(child, errors);
+    }
+}
+```
+
+### Error Message Best Practices
+
+1. **Specific Messages**: Provide context about what was expected
+2. **Position Information**: Error messages include cursor range automatically
+3. **Recovery Strategy**: Combine with `Optional` or `ZeroOrMore` to continue parsing
+4. **Multiple Errors**: Use error recovery to find all issues in one pass
+5. **Error vs Warning**: Use message content to distinguish severity
+6. **User-Friendly**: Write messages from the user's perspective
+
+### Complete Error Reporting Example
+
+```java
+public class LanguageParserWithErrors {
+    
+    public static void main(String[] args) {
+        String source = """
+            var x = 10
+            if (x > 5 {
+                print(x
+            }
+            var y
+            """;
+        
+        Parser parser = Parser.get(ProgramParser.class);
+        ParseContext context = new ParseContext(
+            StringSource.createRootSource(source)
+        );
+        
+        Parsed result = parser.parse(context);
+        
+        if (result.isSucceeded()) {
+            List<ErrorMessage> errors = TokenPrinter.getErrorMessages(
+                result.getRootToken()
+            );
+            
+            if (errors.isEmpty()) {
+                System.out.println("✓ Parse successful with no errors");
+            } else {
+                System.out.println("⚠ Parse succeeded with errors:");
+                for (ErrorMessage error : errors) {
+                    printError(source, error);
+                }
+            }
+        } else {
+            System.out.println("✗ Parse failed completely");
+        }
+        
+        context.close();
+    }
+    
+    static void printError(String source, ErrorMessage error) {
+        int line = error.getRange().startIndexInclusive.lineNumber().value;
+        int col = error.getRange().startIndexInclusive.positionInLine().value;
+        
+        System.out.printf("%d:%d - %s%n", line, col, error.getContent());
+        
+        // Show source line with error indicator
+        String[] lines = source.split("\n");
+        if (line <= lines.length) {
+            System.out.println(lines[line - 1]);
+            System.out.println(" ".repeat(col) + "^");
+        }
+        System.out.println();
+    }
+}
+
+// Output:
+// ⚠ Parse succeeded with errors:
+// 1:10 - Missing ';' at end of declaration
+// var x = 10
+//           ^
+//
+// 2:11 - Missing ')' after condition
+// if (x > 5 {
+//            ^
+//
+// 3:15 - Missing ')' in function call
+//     print(x
+//                ^
+//
+// 5:6 - Expected '=' and initializer
+// var y
+//       ^
+```
+
+
 
 Unlaxer's architecture makes it ideal for building Language Server Protocol (LSP) implementations for custom languages and DSLs.
 
