@@ -41,7 +41,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     clientOptions
   );
 
-  context.subscriptions.push(client.start());
+  client.start();
+  context.subscriptions.push({ dispose: () => client?.stop() });
 
   context.subscriptions.push(
     vscode.commands.registerCommand("calculatorLsp.showServerOutput", async () => {

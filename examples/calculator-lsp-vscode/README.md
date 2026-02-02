@@ -43,3 +43,14 @@ npm run package
 
 ## Notes for WSL / Windows
 - If you develop in WSL but run VS Code on Windows, prefer launching the server jar with a Windows-side Java, or set `calculatorLsp.server.jarPath` to a jar reachable from Windows.
+
+
+### Quick try (no build required)
+
+If you just want to try the example without building the extension:
+
+1. Install the VS Code extension from:
+   `build/calculator-lsp-0.1.0.vsix`
+2. Open a `.calc` file.
+
+For development / rebuilding, see below.

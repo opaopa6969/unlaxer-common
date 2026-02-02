@@ -50,6 +50,18 @@
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <shadedArtifactAttached>false</shadedArtifactAttached>
               <finalName>calculator-lsp-server</finalName>
+              
+              <filters>
+				  <filter>
+				    <artifact>*:*</artifact>
+				    <excludes>
+				      <exclude>META-INF/*.SF</exclude>
+				      <exclude>META-INF/*.DSA</exclude>
+				      <exclude>META-INF/*.RSA</exclude>
+				    </excludes>
+				  </filter>
+				</filters>
+
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>org.unlaxer.calculator.CalculatorLspLauncher</mainClass>
