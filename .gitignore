@@ -15,3 +15,8 @@ dependency-reduced-pom.xml
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 #.mvn/wrapper/maven-wrapper.jar
+
+**/node_modules/
+**/out/
+**/server/target/
+**/*.vsix
