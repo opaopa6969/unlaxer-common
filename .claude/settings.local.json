@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn test:*)",
+      "Bash(mvn -Dtest=CalculatorLspTest test -Dgpg.skip=true)",
+      "Bash(mvn test-compile:*)"
+    ]
+  }
+}
