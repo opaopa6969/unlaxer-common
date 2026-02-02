@@ -49,6 +49,12 @@
 			<version>1.3.10</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.lsp4j</groupId>
+			<artifactId>org.eclipse.lsp4j</artifactId>
+			<version>0.21.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<!-- lock down plugins versions to avoid using Maven defaults (may be

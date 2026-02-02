@@ -122,7 +122,7 @@ Parser literal = new Choice(
 
 ```java
 // Matches: "", "a", "aa", "aaa", ...
-Parser manyAs = new ZeroOrMore(CharParser.of('a'));
+Parser manyAs = new ZeroOrMore(new MappedSingleCharacterParser('a'));
 ```
 
 **Grammar notation**: `A*`
@@ -159,9 +159,9 @@ Parser signedNumber = new Chain(
 ```java
 // Matches: "abc", "acb", "bac", "bca", "cab", "cba"
 Parser anyOrder = new NonOrdered(
-    CharParser.of('a'),
-    CharParser.of('b'),
-    CharParser.of('c')
+    new MappedSingleCharacterParser('a'),
+    new MappedSingleCharacterParser('b'),
+    new MappedSingleCharacterParser('c')
 );
 ```
 
@@ -172,31 +172,31 @@ Terminal parsers match actual characters from the input:
 #### Character Class Parsers
 
 ```java
-// POSIX character classes
-new DigitParser()        // [0-9]
-new AlphaParser()        // [a-zA-Z]
-new AlnumParser()        // [a-zA-Z0-9]
-new SpaceParser()        // whitespace
-new WordParser()         // [a-zA-Z0-9_]
+// POSIX character classes (in org.unlaxer.parser.posix package)
+new DigitParser()              // [0-9]
+new AlphabetParser()           // [a-zA-Z]
+new AlphabetNumericParser()    // [a-zA-Z0-9]
+new SpaceParser()              // whitespace
+new AlphabetNumericUnderScoreParser()  // [a-zA-Z0-9_]
 
 // ASCII punctuation
 new PlusParser()         // +
 new MinusParser()        // -
-new AsteriskParser()     // *
-new SlashParser()        // /
+new MultipleParser()     // *
+new DivisionParser()     // /
 ```
 
 #### Custom Character Parsers
 
 ```java
 // Single character
-new CharParser('x')
+new MappedSingleCharacterParser('x')
 
 // Character range
-new CharParser('a', 'z')
+new MappedSingleCharacterParser(new Range('a', 'z'))
 
 // Multiple characters
-new CharParser("abc")
+new MappedSingleCharacterParser("abc")
 
 // Punctuation excluding parentheses
 PunctuationParser p = new PunctuationParser();
@@ -264,9 +264,9 @@ Supplier<Parser> exprSupplier = () -> {
     return new Choice(
         term,
         new Chain(
-            new CharParser('('),
+            new MappedSingleCharacterParser('('),
             Parser.get(exprSupplier),  // Recursive reference via supplier
-            new CharParser(')')
+            new MappedSingleCharacterParser(')')
         )
     );
 };
@@ -465,9 +465,9 @@ public class Calculator {
             Parser factor = new Choice(
                 new OneOrMore(DigitParser.class),
                 new Chain(
-                    CharParser.of('('),
+                    new MappedSingleCharacterParser('('),
                     Parser.get(exprSupplier),
-                    CharParser.of(')')
+                    new MappedSingleCharacterParser(')')
                 )
             );
             
@@ -1661,19 +1661,24 @@ public class NumberParser extends OneOrMore implements StaticParser {
     }
 }
 
-public class PlusParser extends CharParser implements StaticParser {
-    public PlusParser() {
-        super('+');
-        // Mark as operator
-        addTag(ASTNodeKind.Operator.tag());
+public class PlusParser extends SingleCharacterParser implements StaticParser {
+    @Override
+    public boolean isMatch(char target) {
+        return '+' == target;
     }
+
+    // Mark as operator in constructor or initialization
+    // addTag(ASTNodeKind.Operator.tag());
 }
 
-public class MinusParser extends CharParser implements StaticParser {
-    public MinusParser() {
-        super('-');
-        addTag(ASTNodeKind.Operator.tag());
+public class MinusParser extends SingleCharacterParser implements StaticParser {
+    @Override
+    public boolean isMatch(char target) {
+        return '-' == target;
     }
+
+    // Mark as operator
+    // addTag(ASTNodeKind.Operator.tag());
 }
 
 // Step 2: Create parser with AST mapper
@@ -2098,26 +2103,26 @@ public class XmlElementParser extends Chain {
 public class OpeningTagParser extends Chain {
     public OpeningTagParser() {
         super(
-            new CharParser('<'),
+            new MappedSingleCharacterParser('<'),
             Parser.get(IdentifierParser.class),  // Tag name
-            new CharParser('>')
+            new MappedSingleCharacterParser('>')
         );
     }
 }
 
 public class ClosingTagParser extends Chain {
-    
+
     public ClosingTagParser() {
         super(
             new Chain(
-                new CharParser('<'),
-                new CharParser('/')
+                new MappedSingleCharacterParser('<'),
+                new MappedSingleCharacterParser('/')
             ),
             // Match the identifier from OpeningTagParser
             new MatchedTokenParser(
                 Parser.get(IdentifierParser.class)
             ),
-            new CharParser('>')
+            new MappedSingleCharacterParser('>')
         );
     }
 }
@@ -2147,8 +2152,8 @@ public class HereDocParser extends LazyChain {
         return new Parsers(
             // Opening
             new Chain(
-                new CharParser('<'),
-                new CharParser('<'),
+                new MappedSingleCharacterParser('<'),
+                new MappedSingleCharacterParser('<'),
                 Parser.get(IdentifierParser.class)  // Delimiter
             ),
             new LineBreakParser(),
@@ -2161,7 +2166,7 @@ public class HereDocParser extends LazyChain {
                             Parser.get(IdentifierParser.class)
                         )
                     ),
-                    new AnyCharParser()
+                    new WildCardCharacterParser()
                 )
             ),
             
@@ -2198,7 +2203,7 @@ public class CustomQuotedStringParser extends Chain {
     
     public CustomQuotedStringParser() {
         super(
-            new CharParser('q'),
+            new MappedSingleCharacterParser('q'),
             Parser.get(DelimiterParser.class),  // Opening delimiter
             
             // Content
@@ -2209,7 +2214,7 @@ public class CustomQuotedStringParser extends Chain {
                             Parser.get(DelimiterParser.class)
                         ).effect(this::getClosingDelimiter)
                     ),
-                    new AnyCharParser()
+                    new WildCardCharacterParser()
                 )
             ),
             
@@ -2239,11 +2244,11 @@ Reference captured groups in pattern matching:
 // where pattern defines variables that must match in value
 
 public class PatternMatchParser extends Chain {
-    
+
     public PatternMatchParser() {
         super(
             Parser.get(PatternParser.class),    // Defines variables
-            new CharParser('='),
+            new MappedSingleCharacterParser('='),
             Parser.get(ValueParser.class)       // Must match pattern
         );
     }
@@ -2349,7 +2354,7 @@ public class StatementParser extends Choice {
                 new ZeroOrMore(
                     new Chain(
                         new Not(Parser.get(SemicolonParser.class)),
-                        new AnyCharParser()
+                        new WildCardCharacterParser()
                     )
                 ),
                 new Optional(Parser.get(SemicolonParser.class))
