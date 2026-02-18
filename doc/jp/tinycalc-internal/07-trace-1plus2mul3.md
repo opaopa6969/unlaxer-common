@@ -1,5 +1,3 @@
----
-
 [← 06 - 各コンビネータの動作](./06-combinators.md) | [目次](./index.md) | [08 - 完全トレース: var x set 10; sin(x) + sqrt(3.14) →](./08-trace-complex.md)
 
 # 07 - 完全トレース: `1+2*3`

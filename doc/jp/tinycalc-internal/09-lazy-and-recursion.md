@@ -1,5 +1,3 @@
----
-
 [← 08 - 完全トレース: var x set 10; sin(x) + sqrt(3.14)](./08-trace-complex.md) | [目次](./index.md) | [10 - デバッグ・リスナーシステム →](./10-debug-system.md)
 
 # 09 - Lazyパーサーと再帰文法

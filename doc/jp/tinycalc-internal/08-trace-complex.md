@@ -1,5 +1,3 @@
----
-
 [← 07 - 完全トレース: 1+2*3](./07-trace-1plus2mul3.md) | [目次](./index.md) | [09 - Lazyパーサーと再帰文法 →](./09-lazy-and-recursion.md)
 
 # 08 - 完全トレース: `var x set 10; sin(x) + sqrt(3.14)`

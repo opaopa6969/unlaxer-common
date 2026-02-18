@@ -1,5 +1,3 @@
----
-
 [← 02 - TinyCalc BNF定義](./02-bnf.md) | [目次](./index.md) | [04 - コアデータモデル →](./04-core-datamodel.md)
 
 # 03 - BNFからパーサーを組み立てる
