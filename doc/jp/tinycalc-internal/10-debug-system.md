@@ -1,3 +1,7 @@
+---
+
+[← 09 - Lazyパーサーと再帰文法](./09-lazy-and-recursion.md) | [目次](./index.md)
+
 # 10 - デバッグ・リスナーシステム
 
 ## 概要
@@ -239,3 +243,7 @@ testAllMatch(Parser.get(TermParser.class), "2*3.14");
 // 最後にExpression
 testAllMatch(Parser.get(ExpressionParser.class), "1+2*3.14");
 ```
+
+---
+
+[← 09 - Lazyパーサーと再帰文法](./09-lazy-and-recursion.md) | [目次](./index.md)

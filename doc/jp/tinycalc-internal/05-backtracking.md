@@ -1,3 +1,7 @@
+---
+
+[← 04 - コアデータモデル](./04-core-datamodel.md) | [目次](./index.md) | [06 - 各コンビネータの動作 →](./06-combinators.md)
+
 # 05 - トランザクションスタックとバックトラック
 
 ## バックトラックとは
@@ -155,3 +159,7 @@ Parser.get(ParenExpressionParser.class)   // 5. 括弧式
 
 この順序により、`sin(x)` は先に関数呼び出しとして認識され、
 識別子 `sin` とは解釈されません。
+
+---
+
+[← 04 - コアデータモデル](./04-core-datamodel.md) | [目次](./index.md) | [06 - 各コンビネータの動作 →](./06-combinators.md)

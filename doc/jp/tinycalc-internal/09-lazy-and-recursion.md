@@ -1,3 +1,7 @@
+---
+
+[← 08 - 完全トレース: var x set 10; sin(x) + sqrt(3.14)](./08-trace-complex.md) | [目次](./index.md) | [10 - デバッグ・リスナーシステム →](./10-debug-system.md)
+
 # 09 - Lazyパーサーと再帰文法
 
 ## 再帰文法の問題
@@ -238,3 +242,7 @@ Parser parser = Parser.get(ExpressionParser.class);
 これにより、同じパーサークラスに対して常に同じインスタンスが使われます。
 Lazy パーサーの場合、インスタンス生成時には子パーサーはまだ設定されず、
 最初の `parse()` 呼び出し時に `getLazyParsers()` が実行されます。
+
+---
+
+[← 08 - 完全トレース: var x set 10; sin(x) + sqrt(3.14)](./08-trace-complex.md) | [目次](./index.md) | [10 - デバッグ・リスナーシステム →](./10-debug-system.md)

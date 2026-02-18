@@ -1,3 +1,7 @@
+---
+
+[← 01 - イントロダクション](./01-introduction.md) | [目次](./index.md) | [03 - BNFからパーサーを組み立てる →](./03-building-parsers.md)
+
 # 02 - TinyCalc BNF定義
 
 ## 完全なBNF
@@ -102,3 +106,7 @@ VariableDeclaration → 'set' Expression → Term → Factor → ...
 
 unlaxerでは、この循環参照を `LazyChain` / `LazyChoice` を使って解決します。
 詳細は [09 - Lazyと再帰](09-lazy-and-recursion.md) で解説します。
+
+---
+
+[← 01 - イントロダクション](./01-introduction.md) | [目次](./index.md) | [03 - BNFからパーサーを組み立てる →](./03-building-parsers.md)
