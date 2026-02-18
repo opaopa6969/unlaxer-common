@@ -1,6 +1,10 @@
 # Unlaxer
 
+[English](./README.md) | [日本語](./README.ja.md)
+
 A simple and powerful parser combinator library for Java, inspired by [RELAX NG](http://relaxng.org/).
+
+Looking for Japanese documentation? See [`README.ja.md`](./README.ja.md).
 
 [![Maven Central](https://img.shields.io/maven-central/v/org.unlaxer/unlaxer-common.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22org.unlaxer%22%20AND%20a:%22unlaxer-common%22)
 

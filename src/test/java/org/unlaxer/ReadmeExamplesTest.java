@@ -27,7 +27,7 @@ import org.unlaxer.parser.elementary.WordParser;
 import org.unlaxer.parser.posix.DigitParser;
 
 /**
- * Tests for examples from Readme.md
+ * Tests for examples from README.md
  */
 public class ReadmeExamplesTest extends ParserTestBase {
 
