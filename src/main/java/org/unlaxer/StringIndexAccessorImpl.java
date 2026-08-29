@@ -70,12 +70,12 @@ public class StringIndexAccessorImpl implements StringIndexAccessor{
 
   @Override
   public int indexOf(String str, int fromIndex) {
-    return source.indexOf(fromIndex, fromIndex);
+    return source.indexOf(str, fromIndex);
   }
 
   @Override
   public int lastIndexOf(String str, int fromIndex) {
-    return source.lastIndexOf(fromIndex, fromIndex);
+    return source.lastIndexOf(str, fromIndex);
   }
 
   @Override
