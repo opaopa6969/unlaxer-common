@@ -108,7 +108,8 @@ public class MappedSingleCharacterParser extends SingleCharacterParser implement
 
 	@Override
 	public boolean isMatch(char target) {
-		return doInvert ^ target > 127 ? false : matches[target];
+		boolean inSet = target > 127 ? false : matches[target];
+		return doInvert ^ inSet;
 	}
 
 	public MappedSingleCharacterParser newWithout(String matches) {
